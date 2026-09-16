@@ -1,14 +1,13 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { ELECTION_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/RETURN_RECEIPT';
 import { ReportTypes } from '../reports/report.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-
 import { AggregationGroups } from '../transaction.model';
 import {
   INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS,
   INDIVIDUAL_ORGANIZATION,
+  ELECTION_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 
 export class RETURN_RECEIPT extends SchATransactionType {
