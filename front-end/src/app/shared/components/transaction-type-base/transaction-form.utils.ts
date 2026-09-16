@@ -50,6 +50,10 @@ export class TransactionFormUtils {
     'line_label',
   ]);
 
+  private static getDefinedTransactionValues(transaction: Transaction): Record<string, unknown> {
+    return Object.fromEntries(Object.entries(transaction).filter(([, value]) => value !== undefined));
+  }
+
   /**
    * The parameters after the "component" parameter need to be set to either the primary (parent)
    * component values or, if they are the second transaction type of a "double" transaction
@@ -78,7 +82,7 @@ export class TransactionFormUtils {
       form.get('entity_type')?.disable();
     } else if (shouldPatchFromTransaction && transaction) {
       component.resetForm();
-      form.patchValue({ ...transaction });
+      form.patchValue(TransactionFormUtils.getDefinedTransactionValues(transaction));
       TransactionFormUtils.patchMemoText(transaction, form);
       form.get('entity_type')?.enable();
     } else {
@@ -404,7 +408,7 @@ export class TransactionFormUtils {
     if (transaction?.transactionType) {
       form.patchValue({
         entity_type: defaultContactTypeOption,
-        [transaction.transactionType.templateMap.aggregate]: '0',
+        [transaction.transactionType.templateMap.aggregate]: 0,
         memo_code: this.getMemoCodeConstant(transaction?.transactionType),
         [transaction.transactionType.templateMap.purpose_description]:
           transaction?.transactionType?.generatePurposeDescriptionWrapper(transaction),
