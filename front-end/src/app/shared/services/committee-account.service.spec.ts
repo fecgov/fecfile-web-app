@@ -7,11 +7,9 @@ import { CommitteeAccount } from '../models/committee-account.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { CommitteeAccountService } from './committee-account.service';
-import { CommitteeMemberService } from './committee-member.service';
 
 describe('CommitteeAccountService', () => {
   let committeeAccountService: CommitteeAccountService;
-  let committeeMemberService: CommitteeMemberService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -26,7 +24,6 @@ describe('CommitteeAccountService', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
 
     committeeAccountService = TestBed.inject(CommitteeAccountService);
-    committeeMemberService = TestBed.inject(CommitteeMemberService);
   });
 
   it('should be created', () => {
@@ -59,7 +56,6 @@ describe('CommitteeAccountService', () => {
   });
 
   it('should call api to activate', async () => {
-    vi.spyOn(committeeMemberService, 'updateCommitteeCounts').mockResolvedValue();
     const testCommitteeAccount = new CommitteeAccount();
     testCommitteeAccount.committee_id = '123';
     const resultPromise = committeeAccountService.activateCommittee(testCommitteeAccount.committee_id);
