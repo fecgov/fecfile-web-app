@@ -1,20 +1,18 @@
 import { Component, computed, inject, model, signal } from '@angular/core';
-import { apply, form, FormField, hidden, required, submit } from '@angular/forms/signals';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
+import { MessageService } from 'primeng/api';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { apply, form, FormField, hidden, required, submit } from '@angular/forms/signals';
 import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
 import { SelectInput } from 'app/shared/components/signal-inputs/select-input/select.input';
 import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
-import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
-import { Form24, Form24Data, Form24SignalSchema } from 'app/shared/models/reports/form-24.model';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { CommitteeStore } from 'app/committee/committee.store';
+import { ReportTypes, Form24Data, Form24SignalSchema, Form24 } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
-import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
 import { form24Options } from 'app/shared/utils/label.utils';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { MessageService } from 'primeng/api';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 
 interface ReportFormData {
   type: ReportTypes | '';
@@ -28,16 +26,16 @@ interface ReportFormData {
   imports: [DialogComponent, FormField, SelectButtonInput, SelectInput, InputGroupInput],
 })
 export class FormTypeDialogComponent {
+  private readonly committeeStore = inject(CommitteeStore);
   readonly form24Options = form24Options;
   readonly messageService = inject(MessageService);
   readonly router = inject(Router);
-  readonly store = inject(Store);
   private readonly form24Service = inject(Form24Service);
   private readonly showForm3 = inject(FEATURE_FLAGS).showForm3;
   readonly formTypeOptions = Array.from(getFormTypes(this.showForm3), (mapping) => mapping[1]);
   private readonly form24SignalSchema = inject(Form24SignalSchema);
   readonly filteredOptions = computed(() => {
-    const options = this.formTypeOptions.filter((type) => this.eligibleReportTypes().has(type.code));
+    const options = this.formTypeOptions.filter((type) => this.committeeStore.eligibleReportTypes().has(type.code));
 
     return options.map((option) => {
       return {
@@ -49,7 +47,6 @@ export class FormTypeDialogComponent {
   });
 
   readonly dialogVisible = model(false);
-  readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   readonly reportFormModel = signal<ReportFormData>({ type: '', f24: { type: null, typelessName: '' } });
   readonly reportForm = form(this.reportFormModel, (schemaPath) => {
@@ -57,14 +54,6 @@ export class FormTypeDialogComponent {
     hidden(schemaPath.f24, ({ valueOf }) => valueOf(schemaPath.type) !== ReportTypes.F24);
     hidden(schemaPath.f24.typelessName, ({ valueOf }) => valueOf(schemaPath.f24.type) === null);
     apply(schemaPath.f24, this.form24SignalSchema.form24Schema());
-  });
-
-  readonly eligibleReportTypes = computed(() => {
-    const eligible_report_types = this.committeeAccount().eligible_report_types;
-    if (!eligible_report_types) {
-      console.error('No eligible report types in committee data');
-    }
-    return new Set(eligible_report_types);
   });
 
   readonly typeHour = computed(() => {
@@ -78,18 +67,19 @@ export class FormTypeDialogComponent {
     return submit(this.reportForm, {
       action: async () => {
         try {
+          const committee = this.committeeStore.committee();
           const { type, f24 } = this.reportForm().value();
           if (type === ReportTypes.F24) {
             const form24 = Form24.fromJSON({
               name: this.form24SignalSchema.buildF24Name(f24.type!, f24.typelessName),
               report_type_24_48: this.reportForm.f24.type().value(),
-              street_1: this.committeeAccount().street_1,
-              street_2: this.committeeAccount().street_2,
-              city: this.committeeAccount().city,
-              state: this.committeeAccount().state,
-              zip: this.committeeAccount().zip,
-              filer_committee_id_number: this.committeeAccount().committee_id,
-              committee_name: this.committeeAccount().name,
+              street_1: committee?.street_1,
+              street_2: committee?.street_2,
+              city: committee?.city,
+              state: committee?.state,
+              zip: committee?.zip,
+              filer_committee_id_number: committee?.committee_id,
+              committee_name: committee?.name,
             });
             const report = await this.form24Service.create(form24, ['report_type_24_48']);
             this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);

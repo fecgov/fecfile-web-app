@@ -10,16 +10,13 @@ import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import {
-  setCommitteeAccountDetailsAction,
-  unsetCommitteeAccountDetailsAction,
-} from 'app/store/committee-account.actions';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputGroup } from 'primeng/inputgroup';
+import { CommitteeStore } from '../committee.store';
 
 @Component({
   selector: 'app-create-committee',
@@ -38,6 +35,7 @@ import { InputGroup } from 'primeng/inputgroup';
 })
 export class CreateCommitteeComponent {
   private readonly router = inject(Router);
+  private readonly committeeStore = inject(CommitteeStore);
   protected readonly store = inject(Store);
   protected readonly committeeAccountService = inject(CommitteeAccountService);
   protected readonly messageService = inject(MessageService);
@@ -53,7 +51,7 @@ export class CreateCommitteeComponent {
 
   searchBoxFormControl = new SubscriptionFormControl('');
   constructor() {
-    this.store.dispatch(unsetCommitteeAccountDetailsAction());
+    this.committeeStore.clearCommittee();
   }
 
   async search(committeeId: string | null) {
@@ -89,7 +87,7 @@ export class CreateCommitteeComponent {
         life: 3000,
       });
       committeeAccount = await this.committeeAccountService.activateCommittee(committeeAccount.id);
-      this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committeeAccount }));
+      this.committeeStore.setCommittee(committeeAccount);
       const userLoginData = await this.userService.getCurrentUser();
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
       await this.router.navigateByUrl(``);

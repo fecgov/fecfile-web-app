@@ -35,6 +35,7 @@ import { F3xFormTypes, Form3X } from 'app/shared/models/reports/form-3x.model';
 import { F3FormTypes, Form3 } from 'app/shared/models/reports/form-3.model';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { CommitteeStore } from 'app/committee/committee.store';
 import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
@@ -63,6 +64,7 @@ export enum ReportTypeCategories {
 export class CreateSharedF3Component extends FormComponent implements OnInit {
   // INJECTIONS
   private readonly activeService = inject(FORM_3_SERVICE);
+  private readonly committeeStore = inject(CommitteeStore);
   protected readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
@@ -157,7 +159,7 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
   });
 
   private readonly committeeFrequency = computed(() =>
-    this.isF3X() && this.committeeAccount().filing_frequency === 'M' ? 'M' : 'Q',
+    this.isF3X() && this.committeeStore.filingFrequency() === 'M' ? 'M' : 'Q',
   );
 
   private readonly isElectionYear = computed(() => ReportTypeCategories.ELECTION_YEAR === this.reportTypeCategory());
@@ -247,7 +249,7 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     const defaultFormType = this.isF3X() ? 'F3XN' : F3FormTypes.F3N;
-    const candidateState = this.committeeAccount().candidate_state;
+    const candidateState = this.committeeStore.committee()?.candidate_state;
     this.form.patchValue({
       filing_frequency: this.committeeFrequency(),
       form_type: defaultFormType,

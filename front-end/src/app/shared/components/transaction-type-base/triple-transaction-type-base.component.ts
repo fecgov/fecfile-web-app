@@ -162,7 +162,7 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childForm_2,
       this.childTransaction_2,
       this.childContactTypeOptions_2,
-      this.committeeAccount(),
+      this.committeeStore.committee()!,
     );
   }
 
