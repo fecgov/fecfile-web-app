@@ -1,12 +1,11 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { FEATURE_FLAGS, FeatureFlags } from 'environments/config/feature-flag.config';
+import { environment } from 'environments/environment';
 
-export const featureFlagGuard = (flagKey: keyof FeatureFlags, redirectTo: string = '/reports'): CanActivateFn => {
+export const featureFlagGuard = (flagKey: keyof typeof environment, redirectTo: string = '/reports'): CanActivateFn => {
   return () => {
-    const featureFlags = inject(FEATURE_FLAGS);
     const router = inject(Router);
-    const isFeatureEnabled = featureFlags[flagKey];
+    const isFeatureEnabled = environment[flagKey];
 
     if (isFeatureEnabled) {
       return true;

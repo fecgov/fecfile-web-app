@@ -11,7 +11,7 @@ import { CommitteeMemberService } from 'app/shared/services/committee-member.ser
 import { DialogComponent } from './shared/components/dialog/dialog.component';
 import { CommitteeStore } from './committee/committee.store';
 import { LoginService } from './shared/services/login.service';
-import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +35,7 @@ export class AppComponent {
   readonly router = inject(Router);
   protected readonly elementRef = inject(ElementRef);
   readonly memberService = inject(CommitteeMemberService);
-  readonly showGlossary = inject(FEATURE_FLAGS).showGlossary;
+  readonly showGlossary = environment.showGlossary;
 
   readonly showCommitteeChangedDialog = computed(() => {
     const url = this.router.url;

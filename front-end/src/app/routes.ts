@@ -57,7 +57,7 @@ export const ROUTES: Route[] = [
           nameGuard,
           securityNoticeGuard,
           committeeGuard,
-          featureFlagGuard('enableUnassignedTransactions'),
+          featureFlagGuard('showAllTransactionsPage'),
         ],
         providers: [ReattRedesStore, Form3XService],
       },

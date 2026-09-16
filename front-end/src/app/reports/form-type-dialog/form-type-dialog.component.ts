@@ -12,7 +12,7 @@ import { ReportTypes, Form24Data, Form24SignalSchema, Form24 } from 'app/shared/
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { form24Options } from 'app/shared/utils/label.utils';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
-import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
+import { environment } from 'environments/environment';
 
 interface ReportFormData {
   type: ReportTypes | '';
@@ -31,9 +31,8 @@ export class FormTypeDialogComponent {
   readonly messageService = inject(MessageService);
   readonly router = inject(Router);
   private readonly form24Service = inject(Form24Service);
-  private readonly showForm3 = inject(FEATURE_FLAGS).showForm3;
-  readonly formTypeOptions = Array.from(getFormTypes(this.showForm3), (mapping) => mapping[1]);
   private readonly form24SignalSchema = inject(Form24SignalSchema);
+  readonly formTypeOptions = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[1]);
   readonly filteredOptions = computed(() => {
     const options = this.formTypeOptions.filter((type) => this.committeeStore.eligibleReportTypes().has(type.code));
 
@@ -99,6 +98,6 @@ export class FormTypeDialogComponent {
   }
 
   getFormType(type?: ReportTypes | ''): FormType | undefined {
-    return type === undefined || type === '' ? undefined : getFormTypes(this.showForm3).get(type as ReportTypes);
+    return type === undefined || type === '' ? undefined : getFormTypes(environment.showForm3).get(type as ReportTypes);
   }
 }
