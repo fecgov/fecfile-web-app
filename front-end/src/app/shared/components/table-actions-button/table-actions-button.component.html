@@ -1,4 +1,4 @@
-<div class="drop-down position-static flex justify-content-center">
+<div class="drop-down position-static flex justify-content-center table-action-dropdown">
   <button
     pButton
     pRipple
@@ -10,7 +10,7 @@
     [attr.data-cy]="buttonDataCy()"
     (click)="op.toggle($event)"
   ></button>
-  <p-popover #op>
+  <p-popover #op appendTo="target" styleClass="popdown">
     <ul class="dropdown-menu" data-cy="table-actions-popover">
       @for (action of filteredActions(); track action; let index = $index) {
         <li>

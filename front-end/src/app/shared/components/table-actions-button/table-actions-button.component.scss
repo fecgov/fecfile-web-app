@@ -6,3 +6,9 @@
 .table-action-button:not(:disabled) {
   color: #212121 !important;
 }
+
+:host::ng-deep.popdown {
+  transform: translate(-189px, 25px) !important;
+  z-index: 1;
+  white-space: nowrap;
+}
