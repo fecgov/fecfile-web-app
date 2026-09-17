@@ -5,9 +5,7 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 import { CommitteeMemberService } from './committee-member.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class CommitteeAccountService {
   private readonly apiService = inject(ApiService);
   public readonly committeeMemberService = inject(CommitteeMemberService);
@@ -21,10 +19,8 @@ export class CommitteeAccountService {
     return this.apiService.get(`/committees/get-available-committee/?committee_id=${committeeId}`);
   }
 
-  public async activateCommittee(committeeUUID?: string): Promise<CommitteeAccount> {
-    const activated = await this.apiService.post<CommitteeAccount>(`/committees/${committeeUUID}/activate/`, {});
-    await this.committeeMemberService.updateCommitteeCounts();
-    return activated;
+  public activateCommittee(committeeUUID?: string): Promise<CommitteeAccount> {
+    return this.apiService.post<CommitteeAccount>(`/committees/${committeeUUID}/activate/`, {});
   }
 
   public async createCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {

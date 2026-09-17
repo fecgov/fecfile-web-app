@@ -67,7 +67,7 @@
     "@cypress/schematic": "5.0.0",
     "@eslint/eslintrc": "3.3.5",
     "@eslint/js": "10.0.1",
-    "@faker-js/faker": "10.3.0",
+    "@faker-js/faker": "^10.6.0",
     "@types/node": "^25.6.0",
     "@typescript-eslint/eslint-plugin": "8.57.2",
     "@typescript-eslint/parser": "8.57.2",
@@ -86,6 +86,7 @@
     "tslib": "2.8.1",
     "typescript": "5.9.3",
     "vitest": "^4.1.0",
+    "vitest-localstorage-mock": "^0.1.2",
     "zone.js": "0.16.1"
   },
   "overrides": {

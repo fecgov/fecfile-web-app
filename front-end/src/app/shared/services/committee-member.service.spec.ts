@@ -6,15 +6,22 @@ import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import type { Mock } from 'vitest';
 import { environment } from '../../../environments/environment';
 import { CommitteeMember, ListRestResponse, Roles } from '../models';
-import { testCommitteeAdminLoginData, testMockStore, testUserLoginData } from '../utils/unit-test.utils';
+import {
+  testCommitteeAccount,
+  testCommitteeAdminLoginData,
+  testMockStore,
+  testUserLoginData,
+} from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 import { CommitteeMemberService } from './committee-member.service';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 describe('CommitteeMemberService', () => {
   let service: CommitteeMemberService;
   let httpTestingController: HttpTestingController;
   let mockStore: MockStore;
   let apiService: ApiService;
+  let committeeStore: CommitteeStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,8 +31,10 @@ describe('CommitteeMemberService', () => {
         CommitteeMemberService,
         ApiService,
         provideMockStore(testMockStore()),
+        CommitteeStore,
       ],
     });
+    committeeStore = TestBed.inject(CommitteeStore);
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(CommitteeMemberService);
     apiService = TestBed.inject(ApiService);
@@ -93,13 +102,13 @@ describe('CommitteeMemberService', () => {
   });
 
   it('should return true for needsSecondAdmin() if only one committee admin exists', async () => {
-    vi.spyOn(service, 'getMemberCount').mockReturnValue(Promise.resolve({ count: 1 }));
-    vi.spyOn(service, 'getAdminCount').mockReturnValue(Promise.resolve({ count: 1 }));
+    vi.spyOn(service, 'getMemberCount').mockResolvedValue({ count: 1 });
+    vi.spyOn(service, 'getAdminCount').mockResolvedValue({ count: 1 });
+    committeeStore.setCommittee(testCommitteeAccount());
     mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData());
     mockStore.refreshState();
-    await service.updateCommitteeCounts();
-
-    const needSecondAdmin = await service.needsSecondAdmin();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    const needSecondAdmin = service.needsSecondAdmin();
 
     expect(needSecondAdmin).toBe(true);
   });
@@ -130,6 +139,7 @@ describe('CommitteeMemberService', () => {
     apiSpy.mockResolvedValue({ id: '1', email: 'admin1@test.com', role: 'MANAGER' } as CommitteeMember);
 
     await service.update({ ...member, role: 'MANAGER' } as CommitteeMember);
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(getMemberCountSpy).toHaveBeenCalledOnce();
     expect(getAdminCountSpy).toHaveBeenCalledOnce();
   });

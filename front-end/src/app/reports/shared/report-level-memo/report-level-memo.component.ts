@@ -28,8 +28,6 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   readonly recTypeFormProperty = 'rec_type';
   readonly text4kFormProperty = 'text4000';
   readonly formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
-
-  readonly committeeAccountId = computed(() => this.committeeAccount().committee_id);
   readonly getNextUrl = injectRouteData<(report?: Report) => string | undefined | null>('getNextUrl');
   readonly nextUrl = computed(() => this.getNextUrl()?.(this.activeReport()) || '');
 
