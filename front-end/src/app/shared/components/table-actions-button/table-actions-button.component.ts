@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output, viewChild } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, input, output, viewChild } from '@angular/core';
 import { ApiService } from 'app/shared/services/api.service';
 import { ButtonModule } from 'primeng/button';
 import { Popover, PopoverModule } from 'primeng/popover';
@@ -12,6 +12,7 @@ import { TableAction } from './table-actions';
   imports: [ButtonModule, Ripple, PopoverModule],
 })
 export class TableActionsButtonComponent<T> {
+  private readonly el = inject(ElementRef);
   readonly apiService = inject(ApiService);
   readonly op = viewChild.required(Popover);
   readonly tableActions = input<TableAction<T>[]>([]);
@@ -34,6 +35,15 @@ export class TableActionsButtonComponent<T> {
   performAction(action: TableAction<T>) {
     this.tableActionClick.emit({ action, actionItem: this.actionItem() });
     this.op().hide();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const wrapper = target.closest('.table-action-dropdown');
+    if (!wrapper) {
+      this.op().hide();
+    }
   }
 
   actionDataCy(label: string): string {

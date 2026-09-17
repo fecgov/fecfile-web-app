@@ -37,3 +37,12 @@ button {
   height: 8px;
   width: 8px;
 }
+
+:host ::ng-deep {
+  .p-popover,
+  .p-overlaypanel {
+    position: fixed !important;
+    transform: translate(-175px, 25px) !important;
+    white-space: nowrap;
+  }
+}

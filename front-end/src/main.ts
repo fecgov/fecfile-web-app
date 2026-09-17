@@ -156,6 +156,12 @@ bootstrapApplication(AppComponent, {
           },
         },
       },
+      zIndex: {
+        modal: 1200,
+        overlay: 900,
+        menu: 900,
+        tooltip: 900,
+      },
     }),
     CookieService,
     ConfirmationService,
