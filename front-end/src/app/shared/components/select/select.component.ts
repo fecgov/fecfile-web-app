@@ -14,10 +14,11 @@ import { Options } from 'app/shared/utils/label.utils';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { NgTemplateOutlet } from '@angular/common';
 import { IdGeneratorService } from 'app/shared/services/id-generator.service';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-select',
-  imports: [ReactiveFormsModule, ErrorMessagesComponent, NgTemplateOutlet],
+  imports: [ReactiveFormsModule, ErrorMessagesComponent, NgTemplateOutlet, Select],
   providers: [IdGeneratorService],
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss',
