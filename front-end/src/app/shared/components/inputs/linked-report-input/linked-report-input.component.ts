@@ -1,14 +1,14 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
-import { BaseInputComponent } from '../base-input.component';
-import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { derivedAsync } from 'ngxtension/derived-async';
-import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
+import { derivedAsync } from 'ngxtension/derived-async';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { Form3XService } from 'app/shared/services/form-3x.service';
+import { BaseInputComponent } from '../base-input.component';
 
 export const LinkedReportTooltipText =
   'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. ' +
@@ -32,8 +32,6 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   readonly userTouchedValues = signal(false);
   readonly tooltipText = LinkedReportTooltipText;
 
-  readonly committeeF3xReports = derivedAsync(() => this.form3XService.getAllReports(), { initialValue: [] });
-
   // the form3X that is associated with the transaction on load
   readonly initialForm3X = derivedAsync(async () => {
     const reports = this.transaction()?.reports;
@@ -46,7 +44,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   // the form3X that is associated with the transaction based on
   // the disbursement date or dissemination date ONLY if the date or memo
   // code has been touched by the user, otherwise it will return the initialForm3X
-  readonly associatedF3X = derivedAsync(() => {
+  readonly associatedF3X = derivedAsync(async () => {
     const disbursementDate = this.disbursementDate();
     const disseminationDate = this.disseminationDate();
 
@@ -55,22 +53,8 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
       return report;
     }
 
-    const candidateDates = [disbursementDate, disseminationDate].filter((date): date is Date => !!date);
-    const reports = this.committeeF3xReports();
-
-    for (const date of candidateDates) {
-      const matchingReport = reports.find((report) => {
-        return (
-          report.report_status === ReportStatus.IN_PROGRESS &&
-          !!report.coverage_from_date &&
-          !!report.coverage_through_date &&
-          date >= report.coverage_from_date &&
-          date <= report.coverage_through_date
-        );
-      });
-
-      if (matchingReport) return matchingReport;
-    }
+    const matchingReport = await this.form3XService.getAssociatedForm3xReport(disbursementDate, disseminationDate);
+    if (matchingReport) return matchingReport;
 
     this.form.get('linkedF3x')?.updateValueAndValidity();
     return null;

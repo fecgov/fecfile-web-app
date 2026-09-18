@@ -2,13 +2,11 @@ import { DefaultProjectorFn, MemoizedSelector } from '@ngrx/store';
 import { SECURITY_CONSENT_VERSION } from 'app/login/security-notice/security-notice.component';
 import { initialState as initActiveReport } from 'app/store/active-report.reducer';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { initialState as initNavigationEvent } from 'app/store/navigation-event.reducer';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { initialState as initUserLoginData } from 'app/store/user-login-data.reducer';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { CommitteeMember, Form24, Form3, Report } from '../models';
+import { Form24, Form3, Report } from '../models';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
 import { MemoText } from '../models/memo-text.model';
@@ -90,18 +88,6 @@ export function testCommitteeAccount(): CommitteeAccount {
     website: 'WWW.UNITEDSTATESPOLITICALACTIONCOMMITTEESDIRECTORY.COM',
     zip: '33310',
     eligible_report_types: ['F3X', 'F99', 'F1M'],
-  });
-}
-
-export function testCommitteeMember(): CommitteeMember {
-  return CommitteeMember.fromJSON({
-    id: '1',
-    committee_id: 'C00601211',
-    first_name: 'John',
-    last_name: 'Doe',
-    email: 'john.doe@test.com',
-    phone: '555-1234',
-    title: 'Member',
   });
 }
 
@@ -232,22 +218,19 @@ interface Selector<T> {
 
 export function testMockStore(): {
   initialState: {
-    fecfile_online_committeeAccount: CommitteeAccount;
     fecfile_online_userLoginData: UserLoginData;
     fecfile_online_activeReport: Report | undefined;
     fecfile_online_navigationEvent: NavigationEvent | undefined;
   };
-  selectors: [Selector<CommitteeAccount>, Selector<UserLoginData>, Selector<Report>, Selector<NavigationEvent>];
+  selectors: [Selector<UserLoginData>, Selector<Report>, Selector<NavigationEvent>];
 } {
   return {
     initialState: {
-      fecfile_online_committeeAccount: initCommitteeAccount,
       fecfile_online_userLoginData: initUserLoginData,
       fecfile_online_activeReport: initActiveReport,
       fecfile_online_navigationEvent: initNavigationEvent,
     },
     selectors: [
-      { selector: selectCommitteeAccount, value: testCommitteeAccount() },
       { selector: selectUserLoginData, value: testUserLoginData() },
       { selector: selectActiveReport, value: testActiveReport() },
       { selector: selectNavigationEvent, value: testNavigationEvent() },
