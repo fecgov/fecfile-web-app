@@ -1,9 +1,9 @@
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { Roles, defaultFormData as userFormData } from '../../e2e-smoke/models/UserFormModel';
-import { UsersPage } from '../../e2e-smoke/pages/usersPage';
+import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
-import { UsersHelpers } from './users.helpers';
+import { UsersPage } from '../../e2e-smoke/pages/usersPage';
 import { SharedHelpers } from '../utils/shared.helpers';
+import { UsersHelpers } from './users.helpers';
 
 const uniqueUser = (overrides: Partial<typeof userFormData> = {}) => ({
   ...userFormData,
@@ -82,12 +82,16 @@ describe("Users: Validation and API failure states", () => {
   });
 
   it('keeps the second committee administrator dialog open when dismissed with Escape', () => {
-    cy.intercept('GET', '**/api/v1/committee-members/', {
-      body: [{ email: 'admin@example.com', role: 'COMMITTEE_ADMINISTRATOR' }],
-    }).as('getSingleCommitteeAdmin');
+    cy.intercept('GET', '**/api/v1/committee-members/member_count/', {
+      body: { "count": 1 },
+    }).as('getCommitteeMemberCount');
+    cy.intercept('GET', '**/api/v1/committee-members/admin_count/', {
+      body: { "count": 1 },
+    }).as('getCommitteeAdminCount');
 
     cy.visit('/committee');
-    cy.wait('@getSingleCommitteeAdmin');
+    cy.wait('@getCommitteeMemberCount');
+    cy.wait('@getCommitteeAdminCount');
 
     cy.get('app-second-committee-admin-dialog dialog')
       .should('be.visible')
