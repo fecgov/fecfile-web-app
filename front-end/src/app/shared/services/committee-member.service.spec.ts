@@ -1,20 +1,27 @@
-import type { Mock } from 'vitest';
+import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testCommitteeAdminLoginData, testMockStore } from '../utils/unit-test.utils';
-import { environment } from '../../../environments/environment';
-import { CommitteeMemberService } from './committee-member.service';
-import { provideHttpClient } from '@angular/common/http';
-import { ListRestResponse, CommitteeMember, Roles } from '../models';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import type { Mock } from 'vitest';
+import { environment } from '../../../environments/environment';
+import { CommitteeMember, ListRestResponse, Roles } from '../models';
+import {
+  testCommitteeAccount,
+  testCommitteeAdminLoginData,
+  testMockStore,
+  testUserLoginData,
+} from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
+import { CommitteeMemberService } from './committee-member.service';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 describe('CommitteeMemberService', () => {
   let service: CommitteeMemberService;
   let httpTestingController: HttpTestingController;
   let mockStore: MockStore;
   let apiService: ApiService;
+  let committeeStore: CommitteeStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,8 +31,10 @@ describe('CommitteeMemberService', () => {
         CommitteeMemberService,
         ApiService,
         provideMockStore(testMockStore()),
+        CommitteeStore,
       ],
     });
+    committeeStore = TestBed.inject(CommitteeStore);
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(CommitteeMemberService);
     apiService = TestBed.inject(ApiService);
@@ -75,6 +84,9 @@ describe('CommitteeMemberService', () => {
   });
 
   it('should add a new member with addMember()', async () => {
+    vi.spyOn(service, 'getMemberCount').mockReturnValue(Promise.resolve({ count: 1 }));
+    vi.spyOn(service, 'getAdminCount').mockReturnValue(Promise.resolve({ count: 1 }));
+
     const newMember = CommitteeMember.fromJSON({ email: 'new_member@test.com', role: 'MANAGER' });
 
     const addMemberPromise = service.addMember('new_member@test.com', 'MANAGER' as unknown as typeof Roles);
@@ -89,43 +101,46 @@ describe('CommitteeMemberService', () => {
     expect(member).toEqual(newMember);
   });
 
-  it('should return true for needsSecondAdmin() if only one committee admin exists', () => {
-    vi.spyOn(service, 'membersSignal').mockReturnValue([
-      CommitteeMember.fromJSON({ email: 'admin@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
-    ]);
+  it('should return true for needsSecondAdmin() if only one committee admin exists', async () => {
+    vi.spyOn(service, 'getMemberCount').mockResolvedValue({ count: 1 });
+    vi.spyOn(service, 'getAdminCount').mockResolvedValue({ count: 1 });
+    committeeStore.setCommittee(testCommitteeAccount());
     mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData());
     mockStore.refreshState();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    const needSecondAdmin = service.needsSecondAdmin();
 
-    expect(service.needsSecondAdmin()).toBe(true);
+    expect(needSecondAdmin).toBe(true);
   });
 
   it('should return false for needsSecondAdmin() if more than one committee admin exists', () => {
+    vi.spyOn(service, 'getMemberCount').mockReturnValue(Promise.resolve({ count: 1 }));
+    vi.spyOn(service, 'getAdminCount').mockReturnValue(Promise.resolve({ count: 2 }));
     mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData());
     mockStore.refreshState();
-    vi.spyOn(service, 'membersSignal').mockReturnValue([
-      CommitteeMember.fromJSON({ email: 'admin1@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
-      CommitteeMember.fromJSON({ email: 'admin2@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
-    ]);
-
     expect(service.needsSecondAdmin()).toBe(false);
   });
 
   it('should return false for needsSecondAdmin() if user is not a committee admin', () => {
-    vi.spyOn(service, 'membersSignal').mockReturnValue([
-      CommitteeMember.fromJSON({ email: 'admin@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
-    ]);
-
+    vi.spyOn(service, 'getMemberCount').mockReturnValue(Promise.resolve({ count: 1 }));
+    vi.spyOn(service, 'getAdminCount').mockReturnValue(Promise.resolve({ count: 1 }));
+    mockStore.overrideSelector(selectUserLoginData, {
+      ...testUserLoginData(),
+      role: 'MANAGER',
+    });
     expect(service.needsSecondAdmin()).toBe(false);
   });
 
   it('should update the member signal when updating', async () => {
+    const getMemberCountSpy = vi.spyOn(service, 'getMemberCount').mockReturnValue(Promise.resolve({ count: 1 }));
+    const getAdminCountSpy = vi.spyOn(service, 'getAdminCount').mockReturnValue(Promise.resolve({ count: 1 }));
     const member = CommitteeMember.fromJSON({ id: '1', email: 'admin1@test.com', role: 'COMMITTEE_ADMINISTRATOR' });
-    service.membersSignal.set([member]);
-    expect(service.membersSignal()[0].role).toBe('COMMITTEE_ADMINISTRATOR');
     const apiSpy: Mock = vi.spyOn(apiService, 'put');
     apiSpy.mockResolvedValue({ id: '1', email: 'admin1@test.com', role: 'MANAGER' } as CommitteeMember);
 
     await service.update({ ...member, role: 'MANAGER' } as CommitteeMember);
-    expect(service.membersSignal()[0].role).toBe('MANAGER');
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(getMemberCountSpy).toHaveBeenCalledOnce();
+    expect(getAdminCountSpy).toHaveBeenCalledOnce();
   });
 });

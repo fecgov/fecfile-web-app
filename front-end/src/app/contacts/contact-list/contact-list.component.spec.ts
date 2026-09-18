@@ -87,6 +87,7 @@ describe('ContactListComponent', () => {
 
   describe('typical', () => {
     beforeEach(() => {
+      component.showRestoreDeletedContacts = true;
       fixture.detectChanges();
     });
 
@@ -201,6 +202,23 @@ describe('ContactListComponent', () => {
           previous: '',
           pageNumber: 1,
           results: [],
+        }),
+      );
+      await component.checkForDeletedContacts();
+
+      expect(component.restoreContactsButtonIsVisible).toBe(false);
+    });
+
+    it('Restore deleted contacts should not be visible when the feature flag is disabled', async () => {
+      component.showRestoreDeletedContacts = false;
+
+      vi.spyOn(deletedContactService, 'getTableData').mockReturnValue(
+        Promise.resolve({
+          count: 1,
+          next: '',
+          previous: '',
+          pageNumber: 1,
+          results: [contact],
         }),
       );
       await component.checkForDeletedContacts();
