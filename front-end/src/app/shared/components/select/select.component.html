@@ -1,26 +1,27 @@
 <div class="field">
-  <label [class]="labelClass()" [id]="selectId().label" [for]="selectId().id">
+  <span [class]="labelClass()" [id]="selectId().label">
     {{ label() }}
-    @if (optionalLabel()) {
+    @if (!required()) {
       <span class="paren-label">(OPTIONAL)</span>
     }
-  </label>
+  </span>
   <p-select
-    [id]="selectId().id"
+    [inputId]="selectId().id"
     [options]="options()"
     [formControl]="control()"
-    optionLabel="label"
-    optionValue="value"
     [showClear]="showClear()"
-    (onChange)="handleChange(); update.emit(control().value)"
+    [aria-labelledby]="selectId().label"
+    [appendTo]="appendTo()"
+    (onChange)="update.emit(control().value)"
     (onBlur)="update.emit(control().value)"
   >
-    @if (customTemplate()) {
-      <ng-template pTemplate="item" let-option>
-        <ng-container *ngTemplateOutlet="customTemplate(); context: { $implicit: option }"></ng-container>
+    @if (customTemplate(); as tpl) {
+      <ng-template pTemplate="selectedItem" let-selectedOption>
+        <ng-container *ngTemplateOutlet="tpl; context: { $implicit: selectedOption }" />
       </ng-template>
-      <ng-template pTemplate="selectedItem" let-option>
-        <ng-container *ngTemplateOutlet="customTemplate(); context: { $implicit: option }"></ng-container>
+
+      <ng-template pTemplate="item" let-option>
+        <ng-container *ngTemplateOutlet="tpl; context: { $implicit: option }" />
       </ng-template>
     }
   </p-select>

@@ -544,15 +544,21 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   border-radius: var(--border-radius);
   align-items: center;
   font-size: var(--input-font-size);
+  border: 2px solid var(--fec-grey-alt);
 }
 .p-select:not(.p-disabled) {
   background: var(--p-content-background);
-  border: 2px solid var(--fec-grey-alt);
   transition:
     background-color 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
 }
+
+.p-select.p-disabled {
+  font-family: var(--karla-bold);
+  opacity: 0.65;
+}
+
 .p-select:not(.p-disabled):hover {
   border-color: var(--surface-border);
 }
@@ -2805,6 +2811,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: var(--border-radius);
   box-shadow: none;
+  white-space: nowrap;
 }
 
 .p-popover-close {
@@ -3322,7 +3329,7 @@ input {
 }
 
 .p-datatable-table-container {
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
 .pi-sort-down-fill {

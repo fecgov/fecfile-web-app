@@ -22,6 +22,7 @@ export class SearchableSelectComponent {
   readonly readonly = input(false);
   readonly styleClass = input('');
   readonly pt = input<SelectPassThrough>();
+  readonly appendTo = input('self');
 
   readonly changeOut = output<any>();
   readonly focusOut = output<any>();

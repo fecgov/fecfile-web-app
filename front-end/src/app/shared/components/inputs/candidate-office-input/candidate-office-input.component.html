@@ -1,6 +1,7 @@
 <div [formGroup]="form()">
   <div class="grid">
     <div class="col-6">
+      <!-- Need to appendTo body until contact dialog is moved into our dialog -->
       <app-select
         inputId="candidate_office"
         label="CANDIDATE OFFICE"
@@ -8,6 +9,7 @@
         [form]="form()"
         [formControlName]="officeFormControlName()"
         [formSubmitted]="formSubmitted()"
+        appendTo="body"
       />
     </div>
     <div class="col-3">
@@ -18,6 +20,7 @@
         [form]="form()"
         [formControlName]="stateFormControlName()"
         [formSubmitted]="formSubmitted()"
+        appendTo="body"
       />
     </div>
     <div class="col-3">
@@ -45,6 +48,7 @@
           [form]="form()"
           [formControlName]="districtFormControlName()"
           [formSubmitted]="formSubmitted()"
+          appendTo="body"
         />
       }
     </div>

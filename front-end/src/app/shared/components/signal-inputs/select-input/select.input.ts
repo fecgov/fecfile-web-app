@@ -26,6 +26,7 @@ import { BaseInput } from '../base.input';
         (onHide)="touched.set(true)"
         [disabled]="disabled()"
         [class.p-disabled]="disabled()"
+        [showClear]="showClear()"
       >
         @if (selectedItemTemplate()) {
           <ng-template #selectedItem let-selectedOption>
@@ -53,6 +54,7 @@ import { BaseInput } from '../base.input';
 })
 export class SelectInput extends BaseInput<string> {
   readonly options = input.required<PrimeOptions>();
+  readonly showClear = input(false);
 
   readonly selectedItemTemplate = contentChild<
     TemplateRef<{

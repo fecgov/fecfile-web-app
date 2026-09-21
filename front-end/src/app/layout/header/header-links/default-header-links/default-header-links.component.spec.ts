@@ -7,13 +7,10 @@ import { LoginService } from 'app/shared/services/login.service';
 import { ElectionCycleStore } from 'app/tools/election-cycle/election-cycle.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { Form3Service } from 'app/shared/services/form-3.service';
-import { Mock } from 'vitest';
 
 describe('DefaultHeaderLinksComponent', () => {
   let component: DefaultHeaderLinksComponent;
   let fixture: ComponentFixture<DefaultHeaderLinksComponent>;
-  let toolsHide: Mock;
-  let accountHide: Mock;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -31,9 +28,6 @@ describe('DefaultHeaderLinksComponent', () => {
     fixture = TestBed.createComponent(DefaultHeaderLinksComponent);
     component = fixture.componentInstance;
 
-    toolsHide = vi.spyOn(component.toolsOp(), 'hide');
-    accountHide = vi.spyOn(component.accountOp(), 'hide');
-
     fixture.detectChanges();
   });
 
@@ -45,67 +39,47 @@ describe('DefaultHeaderLinksComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('toggleTools', () => {
-    it('should hide account popover and toggle tools popover', () => {
-      const toolsToggle = vi.spyOn(component.toolsOp(), 'toggle');
-      const mockEvent = new Event('click');
-
-      component.toggleTools(mockEvent);
-
-      expect(accountHide).toHaveBeenCalledTimes(1);
-      expect(toolsToggle).toHaveBeenCalledWith(mockEvent);
-    });
-  });
-
-  describe('toggleAccount', () => {
-    it('should hide tools popover and toggle account popover', () => {
-      const accountToggle = vi.spyOn(component.accountOp(), 'toggle');
-      const mockEvent = new Event('click');
-
-      component.toggleAccount(mockEvent);
-
-      expect(toolsHide).toHaveBeenCalledTimes(1);
-      expect(accountToggle).toHaveBeenCalledWith(mockEvent);
-    });
-  });
-
   describe('onDocumentClick', () => {
     it('should hide both popovers when click target is outside both menu elements', () => {
+      component.toolsHidden.set(false);
+      component.accountHidden.set(false);
+      fixture.detectChanges();
       const outerElement = document.createElement('div');
-
       const mockEvent = { target: outerElement } as unknown as MouseEvent;
 
       component.onDocumentClick(mockEvent);
-      expect(toolsHide).toHaveBeenCalledTimes(1);
-      expect(accountHide).toHaveBeenCalledTimes(1);
+      expect(component.toolsHidden()).toBeTruthy();
+      expect(component.accountHidden()).toBeTruthy();
     });
 
     it('should not hide tools popover when clicking inside #tools-menu-link', () => {
+      component.toolsHidden.set(false);
+      component.accountHidden.set(false);
       const toolsWrapper = document.createElement('div');
       toolsWrapper.id = 'tools-menu-link';
       const innerChild = document.createElement('span');
       toolsWrapper.appendChild(innerChild);
 
       const mockEvent = { target: innerChild } as unknown as MouseEvent;
-
       component.onDocumentClick(mockEvent);
 
-      expect(toolsHide).not.toHaveBeenCalled();
-      expect(accountHide).toHaveBeenCalledTimes(1);
+      expect(component.toolsHidden()).toBeFalsy();
+      expect(component.accountHidden()).toBeTruthy();
     });
 
     it('should not hide account popover when clicking inside #account-menu-link', () => {
+      component.toolsHidden.set(false);
+      component.accountHidden.set(false);
       const accountWrapper = document.createElement('div');
       accountWrapper.id = 'account-menu-link';
       const innerChild = document.createElement('span');
       accountWrapper.appendChild(innerChild);
 
       const mockEvent = { target: innerChild } as unknown as MouseEvent;
-
       component.onDocumentClick(mockEvent);
 
-      expect(toolsHide).toHaveBeenCalledTimes(1);
-      expect(accountHide).not.toHaveBeenCalled();
+      expect(component.toolsHidden()).toBeTruthy();
+      expect(component.accountHidden()).toBeFalsy();
     });
   });
 });

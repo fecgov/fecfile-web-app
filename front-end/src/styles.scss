@@ -70,7 +70,8 @@ p-inputnumber.ng-invalid.ng-touched input.p-inputtext,
 .ng-submitted p-calendar.ng-dirty.ng-invalid input.p-inputtext,
 p-calendar.ng-dirty.ng-invalid.ng-touched input.p-inputtext,
 .ng-submitted p-autocomplete.ng-invalid input.p-inputtext,
-p-autocomplete.ng-invalid.ng-touched input.p-inputtext {
+p-autocomplete.ng-invalid.ng-touched input.p-inputtext,
+p-select.ng-invalid.ng-touched {
   border-color: #dc3545;
 }
 
@@ -908,4 +909,11 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
 .addr-street,
 .addr-city-state {
   display: inline-block;
+}
+
+.custom-popover {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: auto;
 }
