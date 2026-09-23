@@ -9,9 +9,10 @@ import { VersionData } from './version-data';
 import { ReportService } from 'app/shared/services/report.service';
 import { MessageService } from 'primeng/api';
 import { NumberInput } from 'app/shared/components/signal-inputs/number-input/number.input';
-import { DateInput, validateDate } from 'app/shared/components/signal-inputs/date-input/date.input';
+import { DateInput } from 'app/shared/components/signal-inputs/date-input/date.input';
 import { TextInput } from 'app/shared/components/signal-inputs/text-input/text.input';
 import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
+import { validateDate } from 'app/shared/components/signal-inputs/date-input/date.validators';
 
 @Component({
   selector: 'app-update-version-number',

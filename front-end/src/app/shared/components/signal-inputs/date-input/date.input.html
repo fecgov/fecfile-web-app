@@ -1,7 +1,8 @@
-<app-label [label]="label()" [inputId]="inputId()" [optional]="optional()" />
+<app-label [label]="label()" [inputId]="inputId()" [optional]="optional()" [labelStyleClass]="labelStyleClass()" />
 <p-datepicker
   #datepicker
   appendTo="body"
+  [invalid]="touched() && invalid()"
   [attr.data-cy]="inputId()"
   [inputId]="inputId()"
   [showOnFocus]="false"
@@ -10,7 +11,6 @@
   (ngModelChange)="onDateSelect($event)"
   [showIcon]="true"
   [iconDisplay]="'input'"
-  ariaLabelledBy="date_picker_label"
   [keepInvalid]="true"
   [autoClear]="false"
   placeholder="MM/DD/YYYY"
@@ -18,7 +18,8 @@
   slotChar="MM/DD/YYYY"
   appDateSanitizer
   (onSelect)="onDateSelect($event)"
-  (onBlur)="touched.set(true)"
+  (onBlur)="onBlur()"
+  (onHide)="onCloseOverlay()"
 >
   <ng-template pTemplate="header">
     <div class="flex justify-content-between p-2 border-bottom-1 border-300">
