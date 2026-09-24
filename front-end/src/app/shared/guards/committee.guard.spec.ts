@@ -2,10 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { committeeGuard } from './committee.guard';
-import { testMockStore } from '../utils/unit-test.utils';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 describe('committeeGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
@@ -13,7 +11,7 @@ describe('committeeGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideMockStore(testMockStore())],
+      providers: [],
     });
   });
 
@@ -30,10 +28,11 @@ describe('committeeGuard', () => {
     });
   });
   it('should return true with committee', () => {
+    const committeeStore = TestBed.inject(CommitteeStore);
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    TestBed.inject(MockStore).overrideSelector(selectCommitteeAccount, CommitteeAccount.fromJSON({ id: '123' }));
-    TestBed.inject(MockStore).refreshState();
+    committeeStore.setCommittee(CommitteeAccount.fromJSON({ id: '123' }));
+
     (executeGuard(route, state) as Promise<boolean>).then((safe) => {
       expect(safe).toBe(true);
     });

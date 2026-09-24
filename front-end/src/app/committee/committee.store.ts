@@ -1,0 +1,113 @@
+import { DestroyRef, Injectable, computed, effect, inject, signal } from '@angular/core';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+
+const STORAGE_KEY = 'fecfile_online_committeeAccount';
+
+const committeeStatusCodes: { [key: string]: string } = {
+  T: 'Terminated (T)',
+  A: 'Administratively Terminated (A)',
+  D: 'Debt (D)',
+  W: 'Waived (W)',
+  M: 'Monthly (M)',
+  Q: 'Quarterly (Q)',
+} as const;
+
+const activeStatusCodes: ReadonlySet<string> = new Set(['M', 'Q', 'W', 'D']);
+
+@Injectable({ providedIn: 'root' })
+export class CommitteeStore {
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly _committee = signal<CommitteeAccount | null>(this.loadFromStorage());
+  readonly committee = this._committee.asReadonly();
+
+  private readonly _committeeChangedInOtherTab = signal(false);
+  readonly committeeChangedInOtherTab = this._committeeChangedInOtherTab.asReadonly();
+
+  readonly committeeName = computed(() => this.committee()?.name);
+  readonly committeeTypeLabel = computed(() => this.committee()?.committee_type_label ?? '');
+  readonly committeeID = computed(() => this.committee()?.committee_id);
+  readonly filingFrequency = computed(() => this.committee()?.filing_frequency ?? '');
+  readonly committeeFrequency = computed(() => committeeStatusCodes[this.filingFrequency()] ?? '');
+  readonly committeeStatus = computed(() => (activeStatusCodes.has(this.filingFrequency()) ? 'Active' : 'Inactive'));
+  readonly isPAC = computed(() => this.committee()?.isPAC ?? false);
+  readonly isPTY = computed(() => this.committee()?.isPTY ?? false);
+  readonly eligibleReportTypes = computed(() => {
+    const eligible_report_types = this.committee()?.eligible_report_types;
+    if (!eligible_report_types) console.error('No eligible report types in committee data');
+    return new Set(eligible_report_types);
+  });
+
+  constructor() {
+    effect(() => {
+      const account = this._committee();
+
+      try {
+        if (account) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(account));
+        } else {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      } catch (error) {
+        console.error('Error saving committeeAccount to localStorage:', error);
+      }
+    });
+
+    window.addEventListener('storage', this.handleStorageChange);
+
+    this.destroyRef.onDestroy(() => {
+      window.removeEventListener('storage', this.handleStorageChange);
+    });
+  }
+
+  setCommittee(committee: CommitteeAccount): void {
+    this._committeeChangedInOtherTab.set(false);
+    this._committee.set(committee);
+  }
+
+  clearCommittee(): void {
+    this._committeeChangedInOtherTab.set(false);
+    this._committee.set(null);
+  }
+
+  clearCommitteeChangedInOtherTab(): void {
+    this._committeeChangedInOtherTab.set(false);
+  }
+
+  reloadFromStorage(): void {
+    const updated = this.loadFromStorage();
+    this._committee.set(updated);
+    this._committeeChangedInOtherTab.set(false);
+  }
+
+  private loadFromStorage(): CommitteeAccount | null {
+    try {
+      const item = localStorage.getItem(STORAGE_KEY);
+
+      return item ? CommitteeAccount.fromJSON(JSON.parse(item)) : null;
+    } catch (error) {
+      console.error('Error rehydrating committeeAccount:', error);
+      return null;
+    }
+  }
+
+  private readonly handleStorageChange = (event: StorageEvent): void => {
+    if (event.key !== STORAGE_KEY) return;
+
+    try {
+      if (!event.newValue) {
+        this._committeeChangedInOtherTab.set(true);
+        return;
+      }
+
+      const updatedCommittee = CommitteeAccount.fromJSON(JSON.parse(event.newValue));
+      const currentCommitteeId = this._committee()?.id;
+
+      if (currentCommitteeId && updatedCommittee.id !== currentCommitteeId) {
+        this._committeeChangedInOtherTab.set(true);
+      }
+    } catch (error) {
+      console.error('Error processing committee storage change:', error);
+    }
+  };
+}
