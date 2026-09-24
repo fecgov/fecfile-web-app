@@ -58,13 +58,7 @@
         </div>
         <div class="w-15">
           <label for="state">STATE/TERRITORY</label>
-          <app-searchable-select
-            inputId="state"
-            controlName="state"
-            [form]="form"
-            [options]="stateOptions"
-            appendTo="body"
-          />
+          <app-searchable-select inputId="state" controlName="state" [form]="form" [options]="stateOptions" />
           <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
         </div>
         <div class="w-9">
