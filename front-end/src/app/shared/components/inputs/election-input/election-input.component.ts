@@ -29,16 +29,18 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
 
   ngOnInit(): void {
     const transaction = this.transaction();
-    if (transaction && (transaction.transactionType.inheritElectionInfo)) {
-      this.form
-        .get(transaction.transactionType.templateMap.election_code)
-        ?.setValue((transaction.parent_transaction as SchATransaction)?.election_code);
-      this.form
-        .get(transaction.transactionType.templateMap.election_other_description)
-        ?.setValue((transaction.parent_transaction as SchATransaction)?.election_other_description);
-      this.form.disable();
+    if (transaction && transaction.transactionType.inheritElectionInfo) {
+      const electionCodeFormControl = this.form.get(transaction.transactionType.templateMap.election_code);
+      const electionOtherDescriptionFormControl = this.form.get(
+        transaction.transactionType.templateMap.election_other_description,
+      );
+      electionCodeFormControl?.setValue((transaction.parent_transaction as SchATransaction)?.election_code);
+      electionCodeFormControl?.disable();
+      electionOtherDescriptionFormControl?.setValue(
+        (transaction.parent_transaction as SchATransaction)?.election_other_description,
+      );
+      electionOtherDescriptionFormControl?.disable();
     }
-
 
     // Get inital values for election type and year for additional form inputs
 

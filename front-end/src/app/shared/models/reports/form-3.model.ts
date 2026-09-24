@@ -97,7 +97,6 @@ export class Form3 extends BaseForm3 {
   @Exclude()
   override transactionTypes: TransactionTypes[] = [
     // RECEIPTS
-    ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
     // CONTRIBUTIONS FROM INDIVIDUALS/PERSONS
     ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
     ScheduleATransactionTypes.TRIBAL_RECEIPT,
@@ -126,6 +125,7 @@ export class Form3 extends BaseForm3 {
     ScheduleATransactionTypes.OTHER_RECEIPTS,
     ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.FEDERAL_COMMITTEE_RECOUNT_DONATION,
+    ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.UNREGISTERED_RECOUNT_DONATION_FROM_ORGANIZATION,
 
     // LOANS AND DEBTS

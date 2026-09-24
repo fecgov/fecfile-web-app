@@ -38,7 +38,7 @@ describe('RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN', () => {
   });
 
   it('#isReattributable() should return false', () => {
-    const result = transactionType.isReattributable;
+    const result = transactionType.isReattributable();
     expect(result).toBe(false);
   });
 });

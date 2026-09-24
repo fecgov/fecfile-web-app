@@ -46,8 +46,8 @@ describe('INDIVIDUAL_RECOUNT_RECEIPT', () => {
     expect(result).toBe(true);
   });
 
-  it('#isReattributable() should return false for F3X', () => {
+  it('#isReattributable() should return true for F3X', () => {
     const result = transactionType.isReattributable(ReportTypes.F3X);
-    expect(result).toBe(false);
+    expect(result).toBe(true);
   });
 });

@@ -11,7 +11,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
   [ReportTypes.F3]: new Set<TransactionTypes>([
     /*** RECEIPTS **********************************************/
     // CONTRIBUTIONS FROM INDIVIDUALS/PERSONS
-    ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
     ScheduleATransactionTypes.IN_KIND_RECEIPT,
     ScheduleATransactionTypes.EARMARK_RECEIPT,
     // CONTRIBUTIONS FROM REGISTERED FILERS
@@ -25,7 +24,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
     ScheduleATransactionTypes.IN_KIND_TRANSFER,
     // OTHER
-    ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.FEDERAL_COMMITTEE_RECOUNT_DONATION,
     ScheduleATransactionTypes.UNREGISTERED_RECOUNT_DONATION_FROM_ORGANIZATION,
 

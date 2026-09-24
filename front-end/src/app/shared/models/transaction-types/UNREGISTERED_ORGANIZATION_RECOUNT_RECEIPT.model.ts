@@ -9,7 +9,10 @@ import { AggregationGroups } from '../transaction.model';
 export class UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT extends SchATransactionType {
   formFields = [...ORGANIZATION_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = ORGANIZATION;
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT);
+  title = LabelUtils.get(
+    ScheduleATransactionTypeLabels,
+    ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
+  );
   schema = schema;
 
   override generatePurposeDescription(): string {

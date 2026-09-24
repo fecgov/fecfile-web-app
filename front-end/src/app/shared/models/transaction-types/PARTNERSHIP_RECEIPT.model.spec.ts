@@ -41,8 +41,8 @@ describe('PARTNERSHIP_RECEIPT', () => {
     expect(result).toBe(false);
   });
 
-  it('#isReattributable() should return true for F3', () => {
+  it('#isReattributable() should return false', () => {
     const result = transaction.transactionType.isReattributable();
-    expect(result).toBe(true);
+    expect(result).toBe(false);
   });
 });
