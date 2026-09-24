@@ -16,7 +16,7 @@ export class CONDUIT_EARMARK_RECEIPT extends CONDUIT_EARMARK {
     false: ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED,
   };
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 

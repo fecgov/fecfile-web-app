@@ -1,5 +1,6 @@
 import { INDIVIDUAL } from '../utils/transaction-type-properties';
-import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { ReportTypes } from './reports/report.model';
+import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
 import { ScheduleIds } from './transaction.model';
 
 export abstract class SchATransactionType extends TransactionType {
@@ -9,7 +10,7 @@ export abstract class SchATransactionType extends TransactionType {
   override dateLabel = 'DATE RECEIVED';
   override amountInputHeader = 'Receipt information';
   override purposeDescripLabel = 'PURPOSE OF RECEIPT';
-  override get isReattributable() {
+  override isReattributable(report_type: ReportTypes) {
     return !this.negativeAmountValueOnly || this.contactTypeOptions === INDIVIDUAL;
   }
 

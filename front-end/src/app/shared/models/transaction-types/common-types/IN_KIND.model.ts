@@ -22,7 +22,7 @@ export abstract class IN_KIND extends SchATransactionType {
 
   override purposeDescriptionPrefix = 'In-Kind: ';
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 }

@@ -17,7 +17,7 @@ export class RETURN_RECEIPT extends SchATransactionType {
   schema = schema;
   override negativeAmountValueOnly = true;
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 

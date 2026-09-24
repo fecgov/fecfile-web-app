@@ -19,7 +19,7 @@ export class BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT extends SchATransactionType
     return 'Non-contribution Account';
   }
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 

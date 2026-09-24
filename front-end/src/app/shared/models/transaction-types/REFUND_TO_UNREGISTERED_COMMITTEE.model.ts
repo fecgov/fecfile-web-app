@@ -12,7 +12,7 @@ export class REFUND_TO_UNREGISTERED_COMMITTEE extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE);
   schema = schema;
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 

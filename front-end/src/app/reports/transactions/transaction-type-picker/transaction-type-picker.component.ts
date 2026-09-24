@@ -130,7 +130,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           group,
           transactionTypes.filter((transactionType) => {
             if (this.isTransactionDisabled(transactionType)) return false;
-            const lineNumber = TransactionTypeUtils.factory(transactionType).getNewTransaction().form_type ?? '';
+            const lineNumber = TransactionTypeUtils.factory(transactionType).getNewTransaction(report.report_type).form_type ?? '';
             return debtPaymentLines.has(lineNumber);
           }),
         );

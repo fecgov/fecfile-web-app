@@ -1,5 +1,6 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
+import { ReportTypes } from '../reports/report.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
 describe('PARTNERSHIP_RECEIPT', () => {
   let transaction: SchATransaction;
@@ -28,5 +29,20 @@ describe('PARTNERSHIP_RECEIPT', () => {
     transaction.children[0].itemized = true;
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('See Partnership Attribution(s) below');
+  });
+
+  it('#hasElectionInformation() should return true for F3 report type', () => {
+    const result = transaction.transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(result).toBe(true);
+  });
+
+  it('#hasElectionInformation() should return false for F3X', () => {
+    const result = transaction.transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(result).toBe(false);
+  });
+
+  it('#isReattributable() should return true for F3', () => {
+    const result = transaction.transactionType.isReattributable();
+    expect(result).toBe(true);
   });
 });

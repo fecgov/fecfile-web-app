@@ -34,7 +34,7 @@ export abstract class TransactionType {
   contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
-  abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
+  abstract getNewTransaction(report_type?: ReportTypes): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
   synchronizeOrgComNameValues = true; // When the COM name value is saved in the ORG model property per the FEC specification, "true" indicates that it is also copied into the COM model property as well
 
   // Form display settings
@@ -44,6 +44,7 @@ export abstract class TransactionType {
   showCalendarYTD = false;
   showPayeeCandidateYTD = false;
   inheritCalendarYTD = false; // When true, the transaction (memo) will inherit the calendar_ytd of its parent transaction
+  inheritElectionInfo = false; // When true, the transaction (memo) will inherit the election information of its parent transaction
 
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
@@ -105,7 +106,7 @@ export abstract class TransactionType {
   // transaction type model and implemented in a particular input component. See MULTISTATE_INDEPENDENT_EXPENDITURE for an example.
   mandatoryFormValues: { [field: string]: string | boolean | undefined } = {};
 
-  get isReattributable() {
+  isReattributable(report_type?: ReportTypes): boolean {
     return false;
   }
 

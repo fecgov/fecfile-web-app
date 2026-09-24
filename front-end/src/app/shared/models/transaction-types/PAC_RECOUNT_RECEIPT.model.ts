@@ -16,7 +16,7 @@ export class PAC_RECOUNT_RECEIPT extends SchATransactionType {
     return 'Recount Account';
   }
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 

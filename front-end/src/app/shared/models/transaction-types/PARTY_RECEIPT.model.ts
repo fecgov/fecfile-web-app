@@ -17,7 +17,7 @@ export class PARTY_RECEIPT extends SchATransactionType {
     return report_type === ReportTypes.F3;
   }
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 

@@ -13,7 +13,7 @@ export class PAC_RETURN extends SchATransactionType {
   schema = schema;
   override negativeAmountValueOnly = true;
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 

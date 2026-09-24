@@ -1,12 +1,13 @@
 import { Component, computed, OnInit } from '@angular/core';
-import { Validators, ReactiveFormsModule } from '@angular/forms';
-import { takeUntil } from 'rxjs';
-import { BaseInputComponent } from '../base-input.component';
-import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
+import { SchATransaction } from 'app/shared/models';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
+import { takeUntil } from 'rxjs';
+import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { SelectComponent } from '../../select/select.component';
+import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-election-input',
@@ -27,6 +28,18 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
   ];
 
   ngOnInit(): void {
+    const transaction = this.transaction();
+    if (transaction && (transaction.transactionType.inheritElectionInfo)) {
+      this.form
+        .get(transaction.transactionType.templateMap.election_code)
+        ?.setValue((transaction.parent_transaction as SchATransaction)?.election_code);
+      this.form
+        .get(transaction.transactionType.templateMap.election_other_description)
+        ?.setValue((transaction.parent_transaction as SchATransaction)?.election_other_description);
+      this.form.disable();
+    }
+
+
     // Get inital values for election type and year for additional form inputs
 
     const election_code = this.form.get('election_code');
@@ -49,7 +62,6 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     }
 
     // Check for mandatory Field designation and disable if necessary
-    const transaction = this.transaction();
     if (transaction && 'electionType' in transaction.transactionType.mandatoryFormValues) {
       this.form.get('electionType')?.setValue(transaction.transactionType.mandatoryFormValues['electionType']);
       this.form.get('electionType')?.disable();

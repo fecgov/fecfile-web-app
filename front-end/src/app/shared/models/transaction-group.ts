@@ -197,6 +197,7 @@ export const Receipt: TransactionGroup[] = [
       ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
       ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,
       ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
+      ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
       ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
       ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
       ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,

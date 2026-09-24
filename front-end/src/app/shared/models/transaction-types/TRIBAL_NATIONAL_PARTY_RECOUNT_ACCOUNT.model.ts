@@ -19,7 +19,7 @@ export class TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
     return 'Recount/Legal Proceedings Account';
   }
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 

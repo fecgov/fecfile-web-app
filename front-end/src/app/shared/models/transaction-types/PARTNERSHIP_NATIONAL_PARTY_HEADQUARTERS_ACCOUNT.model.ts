@@ -28,7 +28,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransac
     return 'Headquarters Buildings Account (Partnership attributions do not meet itemization threshold)';
   }
 
-  override get isReattributable(): boolean {
+  override isReattributable(): boolean {
     return false;
   }
 

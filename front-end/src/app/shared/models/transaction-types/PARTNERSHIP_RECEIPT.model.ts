@@ -1,13 +1,14 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { ELECTION_FIELDS, ORGANIZATION, ORGANIZATION_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_RECEIPT';
-import { AggregationGroups } from '../transaction.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { SchATransactionType } from '../scha-transaction-type.model';
-import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
+import { AggregationGroups } from '../transaction.model';
+import { ReportTypes } from '../reports/report.model';
 
 export class PARTNERSHIP_RECEIPT extends SchATransactionType {
-  formFields = ORGANIZATION_FORM_FIELDS;
+  formFields = [...ORGANIZATION_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
   schema = schema;
@@ -21,7 +22,12 @@ export class PARTNERSHIP_RECEIPT extends SchATransactionType {
     }
     return 'Partnership attributions do not meet itemization threshold';
   }
-  override get isReattributable(): boolean {
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
+  }
+
+  override isReattributable(): boolean {
     return false;
   }
 
