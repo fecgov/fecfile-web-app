@@ -7,6 +7,7 @@ export class TransactionListRecord extends BaseModel {
   id: string | undefined;
   transaction_type_identifier: string | undefined;
   form_type: string | undefined;
+  line_number: string | undefined;
   report_type: string | undefined;
   transaction_id: string | undefined;
   back_reference_tran_id_number?: string;

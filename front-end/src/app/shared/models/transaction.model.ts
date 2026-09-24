@@ -34,6 +34,7 @@ export abstract class Transaction extends BaseModel {
   // FECFile spec properties
 
   form_type: string | undefined;
+  line_number: string | undefined;
   transaction_id: string | undefined;
 
   // FECFile Online custom properties
