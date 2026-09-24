@@ -6,7 +6,7 @@
 
 <ng-template #actionsBody let-item>
   <app-table-actions-button
-    [tableActions]="rowActions"
+    [tableActions]="rowActions()"
     [actionItem]="item"
     (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
     buttonIcon="pi pi-ellipsis-v"

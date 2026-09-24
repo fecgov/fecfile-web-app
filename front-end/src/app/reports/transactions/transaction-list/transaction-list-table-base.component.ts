@@ -1,28 +1,24 @@
-import { computed, Directive, inject, OnInit, TemplateRef } from '@angular/core';
+import { computed, Directive, inject, input, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition, TableBodyContext } from 'app/shared/components/table/table.component';
-import {
-  isPulledForwardLoan,
-  Report,
-  ReportTypes,
-  ScheduleATransactionTypes,
-  ScheduleBTransactionTypes,
-  ScheduleC1TransactionTypes,
-  ScheduleCTransactionTypes,
-  ScheduleDTransactionTypes,
-  ScheduleIds,
-} from 'app/shared/models';
+import { ReportTypes, Report } from 'app/shared/models/reports/report.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { isPulledForwardLoan, ScheduleIds } from 'app/shared/models/transaction.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 
 const loanReceipts = new Set(['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE']);
 const loansDebts = new Set([
@@ -38,164 +34,171 @@ export abstract class TransactionListTableBaseComponent
   extends TableListBaseComponent<TransactionListRecord>
   implements OnInit
 {
+  override readonly itemService = inject(TransactionListService);
   private readonly reatRedesStore = inject(ReattRedesStore);
-  protected readonly reportService = inject(ReportService);
-  protected readonly transactionService = inject(TransactionService);
+  readonly reportService = inject(ReportService);
+  readonly transactionService = inject(TransactionService);
   protected readonly router = inject(Router);
   protected readonly store = inject(Store);
   protected readonly activatedRoute = inject(ActivatedRoute);
-  // only signal on new report
-  readonly report = this.store.selectSignal(selectActiveReport, { equal: (a, b) => a?.id === b?.id });
 
+  readonly report = input<Report | null>(null);
+
+  abstract readonly schedules: string;
   abstract scheduleTransactionTypeLabels: LabelList;
   paginationPageSizeOptions = [5, 10, 15, 20];
   readonly reportIsEditable = computed(() => this.reportService.isEditable(this.report()));
-  readonly isForm24 = computed(() => this.report().form_type === ReportTypes.F24);
+  readonly isForm24 = computed(() => this.report()?.form_type === ReportTypes.F24);
 
-  public rowActions: TableAction<TransactionListRecord>[] = [
-    new TableAction(
-      'View',
-      this.editItem.bind(this),
-      () => !this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Edit',
-      this.editItem.bind(this),
-      () => this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Clone',
-      this.cloneItem.bind(this),
-      (transaction: TransactionListRecord) => this.canClone(transaction),
-      () => true,
-    ),
-    new TableAction(
-      'Delete',
-      this.deleteItem.bind(this),
-      (transaction: TransactionListRecord) => this.reportIsEditable() && this.canDelete(transaction),
-      () => true,
-    ),
-    new TableAction(
-      'Aggregate',
-      this.forceAggregate.bind(this),
-      (transaction: TransactionListRecord) =>
-        !!transaction.force_unaggregated &&
-        this.reportIsEditable() &&
-        this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction_id &&
-        [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
-      () => true,
-    ),
-    new TableAction(
-      'Unaggregate',
-      this.forceUnaggregate.bind(this),
-      (transaction: TransactionListRecord) =>
-        !transaction.force_unaggregated &&
-        this.reportIsEditable() &&
-        this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction_id &&
-        [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
-      () => true,
-    ),
-    new TableAction(
-      'Itemize',
-      this.forceItemize.bind(this),
-      (transaction: TransactionListRecord) =>
-        transaction.itemized === false &&
-        this.reportIsEditable() &&
-        this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction_id &&
-        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
-      () => true,
-    ),
-    new TableAction(
-      'Unitemize',
-      this.forceUnitemize.bind(this),
-      (transaction: TransactionListRecord) =>
-        transaction.itemized === true &&
-        this.reportIsEditable() &&
-        this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction_id &&
-        ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
-      () => true,
-    ),
-    new TableAction(
-      'Receive loan repayment',
-      this.createLoanRepaymentReceived.bind(this),
-      (transaction: TransactionListRecord) =>
-        transaction.transaction_type_identifier == ScheduleCTransactionTypes.LOAN_BY_COMMITTEE &&
-        this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Review loan agreement',
-      this.editLoanAgreement.bind(this),
-      (transaction: TransactionListRecord) =>
-        this.reportIsEditable() &&
-        transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
-        !!transaction.loan_agreement_id,
-      () => true,
-    ),
-    new TableAction(
-      'New loan agreement',
-      this.createLoanAgreement.bind(this),
-      (transaction: TransactionListRecord) =>
-        this.reportIsEditable() &&
-        transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
-        isPulledForwardLoan(transaction) &&
-        !transaction.loan_agreement_id,
-      () => true,
-    ),
-    new TableAction(
-      'Make loan repayment',
-      this.createLoanRepaymentMade.bind(this),
-      (transaction: TransactionListRecord) =>
-        [
-          ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
-          ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
-        ].includes(transaction.transaction_type_identifier as ScheduleCTransactionTypes) && this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Report debt repayment',
-      this.createDebtRepaymentMade.bind(this),
-      (transaction: TransactionListRecord) =>
-        transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE &&
-        this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Report debt repayment',
-      this.createDebtRepaymentReceived.bind(this),
-      (transaction: TransactionListRecord) =>
-        transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE &&
-        this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Reattribute',
-      this.createReattribution.bind(this),
-      (transaction: TransactionListRecord) => ReattRedesUtils.canReattribute(transaction),
-      () => true,
-    ),
-    new TableAction(
-      'Redesignate',
-      this.createRedesignation.bind(this),
-      (transaction: TransactionListRecord) =>
-        transaction.transactionType.scheduleId === ScheduleIds.B &&
-        transaction.transactionType.hasElectionInformation(this.report().report_type) &&
-        !transaction.transactionType.negativeAmountValueOnly &&
-        !transaction.parent_transaction_id &&
-        !ReattRedesUtils.isReattRedes(transaction, [
-          ReattRedesTypes.REDESIGNATION_FROM,
-          ReattRedesTypes.REDESIGNATION_TO,
-        ]) &&
-        !ReattRedesUtils.isAtAmountLimit(transaction),
-      () => true,
-    ),
-  ];
+  protected getBaseRowActions() {
+    const report = this.report();
+    const reportIsEditable = this.reportIsEditable();
+    if (report == null) return [];
+    return [
+      new TableAction(
+        'View',
+        this.editItem.bind(this),
+        () => !reportIsEditable,
+        () => true,
+      ),
+      new TableAction(
+        'Edit',
+        this.editItem.bind(this),
+        () => reportIsEditable,
+        () => true,
+      ),
+      new TableAction(
+        'Clone',
+        this.cloneItem.bind(this),
+        (transaction: TransactionListRecord) => this.canClone(transaction),
+        () => true,
+      ),
+      new TableAction(
+        'Delete',
+        this.deleteItem.bind(this),
+        (transaction: TransactionListRecord) => reportIsEditable && this.canDelete(transaction),
+        () => true,
+      ),
+      new TableAction(
+        'Aggregate',
+        this.forceAggregate.bind(this),
+        (transaction: TransactionListRecord) =>
+          !!transaction.force_unaggregated &&
+          reportIsEditable &&
+          this.report()?.report_type !== ReportTypes.F24 &&
+          !transaction.parent_transaction_id &&
+          [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
+        () => true,
+      ),
+      new TableAction(
+        'Unaggregate',
+        this.forceUnaggregate.bind(this),
+        (transaction: TransactionListRecord) =>
+          !transaction.force_unaggregated &&
+          reportIsEditable &&
+          report.report_type !== ReportTypes.F24 &&
+          !transaction.parent_transaction_id &&
+          [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
+        () => true,
+      ),
+      new TableAction(
+        'Itemize',
+        this.forceItemize.bind(this),
+        (transaction: TransactionListRecord) =>
+          transaction.itemized === false &&
+          reportIsEditable &&
+          report.report_type !== ReportTypes.F24 &&
+          !transaction.parent_transaction_id &&
+          ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
+        () => true,
+      ),
+      new TableAction(
+        'Unitemize',
+        this.forceUnitemize.bind(this),
+        (transaction: TransactionListRecord) =>
+          transaction.itemized === true &&
+          reportIsEditable &&
+          report.report_type !== ReportTypes.F24 &&
+          !transaction.parent_transaction_id &&
+          ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
+        () => true,
+      ),
+      new TableAction(
+        'Receive loan repayment',
+        this.createLoanRepaymentReceived.bind(this),
+        (transaction: TransactionListRecord) =>
+          transaction.transaction_type_identifier == ScheduleCTransactionTypes.LOAN_BY_COMMITTEE && reportIsEditable,
+        () => true,
+      ),
+      new TableAction(
+        'Review loan agreement',
+        this.editLoanAgreement.bind(this),
+        (transaction: TransactionListRecord) =>
+          reportIsEditable &&
+          transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
+          !!transaction.loan_agreement_id,
+        () => true,
+      ),
+      new TableAction(
+        'New loan agreement',
+        this.createLoanAgreement.bind(this),
+        (transaction: TransactionListRecord) =>
+          reportIsEditable &&
+          transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
+          isPulledForwardLoan(transaction) &&
+          !transaction.loan_agreement_id,
+        () => true,
+      ),
+      new TableAction(
+        'Make loan repayment',
+        this.createLoanRepaymentMade.bind(this),
+        (transaction: TransactionListRecord) =>
+          [
+            ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
+            ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+          ].includes(transaction.transaction_type_identifier as ScheduleCTransactionTypes) && reportIsEditable,
+        () => true,
+      ),
+      new TableAction(
+        'Report debt repayment',
+        this.createDebtRepaymentMade.bind(this),
+        (transaction: TransactionListRecord) =>
+          transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE &&
+          reportIsEditable,
+        () => true,
+      ),
+      new TableAction(
+        'Report debt repayment',
+        this.createDebtRepaymentReceived.bind(this),
+        (transaction: TransactionListRecord) =>
+          transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE &&
+          reportIsEditable,
+        () => true,
+      ),
+      new TableAction(
+        'Reattribute',
+        this.createReattribution.bind(this),
+        (transaction: TransactionListRecord) => ReattRedesUtils.canReattribute(transaction),
+        () => true,
+      ),
+      new TableAction(
+        'Redesignate',
+        this.createRedesignation.bind(this),
+        (transaction: TransactionListRecord) =>
+          transaction.transactionType.scheduleId === ScheduleIds.B &&
+          transaction.transactionType.hasElectionInformation(report.report_type) &&
+          !transaction.transactionType.negativeAmountValueOnly &&
+          !transaction.parent_transaction_id &&
+          !ReattRedesUtils.isReattRedes(transaction, [
+            ReattRedesTypes.REDESIGNATION_FROM,
+            ReattRedesTypes.REDESIGNATION_TO,
+          ]) &&
+          !ReattRedesUtils.isAtAmountLimit(transaction),
+        () => true,
+      ),
+    ];
+  }
+  readonly rowActions = computed(() => this.getBaseRowActions());
 
   protected buildLineColumn(): ColumnDefinition<TransactionListRecord> {
     return {
@@ -283,10 +286,16 @@ export abstract class TransactionListTableBaseComponent
   }
 
   override readonly params = computed(() => {
-    const params: QueryParams = { page_size: this.rowsPerPage() };
-    if (this.reportId) params['report_id'] = this.reportId;
-    params['report_type'] = this.report().report_type;
-    params['report_code_label'] = this.report().report_code_label ?? '';
+    const params: QueryParams = { page_size: this.rowsPerPage(), schedules: this.schedules };
+    const report = this.report();
+    if (report) {
+      params['report_id'] = report.id!;
+      params['report_type'] = report.report_type;
+      params['report_code_label'] = report.report_code_label ?? '';
+    } else {
+      params['report_id'] = 'null';
+    }
+
     return params;
   });
 
