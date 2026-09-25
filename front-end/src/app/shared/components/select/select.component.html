@@ -1,38 +1,30 @@
 <div class="field">
-  <label [class]="labelClass()" [id]="selectId().label" [for]="selectId().id">
+  <span [class]="labelClass()" [id]="selectId().label">
     {{ label() }}
-    @if (optionalLabel()) {
+    @if (!required()) {
       <span class="paren-label">(OPTIONAL)</span>
     }
-  </label>
-  <div class="select-wrapper">
-    <select
-      #selectElement
-      [formControl]="control()"
-      [id]="selectId().id"
-      (change)="handleChange()"
-      [disabled]="control().disabled"
-      (blur)="update.emit(control().value)"
-    >
-      <button [attr.aria-labelledby]="selectId().label">
-        <selectedcontent #selected></selectedcontent>
-      </button>
-      @for (option of options(); track option.value) {
-        <option [ngValue]="option.value">
-          @if (customTemplate()) {
-            <ng-container *ngTemplateOutlet="customTemplate(); context: { $implicit: option }"></ng-container>
-          } @else {
-            {{ option.label }}
-          }
-        </option>
-      }
-    </select>
-    @if (showClear() && control().value && !control().disabled) {
-      <button type="button" class="select-clear-button" aria-label="Clear selection" (click)="clear($event)">
-        <i class="pi pi-times"></i>
-      </button>
+  </span>
+  <p-select
+    [inputId]="selectId().id"
+    [options]="options()"
+    [formControl]="control()"
+    [showClear]="showClear()"
+    [aria-labelledby]="selectId().label"
+    [appendTo]="appendTo()"
+    (onChange)="update.emit(control().value)"
+    (onBlur)="update.emit(control().value)"
+  >
+    @if (customTemplate(); as tpl) {
+      <ng-template pTemplate="selectedItem" let-selectedOption>
+        <ng-container *ngTemplateOutlet="tpl; context: { $implicit: selectedOption }" />
+      </ng-template>
+
+      <ng-template pTemplate="item" let-option>
+        <ng-container *ngTemplateOutlet="tpl; context: { $implicit: option }" />
+      </ng-template>
     }
-  </div>
+  </p-select>
   @if (includeErrorMessages()) {
     <app-error-messages [form]="form()" [fieldName]="formControlName()" [formSubmitted]="formSubmitted()" />
   }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, input, signal } from '@angular/core';
 import { cloneInstance, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
   cloneNavigationEvent,
@@ -38,6 +38,7 @@ import { singleClickDisableAction } from 'app/store/single-click.actions';
   imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule, SplitButtonModule],
 })
 export class NavigationControlComponent {
+  private readonly el = inject(ElementRef);
   private readonly store = inject(Store);
   readonly navigationControl = input.required<NavigationControl>();
   readonly transaction = input<Transaction | undefined>(undefined);
@@ -52,6 +53,8 @@ export class NavigationControlComponent {
     },
     { initialValue: [] },
   );
+
+  readonly popoverHidden = signal(true);
 
   readonly items: MenuItem[] = [
     {
@@ -218,5 +221,12 @@ export class NavigationControlComponent {
       options.push(this.getOptionFromConfig(config, transaction));
     }
     return options;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const isInsideThisInstance = this.el.nativeElement.contains(target);
+    if (!isInsideThisInstance) this.popoverHidden.set(true);
   }
 }

@@ -6,3 +6,8 @@
 .table-action-button:not(:disabled) {
   color: #212121 !important;
 }
+
+.custom-popover {
+  z-index: 5;
+  margin-top: 2px;
+}
