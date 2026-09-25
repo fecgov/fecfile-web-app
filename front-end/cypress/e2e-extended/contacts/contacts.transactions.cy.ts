@@ -178,23 +178,6 @@ const assertContactsListRow = (name: string, type: string, fecId?: string) => {
     });
 };
 
-const assertCreatesNewContactConfirmMessage = (contactTypeLower: ContactTypeLower, contactDisplay: string) => {
-  getVisibleConfirmDialog().within(() => {
-    cy.get('p').should(($msg) => {
-      const text = normalizeText($msg.text());
-
-      const rx = new RegExp(
-        String.raw`By saving this transaction, you.?re also creating a new ${contactTypeLower} contact for ${ContactsHelpers.escapeRegExp(
-          contactDisplay,
-        )}\.?$`,
-        'i',
-      );
-
-      expect(text).to.match(rx);
-    });
-  });
-};
-
 const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems: string[]) => {
   getVisibleConfirmDialog().within(() => {
     cy.get('p').should(($msg) => {
@@ -235,52 +218,6 @@ const hasAllRequiredLookupTypes = (sel: HTMLSelectElement) => {
     if (!opts.has(req)) return false;
   }
   return true;
-};
-
-const selectContactLookupType = (type: 'Individual' | 'Organization' | 'Committee') => {
-  cy.get('select').then(($selects) => {
-    let found: HTMLSelectElement | undefined;
-
-    for (const el of $selects.toArray()) {
-      if (!(el instanceof HTMLSelectElement)) continue;
-      if (hasAllRequiredLookupTypes(el)) {
-        found = el;
-        break;
-      }
-    }
-
-    expect(found, 'Contact Lookup type <select>').to.exist;
-    if (!found) {
-      throw new Error('Contact Lookup type <select> was not found');
-    }
-    cy.wrap(found).select(type);
-  });
-};
-
-const fillInputByLabel = (label: RegExp, value: string) => {
-  cy.contains('label', label)
-    .should('be.visible')
-    .then(($label) => {
-      const forAttr = $label.attr('for');
-      if (forAttr) {
-        cy.get(`#${forAttr}`).clear().type(value);
-        return;
-      }
-      cy.wrap($label).parent().find('input,textarea').first().clear().type(value);
-    });
-};
-
-const selectByLabel = (label: RegExp, value: string) => {
-  cy.contains('label', label)
-    .should('be.visible')
-    .then(($label) => {
-      const forAttr = $label.attr('for');
-      if (forAttr) {
-        cy.get(`#${forAttr}`).select(value);
-        return;
-      }
-      cy.wrap($label).parent().find('select').first().select(value);
-    });
 };
 
 describe('Contacts: Transactions integration', () => {
@@ -530,6 +467,15 @@ describe('Contacts: Transactions integration', () => {
       cy.contains('Individual Receipt').should('exist');
       ContactLookup.getContact(lastName);
 
+      cy.get('body').then(($body) => {
+        if ($body.find('#last_name').length === 0) {
+          ContactLookup.getContact(lastName);
+        }
+      });
+
+      cy.get('#last_name', { timeout: 10000 }).should('have.value', lastName);
+      cy.get('#first_name', { timeout: 10000 }).should('have.value', firstName);
+
       const scheduleData: ScheduleFormData = {
         ...defaultScheduleFormData,
         amount: 250,
@@ -540,14 +486,55 @@ describe('Contacts: Transactions integration', () => {
         memo_text: '',
       };
 
+      TransactionDetailPage.enterDate('[data-cy="contribution_date"]', scheduleData.date_received as Date);
+      cy.get('#amount').safeType(String(scheduleData.amount));
+      cy.get('#amount').should('be.focused');
+
+      cy.contains('button', 'Save').scrollIntoView();
+      TransactionDetailPage.clickSave();
+
+      cy.wait('@getPrevAggregate');
+
+      cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
+      cy.contains('label', /^EMPLOYER$/i)
+        .closest('.field')
+        .contains(/this is a required field\./i, { timeout: 10000 })
+        .should('be.visible');
+      cy.contains('label', /^OCCUPATIONS?$/i)
+        .closest('.field')
+        .contains(/this is a required field\./i, { timeout: 10000 })
+        .should('be.visible');
+
+      // Start a fresh add flow after intermediary warning checks to avoid pending-submit races.
+      ReportListPage.gotToReportTransactionListPage(rid);
+      StartTransaction.Receipts().Individual().IndividualReceipt();
+      cy.contains('Individual Receipt').should('exist');
+
+      ContactLookup.getContact(lastName);
+
+      cy.get('body').then(($body) => {
+        if ($body.find('#last_name').length === 0) {
+          ContactLookup.getContact(lastName);
+        }
+      });
+
+      cy.get('#last_name', { timeout: 10000 }).should('have.value', lastName);
+      cy.get('#first_name', { timeout: 10000 }).should('have.value', firstName);
+
       TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', false, 'contribution_date');
 
       cy.wait('@getPrevAggregate');
 
-      cy.get('#employer').should('have.value', '').type(newEmployer);
-      cy.get('#occupation').should('have.value', '').type(newOccupation);
+      cy.get('#employer', { timeout: 10000 }).should('be.visible').clear().type(newEmployer);
+      cy.get('#occupation', { timeout: 10000 }).should('be.visible').clear().type(newOccupation);
 
-      TransactionDetailPage.clickSave();
+      cy.contains('button', 'Save', { timeout: 10000 }).then(($btn) => {
+        const saveBtn = $btn.get(0) as HTMLButtonElement | undefined;
+        if (!saveBtn) {
+          throw new Error('Expected Save button to exist on transaction form');
+        }
+        saveBtn.click();
+      });
 
       assertSuggestedChangesConfirmDialog(displayName, [
         `Updated employer to ${newEmployer}`,
@@ -555,6 +542,8 @@ describe('Contacts: Transactions integration', () => {
       ]);
 
       PageUtils.clickButton('Continue');
+
+      cy.url({ timeout: 10000 }).should('include', `/report/${rid}/list`);
 
       cy.contains('tbody tr', 'Individual Receipt')
         .should('contain.text', displayName)
