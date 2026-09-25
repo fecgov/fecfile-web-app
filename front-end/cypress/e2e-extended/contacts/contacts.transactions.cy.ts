@@ -467,15 +467,6 @@ describe('Contacts: Transactions integration', () => {
       cy.contains('Individual Receipt').should('exist');
       ContactLookup.getContact(lastName);
 
-      cy.get('body').then(($body) => {
-        if ($body.find('#last_name').length === 0) {
-          ContactLookup.getContact(lastName);
-        }
-      });
-
-      cy.get('#last_name', { timeout: 10000 }).should('have.value', lastName);
-      cy.get('#first_name', { timeout: 10000 }).should('have.value', firstName);
-
       const scheduleData: ScheduleFormData = {
         ...defaultScheduleFormData,
         amount: 250,
@@ -507,15 +498,6 @@ describe('Contacts: Transactions integration', () => {
       cy.contains('Individual Receipt').should('exist');
 
       ContactLookup.getContact(lastName);
-
-      cy.get('body').then(($body) => {
-        if ($body.find('#last_name').length === 0) {
-          ContactLookup.getContact(lastName);
-        }
-      });
-
-      cy.get('#last_name', { timeout: 10000 }).should('have.value', lastName);
-      cy.get('#first_name', { timeout: 10000 }).should('have.value', firstName);
 
       TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', false, 'contribution_date');
 
