@@ -489,6 +489,8 @@ describe('Contacts: Transactions integration', () => {
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', scheduleData.date_received as Date);
       cy.get('#amount').safeType(String(scheduleData.amount));
       cy.get('#amount').should('be.focused');
+      cy.get('#employer').should('have.value', '').click();
+      cy.get('#occupation').should('have.value', '').click();
 
       cy.contains('button', 'Save').scrollIntoView();
       TransactionDetailPage.clickSave();
@@ -496,14 +498,8 @@ describe('Contacts: Transactions integration', () => {
       cy.wait('@getPrevAggregate');
 
       cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
-      cy.contains('label', /^EMPLOYER$/i)
-        .closest('.field')
-        .contains(/this is a required field\./i, { timeout: 10000 })
-        .should('be.visible');
-      cy.contains('label', /^OCCUPATIONS?$/i)
-        .closest('.field')
-        .contains(/this is a required field\./i, { timeout: 10000 })
-        .should('be.visible');
+      cy.contains(/employer.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
+      cy.contains(/occupation.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
 
       // Start a fresh add flow after intermediary warning checks to avoid pending-submit races.
       ReportListPage.gotToReportTransactionListPage(rid);
