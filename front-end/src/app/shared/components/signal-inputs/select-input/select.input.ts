@@ -6,6 +6,8 @@ import { SelectModule } from 'primeng/select';
 import { LabelComponent } from '../label.component';
 import { BaseInput } from '../base.input';
 
+type StringBooleanNull = string | boolean | null;
+
 @Component({
   selector: 'app-select-input',
   imports: [FormsModule, SelectModule, NgTemplateOutlet, LabelComponent],
@@ -26,6 +28,8 @@ import { BaseInput } from '../base.input';
         (onHide)="touched.set(true)"
         [disabled]="disabled()"
         [class.p-disabled]="disabled()"
+        [appendTo]="appendTo()"
+        [invalid]="touched() && invalid()"
       >
         @if (selectedItemTemplate()) {
           <ng-template #selectedItem let-selectedOption>
@@ -51,17 +55,18 @@ import { BaseInput } from '../base.input';
   `,
   styleUrls: ['../input.scss'],
 })
-export class SelectInput extends BaseInput<string> {
+export class SelectInput extends BaseInput<StringBooleanNull> {
   readonly options = input.required<PrimeOptions>();
+  readonly appendTo = input('self');
 
   readonly selectedItemTemplate = contentChild<
     TemplateRef<{
-      $implicit: { label: string; value: string | boolean | null };
+      $implicit: { label: string; value: StringBooleanNull };
     }>
   >('selectedItem');
   readonly itemTemplate = contentChild<
     TemplateRef<{
-      $implicit: { label: string; value: string | boolean | null };
+      $implicit: { label: string; value: StringBooleanNull };
     }>
   >('item');
 }
