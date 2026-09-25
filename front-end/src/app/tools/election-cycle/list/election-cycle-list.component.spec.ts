@@ -8,13 +8,14 @@ import { signal, WritableSignal } from '@angular/core';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ElectionCyclesListComponent } from './election-cycle-list.component';
+import { MessageWrapperService } from 'app/shared/services/message-wrapper.service';
 
 describe('ElectionCyclesListComponent', () => {
   let component: ElectionCyclesListComponent;
   let fixture: ComponentFixture<ElectionCyclesListComponent>;
   let mockElectionCycleService: Partial<ElectionCycleService>;
   const mockCookieService: Partial<CookieService> = { get: vi.fn().mockReturnValue('mock-cookie') };
-  const mockMessageService: Partial<MessageService> = { add: vi.fn() };
+  let messageService: MessageWrapperService;
   const mockBreakpointStore: Partial<Omit<BreakpointStore, 'screenSize'>> & Pick<BreakpointStore, 'screenSize'> = {
     screenSize: signal<ScreenSize>('lg'),
     getColumnWidths: vi.fn().mockImplementation((config) => config.lg || config.sm),
@@ -44,10 +45,7 @@ describe('ElectionCyclesListComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ElectionCyclesListComponent],
-      providers: [
-        { provide: MessageService, useValue: mockMessageService },
-        { provide: CookieService, useValue: mockCookieService },
-      ],
+      providers: [MessageWrapperService, MessageService, { provide: CookieService, useValue: mockCookieService }],
     })
       .overrideComponent(ElectionCyclesListComponent, {
         set: {
@@ -59,6 +57,7 @@ describe('ElectionCyclesListComponent', () => {
       })
       .compileComponents();
 
+    messageService = TestBed.inject(MessageWrapperService);
     fixture = TestBed.createComponent(ElectionCyclesListComponent);
     component = fixture.componentInstance;
 
@@ -130,7 +129,7 @@ describe('ElectionCyclesListComponent', () => {
     it('should populate form when row editing is initiated', () => {
       const existingCycle = mockDataResponse.results[0];
 
-      component.onRowEditInit(existingCycle);
+      component['editItem'](existingCycle);
 
       expect(component.editingId()).toBe('1');
       expect(component.form().value()).toEqual({
@@ -169,32 +168,22 @@ describe('ElectionCyclesListComponent', () => {
 
     it('should call service.create and trigger a success notification on successful save', async () => {
       const reloadSpy = vi.spyOn(component.electionCycleData, 'reload');
+      const successSpy = vi.spyOn(messageService, 'success');
 
-      await component.create();
+      await component['create']();
 
       expect(mockElectionCycleService.create).toHaveBeenCalled();
       expect(component.newItem()).toBeNull();
       expect(reloadSpy).toHaveBeenCalled();
-      expect(mockMessageService.add).toHaveBeenCalledWith(
-        expect.objectContaining({
-          severity: 'success',
-          summary: 'Successful',
-        }),
-      );
+      expect(successSpy).toHaveBeenCalled();
     });
 
     it('should display error message when service.create fails', async () => {
       vi.spyOn(console, 'log').mockImplementation(() => {});
       vi.mocked(mockElectionCycleService.create!).mockRejectedValueOnce(new Error('Network Error'));
-
-      await component.create();
-
-      expect(mockMessageService.add).toHaveBeenCalledWith(
-        expect.objectContaining({
-          severity: 'error',
-          summary: 'Error',
-        }),
-      );
+      const errorSpy = vi.spyOn(messageService, 'error');
+      await component['create']();
+      expect(errorSpy).toHaveBeenCalled();
     });
   });
 });
