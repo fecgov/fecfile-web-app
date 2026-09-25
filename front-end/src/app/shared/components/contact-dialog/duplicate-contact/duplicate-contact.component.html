@@ -8,33 +8,44 @@
     />
   } @else {
     @if (duplicateCheck.value().length > 0) {
-      <div class="background-box">
-        <div class="flex justify-content-between">
-          <span class="font-bold">We found an existing contact</span>
-          <button class="rounded-image-button" (click)="closeDuplicateWarning()" aria-label="Cancel">
-            <svg class="transparent-grey" alt="close duplicate view" height="20" width="20">
+      <section class="background-box" aria-labelledby="duplicate-contact-heading">
+        <header class="flex justify-content-between align-items-center">
+          <h3 id="duplicate-contact-heading" class="karla-bold text-base m-0">We found an existing contact</h3>
+          <button type="button" class="rounded-image-button" (click)="closeDuplicateWarning()" aria-label="Cancel">
+            <svg class="transparent-grey" height="20" width="20" aria-hidden="true">
               <use href="assets/img/x-circle.svg#x-icon"></use>
             </svg>
           </button>
-        </div>
+        </header>
+
         <hr class="my-2" />
-        <div class="flex flex-column gap-20px">
+
+        <ul class="duplicate-list list-none p-0 m-0" [class.is-committee]="type() === 'COM'">
           @for (dup of duplicateCheck.value(); track dup) {
-            <div class="flex justify-content-between align-items-center">
-              <div class="name-location">
-                <span>{{ `${dup.name ?? dup.last_name + ', ' + dup.first_name}` }} </span>
-                <span [innerHTML]="dup | address"></span>
-              </div>
+            <li class="duplicate-row">
+              <span class="col-name" [innerHTML]="dup | name"></span>
+
+              @if (type() === 'CAN') {
+                <span class="col-id cand-id">{{ dup.candidate_id }}</span>
+              }
+              @if (type() === 'COM') {
+                <span class="col-id">{{ dup.committee_id }}</span>
+              }
+              @if (type() !== 'CAN') {
+                <span class="col-address" [innerHTML]="dup | address"></span>
+              }
+
               <button
                 pButton
-                class="p-button-primary fit-button"
+                type="button"
+                class="p-button-primary fit-button col-action"
                 label="Use this contact"
                 (click)="useContact.emit(dup)"
               ></button>
-            </div>
+            </li>
           }
-        </div>
-      </div>
+        </ul>
+      </section>
     }
   }
 }

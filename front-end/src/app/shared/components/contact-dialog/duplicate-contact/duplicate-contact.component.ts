@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ContactService } from 'app/shared/services/contact.service';
 import { AddressPipe } from '../../../pipes/address.pipe';
+import { NamePipe } from '../../../pipes/name.pipe';
 
 export type ValidatingFields = Partial<
   Pick<Contact, 'name' | 'first_name' | 'last_name' | 'candidate_id' | 'committee_id'>
@@ -11,7 +12,7 @@ export type ValidatingFields = Partial<
 
 @Component({
   selector: 'app-duplicate-contact',
-  imports: [ButtonModule, ProgressSpinnerModule, AddressPipe],
+  imports: [ButtonModule, ProgressSpinnerModule, AddressPipe, NamePipe],
   templateUrl: './duplicate-contact.component.html',
   styleUrl: './duplicate-contact.component.scss',
 })
