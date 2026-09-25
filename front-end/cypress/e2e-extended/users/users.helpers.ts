@@ -1,3 +1,7 @@
+type CommitteeMemberListResponse = {
+  results?: CommitteeMemberApiRow[];
+};
+
 type CommitteeMemberApiRow = {
   id?: string;
   email?: string;
@@ -5,7 +9,7 @@ type CommitteeMemberApiRow = {
 
 export class UsersHelpers {
   static readonly emailInput = () => cy.get("@dialog").find("#email").first();
-  static readonly submitBtn  = () => cy.get("@dialog").find("[data-cy='membership-submit']");
+  static readonly submitBtn = () => cy.get("@dialog").find("[data-cy='membership-submit']");
 
   private static apiRequest<T = unknown>(method: string, url: string, body?: unknown, failOnStatusCode = true) {
     return cy.getAllCookies().then((cookies) => {
@@ -32,11 +36,11 @@ export class UsersHelpers {
   static deleteAllTestUsers() {
     const protectedEmails = new Set(['test@test.com', 'admin@admin.com', 'test333@test.com']);
 
-    return UsersHelpers.apiRequest<CommitteeMemberApiRow[]>(
+    return UsersHelpers.apiRequest<CommitteeMemberListResponse>(
       'GET',
       'http://localhost:8080/api/v1/committee-members/',
     ).then((response) => {
-      const members = Array.isArray(response.body) ? response.body : [];
+      const members = Array.isArray(response.body.results) ? response.body.results : [];
       const generatedUsers = members.filter((member) => {
         const email = (member.email ?? '').toLowerCase();
         return (
@@ -67,7 +71,7 @@ export class UsersHelpers {
         const actual = [...$cells].map((el) =>
           el.innerText.replaceAll('\u00A0', ' ').replaceAll(/\s+/g, ' ').trim()
         );
-  
+
         // Exact match: same count, same order, same text.
         expect(actual, 'table header columns').to.deep.equal(expected);
       });
@@ -96,15 +100,15 @@ export class UsersHelpers {
     });
   }
 
-  
+
   static readonly assertEnabled = ($el: JQuery<HTMLElement>) => {
-      const isAriaDisabled = ($el.attr("aria-disabled") || "").toLowerCase() === "true";
-      const isDisabled = $el.is(":disabled");
-      const hasClass = $el.hasClass("p-disabled") || $el.hasClass("disabled");
-      expect(!(isAriaDisabled || isDisabled || hasClass), "button is enabled").to.eq(true);
+    const isAriaDisabled = ($el.attr("aria-disabled") || "").toLowerCase() === "true";
+    const isDisabled = $el.is(":disabled");
+    const hasClass = $el.hasClass("p-disabled") || $el.hasClass("disabled");
+    expect(!(isAriaDisabled || isDisabled || hasClass), "button is enabled").to.eq(true);
   };
 
   static stubOnce(method: string, url: string, response: Partial<Cypress.StaticResponse>, alias: string) {
-      cy.intercept({ method, url, times: 1 }, response).as(alias);
+    cy.intercept({ method, url, times: 1 }, response).as(alias);
   }
 }
