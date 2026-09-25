@@ -74,7 +74,7 @@ describe('FormUtils', () => {
     expect(aggregateFormControl.value).toEqual(50);
   });
 
-  it('should initialize Schedule B aggregate_amount as a number', () => {
+  it('should initialize Schedule B aggregate_amount to zero', () => {
     const form = new FormGroup({
       entity_type: new SubscriptionFormControl(),
       aggregate_amount: new SubscriptionFormControl(),
@@ -140,6 +140,30 @@ describe('FormUtils', () => {
     expect(form.get('donor_candidate_state')?.value).toBe('NY');
     expect(form.get('donor_candidate_district')?.value).toBe('12');
   });
+});
+
+it('should not write aggregate while previous aggregate is still unknown', () => {
+  const form = new FormGroup({
+    aggregate_amount: new SubscriptionFormControl(),
+  });
+
+  const transaction = SchBTransaction.fromJSON({
+    transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
+    aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    expenditure_amount: 1000,
+  });
+
+  TransactionFormUtils.updateAggregate(
+    form,
+    'aggregate',
+    transaction.transactionType.templateMap,
+    transaction,
+    null,
+    transaction.expenditure_amount as number,
+  );
+
+  const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
+  expect(aggregateFormControl.value).toBeNull();
 });
 
 it('should add the amount for calendar YTD', () => {
