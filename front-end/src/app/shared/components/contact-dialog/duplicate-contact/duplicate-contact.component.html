@@ -8,19 +8,21 @@
     />
   } @else {
     @if (duplicateCheck.value().length > 0) {
-      <div class="background-box">
-        <div class="flex justify-content-between">
-          <span class="font-bold">We found an existing contact</span>
+      <section class="background-box" aria-labelledby="duplicate-contact-heading">
+        <header class="flex justify-content-between align-items-center">
+          <h3 id="duplicate-contact-heading" class="karla-bold text-base m-0">We found an existing contact</h3>
           <button class="rounded-image-button" (click)="closeDuplicateWarning()" aria-label="Cancel">
-            <svg class="transparent-grey" alt="close duplicate view" height="20" width="20">
+            <svg class="transparent-grey" alt="close duplicate view" height="20" width="20" aria-hidden="true">
               <use href="assets/img/x-circle.svg#x-icon"></use>
             </svg>
           </button>
-        </div>
+        </header>
+
         <hr class="my-2" />
-        <div class="flex flex-column gap-20px">
+
+        <ul class="flex flex-column gap-20px list-none p-0 m-0">
           @for (dup of duplicateCheck.value(); track dup) {
-            <div class="flex justify-content-between align-items-center">
+            <li class="flex justify-content-between align-items-center">
               <div class="name-location">
                 <span>{{ `${dup.name ?? dup.last_name + ', ' + dup.first_name}` }} </span>
                 <span [innerHTML]="dup | address"></span>
@@ -31,10 +33,10 @@
                 label="Use this contact"
                 (click)="useContact.emit(dup)"
               ></button>
-            </div>
+            </li>
           }
-        </div>
-      </div>
+        </ul>
+      </section>
     }
   }
 }
