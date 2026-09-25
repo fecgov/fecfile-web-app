@@ -301,7 +301,10 @@ describe('Contacts - delete guard', () => {
     cy.wait('@getContactsList');
   });
 
-  it('Unlinked: delete -> confirm modal -> success toast -> row removed; restore deleted contact works', () => {
+  /**
+   * Change to 'it' if the deleted contacts feature flag is enabled
+   */
+  xit('Unlinked: delete -> confirm modal -> success toast -> row removed; restore deleted contact works', () => {
     cy.intercept('DELETE', '**/api/v1/contacts/**').as('deleteContact');
     cy.intercept('GET', '**/api/v1/contacts-deleted/**').as('getDeletedContacts');
     cy.intercept('POST', '**/api/v1/contacts-deleted/restore/**').as('restoreContact');
@@ -516,8 +519,9 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
    * doubly verifies the deletion of two contacts, restores one deleted contact
    * returns to Contact List, verifies un-deleted contact and restored contact are in list
    * verifies Restore deleted contacts button
+   * Change to 'it' if the deleted contacts feature flag is enabled
    */
-  it('Delete & Restore: creates three contacts, soft deletes two, restores one', () => {
+  xit('Delete & Restore: creates three contacts, soft deletes two, restores one', () => {
     const contacts: MockContact[] = [Individual_A_A, Individual_A_A, Individual_A_A];
     cy.contains('button,a', 'Add contact').should('be.visible');
     cy.contains('button,a', 'Restore deleted contacts').should('not.exist');

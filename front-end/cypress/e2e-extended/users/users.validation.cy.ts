@@ -1,9 +1,9 @@
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { Roles, defaultFormData as userFormData } from '../../e2e-smoke/models/UserFormModel';
-import { UsersPage } from '../../e2e-smoke/pages/usersPage';
+import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
-import { UsersHelpers } from './users.helpers';
+import { UsersPage } from '../../e2e-smoke/pages/usersPage';
 import { SharedHelpers } from '../utils/shared.helpers';
+import { UsersHelpers } from './users.helpers';
 
 const uniqueUser = (overrides: Partial<typeof userFormData> = {}) => ({
   ...userFormData,
@@ -81,6 +81,26 @@ describe("Users: Validation and API failure states", () => {
     cy.get('table tbody tr').contains('td', newUser.email).should('not.exist');
   });
 
+  it('keeps the second committee administrator dialog open when dismissed with Escape', () => {
+    cy.intercept('GET', '**/api/v1/committee-members/member_count/', {
+      body: { "count": 1 },
+    }).as('getCommitteeMemberCount');
+    cy.intercept('GET', '**/api/v1/committee-members/admin_count/', {
+      body: { "count": 1 },
+    }).as('getCommitteeAdminCount');
+
+    cy.visit('/committee');
+    cy.wait('@getCommitteeMemberCount');
+    cy.wait('@getCommitteeAdminCount');
+
+    cy.get('app-second-committee-admin-dialog dialog')
+      .should('be.visible')
+      .and('not.have.descendants', 'button[aria-label="Cancel"]')
+      .focus()
+      .type('{esc}')
+      .should('be.visible');
+  });
+
   it('@allow-5xx should stub 500 on invite, keep submit enabled, then succeed on retry', () => {
     const adminUser = uniqueUser({ role: Roles.COMMITTEE_ADMINISTRATOR });
     UsersHelpers.stubOnce('POST', '**/committee-members/add-member/**', { statusCode: 500, body: { message: 'Server error' } }, 'invite500');
@@ -91,11 +111,9 @@ describe("Users: Validation and API failure states", () => {
     cy.wait('@invite500').its('response.statusCode').should('eq', 500);
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     cy.intercept('POST', '**/committee-members/add-member/**').as('invite201'); // capture success (no stub)
-    cy.intercept('GET', '**/committee-members/?page=1**').as('GetMembers');
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite201').its('response.statusCode').should('be.oneOf', [200, 201]);
-    cy.wait('@GetMembers');
     PageUtils.closeToast();
     UsersPage.assertRow(adminUser, 'Pending');
   });

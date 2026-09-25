@@ -3,12 +3,12 @@ import { inject, Injectable } from '@angular/core';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
+import { CommitteeMemberService } from './committee-member.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class CommitteeAccountService {
   private readonly apiService = inject(ApiService);
+  public readonly committeeMemberService = inject(CommitteeMemberService);
 
   public async getCommittees(): Promise<CommitteeAccount[]> {
     const response = await this.apiService.get<ListRestResponse>(`/committees/`);

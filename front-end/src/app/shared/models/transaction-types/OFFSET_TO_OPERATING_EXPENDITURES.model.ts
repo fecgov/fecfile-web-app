@@ -7,16 +7,22 @@ import { AggregationGroups } from '../transaction.model';
 import {
   INDIVIDUAL_ORGANIZATION_FORM_FIELDS,
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
+  ELECTION_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { ReportTypes } from '../reports/report.model';
 
 export class OFFSET_TO_OPERATING_EXPENDITURES extends SchATransactionType {
-  formFields = INDIVIDUAL_ORGANIZATION_FORM_FIELDS;
+  formFields = [...INDIVIDUAL_ORGANIZATION_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
 
   override get isReattributable(): boolean {
     return false;
+  }
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
   }
 
   override isCloneableTransactionType = true;
