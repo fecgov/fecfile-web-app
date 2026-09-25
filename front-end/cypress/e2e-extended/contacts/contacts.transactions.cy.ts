@@ -428,6 +428,66 @@ describe('Contacts: Transactions integration', () => {
     });
   });
 
+  it('blocks save when amount is entered over $200 without blurring and employer/occupation are blank', () => {
+    const unique = Date.now();
+    const id = unique % 1000000;
+
+    const lastName = `TxnNoBlurLn${id}`;
+    const firstName = `TxnNoBlurFn${id}`;
+
+    const contactPayload: MockContact & {
+      employer?: string | null;
+      occupation?: string | null;
+    } = {
+      ...Individual_A_A,
+      last_name: lastName,
+      first_name: firstName,
+      employer: '',
+      occupation: '',
+    };
+
+    makeContact(contactPayload);
+
+    let reportId: string | undefined;
+    makeF3x(F3X_Q2, (resp) => {
+      reportId = resp.body.id;
+    });
+
+    cy.then(() => {
+      if (!reportId) {
+        throw new Error('reportId should be defined');
+      }
+      const rid = reportId;
+
+      cy.intercept('GET', '**/api/v1/transactions/previous/entity/**', (req) => {
+        req.continue((res) => {
+          res.setDelay(1500);
+        });
+      }).as('getPrevAggregateDelayed');
+
+      ReportListPage.gotToReportTransactionListPage(rid);
+      StartTransaction.Receipts().Individual().IndividualReceipt();
+      cy.contains(/Individual Receipt/i).should('exist');
+
+      ContactLookup.getContact(lastName);
+
+      TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 4 - 1, 27));
+      cy.get('#amount').safeType('1000');
+      cy.get('#amount').should('be.focused');
+
+      TransactionDetailPage.clickSave();
+
+      cy.wait('@getPrevAggregateDelayed');
+      cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
+
+      cy.contains(/employer.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
+      cy.contains(/occupation.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
+
+      cy.get('#employer').should('have.value', '');
+      cy.get('#occupation').should('have.value', '');
+    });
+  });
+
   it('creating an Individual receipt transaction w/ aggregate >$200 updates contact employer and occupation', () => {
     const unique = Date.now();
     const id = unique % 1000000;
@@ -484,18 +544,8 @@ describe('Contacts: Transactions integration', () => {
 
       cy.wait('@getPrevAggregate');
 
-      cy.get('#employer').should('have.value', '').click();
-      cy.get('#occupation').should('have.value', '').click();
-
-      cy.contains('button', 'Save').scrollIntoView();
-      TransactionDetailPage.clickSave();
-
-      cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
-      cy.contains(/employer.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
-      cy.contains(/occupation.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
-
-      cy.get('#employer').type(newEmployer);
-      cy.get('#occupation').type(newOccupation);
+      cy.get('#employer').should('have.value', '').type(newEmployer);
+      cy.get('#occupation').should('have.value', '').type(newOccupation);
 
       TransactionDetailPage.clickSave();
 
