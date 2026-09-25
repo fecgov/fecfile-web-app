@@ -63,115 +63,46 @@
           </th>
         }
       }
-
-      <!-- This can go away after full transition to ColumnDefinition method -->
-      <ng-container *ngTemplateOutlet="header()!" />
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-item>
+  <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
     <tr role="row" [ngClass]="item.rowClass">
-      <!-- This can go away after full transition to ColumnDefinition method -->
-
       @for (col of columns(); track col) {
         <td [ngClass]="col.cssClass">
           @if (col.checkbox) {
             <p-tableCheckbox [value]="item" [ariaLabel]="col.label!(item)" />
           } @else {
             @if (col.bodyTpl) {
-              <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item, rowActions: col.actions }" />
+              <ng-container
+                *ngTemplateOutlet="
+                  col.bodyTpl;
+                  context: { $implicit: item, rowIndex: rowIndex, rowActions: col.actions }
+                "
+              />
             } @else {
               <span>{{ item[col.field] | dynamic: col.pipes : col.pipeArgs }}</span>
             }
           }
         </td>
       }
-
-      <!-- This can go away after full transition to ColumnDefinition method -->
-      <ng-container *ngTemplateOutlet="body()!; context: { $implicit: item }" />
     </tr>
   </ng-template>
+  <ng-template #emptyMessageTemplate>
+    <td colspan="100" class="mx-3 empty-message">{{ emptyMessage() }}</td>
+  </ng-template>
+  <app-shared-table-templates
+    #sharedTpls
+    [(rowsPerPage)]="rowsPerPage"
+    [(first)]="first"
+    [totalItems]="totalItems()"
+    [itemName]="itemName()"
+  />
   @if (showPaginationControls()) {
     <ng-template pTemplate="summary">
-      <div class="paginator-container">
-        <div class="responsive-container">
-          <span class="paginator-text">Results per page:</span>
-          <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" appendTo="body">
-            <ng-template pTemplate="dropdownicon">
-              <svg alt="dropdown icon" width="14" height="14" class="rotate-90">
-                <use href="assets/img/arrow.svg#arrow"></use>
-              </svg>
-            </ng-template>
-          </p-select>
-        </div>
-        <div class="responsive-container">
-          <span class="paginator-text">{{ showing() }}:</span>
-          <p-paginator
-            [rows]="rowsPerPage()"
-            [totalRecords]="totalItems()"
-            [first]="first()"
-            (onPageChange)="changePage($event)"
-          >
-            <ng-template pTemplate="firstpagelinkicon">
-              <svg alt="first page icon" width="14" height="14" class="rotate-180">
-                <use href="assets/img/last-arrow.svg#last-arrow"></use>
-              </svg>
-            </ng-template>
-            <ng-template pTemplate="previouspagelinkicon">
-              <svg alt="previous page icon" width="14" height="14" class="rotate-180">
-                <use href="assets/img/arrow.svg#arrow"></use>
-              </svg>
-            </ng-template>
-            <ng-template pTemplate="nextpagelinkicon">
-              <svg alt="next page icon" width="14" height="14">
-                <use href="assets/img/arrow.svg#arrow"></use>
-              </svg>
-            </ng-template>
-            <ng-template pTemplate="lastpagelinkicon">
-              <svg alt="last page icon" width="14" height="14">
-                <use href="assets/img/last-arrow.svg#last-arrow"></use>
-              </svg>
-            </ng-template>
-          </p-paginator>
-        </div>
-      </div>
+      <ng-container *ngTemplateOutlet="sharedTpls.summaryTemplate()" />
     </ng-template>
   }
   <ng-template pTemplate="sorticon" let-sortOrder>
-    <app-table-sort-icon [sortOrder]="sortOrder" />
-  </ng-template>
-  <ng-template pTemplate="paginatorleft">
-    <div class="responsive-container">
-      <span>Results per table:</span>
-      <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage">
-        <ng-template pTemplate="dropdownicon">
-          <svg alt="dropdown icon" width="14" height="14" class="rotate-90">
-            <use href="assets/img/arrow.svg#arrow"></use>
-          </svg>
-        </ng-template>
-      </p-select>
-    </div>
-  </ng-template>
-  <ng-template pTemplate="paginatorfirstpagelinkicon">
-    <svg alt="first page icon" width="14" height="14" class="rotate-180">
-      <use href="assets/img/last-arrow.svg#last-arrow"></use>
-    </svg>
-  </ng-template>
-  <ng-template pTemplate="paginatorpreviouspagelinkicon">
-    <svg alt="previous page icon" width="14" height="14" class="rotate-180">
-      <use href="assets/img/arrow.svg#arrow"></use>
-    </svg>
-  </ng-template>
-  <ng-template pTemplate="paginatornextpagelinkicon">
-    <svg alt="next page icon" width="14" height="14">
-      <use href="assets/img/arrow.svg#arrow"></use>
-    </svg>
-  </ng-template>
-  <ng-template pTemplate="paginatorlastpagelinkicon">
-    <svg alt="last page icon" width="14" height="14">
-      <use href="assets/img/last-arrow.svg#last-arrow"></use>
-    </svg>
-  </ng-template>
-  <ng-template pTemplate="emptymessage">
-    <td colspan="100" class="mx-3 empty-message">{{ emptyMessage() }}</td>
+    <ng-container *ngTemplateOutlet="sharedTpls.sortIconTemplate(); context: { $implicit: sortOrder }" />
   </ng-template>
 </p-table>

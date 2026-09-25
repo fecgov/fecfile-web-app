@@ -1,23 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import {
-  Component,
-  TemplateRef,
-  output,
-  contentChild,
-  viewChild,
-  computed,
-  input,
-  model,
-  HostBinding,
-} from '@angular/core';
-import { PaginatorState, Paginator } from 'primeng/paginator';
+import { Component, TemplateRef, contentChild, viewChild, input, model, HostBinding } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
 import { CurrencyPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { PrimeTemplate, SortEvent } from 'primeng/api';
-import { Select } from 'primeng/select';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.component';
 import { Toolbar } from 'primeng/toolbar';
 import { TableAction } from '../table-actions-button/table-actions';
 import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
@@ -25,6 +10,7 @@ import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
 import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
+import { SharedTableTemplates } from './shared-table.templates';
 
 export interface ColumnDefinition<T> {
   field: string;
@@ -42,6 +28,7 @@ export interface ColumnDefinition<T> {
 
 export interface TableBodyContext<T> {
   $implicit: T;
+  rowIndex?: number;
   rowActions?: TableAction<T>[];
 }
 
@@ -49,19 +36,7 @@ export interface TableBodyContext<T> {
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
-  imports: [
-    NgTemplateOutlet,
-    TableModule,
-    PrimeTemplate,
-    Select,
-    ReactiveFormsModule,
-    FormsModule,
-    Paginator,
-    TableSortIconComponent,
-    NgClass,
-    Toolbar,
-    DynamicPipe,
-  ],
+  imports: [NgTemplateOutlet, TableModule, PrimeTemplate, NgClass, Toolbar, DynamicPipe, SharedTableTemplates],
   providers: [CurrencyPipe, MemoCodePipe, FecDatePipe, TransactionIdPipe, DefaultZeroPipe],
 })
 export class TableComponent<T> {
@@ -82,8 +57,6 @@ export class TableComponent<T> {
   @HostBinding('attr.title')
   readonly hostTitle = null;
 
-  readonly pageChange = output<PageTransitionEvent>();
-
   readonly paginationPageSizeOptions = [5, 10, 15, 20];
 
   readonly dt = viewChild.required<Table>('dt');
@@ -92,20 +65,9 @@ export class TableComponent<T> {
   readonly header = contentChild<TemplateRef<TableBodyContext<T>>>('header');
   readonly body = contentChild<TemplateRef<TableBodyContext<T>>>('body');
 
-  readonly showing = computed(() => {
-    return `Showing ${this.from()} to ${this.to()} of ${this.totalItems()} ${this.itemName()}`;
-  });
-
-  readonly from = computed(() => (this.totalItems() === 0 ? 0 : this.first() + 1));
-  readonly to = computed(() => Math.min(this.first() + this.rowsPerPage(), this.totalItems()));
-
   readonly first = model.required<number>();
 
   readonly showPaginationControls = input(true);
-
-  changePage(value: PaginatorState) {
-    this.first.set(value.first ?? 0);
-  }
 
   updateSort(event: SortEvent) {
     this.sortField.set(event.field || '');

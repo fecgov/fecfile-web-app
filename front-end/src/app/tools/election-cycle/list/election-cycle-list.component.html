@@ -28,23 +28,160 @@
         icon="pi pi-plus"
         class="add-button"
         (click)="addItem()"
+        [disabled]="isEditing()"
       ></button>
     </header>
-    <app-table
-      [(first)]="first"
-      [items]="items()"
-      [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
-      [(totalItems)]="totalItems"
-      [loading]="loading()"
-      [(rowsPerPage)]="rowsPerPage"
-      [(selectedItems)]="selectedItems"
-      itemName="contacts"
-      sortField="sort_name"
-      [columns]="columns()"
-      emptyMessage="You have no election cycles"
-    />
+    <form [formRoot]="form">
+      <p-table
+        #dt
+        dataKey="id"
+        [(rows)]="rowsPerPage"
+        [(first)]="first"
+        [value]="items()"
+        [totalRecords]="totalItems()"
+        [loading]="electionCycleData.isLoading()"
+        [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} items'"
+        sortField="-electionYear,-startDate"
+        [sortOrder]="-1"
+        [lazy]="true"
+        [lazyLoadOnInit]="false"
+        [showCurrentPageReport]="true"
+        stripedRows
+        showGridlines
+        [pt]="{ root: 'standard-container' }"
+        editMode="row"
+      >
+        <ng-template pTemplate="header">
+          <tr role="row">
+            @for (col of columns(); track col) {
+              @if (col.header === '') {
+                <td [style.width]="col.width"></td>
+              } @else {
+                <th [style.width]="col.width" scope="col">
+                  <span>{{ col.header }}</span>
+                </th>
+              }
+            }
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex" let-editing="editing">
+          <tr role="row" [pEditableRow]="item">
+            <td [class.vertical-align-top]="editing">
+              <p-cellEditor>
+                <ng-template #input>
+                  <app-select-input
+                    [options]="officeOptions"
+                    [formField]="form.office"
+                    label="Office"
+                    labelStyleClass="sr-only"
+                    appendTo="body"
+                  />
+                </ng-template>
+                <ng-template #output>
+                  <span>{{ item.office }}</span>
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td [class.vertical-align-top]="editing">
+              <p-cellEditor>
+                <ng-template #input>
+                  <app-select-input
+                    [options]="electionTypeOptions"
+                    [formField]="form.electionType"
+                    label="Election Type"
+                    labelStyleClass="sr-only"
+                    appendTo="body"
+                  />
+                </ng-template>
+                <ng-template #output>
+                  <span>{{ item.electionType }}</span>
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td [class.vertical-align-top]="editing">
+              <p-cellEditor>
+                <ng-template #input>
+                  <app-number-input [formField]="form.electionYear" label="Election Year" labelStyleClass="sr-only" />
+                </ng-template>
+                <ng-template #output>
+                  <span>{{ item.electionYear }}</span>
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td [class.vertical-align-top]="editing">
+              <p-cellEditor>
+                <ng-template #input>
+                  <app-date-input [formField]="form.coverage.startDate" label="Start Date" labelStyleClass="sr-only" />
+                </ng-template>
+                <ng-template #output>
+                  <span>{{ item.coverage.startDate | fecDate }}</span>
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td [class.vertical-align-top]="editing">
+              <p-cellEditor>
+                <ng-template #input>
+                  <app-date-input [formField]="form.coverage.endDate" label="End Date" labelStyleClass="sr-only" />
+                </ng-template>
+                <ng-template #output>
+                  <span>{{ item.coverage.endDate | fecDate }}</span>
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              @if (!editing) {
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  pInitEditableRow
+                  (click)="onRowEditInit(item)"
+                  text
+                  severity="secondary"
+                  label="Edit"
+                  [disabled]="isEditing()"
+                ></button>
+              }
+            </td>
+          </tr>
+        </ng-template>
+        <app-shared-table-templates
+          #sharedTpls
+          [(rowsPerPage)]="rowsPerPage"
+          [(first)]="first"
+          [totalItems]="totalItems()"
+          itemName="cycles"
+        />
+        <ng-template pTemplate="summary">
+          <ng-container *ngTemplateOutlet="sharedTpls.summaryTemplate()" />
+        </ng-template>
+        <ng-template #emptyMessageTemplate>
+          <td colspan="100" class="mx-3 empty-message">You have no election cycles</td>
+        </ng-template>
+      </p-table>
+      @if (isEditing()) {
+        <div class="flex justify-content-between mt-3">
+          <button
+            pButton
+            pRipple
+            class="p-button-secondary"
+            aria-label="add new cycle-cancel-button"
+            (click)="cancelEdit()"
+          >
+            Cancel
+          </button>
+          <button
+            pButton
+            pRipple
+            [disabled]="disableSubmission()"
+            type="submit"
+            class="p-button-primary"
+            aria-label="add new cycle-save-button"
+          >
+            Save
+          </button>
+        </div>
+      }
+    </form>
   </section>
 </main>
-<ng-template #actionsBody let-item>
-  <button type="button">Edit</button>
-</ng-template>
