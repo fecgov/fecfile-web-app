@@ -1,34 +1,15 @@
-import type { ScreenSize } from 'app/store/breakpoint.store';
-import { ElectionCycle } from '../election-cycle.model';
-
-type ElectionCycleColumn = 'office' | 'electionType' | 'electionYear' | 'startDate' | 'endDate' | 'actions';
-type ColumnWidthMap = Record<ElectionCycleColumn, string>;
-export const COLUMN_WIDTH_CONFIG: Partial<Record<ScreenSize, ColumnWidthMap>> = {
-  sm: {
-    office: '18.2%',
-    electionType: '18.2%',
-    electionYear: '12.3%',
-    startDate: '12.3%',
-    endDate: '12.3%',
-    actions: '7.5%',
-  },
-  md: {
-    office: '17.6%',
-    electionType: '17.6%',
-    electionYear: '17.6%',
-    startDate: '20.3%',
-    endDate: '20.3%',
-    actions: '6.6%',
-  },
-  lg: {
-    office: '18.9%',
-    electionType: '18.9%',
-    electionYear: '18.9%',
-    startDate: '18.9%',
-    endDate: '18.9%',
-    actions: '5.5%',
-  },
-} as const;
+import type { ElectionCycle } from '../election-cycle.model';
+import type { WritableSignal } from '@angular/core';
+import { form, required } from '@angular/forms/signals';
+import {
+  validateDate,
+  validateDateAfter,
+  validateDateOverlap,
+} from 'app/shared/components/signal-inputs/date-input/date.validators';
+import { validateYear } from 'app/shared/components/signal-inputs/number-input/number.input';
+import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
+import { CookieService } from 'ngx-cookie-service';
+import { environment } from 'environments/environment';
 
 export const officeOptions = [
   { label: 'House', value: 'House' },
@@ -46,4 +27,35 @@ export const INITIAL_FORM_VALUE: ElectionCycleForm = {
   electionType: null,
   electionYear: '',
   coverage: { startDate: null, endDate: null },
-};
+} as const;
+
+export function createElectionCycleForm(
+  model: WritableSignal<ElectionCycleForm>,
+  cookieService: CookieService,
+  onSubmit: () => Promise<void>,
+) {
+  return form(
+    model,
+    (schema) => {
+      required(schema.office, { message: requiredMessage });
+      required(schema.electionType, { message: requiredMessage });
+      required(schema.electionYear, { message: requiredMessage });
+      required(schema.coverage.startDate, { message: requiredMessage });
+      required(schema.coverage.endDate, { message: requiredMessage });
+
+      validateYear(schema.electionYear);
+      validateDate(schema.coverage.startDate);
+      validateDate(schema.coverage.endDate);
+      validateDateAfter(schema.coverage);
+      validateDateOverlap(schema.coverage, `${environment.apiUrl}/election-cycles/check-overlap/`, cookieService, {
+        message: 'This date overlaps with another election cycle.',
+      });
+    },
+    {
+      submission: {
+        ignoreValidators: 'none',
+        action: onSubmit,
+      },
+    },
+  );
+}

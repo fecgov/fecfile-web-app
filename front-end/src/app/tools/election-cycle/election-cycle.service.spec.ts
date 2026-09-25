@@ -102,7 +102,7 @@ describe('ElectionCycleService', () => {
 
       const result = await service.delete(mockCycle);
 
-      expect(apiServiceMock.delete).toHaveBeenCalledWith('/election-cycles/123');
+      expect(apiServiceMock.delete).toHaveBeenCalledWith('/election-cycles/123/');
       expect(result).toBeNull();
     });
   });

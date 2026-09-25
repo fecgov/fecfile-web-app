@@ -3,32 +3,23 @@ import { ElectionCycle } from '../election-cycle.model';
 import { ElectionCycleService } from '../election-cycle.service';
 import { ButtonModule } from 'primeng/button';
 import { BreakpointStore } from '../../../store/breakpoint.store';
-import { form, FormField, required, FormRoot } from '@angular/forms/signals';
-import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
+import { FormField, FormRoot } from '@angular/forms/signals';
 import { SelectInput } from 'app/shared/components/signal-inputs/select-input/select.input';
-import { NumberInput, validateYear } from 'app/shared/components/signal-inputs/number-input/number.input';
+import { NumberInput } from 'app/shared/components/signal-inputs/number-input/number.input';
 import { DateInput } from 'app/shared/components/signal-inputs/date-input/date.input';
 import { FecDatePipe } from '../../../shared/pipes/fec-date.pipe';
 import { CookieService } from 'ngx-cookie-service';
-import { environment } from 'environments/environment';
 import { Table, TableModule } from 'primeng/table';
 import { RippleModule } from 'primeng/ripple';
-import { MessageService, PrimeTemplate } from 'primeng/api';
+import { PrimeTemplate } from 'primeng/api';
 import { SharedTableTemplates } from 'app/shared/components/table/shared-table.templates';
 import { NgTemplateOutlet } from '@angular/common';
 import { ColumnDefinition } from 'app/shared/components/table/table.component';
-import {
-  COLUMN_WIDTH_CONFIG,
-  ElectionCycleForm,
-  electionTypeOptions,
-  INITIAL_FORM_VALUE,
-  officeOptions,
-} from './election-cycle-form.config';
-import {
-  validateDate,
-  validateDateAfter,
-  validateDateOverlap,
-} from 'app/shared/components/signal-inputs/date-input/date.validators';
+import * as FormConfig from './election-cycle-form.config';
+import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { MessageWrapperService } from 'app/shared/services/message-wrapper.service';
+import { electionColumns } from './election-cycle-table.config';
 
 @Component({
   selector: 'app-election-cycle-list',
@@ -45,59 +36,28 @@ import {
     PrimeTemplate,
     SharedTableTemplates,
     NgTemplateOutlet,
+    TableActionsButtonComponent,
   ],
-  providers: [ElectionCycleService, BreakpointStore],
+  providers: [ElectionCycleService, BreakpointStore, MessageWrapperService],
   templateUrl: './election-cycle-list.component.html',
   styleUrl: './election-cycle-list.component.scss',
 })
 export class ElectionCyclesListComponent {
-  readonly messageService = inject(MessageService);
+  readonly messageService = inject(MessageWrapperService);
   private readonly cookieService = inject(CookieService);
   protected itemService = inject(ElectionCycleService);
   readonly breakpointStore = inject(BreakpointStore);
 
   /* FORM PROPERTIES */
-  readonly model = signal<ElectionCycleForm>(INITIAL_FORM_VALUE);
-  readonly form = form(
-    this.model,
-    (schema) => {
-      required(schema.office, { message: requiredMessage });
-      required(schema.electionType, { message: requiredMessage });
-      required(schema.electionYear, { message: requiredMessage });
-      required(schema.coverage.startDate, { message: requiredMessage });
-      required(schema.coverage.endDate, { message: requiredMessage });
-
-      validateYear(schema.electionYear);
-
-      validateDate(schema.coverage.startDate);
-      validateDate(schema.coverage.endDate);
-      validateDateAfter(schema.coverage);
-      validateDateOverlap(schema.coverage, `${environment.apiUrl}/election-cycles/check-overlap/`, this.cookieService, {
-        message: 'This date overlaps with another election cycle.',
-      });
-    },
-    {
-      submission: {
-        ignoreValidators: 'none',
-        action: async () => {
-          if (this.newItem()) this.create();
-          else this.update();
-          this.clearEditing();
-          this.form().reset(INITIAL_FORM_VALUE);
-        },
-      },
-    },
-  );
-  protected disableSubmission = computed(() => this.form().invalid() || this.form().submitting());
-  readonly officeOptions = officeOptions;
-  readonly electionTypeOptions = electionTypeOptions;
+  readonly model = signal<FormConfig.ElectionCycleForm>(FormConfig.INITIAL_FORM_VALUE);
+  readonly form = FormConfig.createElectionCycleForm(this.model, this.cookieService, this.handleFormSubmit.bind(this));
+  readonly disableSubmission = computed(() => this.form().invalid() || this.form().submitting());
+  readonly officeOptions = FormConfig.officeOptions;
+  readonly electionTypeOptions = FormConfig.electionTypeOptions;
 
   /* TABLE PROPERTIES */
   readonly rowsPerPage = signal(5);
-  readonly first = linkedSignal({
-    source: this.rowsPerPage,
-    computation: () => 0,
-  });
+  readonly first = linkedSignal({ source: this.rowsPerPage, computation: () => 0 });
   readonly table = viewChild.required(Table);
   readonly editingId = signal<string | null>(null);
   readonly isEditing = computed(() => this.editingId() !== null);
@@ -119,18 +79,19 @@ export class ElectionCyclesListComponent {
     return draft ? [draft, ...fetched] : fetched;
   });
 
-  readonly columns: Signal<ColumnDefinition<ElectionCycle>[]> = computed(() => {
-    const widths = this.breakpointStore.getColumnWidths(COLUMN_WIDTH_CONFIG);
-    const isSmall = this.breakpointStore.screenSize() === 'sm';
-    return [
-      { field: 'office', header: 'Office', width: widths.office },
-      { field: 'electionType', header: isSmall ? 'Type' : 'Election Type', width: widths.electionType },
-      { field: 'electionYear', header: isSmall ? 'Year' : 'Election Year', width: widths.electionYear },
-      { field: 'startDate', header: 'Start Date', width: widths.startDate },
-      { field: 'endDate', header: 'End Date', width: widths.endDate },
-      { field: '', header: '', width: widths.actions },
-    ];
-  });
+  readonly columns: Signal<ColumnDefinition<ElectionCycle>[]> = computed(() => electionColumns(this.breakpointStore));
+
+  public rowActions: TableAction<ElectionCycle>[] = [
+    new TableAction('Edit', this.editItem.bind(this)),
+    new TableAction('Delete', this.deleteItem.bind(this)),
+  ];
+
+  private async handleFormSubmit(): Promise<void> {
+    if (this.newItem()) await this.create();
+    else await this.update();
+    this.clearEditing();
+    this.form().reset(FormConfig.INITIAL_FORM_VALUE);
+  }
 
   addItem() {
     const newItem = ElectionCycle.createEmpty();
@@ -140,12 +101,12 @@ export class ElectionCyclesListComponent {
 
   cancelEdit() {
     this.newItem.set(null);
-    this.form().reset(INITIAL_FORM_VALUE);
+    this.form().reset(FormConfig.INITIAL_FORM_VALUE);
     this.clearEditing();
   }
 
-  onRowEditInit(cycle: ElectionCycle) {
-    this.editingId.set(cycle.id);
+  private editItem(cycle: ElectionCycle) {
+    this.setEditing(cycle.id);
     this.form().reset({
       office: cycle.office,
       electionType: cycle.electionType,
@@ -154,30 +115,30 @@ export class ElectionCyclesListComponent {
     });
   }
 
-  async create() {
+  private async deleteItem(cycle: ElectionCycle) {
+    try {
+      await this.itemService.delete(cycle);
+      this.electionCycleData.reload();
+      this.messageService.success(`Election cycle deleted`);
+    } catch {
+      this.messageService.error(`There was an error deleting your new election cycle`);
+    }
+  }
+
+  private async create() {
     try {
       this.newItem.set(null);
       const cycle = new ElectionCycle(this.form().value());
       await this.itemService.create(cycle);
       this.electionCycleData.reload();
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: `New Election cycle created`,
-        life: 3000,
-      });
+      this.messageService.success(`New Election cycle created`);
     } catch (error) {
       console.log('error saving', error);
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'There was an error creating your new election cycle',
-        life: 3000,
-      });
+      this.messageService.error('There was an error creating your new election cycle');
     }
   }
 
-  async update() {
+  private async update() {
     // TODO
   }
 

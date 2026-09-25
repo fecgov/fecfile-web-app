@@ -130,17 +130,17 @@
             </td>
             <td>
               @if (!editing) {
-                <button
-                  pButton
-                  pRipple
-                  type="button"
-                  pInitEditableRow
-                  (click)="onRowEditInit(item)"
-                  text
-                  severity="secondary"
-                  label="Edit"
-                  [disabled]="isEditing()"
-                ></button>
+                <app-table-actions-button
+                  [tableActions]="rowActions"
+                  [actionItem]="item"
+                  (tableActionClick)="$event.action.action($event.actionItem)"
+                  buttonIcon="pi pi-ellipsis-v"
+                  buttonStyleClass="p-button-text"
+                  buttonAriaLabel="action"
+                  dataTest="election-cycles-button"
+                  buttonDataCy="election-cycles-actions-trigger"
+                  actionDataCyPrefix="election-cycles-action"
+                />
               }
             </td>
           </tr>
