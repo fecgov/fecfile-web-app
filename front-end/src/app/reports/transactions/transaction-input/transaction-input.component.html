@@ -24,6 +24,16 @@
   </div>
 }
 
+@if (transactionType?.candidateContactIsPrimary && transaction?.contact_1?.type === ContactTypes.CANDIDATE) {
+  <app-candidate-input
+    [transaction]="transaction"
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [templateMap]="templateMap"
+    [hasCandidateOfficeInput]="transactionType?.hasCandidateOffice() ?? false"
+  />
+}
+
 @if (transaction?.contact_1) {
   @switch (entityType) {
     @case (ContactTypes.ORGANIZATION) {
@@ -52,7 +62,11 @@
   <hr class="solid" />
   <app-section-header [isSingle]="isSingle" text="Address" />
   <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
-  @if (transactionType?.hasEmployeeFields() && entityType === ContactTypes.INDIVIDUAL) {
+  @if (
+    transactionType?.hasEmployeeFields() &&
+    (entityType === ContactTypes.INDIVIDUAL ||
+      (transactionType?.candidateContactIsPrimary && entityType === ContactTypes.CANDIDATE))
+  ) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Employer" />
     <app-employer-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
@@ -168,7 +182,7 @@
 }
 
 <ng-template #candidateInfo>
-  @if (transactionType?.hasCommitteeOrCandidateInformation()) {
+  @if (transactionType?.hasCommitteeOrCandidateInformation() && !transactionType?.candidateContactIsPrimary) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType?.committeeCandidateHeader" />
     @if (transactionType?.contact3IsRequired) {

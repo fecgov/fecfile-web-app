@@ -18,7 +18,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
     ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
     ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
-    ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE,
     ScheduleATransactionTypes.IN_KIND_CONTRIBUTION_FROM_CANDIDATE,
     // TRANSFERS
     ScheduleATransactionTypes.AUTHORIZED_COMMITTEE_TRANSFER,

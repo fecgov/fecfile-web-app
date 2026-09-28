@@ -2,11 +2,15 @@ import { FormGroup } from '@angular/forms';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { AggregationGroups } from 'app/shared/models/transaction.model';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
-import { ContactTypes } from 'app/shared/models/contact.model';
+import { Subject, of } from 'rxjs';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -92,6 +96,48 @@ describe('FormUtils', () => {
 
     const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
     expect(aggregateFormControl.value).toEqual(0);
+  });
+
+  it('hydrates primary candidate contact fields when editing a transaction', async () => {
+    const transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE,
+    ) as SchATransaction;
+    transaction.id = 'transaction-id';
+    transaction.contact_1 = Contact.fromJSON({
+      type: ContactTypes.CANDIDATE,
+      candidate_id: 'C12345678',
+      last_name: 'Candidate',
+      first_name: 'Pat',
+      middle_name: 'Q',
+      prefix: 'Dr',
+      suffix: 'Jr',
+      candidate_office: 'S',
+      candidate_state: 'NY',
+      candidate_district: '12',
+    });
+    const form = new FormGroup(
+      Object.fromEntries(
+        transaction.transactionType.getFormControlNames().map((field) => [field, new SubscriptionFormControl()]),
+      ),
+    );
+    const component = {
+      destroy$: new Subject<void>(),
+    } as TransactionTypeBaseComponent;
+    const contactService = {
+      getFecIdValidator: () => () => of(null),
+    } as unknown as ContactService;
+
+    await TransactionFormUtils.onInit(component, form, transaction, {}, contactService);
+
+    expect(form.get('donor_candidate_fec_id')?.value).toBe('C12345678');
+    expect(form.get('donor_candidate_last_name')?.value).toBe('Candidate');
+    expect(form.get('donor_candidate_first_name')?.value).toBe('Pat');
+    expect(form.get('donor_candidate_middle_name')?.value).toBe('Q');
+    expect(form.get('donor_candidate_prefix')?.value).toBe('Dr');
+    expect(form.get('donor_candidate_suffix')?.value).toBe('Jr');
+    expect(form.get('donor_candidate_office')?.value).toBe('S');
+    expect(form.get('donor_candidate_state')?.value).toBe('NY');
+    expect(form.get('donor_candidate_district')?.value).toBe('12');
   });
 });
 

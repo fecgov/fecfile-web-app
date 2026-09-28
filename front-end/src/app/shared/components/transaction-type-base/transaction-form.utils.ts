@@ -33,7 +33,7 @@ import {
   takeUntil,
 } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
-import { ContactIdMapType } from './transaction-contact.utils';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
 export type DateType = Date | string | undefined;
@@ -94,6 +94,11 @@ export class TransactionFormUtils {
     const templateMap = transactionType?.templateMap;
     if (!transactionType || !templateMap) {
       throw new Error('FECfile+: Cannot find template map when initializing transaction form');
+    }
+
+    const primaryContact = transaction?.contact_1;
+    if (transactionType.candidateContactIsPrimary && primaryContact?.type === ContactTypes.CANDIDATE) {
+      TransactionContactUtils.updateFormWithCandidateFields(primaryContact, form, templateMap);
     }
 
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {

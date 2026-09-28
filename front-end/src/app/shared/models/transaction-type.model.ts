@@ -51,6 +51,7 @@ export abstract class TransactionType {
   contact4IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_4 required to be added to the form validation
 
   contact5IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_5 required to be added to the form validation
+  candidateContactIsPrimary = false;
   candidateInfoPosition = 'low'; // Position of candidate info in the form. 'low' or 'high'
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
   showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
