@@ -1,9 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { Transaction } from '../models/transaction.model';
+import { TransactionListService } from '../services/transaction-list.service';
 import { TransactionService } from '../services/transaction.service';
 import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
 import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
@@ -13,11 +16,8 @@ import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { buildClonedTransaction } from '../utils/transaction-clone.utils';
-import { MultipleEntryTransactionTypes, TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { TransactionListService } from '../services/transaction-list.service';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { isTransactionTypeDisabledForReport } from '../utils/transaction-disable.utils';
+import { MultipleEntryTransactionTypes, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -124,7 +124,7 @@ export class TransactionResolver {
     }
 
     const transactionType = TransactionTypeUtils.factory(transactionTypeName);
-    const transaction: Transaction = transactionType.getNewTransaction();
+    const transaction: Transaction = transactionType.getNewTransaction(this.report().report_type);
     transaction.report_ids = [String(reportId)];
 
     // If this transaction must be completed alongside other on-screen transactions, add them
@@ -139,7 +139,7 @@ export class TransactionResolver {
   async resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
     const to = await this.service.get(toId);
     const repaymentType = TransactionTypeUtils.factory(transactionTypeName);
-    const repayment = repaymentType.getNewTransaction();
+    const repayment = repaymentType.getNewTransaction(this.report().report_type);
     if (type === 'loan') {
       repayment.loan = to;
       repayment.loan_id = to.id;
@@ -154,7 +154,7 @@ export class TransactionResolver {
 
   async resolveNewClone(reportId: string, cloneId: string) {
     const sourceTransaction = await this.service.get(cloneId);
-    return buildClonedTransaction(sourceTransaction, reportId);
+    return buildClonedTransaction(sourceTransaction, reportId, this.report().report_type);
   }
 
   async resolveNewReattribution(reportId: string, originatingId: string) {
@@ -166,13 +166,13 @@ export class TransactionResolver {
     if (!reattributed.transaction_type_identifier) {
       throw new Error('FECfile+: originating reattribution transaction type not found.');
     }
-    let to = TransactionTypeUtils.factory(
-      reattributed.transaction_type_identifier,
-    ).getNewTransaction() as SchATransaction;
+    let to = TransactionTypeUtils.factory(reattributed.transaction_type_identifier).getNewTransaction(
+      this.report().report_type,
+    ) as SchATransaction;
     to = ReattributionToUtils.overlayTransactionProperties(to, reattributed, reportId);
-    let from = TransactionTypeUtils.factory(
-      reattributed.transaction_type_identifier,
-    ).getNewTransaction() as SchATransaction;
+    let from = TransactionTypeUtils.factory(reattributed.transaction_type_identifier).getNewTransaction(
+      this.report().report_type,
+    ) as SchATransaction;
     from = ReattributionFromUtils.overlayTransactionProperties(from, reattributed, reportId);
     to.children = [from];
     return to;
@@ -187,13 +187,13 @@ export class TransactionResolver {
     if (!redesignated.transaction_type_identifier) {
       throw new Error('FECfile+: originating redesignation transaction type not found.');
     }
-    let to = TransactionTypeUtils.factory(
-      redesignated.transaction_type_identifier,
-    ).getNewTransaction() as SchBTransaction;
+    let to = TransactionTypeUtils.factory(redesignated.transaction_type_identifier).getNewTransaction(
+      this.report().report_type,
+    ) as SchBTransaction;
     to = RedesignationToUtils.overlayTransactionProperties(to, redesignated, reportId);
-    let from = TransactionTypeUtils.factory(
-      redesignated.transaction_type_identifier,
-    ).getNewTransaction() as SchBTransaction;
+    let from = TransactionTypeUtils.factory(redesignated.transaction_type_identifier).getNewTransaction(
+      this.report().report_type,
+    ) as SchBTransaction;
     from = RedesignationFromUtils.overlayTransactionProperties(from, redesignated, reportId);
     to.children = [from];
     return to;
@@ -208,7 +208,7 @@ export class TransactionResolver {
    */
   private getNewChildTransaction(parentTransaction: Transaction, childTransactionTypeName: string): Transaction {
     const childTransactionType = TransactionTypeUtils.factory(childTransactionTypeName);
-    const childTransaction = childTransactionType.getNewTransaction();
+    const childTransaction = childTransactionType.getNewTransaction(this.report().report_type);
     childTransaction.parent_transaction = parentTransaction;
     childTransaction.parent_transaction_id = parentTransaction.id;
     childTransaction.report_ids = parentTransaction.report_ids;

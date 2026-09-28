@@ -58,7 +58,10 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     if (election_code?.disabled) {
       this.form.get('electionType')?.disable();
       this.form.get('electionYear')?.disable();
-      if (!ReattRedesUtils.isReattRedes(this.transaction(), [ReattRedesTypes.REDESIGNATION_FROM])) {
+      if (
+        !ReattRedesUtils.isReattRedes(this.transaction(), [ReattRedesTypes.REDESIGNATION_FROM]) &&
+        !this.transaction()?.transactionType.inheritElectionInfo
+      ) {
         this.form.disable();
       }
     }

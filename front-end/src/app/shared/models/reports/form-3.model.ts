@@ -125,6 +125,9 @@ export class Form3 extends BaseForm3 {
     ScheduleATransactionTypes.OTHER_RECEIPTS,
     ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.FEDERAL_COMMITTEE_RECOUNT_DONATION,
+    ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
+    ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,
+    ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.UNREGISTERED_RECOUNT_DONATION_FROM_ORGANIZATION,
 
