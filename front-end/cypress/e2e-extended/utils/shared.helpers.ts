@@ -33,6 +33,7 @@ export class SharedHelpers {
   static chooseDefaultResultsPerPageOptions(): void {
     for (const size of this.RESULTS_PER_PAGE_SIZES) {
       this.chooseResultsPerPage(size);
+      cy.wait('@GetMembers');
     }
   }
 }
