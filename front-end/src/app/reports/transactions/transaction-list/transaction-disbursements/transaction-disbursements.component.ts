@@ -1,11 +1,10 @@
-import { Component, computed, inject, output, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, output, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
-import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import {
@@ -16,7 +15,7 @@ import {
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 @Component({
   selector: 'app-transaction-disbursements',
@@ -25,7 +24,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
-  override readonly itemService = inject(TransactionSchBService);
+  override readonly schedules = 'B,E,F';
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleBTransactionTypeLabels,
     ...ScheduleETransactionTypeLabels,
@@ -66,9 +65,11 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     },
   ]);
 
-  constructor() {
-    super();
-    this.rowActions.push(
+  protected override getBaseRowActions() {
+    const baseActions = super.getBaseRowActions();
+
+    return [
+      ...baseActions,
       new TableAction(
         'Add to Form24 Report',
         (transaction) => {
@@ -78,15 +79,15 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
             createMethod: this.refreshTable.bind(this),
           });
         },
-        (transaction) => {
+        (transaction: TransactionListRecord) => {
           return (
-            this.report().report_type === ReportTypes.F3X &&
+            this.report()?.report_type === ReportTypes.F3X &&
             transaction.report_ids?.length === 1 &&
             transaction.transactionType?.scheduleId === ScheduleIds.E
           );
         },
         () => true,
       ),
-    );
+    ];
   }
 }

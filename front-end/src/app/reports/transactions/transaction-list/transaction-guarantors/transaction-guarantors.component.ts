@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, computed, inject, input, TemplateRef, vie
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
-import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
@@ -19,8 +18,8 @@ import { instanceToPlain } from 'class-transformer';
   imports: [TableComponent, TableActionsButtonComponent, ConfirmDialog],
 })
 export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent {
-  override readonly itemService = inject(TransactionSchC2Service);
   private readonly cdr = inject(ChangeDetectorRef);
+  override readonly schedules = 'C2';
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
 
   readonly nameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('nameBody');
@@ -64,26 +63,28 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     }
   }
 
-  override rowActions: TableAction<TransactionListRecord>[] = [
-    new TableAction(
-      'View',
-      this.editItem.bind(this),
-      () => !this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Edit',
-      this.editItem.bind(this),
-      () => this.reportIsEditable(),
-      () => true,
-    ),
-    new TableAction(
-      'Delete',
-      this.deleteItem.bind(this),
-      () => this.reportIsEditable(),
-      () => true,
-    ),
-  ];
+  override rowActions = computed(() => {
+    return [
+      new TableAction(
+        'View',
+        this.editItem.bind(this),
+        () => !this.reportIsEditable(),
+        () => true,
+      ),
+      new TableAction(
+        'Edit',
+        this.editItem.bind(this),
+        () => this.reportIsEditable(),
+        () => true,
+      ),
+      new TableAction(
+        'Delete',
+        this.deleteItem.bind(this),
+        () => this.reportIsEditable(),
+        () => true,
+      ),
+    ];
+  });
 
   public override refreshAllTables() {
     this.refreshTable();

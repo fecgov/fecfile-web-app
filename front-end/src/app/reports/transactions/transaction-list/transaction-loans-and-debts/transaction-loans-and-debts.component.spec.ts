@@ -5,8 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { SchDTransaction, ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
-import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
-import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
@@ -18,6 +17,8 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
 import { ReportService } from 'app/shared/services/report.service';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
+import { inputBinding, signal } from '@angular/core';
 
 describe('TransactionLoansAndDebtsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -49,13 +50,15 @@ describe('TransactionLoansAndDebtsComponent', () => {
             },
           },
         },
-        TransactionSchCService,
+        TransactionListService,
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionLoansAndDebtsComponent);
+    fixture = TestBed.createComponent(TransactionLoansAndDebtsComponent, {
+      bindings: [inputBinding('report', signal(testActiveReport()))],
+    });
     router = TestBed.inject(Router);
     reportService = TestBed.inject(ReportService);
     vi.spyOn(reportService, 'isEditable').mockReturnValue(true);
@@ -88,7 +91,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
   });
 
   it('test editLoanAgreement', () => {
-    const tableAction = component.rowActions.filter((item) => item.label === 'Review loan agreement')[0];
+    const tableAction = component.rowActions().filter((item) => item.label === 'Review loan agreement')[0];
     const transaction = {
       ...(getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK) as SchCTransaction),
       back_reference_tran_id_number: '1',
@@ -111,7 +114,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
   });
 
   it('test createLoanAgreement', () => {
-    const tableAction = component.rowActions.filter((item) => item.label === 'New loan agreement')[0];
+    const tableAction = component.rowActions().filter((item) => item.label === 'New loan agreement')[0];
     const transaction = {
       ...(getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK) as SchCTransaction),
       back_reference_tran_id_number: '1',
@@ -145,7 +148,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
   });
 
   it('test createDebtRepaymentMade', () => {
-    const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[0];
+    const tableAction = component.rowActions().filter((item) => item.label === 'Report debt repayment')[0];
     const transaction = {
       ...(getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE) as SchDTransaction),
       back_reference_tran_id_number: '1',
@@ -174,7 +177,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
   });
 
   it('test createDebtRepaymentReceived', () => {
-    const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[1];
+    const tableAction = component.rowActions().filter((item) => item.label === 'Report debt repayment')[1];
     const transaction = {
       ...(getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE) as SchDTransaction),
       back_reference_tran_id_number: '1',

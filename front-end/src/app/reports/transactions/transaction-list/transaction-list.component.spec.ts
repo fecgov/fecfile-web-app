@@ -148,13 +148,10 @@ describe('TransactionListComponent', () => {
   });
 
   it('should show Clone only for allowed editable single transactions', () => {
-    const receipts = component.receipts() as unknown as {
-      rowActions: { label: string; isAvailable: (item: TransactionListRecord) => boolean }[];
-      reportService: { isEditable: (report: unknown) => boolean };
-    };
+    const receipts = component.receipts();
     isCloneable.mockImplementation((transaction: TransactionListRecord) => !transaction.parent_transaction_id);
     vi.spyOn(receipts.reportService, 'isEditable').mockReturnValue(true);
-    const cloneAction = receipts.rowActions.find((action) => action.label === 'Clone');
+    const cloneAction = receipts.rowActions().find((action) => action.label === 'Clone');
 
     expect(cloneAction).toBeDefined();
 
@@ -173,14 +170,11 @@ describe('TransactionListComponent', () => {
   });
 
   it('should navigate directly to the pre-filled create page when Clone is selected', () => {
-    const receipts = component.receipts() as unknown as {
-      rowActions: { label: string; action: (item: TransactionListRecord) => void }[];
-      reportService: { isEditable: (report: unknown) => boolean };
-    };
+    const receipts = component.receipts();
     vi.spyOn(receipts.reportService, 'isEditable').mockReturnValue(true);
     const confirmSpy = vi.spyOn(TestBed.inject(ConfirmationService), 'confirm');
     const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
-    const cloneAction = receipts.rowActions.find((action) => action.label === 'Clone');
+    const cloneAction = receipts.rowActions().find((action) => action.label === 'Clone');
     const transaction = TransactionListRecord.fromJSON({
       id: '100',
       transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
@@ -189,7 +183,6 @@ describe('TransactionListComponent', () => {
     cloneAction?.action(transaction);
 
     expect(confirmSpy).not.toHaveBeenCalled();
-
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/create/INDIVIDUAL_RECEIPT?clone=100');
   });
 });

@@ -6,23 +6,23 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-import { UnassociatedTransactionListComponent } from './unassociated-transaction-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { UnassociatedTransactionReceiptsComponent } from './unassociated-transaction-receipts/unassociated-transaction-receipts.component';
-import { UnassociatedTransactionDisbursementsComponent } from './unassociated-transaction-disbursements/unassociated-transaction-disbursements.component';
-import { UnassociatedTransactionLoansAndDebtsComponent } from './unassociated-transaction-loans-and-debts/unassociated-transaction-loans-and-debts.component';
 import { TabsModule } from 'primeng/tabs';
 import { PrimeTemplate } from 'primeng/api';
 import { TransactionListComponent } from 'app/reports/transactions/transaction-list/transaction-list.component';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { UnassignedTransactionListComponent } from './unassigned-transaction-list.component';
+import { TransactionDisbursementsComponent } from 'app/reports/transactions/transaction-list/transaction-disbursements/transaction-disbursements.component';
+import { TransactionLoansAndDebtsComponent } from 'app/reports/transactions/transaction-list/transaction-loans-and-debts/transaction-loans-and-debts.component';
+import { TransactionReceiptsComponent } from 'app/reports/transactions/transaction-list/transaction-receipts/transaction-receipts.component';
 
-describe('UnassociatedTransactionListComponent', () => {
-  let component: UnassociatedTransactionListComponent;
-  let fixture: ComponentFixture<UnassociatedTransactionListComponent>;
+describe('UnassignedTransactionListComponent', () => {
+  let component: UnassignedTransactionListComponent;
+  let fixture: ComponentFixture<UnassignedTransactionListComponent>;
   const isCloneable = () => {
     return true;
   };
@@ -33,13 +33,13 @@ describe('UnassociatedTransactionListComponent', () => {
         ToolbarModule,
         TableModule,
         ConfirmDialogModule,
-        UnassociatedTransactionListComponent,
+        UnassignedTransactionListComponent,
         TransactionListComponent,
         PrimeTemplate,
         TabsModule,
-        UnassociatedTransactionReceiptsComponent,
-        UnassociatedTransactionDisbursementsComponent,
-        UnassociatedTransactionLoansAndDebtsComponent,
+        TransactionReceiptsComponent,
+        TransactionDisbursementsComponent,
+        TransactionLoansAndDebtsComponent,
       ],
       providers: [
         provideHttpClient(),
@@ -73,7 +73,7 @@ describe('UnassociatedTransactionListComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UnassociatedTransactionListComponent);
+    fixture = TestBed.createComponent(UnassignedTransactionListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

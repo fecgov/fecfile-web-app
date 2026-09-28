@@ -11,7 +11,6 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
-import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -19,6 +18,7 @@ import { Component, provideZoneChangeDetection, signal, viewChild } from '@angul
 import { ScheduleCTransactionTypes, Transaction } from 'app/shared/models';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 
 @Component({
   imports: [TransactionGuarantorsComponent],
@@ -72,7 +72,7 @@ describe('TransactionGuarantorsComponent', () => {
           },
         },
         {
-          provide: TransactionSchC2Service,
+          provide: TransactionListService,
           useValue: {
             get: (transactionId: string) =>
               of(
@@ -110,11 +110,11 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should have delete', () => {
     (component.reportIsEditable as any) = signal(true);
-    expect(component.rowActions[0].isAvailable(component.loan())).toEqual(false);
-    expect(component.rowActions[1].isAvailable(component.loan())).toEqual(true);
-    expect(component.rowActions[2].isAvailable(component.loan())).toEqual(true);
-    expect(component.rowActions[0].isEnabled(component.loan())).toEqual(true);
-    expect(component.rowActions[1].isEnabled(component.loan())).toEqual(true);
-    expect(component.rowActions[2].isEnabled(component.loan())).toEqual(true);
+    expect(component.rowActions()[0].isAvailable(component.loan())).toEqual(false);
+    expect(component.rowActions()[1].isAvailable(component.loan())).toEqual(true);
+    expect(component.rowActions()[2].isAvailable(component.loan())).toEqual(true);
+    expect(component.rowActions()[0].isEnabled(component.loan())).toEqual(true);
+    expect(component.rowActions()[1].isEnabled(component.loan())).toEqual(true);
+    expect(component.rowActions()[2].isEnabled(component.loan())).toEqual(true);
   });
 });
