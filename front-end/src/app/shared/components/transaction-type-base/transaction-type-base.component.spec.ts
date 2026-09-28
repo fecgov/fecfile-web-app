@@ -375,6 +375,65 @@ describe('TransactionTypeBaseComponent', () => {
       expect(transactionServiceSpy.update).toHaveBeenCalled();
       expect(navigateToSpy).toHaveBeenCalled();
     });
+
+    it('should revalidate employer and occupation after computing aggregate before save', async () => {
+      fixture.detectChanges();
+      const transaction = getTestIndividualReceipt();
+      component.transaction = transaction;
+      component.form = new FormBuilder().group(
+        {
+          ...component.form.controls,
+          contribution_amount: new SubscriptionFormControl(250),
+          contribution_date: new SubscriptionFormControl(new Date('2024-04-27')),
+          last_name: new SubscriptionFormControl('Doe'),
+          first_name: new SubscriptionFormControl('John'),
+          employer: new SubscriptionFormControl(''),
+          occupation: new SubscriptionFormControl(''),
+          entity_type: new SubscriptionFormControl(ContactTypes.INDIVIDUAL),
+        },
+        { updateOn: 'blur' },
+      );
+      component.templateMap = transaction.transactionType.templateMap;
+      component.transactionType = transaction.transactionType;
+      component.formProperties = transaction.transactionType.getFormControlNames();
+      transactionServiceSpy.getPreviousEntityAggregate.mockReturnValue(of(100));
+
+      const valid = await component.validateForm();
+
+      expect(valid).toBe(false);
+      expect(component.form.get('employer')?.errors?.['required']).toBeTruthy();
+      expect(component.form.get('occupation')?.errors?.['required']).toBeTruthy();
+    });
+
+    it('should wait for newly started async validators before allowing the save gate through', async () => {
+      fixture.detectChanges();
+      const transaction = getTestIndividualReceipt();
+      component.transaction = transaction;
+      component.form = new FormBuilder().group(
+        {
+          ...component.form.controls,
+          contribution_amount: new SubscriptionFormControl(250),
+          contribution_date: new SubscriptionFormControl(new Date('2024-04-27')),
+          last_name: new SubscriptionFormControl('Doe'),
+          first_name: new SubscriptionFormControl('John'),
+          employer: new SubscriptionFormControl('Employer-1'),
+          occupation: new SubscriptionFormControl(''),
+          entity_type: new SubscriptionFormControl(ContactTypes.INDIVIDUAL),
+        },
+        { updateOn: 'blur' },
+      );
+      component.templateMap = transaction.transactionType.templateMap;
+      component.transactionType = transaction.transactionType;
+      component.formProperties = transaction.transactionType.getFormControlNames();
+      transactionServiceSpy.getPreviousEntityAggregate.mockReturnValue(of(100));
+
+      const asyncValidator = vi.fn().mockResolvedValue({ required: true });
+      component.form.get('occupation')?.setAsyncValidators(asyncValidator);
+
+      await expect(component.validateForm()).resolves.toBe(false);
+      expect(asyncValidator).toHaveBeenCalled();
+      expect(component.form.get('occupation')?.errors?.['required']).toBeTruthy();
+    });
   });
 
   describe('navigateTo', () => {
