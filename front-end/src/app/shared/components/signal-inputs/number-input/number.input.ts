@@ -1,17 +1,34 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { LabelComponent } from '../label.component';
 import { BaseInput } from '../base.input';
-import { maxLength, minLength, PathKind, SchemaPath } from '@angular/forms/signals';
+import { max, min, PathKind, SchemaPath, validate } from '@angular/forms/signals';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FormsModule } from '@angular/forms';
 
 const yearFormatMessage = 'This field requires a 4-digit year (YYYY).';
-export function validateYear(schemaPath: SchemaPath<string, 1, PathKind.Child>) {
-  minLength(schemaPath, 4, { message: yearFormatMessage });
-  maxLength(schemaPath, 4, { message: yearFormatMessage });
+export function validateYear(schemaPath: SchemaPath<number | null, 1, PathKind.Child>) {
+  min(schemaPath, 1000, { message: yearFormatMessage });
+  max(schemaPath, 9999, { message: yearFormatMessage });
+}
+
+export function integer(field: SchemaPath<number | null>, options?: { message?: string }) {
+  validate(field, ({ value }) => {
+    const val = value();
+    if (val === null || val === undefined) return null;
+    if (!Number.isInteger(val)) {
+      return {
+        kind: 'integer',
+        message: options?.message || 'Value must be a whole number',
+      };
+    }
+
+    return null;
+  });
 }
 
 @Component({
   selector: 'app-number-input',
-  imports: [LabelComponent],
+  imports: [LabelComponent, InputNumberModule, FormsModule],
   template: `
     @if (!hidden()) {
       <app-label
@@ -20,19 +37,15 @@ export function validateYear(schemaPath: SchemaPath<string, 1, PathKind.Child>) 
         [optional]="optional()"
         [labelStyleClass]="labelStyleClass()"
       />
-      <input
-        type="number"
-        [value]="value()"
-        [id]="inputId()"
-        (blur)="touched.set(true)"
-        (input)="value.set($event.target.value)"
+      <p-inputnumber
+        [inputId]="inputId()"
+        [(ngModel)]="value"
         [disabled]="disabled()"
-        [class.p-disabled]="disabled()"
-        [class.p-invalid]="touched() && invalid()"
-        type="text"
-        inputmode="numeric"
-        (keypress)="handleKeyDown($event)"
-        (paste)="handlePaste($event)"
+        [useGrouping]="false"
+        [min]="minValue()"
+        [minlength]="minlength()"
+        [maxlength]="maxlength()"
+        (onBlur)="touched.set(true)"
       />
       @if (touched() && invalid()) {
         <small class="p-error" role="alert">{{ errors()[0].message }}</small>
@@ -41,64 +54,8 @@ export function validateYear(schemaPath: SchemaPath<string, 1, PathKind.Child>) 
   `,
   styleUrls: ['../input.scss', './number.input.scss'],
 })
-export class NumberInput extends BaseInput<string> {
-  readonly integerOnly = input(true);
-  readonly positiveOnly = input(true);
-
-  private readonly navKeys = new Set([
-    'Backspace',
-    'Delete',
-    'Tab',
-    'Enter',
-    'Escape',
-    'ArrowLeft',
-    'ArrowRight',
-    'ArrowUp',
-    'ArrowDown',
-    'Home',
-    'End',
-  ]);
-
-  readonly fullValidationRegex = computed(() => {
-    const sign = this.positiveOnly() ? '' : '-?';
-    if (this.integerOnly()) {
-      return new RegExp(String.raw`^${sign}\d*$`);
-    }
-    return new RegExp(String.raw`^${sign}\d*\.?\d*$`);
-  });
-
-  handleKeyDown(event: KeyboardEvent) {
-    // Allow standard shortcuts (Ctrl+A, Ctrl+C, Ctrl+V, etc.) and navigation keys
-    if (event.ctrlKey || event.metaKey || this.navKeys.has(event.key)) {
-      return;
-    }
-
-    // Block single-character keypresses that aren't allowed characters
-    if (event.key.length === 1) {
-      const input = event.target as HTMLInputElement;
-      const currentValue = input.value || '';
-
-      const start = input.selectionStart ?? currentValue.length;
-      const end = input.selectionEnd ?? currentValue.length;
-      const nextValue = currentValue.substring(0, start) + event.key + currentValue.substring(end);
-
-      // Validate predicted value against regex
-      if (!this.fullValidationRegex().test(nextValue)) event.preventDefault();
-    }
-  }
-
-  handlePaste(event: ClipboardEvent) {
-    const pastedData = event.clipboardData?.getData('text');
-    if (!pastedData) return;
-
-    const input = event.target as HTMLInputElement;
-    const currentValue = input.value || '';
-
-    const start = input.selectionStart ?? currentValue.length;
-    const end = input.selectionEnd ?? currentValue.length;
-    const nextValue = currentValue.substring(0, start) + pastedData.trim() + currentValue.substring(end);
-
-    // Block paste if the final merged string is not a valid number
-    if (!this.fullValidationRegex().test(nextValue)) event.preventDefault();
-  }
+export class NumberInput extends BaseInput<number | null> {
+  readonly minlength = input<number | null>(null);
+  readonly maxlength = input<number | null>(null);
+  readonly minValue = input<number>();
 }

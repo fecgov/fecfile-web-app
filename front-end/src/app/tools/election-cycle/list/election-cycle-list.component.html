@@ -101,7 +101,14 @@
             <td [class.vertical-align-top]="editing">
               <p-cellEditor>
                 <ng-template #input>
-                  <app-number-input [formField]="form.electionYear" label="Election Year" labelStyleClass="sr-only" />
+                  <app-number-input
+                    [formField]="form.electionYear"
+                    label="Election Year"
+                    labelStyleClass="sr-only"
+                    [minlength]="4"
+                    [maxlength]="4"
+                    [minValue]="0"
+                  />
                 </ng-template>
                 <ng-template #output>
                   <span>{{ item.electionYear }}</span>

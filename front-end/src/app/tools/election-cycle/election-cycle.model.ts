@@ -2,8 +2,8 @@
 import { BaseModel } from 'app/shared/models/base.model';
 import { Expose, Transform, Type, instanceToPlain, plainToInstance } from 'class-transformer';
 
-type OfficeType = 'House' | 'Presidential' | 'Senate';
-type ElectionType = 'General' | 'Special';
+export type OfficeType = 'House' | 'Presidential' | 'Senate';
+export type ElectionType = 'General' | 'Special';
 
 export class Coverage {
   @Expose({ name: 'start_date' })
@@ -26,7 +26,7 @@ export class ElectionCycle extends BaseModel {
   electionType!: ElectionType | null;
 
   @Expose({ name: 'election_year' })
-  electionYear!: string;
+  electionYear!: number;
 
   @Expose()
   @Type(() => Coverage)
@@ -58,7 +58,7 @@ export class ElectionCycle extends BaseModel {
     });
   }
 
-  // Creates empty ElectinCycle with dummy id in order to work with PrimeNG's
+  // Creates empty ElectionCycle with dummy id in order to work with PrimeNG's
   // table row edit. It uses the ID as a row key to determine what row is being edited
   static createEmpty(): ElectionCycle {
     return new ElectionCycle({ id: 'initial' });

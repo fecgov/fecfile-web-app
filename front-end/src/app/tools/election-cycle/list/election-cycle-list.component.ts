@@ -157,7 +157,7 @@ export class ElectionCyclesListComponent {
   async create() {
     try {
       this.newItem.set(null);
-      const cycle = new ElectionCycle(this.form().value());
+      const cycle = new ElectionCycle(this.form().value() as Partial<ElectionCycle>);
       await this.itemService.create(cycle);
       this.electionCycleData.reload();
       this.messageService.add({

@@ -27,7 +27,7 @@ describe('ElectionCyclesListComponent', () => {
         id: '1',
         office: 'House',
         electionType: 'General',
-        electionYear: '2024',
+        electionYear: 2024,
         coverage: {
           startDate: new Date('2023-01-01'),
           endDate: new Date('2024-11-05'),
@@ -136,7 +136,7 @@ describe('ElectionCyclesListComponent', () => {
       expect(component.form().value()).toEqual({
         office: 'House',
         electionType: 'General',
-        electionYear: '2024',
+        electionYear: 2024,
         coverage: existingCycle.coverage,
       });
     });
@@ -159,7 +159,7 @@ describe('ElectionCyclesListComponent', () => {
       component.model.set({
         office: 'Senate',
         electionType: 'General',
-        electionYear: '2026',
+        electionYear: 2026,
         coverage: {
           startDate: new Date('2025-01-01'),
           endDate: new Date('2026-11-03'),

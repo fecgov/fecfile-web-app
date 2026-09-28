@@ -1,5 +1,5 @@
 import type { ScreenSize } from 'app/store/breakpoint.store';
-import { ElectionCycle } from '../election-cycle.model';
+import type { Coverage, ElectionType, OfficeType } from '../election-cycle.model';
 
 type ElectionCycleColumn = 'office' | 'electionType' | 'electionYear' | 'startDate' | 'endDate' | 'actions';
 type ColumnWidthMap = Record<ElectionCycleColumn, string>;
@@ -40,10 +40,15 @@ export const electionTypeOptions = [
   { label: 'Special', value: 'Special' },
 ];
 
-export type ElectionCycleForm = Omit<ElectionCycle, 'toJson' | 'id'>;
+export type ElectionCycleForm = {
+  office: OfficeType | null;
+  electionType: ElectionType | null;
+  electionYear: number | null;
+  coverage: Coverage;
+};
 export const INITIAL_FORM_VALUE: ElectionCycleForm = {
   office: null,
   electionType: null,
-  electionYear: '',
+  electionYear: null,
   coverage: { startDate: null, endDate: null },
 };
