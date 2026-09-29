@@ -51,7 +51,7 @@ describe('Receipt Transactions', () => {
         'expenditure_date',
       );
       ContactLookup.getCandidate(candidate, [], [], '#contact_2_lookup');
-      PageUtils.selectDropdownSetValue('[inputid="electionType"]', 'G');
+      PageUtils.pSelectDropdownSetValue('[inputid="electionType"]', 'G');
       F3XAggregationHelpers.clearAndType('#electionYear', `${currentYear}`);
 
       // Verify record created

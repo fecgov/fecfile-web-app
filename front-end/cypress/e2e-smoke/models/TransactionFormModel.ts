@@ -29,7 +29,7 @@ export const defaultScheduleFormData: ScheduleFormData = {
   amount: 100.55,
   category_code: '',
   date_received: new Date(currentYear, 4 - 1, 27),
-  electionType: 'G',
+  electionType: 'General (G)',
   electionYear: 2022,
   election_other_description: '',
   purpose_description: faker.lorem.sentence({ min: 1, max: 4 }),

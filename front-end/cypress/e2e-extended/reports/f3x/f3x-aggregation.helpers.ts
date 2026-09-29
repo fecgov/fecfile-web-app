@@ -462,7 +462,7 @@ export class F3XAggregationHelpers {
       date_received: disbursementDate,
       date2: disseminationDate,
       supportOpposeCode: 'SUPPORT',
-      electionType: electionTypeFromCode || 'G',
+      electionType: electionTypeFromCode || 'General (G)',
       electionYear: electionYearFromCode,
       signatoryDateSigned: disbursementDate,
       signatoryFirstName: this.boundedLabel('Sig'),
