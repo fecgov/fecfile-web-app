@@ -19,7 +19,6 @@ describe('FormUtils', () => {
     expect(t).toBeTruthy();
   });
 
-  transaction.entity_type = ContactTypes.CANDIDATE;
   it('should add the amount for not-refunds', () => {
     const form = new FormGroup({
       contribution_amount: new SubscriptionFormControl(),
