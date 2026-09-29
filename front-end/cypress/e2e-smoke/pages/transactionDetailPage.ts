@@ -154,7 +154,7 @@ export class TransactionDetailPage {
 
     // set interest dropdown and rate
     if (formData.loan_interest_rate_is_percent) {
-      PageUtils.selectDropdownSetValue('[label="INTEREST RATE"]', formData.loan_interest_rate_is_percent, alias);
+      PageUtils.pSelectDropdownSetValue('p-select:has([id^="loan_interest_rate_is_percent-"])', formData.loan_interest_rate_is_percent, alias);
       if (formData.interest_rate) {
         cy.get('[data-cy="interestRateInput"]').find('input:visible:first').safeType(formData.interest_rate);
       }
@@ -165,7 +165,7 @@ export class TransactionDetailPage {
     }
 
     if (formData.loan_due_date_is_date) {
-      PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.loan_due_date_is_date, alias);
+      PageUtils.pSelectDropdownSetValue('p-select:has([id^="loan_due_date_is_date-"])', formData.loan_due_date_is_date, alias);
       if (formData.due_date) {
         if (formData.due_date instanceof Date) {
           PageUtils.calendarSetValue(`[data-cy="loan_due_date"]`, formData.due_date, alias);
@@ -269,7 +269,7 @@ export class TransactionDetailPage {
       .find('p-checkbox[inputid="memo_code"]')
       .should(formData.memo_code ? 'have.class' : 'not.have.class', 'p-checkbox-checked');
     if (formData.electionType) {
-      cy.get(alias).find('[inputid="electionType"]').should('contain', formData.electionType);
+      PageUtils.valueCheck('p-select:has([id^="electionType-"])', formData.electionType);
     }
     if (formData.electionYear) {
       cy.get(alias).find('#electionYear').should('have.value', formData.electionYear);
@@ -281,19 +281,15 @@ export class TransactionDetailPage {
     cy.get(alias).find('#amount').should('have.value', amount);
 
     if (formData.category_code != '') {
-      cy.get(alias).find('app-select[inputid="category_code"]').should('contain', formData.category_code);
+      PageUtils.valueCheck('p-select:has([id^="category_code-"])', formData.category_code);
     }
   }
 
   static assertLoanFormData(formData: LoanFormData, alias = '') {
     alias = PageUtils.getAlias(alias);
     if (formData.loan_due_date_is_date) {
-      cy.get(alias)
-        .find('[label="DATE DUE"]')
-        .find('select')
-        .find('option:selected')
-        .should('contain', formData.loan_due_date_is_date as string);
-
+      PageUtils.valueCheck('p-select:has([id^="loan_due_date_is_date-"])',formData.loan_due_date_is_date as string)
+      
       if (formData.due_date) {
         if (formData.due_date instanceof Date) {
           cy.get(alias)
@@ -310,11 +306,7 @@ export class TransactionDetailPage {
       }
     }
     if (formData.loan_interest_rate_is_percent) {
-      cy.get(alias)
-        .find('[label="INTEREST RATE"]')
-        .find('select')
-        .find('option:selected')
-        .should('contain', formData.loan_interest_rate_is_percent as string);
+      PageUtils.valueCheck('p-select:has([id^="loan_interest_rate_is_percent-"])',formData.loan_interest_rate_is_percent as string)
 
       if (formData.interest_rate !== undefined && formData.interest_rate !== null) {
         cy.get(alias)
@@ -389,13 +381,13 @@ export class TransactionDetailPage {
 
   private static enterCategoryCode(formData: ScheduleFormData, alias: string) {
     if (formData.category_code) {
-      PageUtils.selectDropdownSetValue('app-select[inputid="category_code"]', formData.category_code, alias);
+      PageUtils.pSelectDropdownSetValue('p-select:has([id^="category_code-"])', formData.category_code, alias);
     }
   }
 
   private static enterElection(formData: ScheduleFormData, alias: string) {
     if (formData.electionType) {
-      PageUtils.selectDropdownSetValue('[inputid="electionType"]', formData.electionType, alias);
+      PageUtils.pSelectDropdownSetValue('p-select:has([id^="electionType-"])', formData.electionType, alias);
     }
     if (formData.electionYear) {
       cy.get(alias).find('#electionYear').safeType(formData.electionYear);

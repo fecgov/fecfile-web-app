@@ -14,7 +14,7 @@ import { ReportListPage } from '../pages/reportListPage';
 
 const redesignationData: ContributionFormData = {
   ...defaultTransactionFormData,
-  electionType: 'P',
+  electionType: 'Primary (P)',
   purpose_description: undefined,
   category_code: undefined,
 };
