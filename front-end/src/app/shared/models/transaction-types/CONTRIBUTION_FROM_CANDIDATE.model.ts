@@ -26,7 +26,6 @@ export class CONTRIBUTION_FROM_CANDIDATE extends SchATransactionType {
     ...EMPLOYEE_INFO_FIELDS,
   ];
   contactTypeOptions = [ContactTypes.CANDIDATE];
-  override candidateContactIsPrimary = true;
   override contactConfig = {
     contact_1: {
       candidate_fec_id: 'candidate_id',
