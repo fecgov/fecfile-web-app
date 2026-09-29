@@ -27,9 +27,9 @@ export class TRIBAL_RECOUNT_RECEIPT extends SchATransactionType {
 
   override isCloneableTransactionType = true;
 
-  getNewTransaction(report_type: ReportTypes) {
+  getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: report_type === ReportTypes.F3 ? 'SA15' : report_type === ReportTypes.F3X ? 'SA17' : '',
+      form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
       aggregation_group: AggregationGroups.RECOUNT_ACCOUNT,
     });

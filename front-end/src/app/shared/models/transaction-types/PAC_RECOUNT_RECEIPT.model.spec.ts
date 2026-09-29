@@ -14,14 +14,8 @@ describe('PAC_RECOUNT_RECEIPT', () => {
     expect(transactionType.scheduleId).toBe('A');
   });
 
-  it('#factory() should return a F3 SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction(ReportTypes.F3);
-    expect(txn.form_type).toBe('SA15');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
-  });
-
   it('#factory() should return a F3X SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction(ReportTypes.F3X);
+    const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
   });

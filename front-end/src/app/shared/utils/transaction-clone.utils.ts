@@ -1,4 +1,3 @@
-import { ReportTypes } from '../models';
 import { MemoText } from '../models/memo-text.model';
 import type { TransactionType } from '../models/transaction-type.model';
 import { cloneInstance, ScheduleTransaction, Transaction } from '../models/transaction.model';
@@ -69,15 +68,11 @@ export function isCloneable(transaction: CloneEligibilityTransaction | undefined
   );
 }
 
-export function buildClonedTransaction(
-  source: ScheduleTransaction,
-  reportId: string,
-  reportType: ReportTypes,
-): Transaction {
+export function buildClonedTransaction(source: ScheduleTransaction, reportId: string): Transaction {
   if (!isCloneable(source)) {
     throw new Error(`FECfile+: This transaction (${source.transaction_type_identifier}) is not eligible for cloning.`);
   }
-  const clone = source.transactionType.getNewTransaction(reportType);
+  const clone = source.transactionType.getNewTransaction();
   const sourceCopy = cloneInstance(source);
 
   if (sourceCopy) {

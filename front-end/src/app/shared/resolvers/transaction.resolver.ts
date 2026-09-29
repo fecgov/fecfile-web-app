@@ -124,7 +124,7 @@ export class TransactionResolver {
     }
 
     const transactionType = TransactionTypeUtils.factory(transactionTypeName);
-    const transaction: Transaction = transactionType.getNewTransaction(this.report().report_type);
+    const transaction: Transaction = transactionType.getNewTransaction();
     transaction.report_ids = [String(reportId)];
 
     // If this transaction must be completed alongside other on-screen transactions, add them
@@ -139,7 +139,7 @@ export class TransactionResolver {
   async resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
     const to = await this.service.get(toId);
     const repaymentType = TransactionTypeUtils.factory(transactionTypeName);
-    const repayment = repaymentType.getNewTransaction(this.report().report_type);
+    const repayment = repaymentType.getNewTransaction();
     if (type === 'loan') {
       repayment.loan = to;
       repayment.loan_id = to.id;
@@ -154,7 +154,7 @@ export class TransactionResolver {
 
   async resolveNewClone(reportId: string, cloneId: string) {
     const sourceTransaction = await this.service.get(cloneId);
-    return buildClonedTransaction(sourceTransaction, reportId, this.report().report_type);
+    return buildClonedTransaction(sourceTransaction, reportId);
   }
 
   async resolveNewReattribution(reportId: string, originatingId: string) {
@@ -166,13 +166,13 @@ export class TransactionResolver {
     if (!reattributed.transaction_type_identifier) {
       throw new Error('FECfile+: originating reattribution transaction type not found.');
     }
-    let to = TransactionTypeUtils.factory(reattributed.transaction_type_identifier).getNewTransaction(
-      this.report().report_type,
-    ) as SchATransaction;
+    let to = TransactionTypeUtils.factory(
+      reattributed.transaction_type_identifier,
+    ).getNewTransaction() as SchATransaction;
     to = ReattributionToUtils.overlayTransactionProperties(to, reattributed, reportId);
-    let from = TransactionTypeUtils.factory(reattributed.transaction_type_identifier).getNewTransaction(
-      this.report().report_type,
-    ) as SchATransaction;
+    let from = TransactionTypeUtils.factory(
+      reattributed.transaction_type_identifier,
+    ).getNewTransaction() as SchATransaction;
     from = ReattributionFromUtils.overlayTransactionProperties(from, reattributed, reportId);
     to.children = [from];
     return to;
@@ -187,13 +187,13 @@ export class TransactionResolver {
     if (!redesignated.transaction_type_identifier) {
       throw new Error('FECfile+: originating redesignation transaction type not found.');
     }
-    let to = TransactionTypeUtils.factory(redesignated.transaction_type_identifier).getNewTransaction(
-      this.report().report_type,
-    ) as SchBTransaction;
+    let to = TransactionTypeUtils.factory(
+      redesignated.transaction_type_identifier,
+    ).getNewTransaction() as SchBTransaction;
     to = RedesignationToUtils.overlayTransactionProperties(to, redesignated, reportId);
-    let from = TransactionTypeUtils.factory(redesignated.transaction_type_identifier).getNewTransaction(
-      this.report().report_type,
-    ) as SchBTransaction;
+    let from = TransactionTypeUtils.factory(
+      redesignated.transaction_type_identifier,
+    ).getNewTransaction() as SchBTransaction;
     from = RedesignationFromUtils.overlayTransactionProperties(from, redesignated, reportId);
     to.children = [from];
     return to;
@@ -208,7 +208,7 @@ export class TransactionResolver {
    */
   private getNewChildTransaction(parentTransaction: Transaction, childTransactionTypeName: string): Transaction {
     const childTransactionType = TransactionTypeUtils.factory(childTransactionTypeName);
-    const childTransaction = childTransactionType.getNewTransaction(this.report().report_type);
+    const childTransaction = childTransactionType.getNewTransaction();
     childTransaction.parent_transaction = parentTransaction;
     childTransaction.parent_transaction_id = parentTransaction.id;
     childTransaction.report_ids = parentTransaction.report_ids;
