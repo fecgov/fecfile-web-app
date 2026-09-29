@@ -27,7 +27,7 @@ describe('CONTRIBUTION_FROM_CANDIDATE', () => {
     expect(transactionType.formFields).toContain('candidate_office');
     expect(transactionType.formFields).toContain('candidate_state');
     expect(transactionType.formFields).toContain('candidate_district');
-    expect(transactionType.hasCandidateInformation()).toBe(false);
+    expect(transactionType.hasCandidateInformation()).toBe(true);
     expect(transactionType.contactConfig.contact_1.candidate_office).toBe('candidate_office');
     expect(transactionType.contactConfig.contact_1.candidate_state).toBe('candidate_state');
     expect(transactionType.contactConfig.contact_1.candidate_district).toBe('candidate_district');

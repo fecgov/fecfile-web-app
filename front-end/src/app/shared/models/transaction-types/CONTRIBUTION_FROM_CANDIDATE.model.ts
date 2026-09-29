@@ -49,10 +49,6 @@ export class CONTRIBUTION_FROM_CANDIDATE extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE);
   schema = schema;
 
-  override hasCandidateInformation(): boolean {
-    return false;
-  }
-
   override hasElectionInformation(reportType: ReportTypes): boolean {
     return reportType === ReportTypes.F3;
   }

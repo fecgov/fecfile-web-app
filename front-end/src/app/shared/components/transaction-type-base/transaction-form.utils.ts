@@ -97,10 +97,7 @@ export class TransactionFormUtils {
     }
 
     const primaryContact = transaction?.contact_1;
-    if (
-      form.get('entity_type')?.value === ContactTypes.CANDIDATE &&
-      primaryContact?.type === ContactTypes.CANDIDATE
-    ) {
+    if (form.get('entity_type')?.value === ContactTypes.CANDIDATE && primaryContact?.type === ContactTypes.CANDIDATE) {
       TransactionContactUtils.updateFormWithCandidateFields(primaryContact, form, templateMap);
     }
 

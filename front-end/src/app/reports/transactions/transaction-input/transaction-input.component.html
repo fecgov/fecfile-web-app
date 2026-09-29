@@ -232,7 +232,7 @@
       <app-support-oppose-input [form]="form" [formSubmitted]="formSubmitted" />
     }
 
-    @if (transaction?.transactionType?.hasCandidateInformation(form) && entityType !== ContactTypes.CANDIDATE) {
+    @if (transaction?.transactionType?.hasCandidateInformation(form)) {
       @if (!transactionType?.hideContactLookup) {
         <div class="grid candidate_committee_lookup">
           <div class="col-12">
