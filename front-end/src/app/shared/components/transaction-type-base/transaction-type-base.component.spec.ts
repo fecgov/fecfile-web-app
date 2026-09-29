@@ -116,7 +116,7 @@ describe('TransactionTypeBaseComponent', () => {
             getPreviousEntityAggregate: vi
               .fn()
               .mockName('TransactionService.getPreviousEntityAggregate')
-              .mockReturnValue(Promise.resolve(undefined)),
+              .mockReturnValue(of(undefined)),
           },
         },
         ConfirmationService,
@@ -380,6 +380,7 @@ describe('TransactionTypeBaseComponent', () => {
       fixture.detectChanges();
       const transaction = getTestIndividualReceipt();
       component.transaction = transaction;
+      const templateMap = transaction.transactionType.templateMap;
       component.form = new FormBuilder().group(
         {
           ...component.form.controls,
@@ -387,28 +388,44 @@ describe('TransactionTypeBaseComponent', () => {
           contribution_date: new SubscriptionFormControl(new Date('2024-04-27')),
           last_name: new SubscriptionFormControl('Doe'),
           first_name: new SubscriptionFormControl('John'),
-          employer: new SubscriptionFormControl(''),
-          occupation: new SubscriptionFormControl(''),
+          [templateMap.employer]: new SubscriptionFormControl(''),
+          [templateMap.occupation]: new SubscriptionFormControl(''),
           entity_type: new SubscriptionFormControl(ContactTypes.INDIVIDUAL),
         },
         { updateOn: 'blur' },
       );
-      component.templateMap = transaction.transactionType.templateMap;
+      component.templateMap = templateMap;
       component.transactionType = transaction.transactionType;
       component.formProperties = transaction.transactionType.getFormControlNames();
       transactionServiceSpy.getPreviousEntityAggregate.mockReturnValue(of(100));
 
+      const aggregateControl = component.form.get(component.templateMap.aggregate);
+      const employerControl = component.form.get(component.templateMap.employer);
+      const occupationControl = component.form.get(component.templateMap.occupation);
+
+      const aggregateConditionalRequired = (value: unknown) => {
+        const aggregate = Number(aggregateControl?.value ?? 0);
+        if (aggregate > 200 && (value === null || value === undefined || value === '')) {
+          return { required: true };
+        }
+        return null;
+      };
+
+      employerControl?.setValidators(() => aggregateConditionalRequired(employerControl.value));
+      occupationControl?.setValidators(() => aggregateConditionalRequired(occupationControl.value));
+
       const valid = await component.validateForm();
 
       expect(valid).toBe(false);
-      expect(component.form.get('employer')?.errors?.['required']).toBeTruthy();
-      expect(component.form.get('occupation')?.errors?.['required']).toBeTruthy();
+      expect(component.form.get(component.templateMap.employer)?.errors?.['required']).toBeTruthy();
+      expect(component.form.get(component.templateMap.occupation)?.errors?.['required']).toBeTruthy();
     });
 
     it('should wait for newly started async validators before allowing the save gate through', async () => {
       fixture.detectChanges();
       const transaction = getTestIndividualReceipt();
       component.transaction = transaction;
+      const templateMap = transaction.transactionType.templateMap;
       component.form = new FormBuilder().group(
         {
           ...component.form.controls,
@@ -416,23 +433,23 @@ describe('TransactionTypeBaseComponent', () => {
           contribution_date: new SubscriptionFormControl(new Date('2024-04-27')),
           last_name: new SubscriptionFormControl('Doe'),
           first_name: new SubscriptionFormControl('John'),
-          employer: new SubscriptionFormControl('Employer-1'),
-          occupation: new SubscriptionFormControl(''),
+          [templateMap.employer]: new SubscriptionFormControl('Employer-1'),
+          [templateMap.occupation]: new SubscriptionFormControl(''),
           entity_type: new SubscriptionFormControl(ContactTypes.INDIVIDUAL),
         },
         { updateOn: 'blur' },
       );
-      component.templateMap = transaction.transactionType.templateMap;
+      component.templateMap = templateMap;
       component.transactionType = transaction.transactionType;
       component.formProperties = transaction.transactionType.getFormControlNames();
       transactionServiceSpy.getPreviousEntityAggregate.mockReturnValue(of(100));
 
       const asyncValidator = vi.fn().mockResolvedValue({ required: true });
-      component.form.get('occupation')?.setAsyncValidators(asyncValidator);
+      component.form.get(component.templateMap.occupation)?.setAsyncValidators(asyncValidator);
 
       await expect(component.validateForm()).resolves.toBe(false);
       expect(asyncValidator).toHaveBeenCalled();
-      expect(component.form.get('occupation')?.errors?.['required']).toBeTruthy();
+      expect(component.form.get(component.templateMap.occupation)?.errors?.['required']).toBeTruthy();
     });
   });
 
