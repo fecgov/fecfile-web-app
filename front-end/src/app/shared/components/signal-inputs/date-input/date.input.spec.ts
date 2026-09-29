@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal, viewChild } from '@angular/core';
 import { form, FormField, required } from '@angular/forms/signals';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
-import { DateInput, StringDate, validateDate } from './date.input';
+import { DateInput, StringDate } from './date.input';
+import { validateDate } from './date.validators';
 
 @Component({
   standalone: true,
