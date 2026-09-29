@@ -103,6 +103,7 @@ describe('FormUtils', () => {
       ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE,
     ) as SchATransaction;
     transaction.id = 'transaction-id';
+    transaction.entity_type = ContactTypes.CANDIDATE;
     transaction.contact_1 = Contact.fromJSON({
       type: ContactTypes.CANDIDATE,
       candidate_id: 'C12345678',
