@@ -241,6 +241,9 @@ export class TransactionFormUtils {
         takeUntil(component.destroy$),
       )
       .subscribe(([amount, previousAggregate]) => {
+        if (previousAggregate === null || previousAggregate === undefined) {
+          return;
+        }
         this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previousAggregate, amount);
       });
   }
@@ -303,6 +306,9 @@ export class TransactionFormUtils {
         takeUntil(component.destroy$),
       )
       .subscribe(([amount, previousAggregate, transaction]) => {
+        if (previousAggregate === null || previousAggregate === undefined) {
+          return;
+        }
         this.updateAggregate(
           form,
           'aggregate_general_elec_expended',
@@ -322,7 +328,10 @@ export class TransactionFormUtils {
     previousAggregate: number | null,
     amount: number,
   ) {
-    previousAggregate = previousAggregate ?? 0;
+    if (previousAggregate === null || previousAggregate === undefined) {
+      return;
+    }
+
     if (transaction.force_unaggregated) {
       form.get(templateMap[field])?.setValue(previousAggregate);
     } else if (transaction.transactionType?.isRefund) {
