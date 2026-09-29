@@ -17,7 +17,7 @@ export class ElectionCycleService implements TableListService<ElectionCycle> {
   }
 
   async delete(item: ElectionCycle): Promise<null> {
-    return this.apiService.delete<null>(`${this.endpoint}${item.id}`);
+    return this.apiService.delete<null>(`${this.endpoint}${item.id}/`);
   }
 
   async create(cycle: ElectionCycle): Promise<ElectionCycle> {
