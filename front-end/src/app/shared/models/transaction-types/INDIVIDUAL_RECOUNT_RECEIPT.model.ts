@@ -21,13 +21,6 @@ export class INDIVIDUAL_RECOUNT_RECEIPT extends SchATransactionType {
     return report_type === ReportTypes.F3;
   }
 
-  override isReattributable(report_type: ReportTypes): boolean {
-    if (report_type === ReportTypes.F3) {
-      return true;
-    }
-    return super.isReattributable(report_type);
-  }
-
   override isCloneableTransactionType = true;
 
   getNewTransaction() {

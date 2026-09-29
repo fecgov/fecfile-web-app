@@ -10,7 +10,7 @@ export class PAC_IN_KIND_RECEIPT extends IN_KIND {
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.PAC_IN_KIND_OUT];
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

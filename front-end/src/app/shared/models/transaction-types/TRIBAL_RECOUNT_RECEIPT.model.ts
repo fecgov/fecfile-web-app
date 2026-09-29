@@ -17,7 +17,7 @@ export class TRIBAL_RECOUNT_RECEIPT extends SchATransactionType {
     return 'Recount Account';
   }
 
-  override isReattributable() {
+  override get isReattributable() {
     return false;
   }
 

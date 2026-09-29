@@ -25,7 +25,7 @@ describe('UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT', () => {
   });
 
   it('#isReattributable() should return false', () => {
-    const result = transactionType.isReattributable();
+    const result = transactionType.isReattributable;
     expect(result).toBe(false);
   });
 });

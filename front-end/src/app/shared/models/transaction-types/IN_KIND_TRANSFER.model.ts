@@ -10,7 +10,7 @@ export class IN_KIND_TRANSFER extends IN_KIND {
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT];
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

@@ -22,7 +22,7 @@ export abstract class CONDUIT_EARMARK extends SchATransactionType {
   override contactTitle = 'Contact';
   override showAggregate = false;
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 }

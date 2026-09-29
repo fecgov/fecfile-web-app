@@ -17,7 +17,7 @@ export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
 
   override contact2IsRequired = () => true;
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

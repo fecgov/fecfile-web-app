@@ -12,7 +12,7 @@ export class TRANSFER extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRANSFER);
   schema = schema;
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

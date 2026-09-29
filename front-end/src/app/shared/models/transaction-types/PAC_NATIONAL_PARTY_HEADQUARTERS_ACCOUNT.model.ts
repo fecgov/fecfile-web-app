@@ -19,7 +19,7 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransactionType
     return 'Headquarters Buildings Account';
   }
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

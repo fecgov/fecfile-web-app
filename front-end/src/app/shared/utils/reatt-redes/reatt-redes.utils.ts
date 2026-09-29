@@ -1,5 +1,4 @@
 import { FormGroup } from '@angular/forms';
-import { ReportTypes } from 'app/shared/models';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { MemoText } from '../../models/memo-text.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
@@ -41,7 +40,7 @@ export class ReattRedesUtils {
   public static canReattribute(transaction: TransactionListRecord): boolean {
     return (
       !transaction.parent_transaction_id &&
-      transaction.transactionType.isReattributable(transaction.report_type as ReportTypes) &&
+      transaction.transactionType.isReattributable &&
       !ReattRedesUtils.isReattRedes(transaction, [
         ReattRedesTypes.REATTRIBUTION_FROM,
         ReattRedesTypes.REATTRIBUTION_TO,

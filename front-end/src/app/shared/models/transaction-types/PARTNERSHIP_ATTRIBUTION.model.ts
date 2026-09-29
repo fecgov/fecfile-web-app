@@ -23,13 +23,6 @@ export class PARTNERSHIP_ATTRIBUTION extends SchATransactionType {
     return report_type === ReportTypes.F3;
   }
 
-  override isReattributable(report_type: ReportTypes): boolean {
-    if (report_type === ReportTypes.F3) {
-      return false;
-    }
-    return super.isReattributable(report_type);
-  }
-
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',

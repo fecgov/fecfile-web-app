@@ -18,7 +18,7 @@ export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT extends SchATransactionTyp
     return 'Non-contribution Account';
   }
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

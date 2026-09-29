@@ -21,7 +21,7 @@ export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
   ]);
   override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

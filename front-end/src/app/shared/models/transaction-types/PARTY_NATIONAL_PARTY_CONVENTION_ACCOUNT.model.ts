@@ -19,7 +19,7 @@ export class PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType
     return 'Pres. Nominating Convention Account';
   }
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

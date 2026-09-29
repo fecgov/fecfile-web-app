@@ -16,7 +16,7 @@ export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
     false: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED,
   };
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

@@ -34,14 +34,4 @@ describe('INDIVIDUAL_RECOUNT_RECEIPT', () => {
     const result = transactionType.hasElectionInformation(ReportTypes.F3X);
     expect(result).toBe(false);
   });
-
-  it('#isReattributable() should return true for F3', () => {
-    const result = transactionType.isReattributable(ReportTypes.F3);
-    expect(result).toBe(true);
-  });
-
-  it('#isReattributable() should return true for F3X', () => {
-    const result = transactionType.isReattributable(ReportTypes.F3X);
-    expect(result).toBe(true);
-  });
 });

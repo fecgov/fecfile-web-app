@@ -21,7 +21,7 @@ export class PAC_RECOUNT_RECEIPT extends SchATransactionType {
     return report_type === ReportTypes.F3;
   }
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

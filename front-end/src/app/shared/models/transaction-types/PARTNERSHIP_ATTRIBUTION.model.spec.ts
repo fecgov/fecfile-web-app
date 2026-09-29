@@ -36,14 +36,4 @@ describe('PARTNERSHIP_ATTRIBUTION', () => {
     const result = transaction.transactionType.hasElectionInformation(ReportTypes.F3X);
     expect(result).toBe(false);
   });
-
-  it('#isReattributable() should return true for F3X', () => {
-    const result = transaction.transactionType.isReattributable(ReportTypes.F3X);
-    expect(result).toBe(true);
-  });
-
-  it('#isReattributable() should return false for F3', () => {
-    const result = transaction.transactionType.isReattributable(ReportTypes.F3);
-    expect(result).toBe(false);
-  });
 });

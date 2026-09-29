@@ -17,7 +17,7 @@ export class OTHER_RECEIPT extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_RECEIPTS);
   schema = schema;
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

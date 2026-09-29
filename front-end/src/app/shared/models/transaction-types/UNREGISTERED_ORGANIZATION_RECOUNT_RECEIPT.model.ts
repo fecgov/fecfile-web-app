@@ -19,7 +19,7 @@ export class UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT extends SchATransactionTy
     return 'Recount Account';
   }
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

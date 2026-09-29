@@ -42,7 +42,7 @@ describe('PARTNERSHIP_RECEIPT', () => {
   });
 
   it('#isReattributable() should return false', () => {
-    const result = transaction.transactionType.isReattributable();
+    const result = transaction.transactionType.isReattributable;
     expect(result).toBe(false);
   });
 });

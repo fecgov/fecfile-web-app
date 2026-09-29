@@ -30,7 +30,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionT
     return 'Recount/Legal Proceedings Account Transfer of JF Proceeds';
   }
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

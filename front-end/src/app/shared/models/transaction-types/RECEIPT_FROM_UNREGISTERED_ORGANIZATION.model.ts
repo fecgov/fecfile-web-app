@@ -16,7 +16,7 @@ export class RECEIPT_FROM_UNREGISTERED_ORGANIZATION extends SchATransactionType 
   );
   schema = schema;
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

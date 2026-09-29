@@ -17,7 +17,7 @@ export class RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN extends SchATransacti
   schema = schema;
   override negativeAmountValueOnly = true;
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

@@ -13,7 +13,7 @@ export class IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY extends IN_KIND {
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT];
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 

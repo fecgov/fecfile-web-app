@@ -30,7 +30,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransacti
     return 'Pres. Nominating Convention Account Transfer of JF Proceeds';
   }
 
-  override isReattributable(): boolean {
+  override get isReattributable(): boolean {
     return false;
   }
 
