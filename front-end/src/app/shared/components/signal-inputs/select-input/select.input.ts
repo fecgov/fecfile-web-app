@@ -28,6 +28,7 @@ type StringBooleanNull = string | boolean | null;
         (onHide)="touched.set(true)"
         [disabled]="disabled()"
         [class.p-disabled]="disabled()"
+        [showClear]="showClear()"
         [appendTo]="appendTo()"
         [invalid]="touched() && invalid()"
       >
@@ -57,6 +58,7 @@ type StringBooleanNull = string | boolean | null;
 })
 export class SelectInput extends BaseInput<StringBooleanNull> {
   readonly options = input.required<PrimeOptions>();
+  readonly showClear = input(false);
   readonly appendTo = input('self');
 
   readonly selectedItemTemplate = contentChild<

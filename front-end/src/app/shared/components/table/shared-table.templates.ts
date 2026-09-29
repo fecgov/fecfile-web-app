@@ -21,7 +21,7 @@ import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.compo
       <div class="paginator-container">
         <div class="responsive-container">
           <span class="paginator-text">Results per page:</span>
-          <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" appendTo="body">
+          <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage">
             <ng-template pTemplate="dropdownicon">
               <svg alt="dropdown icon" width="14" height="14" class="rotate-90">
                 <use href="assets/img/arrow.svg#arrow"></use>
