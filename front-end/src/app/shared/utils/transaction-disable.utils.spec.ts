@@ -21,6 +21,12 @@ describe('transaction disable utils', () => {
     expect(isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.PARTY_RECEIPT)).toBe(false);
   });
 
+  it('does not disable returned or bounced individual receipts for Form 3', () => {
+    expect(
+      isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL),
+    ).toBe(false);
+  });
+
   it('does not disable transactions for report types missing from the disabled list', () => {
     expect(isTransactionTypeDisabledForReport(ReportTypes.F3X, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT)).toBe(
       false,

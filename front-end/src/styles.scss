@@ -917,3 +917,7 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
   right: 0;
   left: auto;
 }
+
+.p-invalid {
+  border-color: var(--error) !important;
+}

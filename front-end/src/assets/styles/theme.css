@@ -28,6 +28,9 @@ label.p-disabled {
   font-weight: bold;
   color: var(--error);
 }
+input.p-error {
+  border-color: var(--error);
+}
 
 .p-text-secondary {
   color: var(--text-color-secondary);

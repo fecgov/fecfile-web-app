@@ -1,4 +1,5 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { ReportTypes } from '../reports/report.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { RETURN_RECEIPT } from './RETURN_RECEIPT.model';
 
@@ -21,5 +22,10 @@ describe('RETURN_RECEIPT', () => {
   });
   it('#generatePurposeDescription() should not be defined', () => {
     expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
+  });
+
+  it('should show election information only for Form 3', () => {
+    expect(transactionType.hasElectionInformation(ReportTypes.F3)).toBe(true);
+    expect(transactionType.hasElectionInformation(ReportTypes.F3X)).toBe(false);
   });
 });
