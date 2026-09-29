@@ -158,12 +158,13 @@
           [(first)]="first"
           [totalItems]="totalItems()"
           itemName="cycles"
+          emptyMessage="You have no election cycles"
         />
         <ng-template pTemplate="summary">
           <ng-container *ngTemplateOutlet="sharedTpls.summaryTemplate()" />
         </ng-template>
-        <ng-template #emptyMessageTemplate>
-          <td colspan="100" class="mx-3 empty-message">You have no election cycles</td>
+        <ng-template pTemplate="emptymessage">
+          <ng-container *ngTemplateOutlet="sharedTpls.emptyMessageTemplate()" />
         </ng-template>
       </p-table>
       @if (isEditing()) {

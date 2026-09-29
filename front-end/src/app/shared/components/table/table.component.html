@@ -87,8 +87,8 @@
       }
     </tr>
   </ng-template>
-  <ng-template #emptyMessageTemplate>
-    <td colspan="100" class="mx-3 empty-message">{{ emptyMessage() }}</td>
+  <ng-template pTemplate="emptymessage">
+    <ng-container *ngTemplateOutlet="sharedTpls.emptyMessageTemplate()" />
   </ng-template>
   <app-shared-table-templates
     #sharedTpls
@@ -96,6 +96,7 @@
     [(first)]="first"
     [totalItems]="totalItems()"
     [itemName]="itemName()"
+    [emptyMessage]="emptyMessage()"
   />
   @if (showPaginationControls()) {
     <ng-template pTemplate="summary">

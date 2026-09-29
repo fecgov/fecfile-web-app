@@ -53,7 +53,8 @@ describe('Extended F3X Schedule E Aggregation', () => {
           candidate: result.candidate,
           amount: 80,
           disbursementDate: new Date(currentYear, 4 - 1, 8),
-          electionCode: `P${currentYear}`,
+          electionType: 'Primary (P)',
+          electionYear: currentYear
         },
         {
           reportId: result.report,
@@ -61,7 +62,8 @@ describe('Extended F3X Schedule E Aggregation', () => {
           candidate: result.candidate,
           amount: 40,
           disbursementDate: new Date(currentYear, 4 - 1, 22),
-          electionCode: `P${currentYear}`,
+          electionType: 'Primary (P)',
+          electionYear: currentYear
         },
       ]).then(([firstId, secondId]) => {
         F3XAggregationHelpers.goToReport(result.report);
@@ -69,7 +71,7 @@ describe('Extended F3X Schedule E Aggregation', () => {
         F3XAggregationHelpers.clickSave();
 
         F3XAggregationHelpers.openDisbursement(secondId);
-        PageUtils.pSelectDropdownSetValue('[inputid="electionType"]', 'G');
+        PageUtils.pSelectDropdownSetValue('p-select:has([id^="electionType-"])', 'General (G)');
         F3XAggregationHelpers.clearAndType('#electionYear', `${currentYear}`);
         F3XAggregationHelpers.assertCalendarYtdAfterBlur('$40.00');
         F3XAggregationHelpers.clickSave();

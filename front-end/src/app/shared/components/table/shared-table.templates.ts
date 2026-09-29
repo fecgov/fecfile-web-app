@@ -97,6 +97,9 @@ import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.compo
         <use href="assets/img/last-arrow.svg#last-arrow"></use>
       </svg>
     </ng-template>
+    <ng-template #emptyMessageTemplate>
+      <td colspan="100" class="mx-3 empty-message">{{ emptyMessage() }}</td>
+    </ng-template>
   `,
   styles: `
     .empty-message {
@@ -141,6 +144,7 @@ export class SharedTableTemplates implements AfterViewInit {
   readonly totalItems = input.required<number>();
   readonly itemName = input.required<string>();
   readonly first = model.required<number>();
+  readonly emptyMessage = input('No data available in table');
 
   readonly showing = computed(() => {
     return `Showing ${this.from()} to ${this.to()} of ${this.totalItems()} ${this.itemName()}`;

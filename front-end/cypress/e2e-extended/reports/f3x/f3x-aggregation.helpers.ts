@@ -45,7 +45,8 @@ interface ScheduleECreateArgs {
   amount: number;
   disbursementDate: Date;
   disseminationDate?: Date;
-  electionCode?: string;
+  electionType?: string;
+  electionYear?: number;
 }
 
 const receiptsTableRoot = 'app-transaction-receipts p-table';
@@ -444,8 +445,8 @@ export class F3XAggregationHelpers {
     let createdId = '';
     const disbursementDate = args.disbursementDate;
     const disseminationDate = args.disseminationDate ?? args.disbursementDate;
-    const electionTypeFromCode = args.electionCode?.slice(0, 1) ?? '';
-    const parsedElectionYear = args.electionCode ? Number(args.electionCode.slice(1)) : Number.NaN;
+    const electionTypeFromCode = args.electionType ?? '';
+    const parsedElectionYear = args.electionYear ?? Number.NaN;
     const electionYearFromCode = Number.isNaN(parsedElectionYear) ? currentYear : parsedElectionYear;
     this.goToReport(args.reportId);
     StartTransaction.Disbursements().Contributions().IndependentExpenditure();
