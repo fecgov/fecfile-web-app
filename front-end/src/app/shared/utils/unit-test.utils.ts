@@ -269,6 +269,83 @@ export function testContact() {
   });
 }
 
+export function testIndividual() {
+  return Contact.fromJSON({
+    id: '111',
+    type: ContactTypes.INDIVIDUAL,
+    last_name: 'Smith',
+    first_name: 'Joe',
+    middle_name: 'James',
+    prefix: 'Mr',
+    suffix: 'Jr',
+    street_1: '123 Main St',
+    street_2: 'Apt B',
+    city: 'Anytown',
+    state: 'VA',
+    zip: '22201',
+    employer: 'Plumbing, Inc.',
+    occupation: 'plumber',
+    telephone: '555-555-5555',
+    country: 'USA',
+  });
+}
+
+export function testCandidate() {
+  return Contact.fromJSON({
+    id: '111',
+    type: ContactTypes.CANDIDATE,
+    last_name: 'Smith',
+    first_name: 'Joe',
+    middle_name: 'James',
+    prefix: 'Mr',
+    suffix: 'Jr',
+    street_1: '123 Main St',
+    street_2: 'Apt B',
+    city: 'Anytown',
+    state: 'VA',
+    zip: '22201',
+    employer: 'Plumbing, Inc.',
+    occupation: 'plumber',
+    telephone: '555-555-5555',
+    country: 'USA',
+    candidate_id: '999',
+    candidate_office: CandidateOfficeTypes.HOUSE,
+    candidate_state: 'VA',
+    candidate_district: '1',
+  });
+}
+
+export function testOrganization() {
+  return Contact.fromJSON({
+    id: '111',
+    type: ContactTypes.ORGANIZATION,
+    name: 'Organization LLC',
+    street_1: '123 Main St',
+    street_2: 'Apt B',
+    city: 'Anytown',
+    state: 'VA',
+    zip: '22201',
+    telephone: '555-555-5555',
+    country: 'USA',
+  });
+}
+
+export function testCommittee() {
+  return Contact.fromJSON({
+    id: '111',
+    type: ContactTypes.COMMITTEE,
+    name: 'Organization LLC',
+    street_1: '123 Main St',
+    street_2: 'Apt B',
+    city: 'Anytown',
+    state: 'VA',
+    zip: '22201',
+    telephone: '555-555-5555',
+    country: 'USA',
+    committee_id: '888',
+  });
+}
+
 export function getTestIndividualReceipt(): SchATransaction {
   return SchATransaction.fromJSON({
     id: '123',
