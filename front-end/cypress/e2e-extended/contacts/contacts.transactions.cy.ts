@@ -210,16 +210,6 @@ const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems:
   });
 };
 
-const REQUIRED_LOOKUP_TYPES = new Set(['Individual', 'Organization', 'Committee']);
-
-const hasAllRequiredLookupTypes = (sel: HTMLSelectElement) => {
-  const opts = new Set(Array.from(sel.options, (o) => o.text.trim()));
-  for (const req of REQUIRED_LOOKUP_TYPES) {
-    if (!opts.has(req)) return false;
-  }
-  return true;
-};
-
 const createContactAndReport = (
   lastName: string,
   firstName: string,
