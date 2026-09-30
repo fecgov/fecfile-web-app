@@ -21,7 +21,6 @@ export class INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT extends SchBTransactionTy
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     });

@@ -25,7 +25,6 @@ export class TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SCHEDULE_
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });

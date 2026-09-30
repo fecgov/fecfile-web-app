@@ -25,7 +25,6 @@ export class PARTY_RECEIPT extends SchATransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11B',
       transaction_type_identifier: ScheduleATransactionTypes.PARTY_RECEIPT,
       aggregation_group: AggregationGroups.GENERAL,
     });

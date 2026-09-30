@@ -29,7 +29,6 @@ export class OTHER_RECEIPT extends SchATransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.OTHER_RECEIPTS,
       aggregation_group: AggregationGroups.OTHER_RECEIPTS,
     });

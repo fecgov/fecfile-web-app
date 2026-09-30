@@ -15,7 +15,6 @@ describe('CONTRIBUTION_TO_OTHER_COMMITTEE_VOID', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SB23');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID);
   });
 

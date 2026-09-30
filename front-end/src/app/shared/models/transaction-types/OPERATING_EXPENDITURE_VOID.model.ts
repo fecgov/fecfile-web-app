@@ -20,7 +20,6 @@ export class OPERATING_EXPENDITURE_VOID extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

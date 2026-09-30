@@ -25,7 +25,6 @@ export class PAC_IN_KIND_OUT extends IN_KIND_OUT {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.PAC_IN_KIND_OUT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

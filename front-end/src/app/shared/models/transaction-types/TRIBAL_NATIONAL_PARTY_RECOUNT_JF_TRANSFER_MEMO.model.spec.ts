@@ -18,7 +18,6 @@ describe('TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
     const txn: Transaction | undefined = transaction.transactionType?.getNewTransaction();
     expect(txn).toBeTruthy();
     if (txn) {
-      expect(txn.form_type).toBe('SA17');
       expect(txn.transaction_type_identifier).toBe(
         ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
       );

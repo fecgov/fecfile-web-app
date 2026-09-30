@@ -27,7 +27,6 @@ export class PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });

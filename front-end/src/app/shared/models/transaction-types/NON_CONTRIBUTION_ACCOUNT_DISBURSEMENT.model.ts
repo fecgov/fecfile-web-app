@@ -22,7 +22,6 @@ export class NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB29',
       transaction_type_identifier: ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

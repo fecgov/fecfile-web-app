@@ -26,7 +26,6 @@ export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT extends SchATransactionTyp
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
       aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
     });

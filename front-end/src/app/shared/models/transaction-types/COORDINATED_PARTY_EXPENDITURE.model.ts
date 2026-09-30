@@ -48,7 +48,6 @@ export class COORDINATED_PARTY_EXPENDITURE extends SchFTransactionType {
 
   getNewTransaction() {
     return SchFTransaction.fromJSON({
-      form_type: 'SF',
       transaction_type_identifier: ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
       aggregation_group: AggregationGroups.COORDINATED_PARTY_EXPENDITURES,
     });

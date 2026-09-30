@@ -18,7 +18,6 @@ describe('PARTNERSHIP_JF_TRANSFER_MEMO', () => {
   });
 
   it.skip('#factory() should return a SchBTransaction', () => {
-    expect(transaction.form_type).toBe('SA12');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   });
 

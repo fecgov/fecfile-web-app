@@ -10,7 +10,6 @@ export class PAC_EARMARK_MEMO extends EARMARK_MEMO {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11C',
       transaction_type_identifier: ScheduleATransactionTypes.PAC_EARMARK_MEMO,
       aggregation_group: AggregationGroups.GENERAL,
       memo_code: true,

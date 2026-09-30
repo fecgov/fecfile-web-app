@@ -28,7 +28,6 @@ export class RECEIPT_FROM_UNREGISTERED_ORGANIZATION extends SchATransactionType 
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
       aggregation_group: AggregationGroups.GENERAL,
     });

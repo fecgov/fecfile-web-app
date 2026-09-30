@@ -17,7 +17,6 @@ describe('PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
-    expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
       ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
     );
