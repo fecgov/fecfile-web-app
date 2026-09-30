@@ -25,4 +25,10 @@ export class ElectionCycleService implements TableListService<ElectionCycle> {
     const response = await this.apiService.post<Record<string, string>>(this.endpoint, payload);
     return ElectionCycle.fromJson(response);
   }
+
+  async update(cycle: ElectionCycle): Promise<ElectionCycle> {
+    const payload = cycle.toJson();
+    const response = await this.apiService.put<Record<string, string>>(`${this.endpoint}${cycle.id}/`, payload);
+    return ElectionCycle.fromJson(response);
+  }
 }

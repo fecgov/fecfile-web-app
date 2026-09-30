@@ -54,7 +54,7 @@ export function validateDateOverlap(
   url: string,
   cookieService: CookieService,
   options?: {
-    excludeId?: string;
+    excludeId?: string | null;
     message?: string;
   },
 ) {
