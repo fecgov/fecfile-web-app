@@ -417,7 +417,7 @@ export class TransactionFormUtils {
     if (transaction?.transactionType) {
       form.patchValue({
         entity_type: defaultContactTypeOption,
-        [transaction.transactionType.templateMap.aggregate]: 0,
+        [transaction.transactionType.templateMap.aggregate]: null,
         memo_code: this.getMemoCodeConstant(transaction?.transactionType),
         [transaction.transactionType.templateMap.purpose_description]:
           transaction?.transactionType?.generatePurposeDescriptionWrapper(transaction),
@@ -496,14 +496,8 @@ export class TransactionFormUtils {
     firstValueFrom(contactId$).then((contactIdStart) => {
       (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
         (previousAggregate) => {
-          this.updateAggregate(
-            form,
-            'aggregate',
-            templateMap,
-            transaction,
-            previousAggregate,
-            form.get(templateMap.amount)?.value,
-          );
+          const amount = form.get(templateMap.amount)?.value;
+          this.updateAggregate(form, 'aggregate', templateMap, transaction, previousAggregate ?? 0, amount);
         },
         component.destroy$,
         [
