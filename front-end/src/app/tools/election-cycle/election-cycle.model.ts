@@ -23,7 +23,7 @@ export class ElectionCycle extends BaseModel {
   office!: OfficeType | null;
 
   @Expose({ name: 'election_type' })
-  electionType!: ElectionType | null;
+  electionType!: ElectionType;
 
   @Expose({ name: 'election_year' })
   electionYear!: number;

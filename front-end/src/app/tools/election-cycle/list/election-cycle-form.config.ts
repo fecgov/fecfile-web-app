@@ -23,13 +23,13 @@ export const electionTypeOptions = [
 
 export type ElectionCycleForm = {
   office: OfficeType | null;
-  electionType: ElectionType | null;
+  electionType: ElectionType;
   electionYear: number | null;
   coverage: Coverage;
 };
 export const INITIAL_FORM_VALUE: ElectionCycleForm = {
   office: null,
-  electionType: null,
+  electionType: 'General',
   electionYear: null,
   coverage: { startDate: null, endDate: null },
 } as const;
