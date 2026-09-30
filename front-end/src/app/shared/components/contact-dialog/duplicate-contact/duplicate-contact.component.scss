@@ -2,6 +2,7 @@
   grid-column-end: span 12 !important;
   margin: 0;
 }
+
 .background-box {
   padding: 10px 15px;
   margin-bottom: 24px;
@@ -10,32 +11,104 @@
   box-shadow: var(--p-dialog-shadow);
 }
 
-.name-location {
-  display: flex;
-  flex-direction: column;
+.fit-button {
+  width: 145px;
+  min-width: 145px;
+}
 
-  span:nth-of-type(2) {
-    overflow-wrap: anywhere;
+.col-address,
+.col-id {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 576px) {
+  .duplicate-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 
-  @media (min-width: 577px) {
+  .duplicate-row {
+    display: grid;
+    grid-template-columns: 1fr 145px;
+    column-gap: 10px;
+    row-gap: 4px;
     align-items: center;
-    gap: 40px;
-    flex-direction: row;
+    grid-template-rows: auto auto;
 
-    span {
-      &:nth-of-type(1) {
-        max-width: 60%;
-        flex-shrink: 0;
-      }
-      &:nth-of-type(2) {
-        flex: 1;
+    .col-name {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .col-id {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .col-address {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .col-action {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      justify-self: end;
+      align-self: center;
+    }
+
+    &:has(.col-id) {
+      grid-template-rows: auto auto auto;
+
+      .col-address {
+        grid-row: 3;
       }
     }
   }
 }
 
-.fit-button {
-  min-width: 145px;
-  margin-left: 10px;
+@media (min-width: 577px) {
+  .duplicate-list {
+    display: grid;
+    column-gap: 0;
+    row-gap: 16px;
+    align-items: center;
+    grid-template-columns: fit-content(60%) 1fr 145px;
+
+    &.is-committee {
+      grid-template-columns: fit-content(40%) fit-content(20%) 1fr 145px;
+    }
+  }
+
+  .duplicate-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: center;
+
+    .col-name,
+    .col-id {
+      padding-right: 40px;
+    }
+
+    .col-address,
+    .cand-id {
+      padding-right: 10px;
+    }
+
+    .col-name,
+    .col-id,
+    .col-address {
+      grid-column: auto;
+      grid-row: auto;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: word-break;
+    }
+
+    .col-action {
+      grid-column: auto;
+      grid-row: auto;
+      justify-self: end;
+    }
+  }
 }

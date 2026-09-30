@@ -1,12 +1,12 @@
 import { Component, computed, OnInit } from '@angular/core';
-import { Validators, ReactiveFormsModule } from '@angular/forms';
-import { takeUntil } from 'rxjs';
-import { BaseInputComponent } from '../base-input.component';
-import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
+import { takeUntil } from 'rxjs';
+import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { SelectComponent } from '../../select/select.component';
+import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-election-input',
@@ -43,7 +43,13 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     if (election_code?.disabled) {
       this.form.get('electionType')?.disable();
       this.form.get('electionYear')?.disable();
-      if (!ReattRedesUtils.isReattRedes(this.transaction(), [ReattRedesTypes.REDESIGNATION_FROM])) {
+      const inheritsElectionInfo =
+        this.transaction()?.transactionType.inheritedFields?.includes('election_code') &&
+        this.transaction()?.transactionType.inheritedFields?.includes('election_other_description');
+      if (
+        !ReattRedesUtils.isReattRedes(this.transaction(), [ReattRedesTypes.REDESIGNATION_FROM]) &&
+        !inheritsElectionInfo
+      ) {
         this.form.disable();
       }
     }
