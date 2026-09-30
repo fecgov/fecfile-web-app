@@ -225,50 +225,44 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   }
 
   private async waitForPendingValidation(): Promise<void> {
-    let attempts = 0;
-    const maxAttempts = 5;
+    this.form.updateValueAndValidity();
+    Object.values(this.form.controls).forEach((control) => control.updateValueAndValidity());
 
-    while (attempts < maxAttempts) {
-      this.form.updateValueAndValidity();
-      Object.values(this.form.controls).forEach((control) => control.updateValueAndValidity());
+    const pendingControls = [
+      this.form,
+      this.form.get(this.templateMap.employer),
+      this.form.get(this.templateMap.occupation),
+    ].filter((control): control is AbstractControl => !!control && control.pending);
 
-      const pendingControls = [
-        this.form,
-        this.form.get(this.templateMap.employer),
-        this.form.get(this.templateMap.occupation),
-      ].filter((control): control is AbstractControl => !!control && control.pending);
+    if (!pendingControls.length && this.form.status !== 'PENDING') {
+      return;
+    }
 
-      if (!pendingControls.length && this.form.status !== 'PENDING') {
-        return;
-      }
+    const pendingWaits = pendingControls.map((control) =>
+      firstValueFrom(
+        control.statusChanges.pipe(
+          filter((status) => status !== 'PENDING'),
+          take(1),
+        ),
+      ),
+    );
 
-      const pendingWaits = pendingControls.map((control) =>
+    if (this.form.status === 'PENDING') {
+      pendingWaits.push(
         firstValueFrom(
-          control.statusChanges.pipe(
+          this.form.statusChanges.pipe(
             filter((status) => status !== 'PENDING'),
             take(1),
           ),
         ),
       );
-
-      if (this.form.status === 'PENDING') {
-        pendingWaits.push(
-          firstValueFrom(
-            this.form.statusChanges.pipe(
-              filter((status) => status !== 'PENDING'),
-              take(1),
-            ),
-          ),
-        );
-      }
-
-      if (!pendingWaits.length) {
-        return;
-      }
-
-      await Promise.all(pendingWaits);
-      attempts += 1;
     }
+
+    if (!pendingWaits.length) {
+      return;
+    }
+
+    await Promise.all(pendingWaits);
 
     this.form.updateValueAndValidity();
   }
