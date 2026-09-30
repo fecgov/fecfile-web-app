@@ -199,7 +199,7 @@ export abstract class TransactionListTableBaseComponent
 
   protected buildLineColumn(): ColumnDefinition<TransactionListRecord> {
     return {
-      field: 'line_number',
+      field: 'line_label',
       header: 'Line',
       sortable: true,
       cssClass: 'line-column',
