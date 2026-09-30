@@ -16,7 +16,6 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
-    expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
       ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     );
