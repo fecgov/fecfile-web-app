@@ -27,8 +27,14 @@ export class DateInput extends BaseInput<StringDate> {
       const parsedDate = new Date(date);
       finalValue = Number.isNaN(parsedDate.getTime()) ? date : parsedDate;
     }
+<<<<<<< HEAD
     this.tempValue.set(finalValue);
     this.commitValue();
+=======
+
+    this.value.set(finalValue);
+    this.touched.set(true);
+>>>>>>> abc13a623 (Fix issue where date wasn't being validated on select)
   }
 
   onYearChange(event: Event, delta: -1 | 1) {
