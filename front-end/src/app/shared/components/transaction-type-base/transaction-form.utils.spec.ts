@@ -74,7 +74,7 @@ describe('FormUtils', () => {
     expect(aggregateFormControl.value).toEqual(50);
   });
 
-  it('should initialize Schedule B aggregate_amount to zero', () => {
+  it('should initialize Schedule B aggregate_amount to blank', () => {
     const form = new FormGroup({
       entity_type: new SubscriptionFormControl(),
       aggregate_amount: new SubscriptionFormControl(),
@@ -95,7 +95,7 @@ describe('FormUtils', () => {
     );
 
     const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
-    expect(aggregateFormControl.value).toEqual(0);
+    expect(aggregateFormControl.value).toBeNull();
   });
 
   it('hydrates primary candidate contact fields when editing a transaction', async () => {
