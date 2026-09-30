@@ -16,7 +16,6 @@ describe('LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const transaction: SchATransaction = transactionType.getNewTransaction();
-    expect(transaction.form_type).toBe('SA13');
     expect(transaction.aggregation_group).toBe(AggregationGroups.GENERAL);
     expect(transaction.transaction_type_identifier).toBe(
       ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,

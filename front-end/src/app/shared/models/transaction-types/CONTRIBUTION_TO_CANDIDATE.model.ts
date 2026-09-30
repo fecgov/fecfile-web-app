@@ -23,7 +23,6 @@ export class CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB23',
       transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
     });
   }

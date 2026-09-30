@@ -10,7 +10,6 @@ export class EARMARK_MEMO_HEADQUARTERS_ACCOUNT extends EARMARK_MEMO {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
       memo_code: true,
