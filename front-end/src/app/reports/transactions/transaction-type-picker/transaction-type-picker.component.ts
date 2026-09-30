@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { CommitteeStore } from 'app/committee/committee.store';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
@@ -26,7 +27,6 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Accordion, AccordionModule } from 'primeng/accordion';
 import { environment } from '../../../../environments/environment';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
-import { CommitteeStore } from 'app/committee/committee.store';
 
 @Component({
   selector: 'app-transaction-type-picker',
@@ -97,8 +97,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
       const transactionTypes = report.transactionTypes.filter(
         (t) =>
           group.transactionTypes.has(t) &&
-          (this.committeeStore.isPAC() || !PAC_ONLY().has(t)) &&
-          (this.committeeStore.isPTY() || !PTY_ONLY().has(t)),
+          (this.isF3() ||
+            ((this.committeeStore.isPAC() || !PAC_ONLY().has(t)) &&
+              (this.committeeStore.isPTY() || !PTY_ONLY().has(t)))),
       );
 
       if (this.debtId()) {

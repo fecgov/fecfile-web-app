@@ -95,6 +95,7 @@ import { TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-typ
 import { TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
+import { UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT } from '../models/transaction-types/UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT.model';
 
 // Schedule B /////////////////////////////////////////////////////
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
@@ -164,10 +165,10 @@ import { REFUND_PAC_CONTRIBUTION } from '../models/transaction-types/REFUND_PAC_
 import { REFUND_PAC_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PAC_CONTRIBUTION_VOID.model';
 import { REFUND_PARTY_CONTRIBUTION } from '../models/transaction-types/REFUND_PARTY_CONTRIBUTION.model';
 import { REFUND_PARTY_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PARTY_CONTRIBUTION_VOID.model';
-import { REFUND_TO_FEDERAL_CANDIDATE } from '../models/transaction-types/REFUND_TO_FEDERAL_CANDIDATE.model';
-import { REFUND_TO_UNREGISTERED_COMMITTEE } from '../models/transaction-types/REFUND_TO_UNREGISTERED_COMMITTEE.model';
 import { REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION } from '../models/transaction-types/REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION.model';
 import { REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID } from '../models/transaction-types/REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID.model';
+import { REFUND_TO_FEDERAL_CANDIDATE } from '../models/transaction-types/REFUND_TO_FEDERAL_CANDIDATE.model';
+import { REFUND_TO_UNREGISTERED_COMMITTEE } from '../models/transaction-types/REFUND_TO_UNREGISTERED_COMMITTEE.model';
 import { TRANSFER_TO_AFFILIATES } from '../models/transaction-types/TRANSFER_TO_AFFILIATES.model';
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
@@ -247,6 +248,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
   TRIBAL_RECEIPT,
   TRIBAL_RECOUNT_RECEIPT,
+  UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
   BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
