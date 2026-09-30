@@ -5,6 +5,7 @@ import { ReportTypes } from '../reports/report.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
+import { TemplateMapKeyType } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class PARTNERSHIP_ATTRIBUTION extends SchATransactionType {
@@ -13,7 +14,7 @@ export class PARTNERSHIP_ATTRIBUTION extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION);
   schema = schema;
   override _navigationControls = CHILD_CONTROLS;
-  override inheritElectionInfo = true;
+  override inheritedFields = ['election_code', 'election_other_description'] as TemplateMapKeyType[];
 
   override generatePurposeDescription(): string {
     return 'Partnership Attribution';

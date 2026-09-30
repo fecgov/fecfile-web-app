@@ -1,6 +1,5 @@
 import { Component, computed, OnInit } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { SchATransaction } from 'app/shared/models';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { InputText } from 'primeng/inputtext';
 import { takeUntil } from 'rxjs';
@@ -28,20 +27,6 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
   ];
 
   ngOnInit(): void {
-    const transaction = this.transaction();
-    if (transaction && transaction.transactionType.inheritElectionInfo) {
-      const electionCodeFormControl = this.form.get(transaction.transactionType.templateMap.election_code);
-      const electionOtherDescriptionFormControl = this.form.get(
-        transaction.transactionType.templateMap.election_other_description,
-      );
-      electionCodeFormControl?.setValue((transaction.parent_transaction as SchATransaction)?.election_code);
-      electionCodeFormControl?.disable();
-      electionOtherDescriptionFormControl?.setValue(
-        (transaction.parent_transaction as SchATransaction)?.election_other_description,
-      );
-      electionOtherDescriptionFormControl?.disable();
-    }
-
     // Get inital values for election type and year for additional form inputs
 
     const election_code = this.form.get('election_code');
@@ -58,15 +43,19 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     if (election_code?.disabled) {
       this.form.get('electionType')?.disable();
       this.form.get('electionYear')?.disable();
+      const inheritsElectionInfo =
+        this.transaction()?.transactionType.inheritedFields?.includes('election_code') &&
+        this.transaction()?.transactionType.inheritedFields?.includes('election_other_description');
       if (
         !ReattRedesUtils.isReattRedes(this.transaction(), [ReattRedesTypes.REDESIGNATION_FROM]) &&
-        !this.transaction()?.transactionType.inheritElectionInfo
+        !inheritsElectionInfo
       ) {
         this.form.disable();
       }
     }
 
     // Check for mandatory Field designation and disable if necessary
+    const transaction = this.transaction();
     if (transaction && 'electionType' in transaction.transactionType.mandatoryFormValues) {
       this.form.get('electionType')?.setValue(transaction.transactionType.mandatoryFormValues['electionType']);
       this.form.get('electionType')?.disable();
