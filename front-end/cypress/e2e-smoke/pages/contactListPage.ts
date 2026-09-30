@@ -50,17 +50,17 @@ export class ContactListPage {
     cy.get(alias).find('#street_2').safeType(formData['street_2']);
     cy.get(alias).find('#city').safeType(formData['city']);
     cy.get(alias).find('#zip').safeType(formData['zip']);
-    cy.get(alias).find('#telephone').safeType(formData['phone']);
+    cy.get(alias).find('#telephone').scrollIntoView().safeType(formData['phone']);
     PageUtils.pSelectDropdownSetValue("app-searchable-select[inputid='state']", formData['state'], alias);
 
     //Candidate-exclusive fields
     if (formData['contact_type'] == 'Candidate') {
       cy.get(alias).find('#candidate_id').safeType(formData['candidate_id']);
 
-      PageUtils.selectDropdownSetValue("app-select[inputid='candidate_office']", formData['candidate_office'], alias);
+      PageUtils.pSelectDropdownSetValue("app-select[inputid='candidate_office']", formData['candidate_office'], alias);
 
       if (formData['candidate_office'] != 'Presidential') {
-        PageUtils.selectDropdownSetValue(
+        PageUtils.pSelectDropdownSetValue(
           "app-select[inputid='candidate_state']",
           formData['candidate_state'],
           alias,
@@ -68,7 +68,7 @@ export class ContactListPage {
 
         const singleDistrictStates = ['Alaska', 'Delaware', 'North Dakota', 'South Dakota', 'Vermont', 'Wyoming'];
         if (formData['candidate_office'] == 'House' && !singleDistrictStates.includes(formData['candidate_state'])) {
-          PageUtils.selectDropdownSetValue("app-select[inputid='candidate_district']", formData['candidate_district'], alias);
+          PageUtils.pSelectDropdownSetValue("app-select[inputid='candidate_district']", formData['candidate_district'], alias);
         }
       }
     }

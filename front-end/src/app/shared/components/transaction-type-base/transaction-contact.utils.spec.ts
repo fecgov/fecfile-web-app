@@ -113,6 +113,25 @@ describe('ContactUtils', () => {
     expect(transaction.contact_1).toBeFalsy();
   });
 
+  it('populates primary candidate fields for a candidate contribution', () => {
+    const transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE,
+    ) as SchATransaction;
+    selectItem.value.type = ContactTypes.CANDIDATE;
+
+    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, transaction, contactId$);
+
+    expect(transaction.contact_1).toBe(selectItem.value);
+    expect(form.get('donor_candidate_fec_id')?.value).toBe('999');
+    expect(form.get('donor_candidate_last_name')?.value).toBe('Smith');
+    expect(form.get('donor_candidate_first_name')?.value).toBe('Joe');
+    expect(form.get('donor_candidate_middle_name')?.value).toBe('James');
+    expect(form.get('donor_candidate_prefix')?.value).toBe('Mr');
+    expect(form.get('donor_candidate_suffix')?.value).toBe('Jr');
+    expect(form.get('contributor_employer')?.value).toBe('Plumbing, Inc.');
+    expect(form.get('contributor_occupation')?.value).toBe('plumber');
+  });
+
   it('test updateFormWithCandidateContact', () => {
     const transaction = testScheduleATransaction();
     TransactionContactUtils.updateFormWithCandidateContact(selectItem, form, transaction, new Subject<string>());

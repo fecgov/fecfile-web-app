@@ -18,12 +18,12 @@
       pRipple
       class="dd-button"
       [disabled]="isDisabled()"
-      (click)="op.toggle($event)"
+      (click)="popoverHidden.update(v => !v)"
       data-cy="navigation-control-dropdown"
     >
       <i [class]="navigationControl().icon || ''"></i><span>{{ navigationControl().label || '' }}</span>
     </button>
-    <p-popover #op>
+    <div class="p-popover custom-popover" [class.hidden]="popoverHidden()">
       <div class="p-3">
         @for (option of dropdownOptions(); track option) {
           @if (option.items) {
@@ -67,7 +67,7 @@
           }
         }
       </div>
-    </p-popover>
+    </div>
   }
   @case (controlType.SPLITBUTTON) {
     <p-splitButton

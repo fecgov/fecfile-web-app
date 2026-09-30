@@ -27,6 +27,12 @@ describe('transaction disable utils', () => {
     ).toBe(false);
   });
 
+  it('does not disable candidate contributions for Form 3', () => {
+    expect(
+      isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE),
+    ).toBe(false);
+  });
+
   it('does not disable transactions for report types missing from the disabled list', () => {
     expect(isTransactionTypeDisabledForReport(ReportTypes.F3X, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT)).toBe(
       false,

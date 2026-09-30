@@ -14,6 +14,7 @@
     class="horizontal-field"
     label="CURRENT VERSION OR<br />AMENDMENT NUMBER"
     [formField]="form.original"
+    [minValue]="0"
   />
   <app-number-input
     class="horizontal-field"
@@ -23,6 +24,7 @@
         original=0, amendment 1=1)
       </span>"
     [formField]="form.amendment"
+    [minValue]="0"
   />
 
   @if (isF24()) {

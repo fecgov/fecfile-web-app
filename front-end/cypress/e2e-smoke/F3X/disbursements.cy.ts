@@ -162,7 +162,7 @@ describe('Disbursements', () => {
 
       const transactionFormData = {
         ...formTransactionDataForSchedule,
-        electionType: 'General',
+        electionType: 'General (G)',
         electionYear: 2024,
         election_other_description: faker.lorem.sentence({ min: 1, max: 2 }),
         purpose_description: '',
