@@ -220,6 +220,38 @@ const hasAllRequiredLookupTypes = (sel: HTMLSelectElement) => {
   return true;
 };
 
+const createContactAndReport = (
+  lastName: string,
+  firstName: string,
+  overrides: Partial<MockContact> = {},
+) => {
+  const contactPayload: MockContact & {
+    employer?: string | null;
+    occupation?: string | null;
+  } = {
+    ...Individual_A_A,
+    last_name: lastName,
+    first_name: firstName,
+    employer: '',
+    occupation: '',
+    ...overrides,
+  };
+
+  makeContact(contactPayload);
+
+  let reportId: string | undefined;
+  makeF3x(F3X_Q2, (resp) => {
+    reportId = resp.body.id;
+  });
+
+  return cy.then(() => {
+    if (!reportId) {
+      throw new Error('F3X report id should be defined');
+    }
+    return reportId;
+  });
+};
+
 describe('Contacts: Transactions integration', () => {
   beforeEach(() => {
     Initialize();
@@ -372,29 +404,7 @@ describe('Contacts: Transactions integration', () => {
     const lastName = `TxnNoBlurLn${id}`;
     const firstName = `TxnNoBlurFn${id}`;
 
-    const contactPayload: MockContact & {
-      employer?: string | null;
-      occupation?: string | null;
-    } = {
-      ...Individual_A_A,
-      last_name: lastName,
-      first_name: firstName,
-      employer: '',
-      occupation: '',
-    };
-
-    makeContact(contactPayload);
-
-    let reportId: string | undefined;
-    makeF3x(F3X_Q2, (resp) => {
-      reportId = resp.body.id;
-    });
-
-    cy.then(() => {
-      if (!reportId) {
-        throw new Error('reportId should be defined');
-      }
-      const rid = reportId;
+    createContactAndReport(lastName, firstName).then((rid) => {
 
       cy.intercept('GET', '**/api/v1/transactions/previous/entity/**', (req) => {
         req.continue((res) => {
@@ -435,29 +445,7 @@ describe('Contacts: Transactions integration', () => {
     const newEmployer = `Employer-${id}`;
     const newOccupation = `Occupation-${id}`;
 
-    const contactPayload: MockContact & {
-      employer?: string | null;
-      occupation?: string | null;
-    } = {
-      ...Individual_A_A,
-      last_name: lastName,
-      first_name: firstName,
-      employer: '',
-      occupation: '',
-    };
-
-    makeContact(contactPayload);
-
-    let reportId: string | undefined;
-    makeF3x(F3X_Q2, (resp) => {
-      reportId = resp.body.id;
-    });
-
-    cy.then(() => {
-      if (!reportId) {
-        throw new Error('F3X report id should be defined');
-      }
-      const rid = reportId;
+    createContactAndReport(lastName, firstName).then((rid) => {
 
       cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as('getPrevAggregate');
 
