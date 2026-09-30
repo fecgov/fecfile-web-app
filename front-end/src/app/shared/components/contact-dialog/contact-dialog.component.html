@@ -299,6 +299,7 @@
             icon="pi pi-check"
             class="p-button-info"
             data-cy="save-continue"
+            [disabled]="disableSubmission()"
             (click)="submitForm()"
           ></button>
         } @else {
@@ -310,6 +311,7 @@
             icon="pi pi-check"
             class="p-button-primary"
             data-cy="save"
+            [disabled]="disableSubmission()"
             (click)="submitForm()"
           ></button>
           @if (isNewItem()) {
@@ -321,6 +323,7 @@
               icon="pi pi-check"
               class="p-button-info"
               data-cy="save-add-more"
+              [disabled]="disableSubmission()"
               (click)="submitForm('continue')"
             ></button>
           }
