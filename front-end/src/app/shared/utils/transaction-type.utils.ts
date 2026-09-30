@@ -12,6 +12,7 @@ import { ScheduleIds, ScheduleTransaction, TransactionTypes } from '../models/tr
 import { TransactionType } from '../models/transaction-type.model';
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { CONDUIT_EARMARK_RECEIPT } from '../models/transaction-types/CONDUIT_EARMARK_RECEIPT.model';
+import { CONTRIBUTION_FROM_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_FROM_CANDIDATE.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_MEMO_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_CONVENTION_ACCOUNT.model';
 import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_HEADQUARTERS_ACCOUNT.model';
@@ -297,6 +298,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
   PAC_IN_KIND_RECEIPT,
   CONDUIT_EARMARK_RECEIPT,
+  CONTRIBUTION_FROM_CANDIDATE,
   CONDUIT_EARMARK_RECEIPT_DEPOSITED: CONDUIT_EARMARK_RECEIPT,
   CONDUIT_EARMARK_RECEIPT_UNDEPOSITED: CONDUIT_EARMARK_RECEIPT,
   LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
