@@ -1,3 +1,4 @@
+import { ReportTypes } from '../reports/report.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { INDIVIDUAL_RECOUNT_RECEIPT } from './INDIVIDUAL_RECOUNT_RECEIPT.model';
 
@@ -13,7 +14,7 @@ describe('INDIVIDUAL_RECOUNT_RECEIPT', () => {
     expect(transactionType.scheduleId).toBe('A');
   });
 
-  it('#factory() should return a SchATransaction', () => {
+  it('#factory() should return a F3X SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT);
@@ -22,5 +23,15 @@ describe('INDIVIDUAL_RECOUNT_RECEIPT', () => {
   it('#generatePurposeDescription() should return appropriate retval', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe(`Recount Account`);
+  });
+
+  it('#hasElectionInformation() should return true for F3 report type', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(result).toBe(true);
+  });
+
+  it('#hasElectionInformation() should return false for F3X', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(result).toBe(false);
   });
 });

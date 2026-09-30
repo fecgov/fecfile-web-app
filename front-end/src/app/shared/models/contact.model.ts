@@ -419,6 +419,7 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
     return {
       label: `${markedName}<br>(${markedId})${statusCircle}`,
       value: this,
+      title: '',
     };
   }
 }
@@ -435,6 +436,7 @@ export class FecfileCommitteeLookupData extends Contact {
     return {
       label: `${markedName}<br>(${markedId})`,
       value: this,
+      title: '',
     };
   }
 }

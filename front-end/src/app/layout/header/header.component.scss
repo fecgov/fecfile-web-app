@@ -10,7 +10,6 @@ nav {
   width: 100%;
   padding-left: 32px;
   padding-right: 32px;
-  overflow: hidden;
   transition: height var(--header-transition);
   &.compact {
     height: 54px;
