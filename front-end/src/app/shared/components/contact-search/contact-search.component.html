@@ -9,7 +9,6 @@
         [readonly]="true"
         styleClass="readonly"
         id="entity_type_dropdown"
-        appendTo="body"
         [pt]="{ dropdown: 'no-dropdown-icon' }"
       />
     </div>
@@ -29,7 +28,6 @@
         (completeMethod)="onDropdownSearch($event)"
         (onSelect)="onContactLookupSelect($event.value)"
         scrollHeight="30vh"
-        appendTo="body"
       >
         <ng-template let-group pTemplate="group">
           <div class="option-group-header">{{ group.label }}</div>

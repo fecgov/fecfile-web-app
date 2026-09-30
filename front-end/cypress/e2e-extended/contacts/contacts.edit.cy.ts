@@ -492,8 +492,7 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-
-    cy.get('select[id^="candidate_office-"]').select('Senate');
+    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_office-"])', 'Senate');
     ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -501,8 +500,7 @@ describe('Contacts Edit', () => {
       .find('small.p-error, .p-error')
       .should('not.exist');
 
-      
-    cy.get('select[id^="candidate_office-"]').select('House');
+    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_office-"])', 'House');
     ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -529,9 +527,9 @@ describe('Contacts Edit', () => {
     cy.get('#employer').clear().type(newEmployer);
     cy.get('#occupation').clear().type(newOccupation);
 
-    cy.get('select[id^="candidate_office-"]').select(newOffice);
-    cy.get('select[id^="candidate_state-"]').select(newCandState);
-    cy.get('select[id^="candidate_district-"]').select(newCandDistrict);
+    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_office-"])', newOffice);
+    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_state-"])', newCandState);
+    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_district-"])', newCandDistrict);
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
@@ -566,9 +564,9 @@ describe('Contacts Edit', () => {
       occupation: newOccupation,
     });
 
-    cy.get('select[id^="candidate_office-"]').find('selectedcontent').should('contain.text', newOffice);
-    cy.get('select[id^="candidate_state-"]').find('selectedcontent').should('contain.text', newCandState);
-    cy.get('select[id^="candidate_district-"]').parent().find('selectedcontent').should('contain.text', newCandDistrict);
+    PageUtils.valueCheck('p-select:has([id^="candidate_office-"])', newOffice);
+    PageUtils.valueCheck('p-select:has([id^="candidate_state-"])', newCandState);
+    PageUtils.valueCheck('p-select:has([id^="candidate_district-"])', newCandDistrict);
 
     candidateLookup(lookupCandidateId, lookupLast, lookupFirst, lookupName);
   });

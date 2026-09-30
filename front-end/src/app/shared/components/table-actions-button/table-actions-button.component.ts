@@ -1,7 +1,6 @@
-import { Component, computed, inject, input, output, viewChild } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, input, output, signal } from '@angular/core';
 import { ApiService } from 'app/shared/services/api.service';
 import { ButtonModule } from 'primeng/button';
-import { Popover, PopoverModule } from 'primeng/popover';
 import { Ripple } from 'primeng/ripple';
 import { TableAction } from './table-actions';
 
@@ -9,11 +8,11 @@ import { TableAction } from './table-actions';
   selector: 'app-table-actions-button',
   templateUrl: './table-actions-button.component.html',
   styleUrls: ['./table-actions-button.component.scss'],
-  imports: [ButtonModule, Ripple, PopoverModule],
+  imports: [ButtonModule, Ripple],
 })
 export class TableActionsButtonComponent<T> {
+  private readonly el = inject(ElementRef);
   readonly apiService = inject(ApiService);
-  readonly op = viewChild.required(Popover);
   readonly tableActions = input<TableAction<T>[]>([]);
   readonly actionItem = input.required<T>();
   readonly buttonIcon = input('');
@@ -25,6 +24,8 @@ export class TableActionsButtonComponent<T> {
   readonly rounded = input(true);
   readonly tableActionClick = output<{ action: TableAction<T>; actionItem: T }>();
 
+  readonly popoverHidden = signal(true);
+
   readonly filteredActions = computed(() => {
     const item = this.actionItem();
     if (!item) return [];
@@ -33,7 +34,14 @@ export class TableActionsButtonComponent<T> {
 
   performAction(action: TableAction<T>) {
     this.tableActionClick.emit({ action, actionItem: this.actionItem() });
-    this.op().hide();
+    this.popoverHidden.set(true);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const isInsideThisInstance = this.el.nativeElement.contains(target);
+    if (!isInsideThisInstance) this.popoverHidden.set(true);
   }
 
   actionDataCy(label: string): string {
