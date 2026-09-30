@@ -97,7 +97,7 @@ export abstract class Transaction extends BaseModel {
 
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
   getFieldsNotToValidate(): string[] {
-    return ['transaction_id', 'filer_committee_id_number'];
+    return ['transaction_id', 'filer_committee_id_number', 'form_type'];
   }
 
   schema_name: string | undefined;
