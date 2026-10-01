@@ -22,6 +22,7 @@ export class TableActionsButtonComponent<T> {
   readonly buttonDataCy = input('table-actions-trigger');
   readonly actionDataCyPrefix = input('table-action');
   readonly rounded = input(true);
+  readonly disabled = input(false);
   readonly tableActionClick = output<{ action: TableAction<T>; actionItem: T }>();
 
   readonly popoverHidden = signal(true);

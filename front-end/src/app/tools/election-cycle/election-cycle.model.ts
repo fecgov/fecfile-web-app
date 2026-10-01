@@ -2,7 +2,7 @@
 import { BaseModel } from 'app/shared/models/base.model';
 import { Expose, Transform, Type, instanceToPlain, plainToInstance } from 'class-transformer';
 
-export type OfficeType = 'House' | 'Presidential' | 'Senate';
+export type OfficeType = 'House' | 'Senate';
 export type ElectionType = 'General' | 'Special';
 
 export class Coverage {

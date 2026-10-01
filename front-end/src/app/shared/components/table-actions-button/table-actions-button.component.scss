@@ -11,3 +11,9 @@
   z-index: 5;
   margin-top: 2px;
 }
+
+.p-disabled,
+.p-component:disabled,
+.p-select:disabled {
+  background: transparent;
+}
