@@ -7,7 +7,7 @@
   [showOnFocus]="false"
   [disabled]="disabled()"
   [(ngModel)]="tempValue"
-  (ngModelChange)="onDateSelect($event)"
+  (onSelect)="onDateSelect($event)"
   [showIcon]="true"
   [iconDisplay]="'input'"
   [keepInvalid]="true"
