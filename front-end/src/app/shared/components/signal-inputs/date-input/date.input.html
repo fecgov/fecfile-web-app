@@ -6,7 +6,7 @@
   [inputId]="inputId()"
   [showOnFocus]="false"
   [disabled]="disabled()"
-  [(ngModel)]="value"
+  [(ngModel)]="tempValue"
   (ngModelChange)="onDateSelect($event)"
   [showIcon]="true"
   [iconDisplay]="'input'"
@@ -16,7 +16,6 @@
   pInputMask="99/99/9999"
   slotChar="MM/DD/YYYY"
   appDateSanitizer
-  (onSelect)="onDateSelect($event)"
   (onBlur)="onBlur()"
   (onHide)="onCloseOverlay()"
 >
