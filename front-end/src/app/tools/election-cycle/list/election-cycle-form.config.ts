@@ -13,7 +13,6 @@ import type { OfficeType, ElectionType, Coverage } from '../election-cycle.model
 
 export const officeOptions = [
   { label: 'House', value: 'House' },
-  { label: 'Presidential', value: 'Presidential' },
   { label: 'Senate', value: 'Senate' },
 ];
 export const electionTypeOptions = [
