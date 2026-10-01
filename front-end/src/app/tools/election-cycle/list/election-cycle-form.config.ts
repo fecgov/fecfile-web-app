@@ -1,5 +1,5 @@
 import type { WritableSignal } from '@angular/core';
-import { form, required } from '@angular/forms/signals';
+import { debounce, form, required } from '@angular/forms/signals';
 import {
   validateDate,
   validateDateAfter,
@@ -13,7 +13,6 @@ import type { OfficeType, ElectionType, Coverage } from '../election-cycle.model
 
 export const officeOptions = [
   { label: 'House', value: 'House' },
-  { label: 'Presidential', value: 'Presidential' },
   { label: 'Senate', value: 'Senate' },
 ];
 export const electionTypeOptions = [
