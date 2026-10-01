@@ -9,6 +9,7 @@
     [class]="buttonStyleClass()"
     [ariaLabel]="buttonAriaLabel()"
     [attr.data-cy]="buttonDataCy()"
+    [disabled]="disabled()"
     (click)="popoverHidden.update((x) => !x)"
   ></button>
   <div class="p-popover custom-popover" [class.hidden]="popoverHidden()">
