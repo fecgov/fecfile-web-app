@@ -15,7 +15,8 @@ a,
   justify-content: center;
 }
 
-li:hover {
+button:hover,
+a:hover {
   background: var(--surface-hover);
 }
 

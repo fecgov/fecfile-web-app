@@ -1,14 +1,14 @@
 import { FormGroup } from '@angular/forms';
-import { cloneInstance, Transaction } from '../../models/transaction.model';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { MemoText } from '../../models/memo-text.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
-import { ReattributionToUtils } from './reattribution-to.utils';
-import { ReattributionFromUtils } from './reattribution-from.utils';
-import { RedesignationToUtils } from './redesignation-to.utils';
-import { RedesignationFromUtils } from './redesignation-from.utils';
-import { MemoText } from '../../models/memo-text.model';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { cloneInstance, Transaction } from '../../models/transaction.model';
 import { resetCloneCoreFields, resetCloneMemoText } from '../transaction-clone.utils';
+import { ReattributionFromUtils } from './reattribution-from.utils';
+import { ReattributionToUtils } from './reattribution-to.utils';
+import { RedesignationFromUtils } from './redesignation-from.utils';
+import { RedesignationToUtils } from './redesignation-to.utils';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',

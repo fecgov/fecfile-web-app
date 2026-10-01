@@ -34,7 +34,7 @@ describe('UpdateVersionNumberComponent', () => {
   });
 
   it('should sync original version from store selector on initialization', () => {
-    expect(component.form.original().value()).toBe('0');
+    expect(component.form.original().value()).toBe(0);
   });
 
   it('should disable previousSubmissionDate if report is NOT F24', () => {
@@ -46,23 +46,23 @@ describe('UpdateVersionNumberComponent', () => {
     store.overrideSelector(selectActiveReport, testF24());
     store.refreshState();
     fixture.detectChanges();
-
     expect(component.isF24()).toBe(true);
+    component.form.amendment().value.set(1);
     expect(component.form.previousSubmissionDate().disabled()).toBe(false);
   });
 
   it('should validate amendment constraints (required, min, pattern, mismatch)', () => {
     const amendmentField = component.form.amendment;
-    const originalValue = component.form.original().value() + '';
+    const originalValue = component.form.original().value();
     expect(amendmentField().valid()).toBe(false);
 
-    amendmentField().value.set('-1');
+    amendmentField().value.set(-1);
     expect(amendmentField().valid()).toBe(false);
 
-    amendmentField().value.set('1.5');
+    amendmentField().value.set(1.5);
     expect(amendmentField().valid()).toBe(false);
 
-    amendmentField().value.set('1');
+    amendmentField().value.set(1);
     expect(amendmentField().valid()).toBe(true);
 
     console.log(originalValue);
@@ -74,7 +74,7 @@ describe('UpdateVersionNumberComponent', () => {
     store.overrideSelector(selectActiveReport, testF24());
     store.refreshState();
     fixture.detectChanges();
-
+    component.form.amendment().value.set(1);
     const dateField = component.form.previousSubmissionDate;
 
     dateField().value.set('01/01/20YY');
@@ -99,15 +99,15 @@ describe('UpdateVersionNumberComponent', () => {
     vi.spyOn(f3xService, 'get').mockResolvedValueOnce(newReport);
     const setActiveReportSpy = vi.spyOn(f3xService, 'setActiveReportById');
     const messageSpy = vi.spyOn(messageService, 'add');
-    component.form.amendment().value.set('3');
+    component.form.amendment().value.set(3);
     component.form.eFilingId().value.set('FEC-123456');
 
     await submit(component.form);
     await fixture.whenStable();
 
     expect(updateSpy).toHaveBeenCalledWith(report, {
-      original: '0',
-      amendment: '3',
+      original: 0,
+      amendment: 3,
       eFilingId: 'FEC-123456',
       previousSubmissionDate: null,
     });
@@ -120,16 +120,16 @@ describe('UpdateVersionNumberComponent', () => {
       }),
     );
 
-    expect(component.form.amendment().value()).toBe('');
+    expect(component.form.amendment().value()).toBe(0);
     expect(component.form.eFilingId().value()).toBe('');
-    expect(component.form.original().value()).toBe('3');
+    expect(component.form.original().value()).toBe(3);
   });
 
   it('should handle service errors gracefully during submission rejection cascades', async () => {
     const messageSpy = vi.spyOn(messageService, 'add');
     vi.spyOn(f3xService, 'updateVersionNumber').mockRejectedValueOnce(new Error('Server Drop'));
 
-    component.form.amendment().value.set('1');
+    component.form.amendment().value.set(1);
     component.form.eFilingId().value.set('FEC-0000');
 
     await submit(component.form);

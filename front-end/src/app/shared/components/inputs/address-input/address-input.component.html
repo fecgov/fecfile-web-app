@@ -17,9 +17,9 @@
     </div>
     <div class="col-6">
       <div class="field">
-        <span class="span-label" id="address_input_street_2_label"
-          >APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></span
-        >
+        <span class="span-label" id="address_input_street_2_label">
+          APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span>
+        </span>
         <input
           id="street_2"
           type="text"
@@ -57,7 +57,6 @@
           [controlName]="stateFieldName()"
           [form]="form()"
           [options]="stateOptions"
-          appendTo="body"
           [readonly]="readonly()"
           styleClass="{{ readonly() ? 'readonly' : '' }}"
           fluid
