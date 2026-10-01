@@ -131,7 +131,7 @@ export class ElectionCyclesListComponent {
       const cycle = new ElectionCycle(this.form().value() as Partial<ElectionCycle>);
       await this.itemService.create(cycle);
       this.electionCycleData.reload();
-      this.messageService.success(`New Election cycle created`);
+      this.messageService.success('New Election cycle added');
     } catch (error) {
       console.log('error saving', error);
       this.messageService.error('There was an error creating your new election cycle');
