@@ -72,10 +72,10 @@
     column-gap: 0;
     row-gap: 16px;
     align-items: center;
-    grid-template-columns: fit-content(60%) 1fr 145px;
+    grid-template-columns: fit-content(calc(60% - 87px)) 1fr 145px;
 
     &.is-committee {
-      grid-template-columns: fit-content(40%) fit-content(20%) 1fr 145px;
+      grid-template-columns: fit-content(calc(50% - 106px)) 122px 1fr 145px;
     }
   }
 
@@ -102,7 +102,6 @@
       grid-row: auto;
       white-space: normal;
       overflow-wrap: anywhere;
-      word-break: word-break;
     }
 
     .col-action {
