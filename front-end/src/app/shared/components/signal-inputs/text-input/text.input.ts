@@ -11,6 +11,7 @@ import { BaseInput } from '../base.input';
   template: `
     <app-label [label]="label()" [inputId]="inputId()" [optional]="optional()" />
     <input
+      [disabled]="disabled()"
       [appToUpper]="forceUpper()"
       [placeholder]="placeholder()"
       type="text"

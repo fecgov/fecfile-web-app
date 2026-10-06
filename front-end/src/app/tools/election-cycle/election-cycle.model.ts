@@ -35,6 +35,9 @@ export class ElectionCycle extends BaseModel {
   })
   coverage!: Coverage;
 
+  @Expose({ name: 'has_form3' })
+  hasForm3!: boolean;
+
   constructor(init?: Partial<ElectionCycle>) {
     super();
     if (init) {

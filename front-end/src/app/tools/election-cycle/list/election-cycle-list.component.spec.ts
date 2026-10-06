@@ -94,7 +94,7 @@ describe('ElectionCyclesListComponent', () => {
       const cols = component.columns();
       expect(cols).toHaveLength(6);
       expect(cols[0].field).toBe('office');
-      expect(cols.find((col) => col.field === 'electionType')?.header).toBe('Cycle Type');
+      expect(cols.find((col) => col.field === 'electionType')?.header).toBe('Cycle type');
       expect(mockBreakpointStore.getColumnWidths).toHaveBeenCalled();
     });
 

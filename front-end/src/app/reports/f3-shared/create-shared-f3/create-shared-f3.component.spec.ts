@@ -1,283 +1,193 @@
-import type { Mock } from 'vitest';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { MessageService } from 'primeng/api';
-import { of } from 'rxjs';
-import { Form3X, F3xFormTypes } from 'app/shared/models';
-import { Form3XService } from 'app/shared/services/form-3x.service';
+import { signal } from '@angular/core';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { CreateSharedF3Component } from './create-shared-f3.component';
+import { SharedForm3Store } from './shared-form3.store';
+import { ReportTypeCategories } from './create-shared-f3.utils';
+
+import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
+import { MessageWrapperService } from 'app/shared/services/message-wrapper.service';
+import { BreakpointStore } from 'app/store/breakpoint.store';
+import { CommitteeStore } from 'app/committee/committee.store';
+import { ElectionCycleService } from 'app/tools/election-cycle/election-cycle.service';
+
+import { F3FormTypes, Form3 } from 'app/shared/models';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { CreateSharedF3Component, ReportTypeCategories } from './create-shared-f3.component';
-import { FORM_3_SERVICE, BaseForm3Service } from 'app/shared/services/base-form-3.service';
-import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 
-let component: CreateSharedF3Component;
-let fixture: ComponentFixture<CreateSharedF3Component>;
-let router: Router;
-let activeServiceInstance: BaseForm3Service<BaseForm3>;
-let store: MockStore;
+describe('CreateSharedF3Component', () => {
+  let fixture: ComponentFixture<CreateSharedF3Component>;
+  let component: CreateSharedF3Component;
 
-async function setup(params: { reportId?: string; mockUrl?: string }) {
-  const currentUrl = params.mockUrl ?? '/reports/f3x/create/step-1';
-  await TestBed.configureTestingModule({
-    imports: [ReactiveFormsModule, CreateSharedF3Component],
-    providers: [
-      provideHttpClient(),
-      provideHttpClientTesting(),
-      Form3XService,
-      MessageService,
-      { provide: FORM_3_SERVICE, useClass: Form3XService },
-      {
-        provide: ActivatedRoute,
-        useValue: {
-          params: of(params),
-          snapshot: { params: of(params) },
+  let reportStoreMock: {
+    report: ReturnType<typeof signal<Form3 | null>>;
+    isF3X: boolean;
+    usedReportCodes: ReturnType<typeof signal<ReportCodes[]>>;
+  };
+
+  let activeServiceMock: {
+    isF3X: boolean;
+    create: ReturnType<typeof vi.fn>;
+    update: ReturnType<typeof vi.fn>;
+  };
+
+  let routerMock: {
+    navigateByUrl: ReturnType<typeof vi.fn>;
+  };
+
+  let messageServiceMock: {
+    success: ReturnType<typeof vi.fn>;
+  };
+
+  let breakpointStoreMock: {
+    isAtLeast: ReturnType<typeof vi.fn>;
+  };
+
+  let committeeStoreMock: {
+    filingFrequency: ReturnType<typeof signal<'Q' | 'M'>>;
+    committee: ReturnType<typeof signal<{ candidate_state: string } | null>>;
+  };
+
+  beforeEach(async () => {
+    reportStoreMock = {
+      report: signal<Form3 | null>(null),
+      isF3X: false,
+      usedReportCodes: signal<ReportCodes[]>([]),
+    };
+
+    activeServiceMock = {
+      isF3X: false,
+      create: vi.fn().mockResolvedValue({ id: 'new-report-id' }),
+      update: vi.fn().mockResolvedValue({ id: 'updated-report-id' }),
+    };
+
+    routerMock = {
+      navigateByUrl: vi.fn().mockResolvedValue(true),
+    };
+
+    messageServiceMock = {
+      success: vi.fn(),
+    };
+
+    breakpointStoreMock = {
+      isAtLeast: vi.fn().mockReturnValue(false),
+    };
+
+    committeeStoreMock = {
+      filingFrequency: signal<'Q' | 'M'>('Q'),
+      committee: signal({ candidate_state: 'VA' }),
+    };
+
+    await TestBed.configureTestingModule({
+      imports: [CreateSharedF3Component],
+      providers: [
+        provideRouter([]),
+        CookieService,
+        { provide: Router, useValue: routerMock },
+        { provide: FORM_3_SERVICE, useValue: activeServiceMock },
+      ],
+    })
+      .overrideComponent(CreateSharedF3Component, {
+        set: {
+          // These tests focus on component logic, not template rendering.
+          template: '',
+          imports: [],
+          providers: [
+            { provide: SharedForm3Store, useValue: reportStoreMock },
+            { provide: BreakpointStore, useValue: breakpointStoreMock },
+            { provide: MessageWrapperService, useValue: messageServiceMock },
+            { provide: ElectionCycleService, useValue: {} },
+            { provide: CommitteeStore, useValue: committeeStoreMock },
+          ],
         },
-      },
-      provideMockStore(testMockStore()),
-    ],
-  }).compileComponents();
-
-  store = TestBed.inject(MockStore);
-  vi.spyOn(store, 'dispatch');
-  router = TestBed.inject(Router);
-  activeServiceInstance = TestBed.inject(FORM_3_SERVICE);
-  vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
-  Object.defineProperty(router, 'url', {
-    get: () => currentUrl,
-    configurable: true,
+      })
+      .compileComponents();
   });
-}
 
-describe('CreateSharedF3Component: New', () => {
-  const mockCoverageDates = [
-    {
+  function setup(report: Form3 | null = null): void {
+    reportStoreMock.report.set(report);
+
+    fixture = TestBed.createComponent(CreateSharedF3Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }
+
+  function createExistingReport(): Form3 {
+    return Form3.fromJSON({
+      id: 'report-123',
+      form_type: F3FormTypes.F3N,
       report_code: ReportCodes.Q1,
-      coverage_from_date: new Date('2024-01-01'),
-      coverage_through_date: new Date('2024-03-31'),
-    },
-  ];
-
-  let coverageDateSpy: Mock;
-  beforeEach(async () => {
-    await setup({});
-
-    coverageDateSpy = vi.spyOn(activeServiceInstance, 'getCoverageDates').mockResolvedValue(mockCoverageDates);
-    fixture = TestBed.createComponent(CreateSharedF3Component);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create and initialize the form for a new report', async () => {
-    expect(component).toBeTruthy();
-    expect(component.isF3X()).toBe(true);
-    expect(component.title()).toBe('Form 3X');
-    expect(component.reportId()).toBeNull();
-
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    expect(component.form.get('filing_frequency')?.value).toBe('Q');
-    expect(component.form.get('form_type')?.value).toBe(F3xFormTypes.F3XN);
-    expect(coverageDateSpy).toHaveBeenCalled();
-  });
-
-  it('should call create method on save when form is valid', async () => {
-    const mockForm3X = new Form3X();
-    mockForm3X.id = '999';
-    const createSpy = vi.spyOn(activeServiceInstance, 'create').mockResolvedValue(mockForm3X);
-
-    component.form.patchValue({
-      report_code: ReportCodes.Q2,
-      coverage_from_date: new Date('2024-04-01'),
-      coverage_through_date: new Date('2024-06-30'),
+      report_type_category: ReportTypeCategories.ELECTION_YEAR,
+      coverage_from_date: new Date(2026, 0, 1),
+      coverage_through_date: new Date(2026, 2, 31),
     });
-    fixture.detectChanges();
+  }
 
-    await component.submitForm('continue');
+  describe('Create mode', () => {
+    beforeEach(() => {
+      setup();
+    });
 
-    expect(createSpy).toHaveBeenCalled();
-    expect(router.navigateByUrl).toHaveBeenCalledWith(`/reports/transactions/report/999/list`);
-  });
+    it('should create the component', () => {
+      expect(component).toBeTruthy();
+    });
 
-  it('should not save and should dispatch singleClickEnableAction if form is invalid', async () => {
-    const createSpy = vi.spyOn(activeServiceInstance, 'create');
-    const updateSpy = vi.spyOn(activeServiceInstance, 'updateWithAllowedErrorCodes');
+    it('should initialize with default report code', () => {
+      expect(component.model().reportCode).toBe('Q1');
+    });
 
-    await fixture.whenStable();
-    fixture.detectChanges();
-    // now invalidate the form
-    component.form.patchValue({ coverage_from_date: null });
-    expect(component.form.valid).toBe(false);
+    it('should initialize the election state from the committee', () => {
+      expect(component.model().electionReport.state).toBe('VA');
+    });
 
-    await component.submitForm();
-
-    expect(component.formSubmitted).toBe(true);
-    expect(createSpy).not.toHaveBeenCalled();
-    expect(updateSpy).not.toHaveBeenCalled();
-    expect(store.dispatch).toHaveBeenCalled();
-    expect(store.dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: '[SingleClickButtonDisabled] False' }));
-  });
-});
-
-describe('CreateSharedF3Component: Edit', () => {
-  let messageService: MessageService;
-  let getSpy: Mock;
-  let messageSpy: Mock;
-  const mockReportId = '123';
-  const mockReport = Form3X.fromJSON({
-    id: mockReportId,
-    filing_frequency: 'M',
-    report_type_category: ReportTypeCategories.ELECTION_YEAR,
-    report_code: ReportCodes.M4,
-    coverage_from_date: '2024-04-05',
-    coverage_through_date: '2024-04-30',
-  });
-
-  beforeEach(async () => {
-    await setup({ reportId: mockReportId });
-
-    messageService = TestBed.inject(MessageService);
-    getSpy = vi.spyOn(activeServiceInstance, 'get').mockResolvedValue(mockReport);
-    messageSpy = vi.spyOn(messageService, 'add');
-
-    fixture = TestBed.createComponent(CreateSharedF3Component);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should fetch existing report and patch form', () => {
-    expect(component.reportId()).toBe(mockReportId);
-    expect(getSpy).toHaveBeenCalledWith(mockReportId);
-    fixture.detectChanges();
-    expect(component.form.get('report_code')?.value).toBe(ReportCodes.M4);
-    expect(component.form.get('filing_frequency')?.value).toBe('M');
-    const coverage_from_date: Date = component.form.get('coverage_from_date')?.value;
-    expect(coverage_from_date.getMonth()).toEqual(3); // April
-    expect(coverage_from_date.getDate()).toEqual(5); // 5th
-    expect(coverage_from_date.getFullYear()).toEqual(2024); // 2024
-  });
-
-  it('should call update method on save', async () => {
-    const updateSpy = vi.spyOn(activeServiceInstance, 'updateWithAllowedErrorCodes').mockResolvedValue(mockReport);
-    component.form.patchValue({ coverage_from_date: new Date('2024-06-01') });
-    component.form.patchValue({ coverage_through_date: new Date('2024-07-01') });
-    await component.submitForm();
-
-    expect(updateSpy).toHaveBeenCalled();
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/reports');
-    expect(messageSpy).toHaveBeenCalled();
-  });
-
-  describe('Reactive Logic', () => {
-    it('should update reportCodes when filing frequency and category change', () => {
-      component.form.patchValue({
-        filing_frequency: 'M',
-        report_type_category: ReportTypeCategories.ELECTION_YEAR,
+    it('should initialize an coverage period based on report code', () => {
+      expect(component.model().coverage).toEqual({
+        startDate: new Date(2026, 0, 1),
+        endDate: new Date(2026, 2, 31),
       });
-      fixture.detectChanges();
-      expect(component.reportCodes()).toContainEqual(ReportCodes.M2);
-
-      component.form.patchValue({ filing_frequency: 'Q' });
-      fixture.detectChanges();
-      expect(component.reportCodes()).toContainEqual(ReportCodes.Q1);
     });
 
-    it('should automatically update coverage dates when report code changes', () => {
-      component.form.get('report_code')?.setValue(ReportCodes.M2);
+    it('should call the create service when creating a report', async () => {
+      component.model.update((model) => ({
+        ...model,
+        reportTypeCategory: ReportTypeCategories.ELECTION_YEAR,
+        reportCode: ReportCodes.Q1,
+        coverage: {
+          startDate: new Date(2026, 0, 1),
+          endDate: new Date(2026, 2, 31),
+        },
+      }));
 
-      fixture.detectChanges();
+      await component.create();
 
-      const fromDate = component.form.get('coverage_from_date')?.value;
-      const throughDate = component.form.get('coverage_through_date')?.value;
-
-      expect(fromDate.getMonth()).toBe(3);
-      expect(throughDate.getMonth()).toBe(3);
+      expect(activeServiceMock.create).toHaveBeenCalledOnce();
+      expect(activeServiceMock.update).not.toHaveBeenCalled();
     });
   });
-});
 
-describe('Default Report Type Category Logic', () => {
-  beforeEach(async () => {
-    await setup({});
-    vi.useFakeTimers();
-  });
+  describe('Edit mode', () => {
+    let existingReport: Form3;
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+    beforeEach(() => {
+      existingReport = createExistingReport();
+      setup(existingReport);
+    });
 
-  const setupComponent = () => {
-    fixture = TestBed.createComponent(CreateSharedF3Component);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  };
+    it('should initialize the model from the existing report', () => {
+      expect(component.model().reportCode).toBe(existingReport.report_code);
 
-  it('should be ELECTION_YEAR in an even year after January', () => {
-    vi.setSystemTime(new Date(2024, 1, 1));
-    setupComponent();
-    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.ELECTION_YEAR);
-  });
+      expect(component.model().reportTypeCategory).toBe(existingReport.report_type_category);
 
-  it('should be ELECTION_YEAR in an odd year during January', () => {
-    vi.setSystemTime(new Date(2025, 0, 15));
-    setupComponent();
-    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.ELECTION_YEAR);
-  });
+      expect(component.model().coverage).toEqual({
+        startDate: existingReport.coverage_from_date,
+        endDate: existingReport.coverage_through_date,
+      });
+    });
 
-  it('should be NON_ELECTION_YEAR in an odd year after January', () => {
-    vi.setSystemTime(new Date(2025, 2, 20));
-    setupComponent();
-    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.NON_ELECTION_YEAR);
-  });
-
-  it('should be NON_ELECTION_YEAR in an even year during January', () => {
-    vi.setSystemTime(new Date(2024, 0, 10));
-    setupComponent();
-    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.NON_ELECTION_YEAR);
-  });
-});
-
-describe('Election Date and State Validators', () => {
-  beforeEach(async () => {
-    await setup({});
-    setupComponent();
-  });
-
-  const setupComponent = () => {
-    fixture = TestBed.createComponent(CreateSharedF3Component);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  };
-
-  it('should require date_of_election and state_of_election for election reports', () => {
-    component.form.patchValue({ report_code: ReportCodes['12G'] });
-    fixture.detectChanges();
-    const dateOfElectionControl = component.form.get('date_of_election');
-    const stateOfElectionControl = component.form.get('state_of_election');
-    dateOfElectionControl?.updateValueAndValidity();
-    stateOfElectionControl?.updateValueAndValidity();
-    expect(dateOfElectionControl?.invalid).toEqual(true);
-    expect(stateOfElectionControl?.invalid).toEqual(true);
-    component.form.patchValue({ date_of_election: '2024-11-05', state_of_election: 'CA' });
-    dateOfElectionControl?.updateValueAndValidity();
-    stateOfElectionControl?.updateValueAndValidity();
-    expect(dateOfElectionControl?.invalid).toEqual(false);
-    expect(stateOfElectionControl?.invalid).toEqual(false);
-  });
-
-  it('should not require date_of_election and state_of_election for non-election reports', () => {
-    component.form.patchValue({ report_code: ReportCodes.Q1 });
-    fixture.detectChanges();
-    const dateOfElectionControl = component.form.get('date_of_election');
-    const stateOfElectionControl = component.form.get('state_of_election');
-    dateOfElectionControl?.updateValueAndValidity();
-    stateOfElectionControl?.updateValueAndValidity();
-    expect(dateOfElectionControl?.invalid).toEqual(false);
-    expect(stateOfElectionControl?.invalid).toEqual(false);
+    it('should preserve the existing report code as the default', () => {
+      expect(component.defaultReportCode()).toBe(existingReport.report_code);
+    });
   });
 });
