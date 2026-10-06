@@ -13,7 +13,7 @@
 .p-component:disabled,
 .p-select:disabled {
   opacity: 0.65;
-  background: var(--surface-ground);
+  background-color: var(--surface-ground);
   color: var(--p-content-color);
 }
 
@@ -3428,6 +3428,7 @@ td {
 .p-radiobutton-input {
   height: 100% !important;
   padding: 0;
+  border: none;
 }
 
 .p-field-checkbox > label:not(.p-disabled) {

@@ -1,32 +1,40 @@
-.p-field-checkbox > .p-disabled {
-  opacity: 1;
-  color: #999999;
-}
+:host {
+  .grid-form {
+    & > * {
+      margin-bottom: 32px;
 
-:host ::ng-deep {
-  .p-disabled > .p-radiobutton {
-    opacity: 0.65;
-  }
+      &:nth-last-child(-n + 1) {
+        margin-bottom: 0;
+      }
+    }
 
-  hr,
-  h2,
-  .field {
-    margin-bottom: 0 !important;
-  }
-
-  .dialog-button {
-    margin-top: 16px;
-    margin-bottom: 16px;
-  }
-
-  p {
-    font-family: var(--karla);
+    & > section,
+    & > app-election-cycle-selection {
+      border-top: 2px solid;
+      padding-top: 32px;
+    }
   }
 }
+#report-type > * {
+  margin-bottom: 32px;
 
-#form {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  margin-bottom: 16px;
+  &:nth-last-child(-n + 1) {
+    margin-bottom: 0;
+  }
+}
+p {
+  margin-bottom: 24px;
+}
+
+.grid-section {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0 8px;
+  align-items: start;
+  grid-auto-rows: auto auto auto;
+
+  & > * {
+    margin: 0;
+    grid-column-end: span 12;
+  }
 }

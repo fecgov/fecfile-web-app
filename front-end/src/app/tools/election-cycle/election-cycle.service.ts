@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { ElectionCycle } from './election-cycle.model';
+import { Coverage, ElectionCycle } from './election-cycle.model';
 import { TableListService } from 'app/shared/interfaces/table-list-service.interface';
 import { ListRestResponse } from 'app/shared/models';
 import { ApiService } from 'app/shared/services/api.service';
+import { DateUtils } from 'app/shared/utils/date.utils';
 
 @Injectable()
 export class ElectionCycleService implements TableListService<ElectionCycle> {
@@ -29,6 +30,18 @@ export class ElectionCycleService implements TableListService<ElectionCycle> {
   async update(cycle: ElectionCycle): Promise<ElectionCycle> {
     const payload = cycle.toJson();
     const response = await this.apiService.put<Record<string, string>>(`${this.endpoint}${cycle.id}/`, payload);
+    return ElectionCycle.fromJson(response);
+  }
+
+  async findByCoverage(coverage: Coverage): Promise<ElectionCycle | null> {
+    const response = await this.apiService.get<Record<string, string> | { message: string }>(
+      `${this.endpoint}find-by-coverage/`,
+      {
+        start_date: DateUtils.convertDateToFecFormat(coverage.startDate),
+        end_date: DateUtils.convertDateToFecFormat(coverage.endDate),
+      },
+    );
+    if (response.message) return null;
     return ElectionCycle.fromJson(response);
   }
 }

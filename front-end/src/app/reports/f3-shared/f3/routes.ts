@@ -6,7 +6,6 @@ import { ReportIsEditableGuard } from '../../../shared/guards/report-is-editable
 import { SubmitReportComponent } from '../../submission-workflow/submit-report.component';
 import { Report } from 'app/shared/models/reports/report.model';
 import { SubmitReportStatusComponent } from '../../submission-workflow/submit-report-status.component';
-import { CreateSharedF3Component } from '../create-shared-f3/create-shared-f3.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
@@ -14,6 +13,7 @@ import { UpdateVersionNumberComponent } from 'app/reports/shared/update-version-
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 import { ReportDetailedSummaryComponent } from '../summaries/report-detailed-summary/report-detailed-summary.component';
 import { ReportSummaryComponent } from '../summaries/report-summary/report-summary.component';
+import { CreateSharedF3Component } from '../create-shared-f3/create-shared-f3.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
