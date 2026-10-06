@@ -7,6 +7,7 @@ import {
   organizationFormData,
 } from '../models/ContactFormModel';
 import { PageUtils } from './pageUtils';
+import { ContactsHelpers } from '../../e2e-extended/contacts/contacts.helpers';
 
 export class ContactListPage {
 
@@ -34,28 +35,29 @@ export class ContactListPage {
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
       //Contact
-      cy.get(alias).find('#last_name').safeType(formData['last_name']);
-      cy.get(alias).find('#first_name').safeType(formData['first_name']);
-      cy.get(alias).find('#middle_name').safeType(formData['middle_name']);
-      cy.get(alias).find('#prefix').safeType(formData['prefix']);
-      cy.get(alias).find('#suffix').safeType(formData['suffix']);
+      cy.get(alias).find('#last_name').clear().safeType(formData['last_name']).blur();
+      cy.get(alias).find('#first_name').clear().safeType(formData['first_name']).blur();
+      cy.get(alias).find('#middle_name').clear().safeType(formData['middle_name']).blur();
+      cy.get(alias).find('#prefix').clear().safeType(formData['prefix']).blur();
+      cy.get(alias).find('#suffix').clear().safeType(formData['suffix']).blur();
 
       //Employer
-      cy.get(alias).find('#employer').safeType(formData['employer']);
-      cy.get(alias).find('#occupation').safeType(formData['occupation']);
+      cy.get(alias).find('#employer').clear().safeType(formData['employer']).blur();
+      cy.get(alias).find('#occupation').clear().safeType(formData['occupation']).blur();
     }
 
     //Address
-    cy.get(alias).find('#street_1').safeType(formData['street_1']);
-    cy.get(alias).find('#street_2').safeType(formData['street_2']);
-    cy.get(alias).find('#city').safeType(formData['city']);
-    cy.get(alias).find('#zip').safeType(formData['zip']);
-    cy.get(alias).find('#telephone').scrollIntoView().safeType(formData['phone']);
-    PageUtils.pSelectDropdownSetValue("app-searchable-select[inputid='state']", formData['state'], alias);
+    cy.get(alias).find('#street_1').clear().safeType(formData['street_1']).blur();
+    cy.get(alias).find('#street_2').clear().safeType(formData['street_2']).blur();
+    cy.get(alias).find('#city').clear().safeType(formData['city']).blur();
+    cy.get(alias).find('#zip').clear().safeType(formData['zip']).blur();
+    cy.get(alias).find('#telephone').scrollIntoView().clear().safeType(formData['phone']).blur();
+    ContactsHelpers.setState(formData['state'], alias);
+
 
     //Candidate-exclusive fields
     if (formData['contact_type'] == 'Candidate') {
-      cy.get(alias).find('#candidate_id').safeType(formData['candidate_id']);
+      cy.get(alias).find('#candidate_id').clear().safeType(formData['candidate_id']).blur();
 
       PageUtils.pSelectDropdownSetValue("app-select[inputid='candidate_office']", formData['candidate_office'], alias);
 
@@ -74,12 +76,12 @@ export class ContactListPage {
     }
 
     if (formData['contact_type'] == 'Committee') {
-      cy.get(alias).find('#committee_id').safeType(formData['committee_id']);
-      cy.get(alias).find('#name').safeType(formData['name']);
+      cy.get(alias).find('#committee_id').safeType(formData['committee_id']).blur();
+      cy.get(alias).find('#name').safeType(formData['name']).blur();
     }
 
     if (formData['contact_type'] == 'Organization') {
-      cy.get(alias).find('#name').safeType(formData['name']);
+      cy.get(alias).find('#name').safeType(formData['name']).blur();
     }
   }
 
@@ -167,12 +169,15 @@ export class ContactListPage {
     PageUtils.clickButton('Cancel', '[data-cy="contact-dialog"] [data-cy="cancel"]:visible');
   }
   static clickSave() {
+    cy.get(PageUtils.getAlias(ContactsHelpers.CONTACT_DIALOG)).click('topLeft');
     PageUtils.clickButton('Save', '[data-cy="contact-dialog"] [data-cy="save"]:visible');
   }
   static clickSaveAndContinue() {
+    cy.get(PageUtils.getAlias(ContactsHelpers.CONTACT_DIALOG)).click('topLeft');
     PageUtils.clickButton('Save & continue', '[data-cy="contact-dialog"] [data-cy="save-continue"]:visible');
   }
   static clickSaveAndAddMore() {
+    cy.get(PageUtils.getAlias(ContactsHelpers.CONTACT_DIALOG)).click('topLeft');
     PageUtils.clickButton('Save & Add More', '[data-cy="contact-dialog"] [data-cy="save-add-more"]:visible');
   }
 }
