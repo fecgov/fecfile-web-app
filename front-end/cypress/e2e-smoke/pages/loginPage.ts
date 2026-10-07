@@ -60,7 +60,7 @@ function loginDotGovLogin() {
   cy.wait('@GetStatus');
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
-  cy.get('.notice-box-form').scrollTo('bottom')
+  cy.get('.notice-box-form').scrollTo('bottom');
   cy.get('#security-consent-annual').click();
   cy.get('[data-cy="consent-button"]').click();
   cy.wait('@GetCommitteeAccounts');
@@ -74,24 +74,10 @@ function loginDotGovLogin() {
   PageUtils.enterSecondCommitteeEmailIfneeded();
 }
 
-function retrieveAuthToken() {
-  const storedData = localStorage.getItem('fecfile_online_userLoginData');
-  const loginData = JSON.parse(storedData ?? '');
-  return 'JWT ' + loginData.token;
-}
-
 export function Initialize() {
   LoginPage.login();
   ReportListPage.deleteAllReports();
   ContactListPage.deleteAllContacts();
-}
-
-function setCommitteeType(committeeType = 'O') {
-  const fecfile_online_committeeAccount = localStorage.getItem('fecfile_online_committeeAccount');
-  if (!fecfile_online_committeeAccount) return;
-  const json = JSON.parse(fecfile_online_committeeAccount);
-  json.committee_type = committeeType;
-  localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(json));
 }
 
 export function setCommitteeToPTY() {
