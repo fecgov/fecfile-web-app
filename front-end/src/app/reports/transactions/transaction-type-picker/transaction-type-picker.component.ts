@@ -17,12 +17,7 @@ import { TransactionGroupTypes, TransactionTypes } from 'app/shared/models/trans
 import { scrollToTop } from 'app/shared/utils/form.utils';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { isTransactionTypeDisabledForReport } from 'app/shared/utils/transaction-disable.utils';
-import {
-  getTransactionTypeClass,
-  PAC_ONLY,
-  PTY_ONLY,
-  TransactionTypeUtils,
-} from 'app/shared/utils/transaction-type.utils';
+import { getTransactionTypeClass, PAC_ONLY, PTY_ONLY } from 'app/shared/utils/transaction-type.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Accordion, AccordionModule } from 'primeng/accordion';
 import { environment } from '../../../../environments/environment';
@@ -151,6 +146,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   }
 }
 
+// Migrate this to be determined on the backend
+// https://fecgov.atlassian.net/browse/FECFILE-3499
 const debtPaymentTypes = new Set([
   // SB21B
   'IN_KIND_OUT',
