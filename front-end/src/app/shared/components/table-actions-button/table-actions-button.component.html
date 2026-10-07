@@ -1,16 +1,18 @@
-<div class="drop-down position-static flex justify-content-center">
+<div class="drop-down relative flex justify-content-center table-action-dropdown">
   <button
     pButton
     pRipple
+    type="button"
     [icon]="buttonIcon()"
     [label]="buttonLabel()"
     [class.rounded-text]="rounded()"
     [class]="buttonStyleClass()"
     [ariaLabel]="buttonAriaLabel()"
     [attr.data-cy]="buttonDataCy()"
-    (click)="op.toggle($event)"
+    [disabled]="disabled()"
+    (click)="popoverHidden.update((x) => !x)"
   ></button>
-  <p-popover #op>
+  <div class="p-popover custom-popover" [class.hidden]="popoverHidden()">
     <ul class="dropdown-menu" data-cy="table-actions-popover">
       @for (action of filteredActions(); track action; let index = $index) {
         <li>
@@ -31,5 +33,5 @@
         <p>Loading...</p>
       }
     </ul>
-  </p-popover>
+  </div>
 </div>

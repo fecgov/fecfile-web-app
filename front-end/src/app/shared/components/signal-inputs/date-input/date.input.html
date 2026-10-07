@@ -1,36 +1,35 @@
-<app-label [label]="label()" [inputId]="inputId()" [optional]="optional()" />
+<app-label [label]="label()" [inputId]="inputId()" [optional]="optional()" [labelStyleClass]="labelStyleClass()" />
 <p-datepicker
   #datepicker
-  appendTo="body"
+  [invalid]="touched() && invalid()"
   [attr.data-cy]="inputId()"
   [inputId]="inputId()"
   [showOnFocus]="false"
   [disabled]="disabled()"
-  [(ngModel)]="value"
-  (ngModelChange)="onDateSelect($event)"
+  [(ngModel)]="tempValue"
+  (onSelect)="onDateSelect($event)"
   [showIcon]="true"
   [iconDisplay]="'input'"
-  ariaLabelledBy="date_picker_label"
   [keepInvalid]="true"
   [autoClear]="false"
   placeholder="MM/DD/YYYY"
   pInputMask="99/99/9999"
   slotChar="MM/DD/YYYY"
   appDateSanitizer
-  (onSelect)="onDateSelect($event)"
-  (onBlur)="touched.set(true)"
+  (onBlur)="onBlur()"
+  (onHide)="onCloseOverlay()"
 >
   <ng-template pTemplate="header">
     <div class="flex justify-content-between p-2 border-bottom-1 border-300">
       <div class="flex gap-1">
         @if (datepicker.currentView === 'date') {
-        <button class="year-button" (click)="onYearChange($event, -1)">
+        <button type="button" class="year-button" (click)="onYearChange($event, -1)">
           <svg height="20" width="20" class="primary-icon rotate-180">
             <use href="assets/img/double-arrow.svg#double-arrow"></use>
           </svg>
         </button>
         }
-        <button class="month-button" (click)="datepicker.onPrevButtonClick($event)">
+        <button type="button" class="month-button" (click)="datepicker.onPrevButtonClick($event)">
           <svg height="14" width="14" class="rotate-180 primary-icon">
             <use href="assets/img/arrow.svg#arrow"></use>
           </svg>
@@ -66,13 +65,13 @@
         }
       </div>
       <div class="flex gap-1">
-        <button class="month-button" (click)="datepicker.onNextButtonClick($event)">
+        <button type="button" class="month-button" (click)="datepicker.onNextButtonClick($event)">
           <svg height="14" width="14" class="primary-icon">
             <use href="assets/img/arrow.svg#arrow"></use>
           </svg>
         </button>
         @if (datepicker.currentView === 'date') {
-        <button class="year-button" (click)="onYearChange($event, 1)">
+        <button type="button" class="year-button" (click)="onYearChange($event, 1)">
           <svg height="20" width="20" class="primary-icon">
             <use href="assets/img/double-arrow.svg#double-arrow"></use>
           </svg>

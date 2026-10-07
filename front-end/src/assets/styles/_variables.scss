@@ -46,6 +46,7 @@
   --p-overlay-select-background: var(--p-content-background);
   --p-textarea-color: var(--p-content-color);
   --p-select-color: var(--p-content-color);
+  --p-select-disabled-color: var(--p-content-color);
   --p-select-padding-x: 0;
   --p-select-option-color: var(--p-content-color);
   --p-select-option-selected-color: white;
@@ -133,6 +134,9 @@
   --p-dialog-footer-padding: 0 0 1rem 0;
   --p-dialog-color: var(--p-content-color);
   --p-confirmdialog-icon-color: var(--p-content-color);
+
+  /* Popover */
+  --p-popover-gutter: 0;
 
   /* Autocomplete */
   --p-autocomplete-dropdown-background: var(--background);

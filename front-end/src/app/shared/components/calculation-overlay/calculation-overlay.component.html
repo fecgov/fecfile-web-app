@@ -1,14 +1,8 @@
 <div class="calculation-icon">
-  <p-popover #op>
+  <button (click)="popoverHidden.update(v => !v)" class="bg-white border-none p-0 cursor-pointer">
+    <img src="/assets/img/calculation-icon.svg" alt="calculation icon" aria-hidden="true" height="20" width="20" />
+  </button>
+  <div class="p-popover custom-popover" [class.hidden]="popoverHidden()">
     <ng-content></ng-content>
-  </p-popover>
-  <img
-    src="/assets/img/calculation-icon.svg"
-    role="img"
-    alt=""
-    aria-hidden="true"
-    (click)="op.toggle($event)"
-    (keyup.enter)="op.toggle($event)"
-    tabindex="0"
-  />
+  </div>
 </div>

@@ -66,6 +66,7 @@ describe('committeeOwnerGuard', () => {
 
   it('should route to reports page when memberService.needsSecondAdmin()', async () => {
     needsSecondAdminMock.set(true);
+    await new Promise((resolve) => setTimeout(resolve, 0));
     const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
     expect(safe).toEqual(router.createUrlTree(['/reports']));
   });

@@ -44,6 +44,17 @@
         [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
       />
     }
+    @case (ContactTypes.CANDIDATE) {
+      @if (transaction?.contact_1?.type === ContactTypes.CANDIDATE) {
+        <app-candidate-input
+          [transaction]="transaction"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [templateMap]="templateMap"
+          [hasCandidateOfficeInput]="transactionType?.hasCandidateOffice() ?? false"
+        />
+      }
+    }
     @case (ContactTypes.INDIVIDUAL) {
       <app-name-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
     }
@@ -52,7 +63,10 @@
   <hr class="solid" />
   <app-section-header [isSingle]="isSingle" text="Address" />
   <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
-  @if (transactionType?.hasEmployeeFields() && entityType === ContactTypes.INDIVIDUAL) {
+  @if (
+    transactionType?.hasEmployeeFields() &&
+    (entityType === ContactTypes.INDIVIDUAL || entityType === ContactTypes.CANDIDATE)
+  ) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Employer" />
     <app-employer-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
@@ -168,7 +182,7 @@
 }
 
 <ng-template #candidateInfo>
-  @if (transactionType?.hasCommitteeOrCandidateInformation()) {
+  @if (transactionType?.hasCommitteeOrCandidateInformation() && entityType !== ContactTypes.CANDIDATE) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType?.committeeCandidateHeader" />
     @if (transactionType?.contact3IsRequired) {

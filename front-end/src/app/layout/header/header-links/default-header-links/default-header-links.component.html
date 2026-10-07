@@ -4,35 +4,34 @@
     <li><a routerLink="/transactions">Transactions</a></li>
   }
   <li><a routerLink="/contacts">Contacts</a></li>
-  <li>
-    <button class="nav-button" (click)="toolsOp.toggle($event)">
+
+  <li id="tools-menu-link" class="relative">
+    <button class="nav-button" (click)="toolsHidden.update((x) => !x)">
       <span>Tools</span>
       <svg class="dropdown-icon"><use href="assets/img/arrow.svg#arrow"></use></svg>
     </button>
+    <div class="p-popover custom-popover" [class.hidden]="toolsHidden()">
+      <ul>
+        <li><button (click)="clickLink('/tools/update-cash-on-hand')">Update cash on hand</button></li>
+        @if (electionCycleStore.showElectionCycles() && showForm3) {
+          <li><button (click)="clickLink('/tools/election-cycles')">Election cycles</button></li>
+        }
+      </ul>
+    </div>
   </li>
 
-  <li id="navbarProfileDropdownMenuLink">
-    <button class="nav-button" (click)="accountOp.toggle($event)">
+  <li id="account-menu-link" class="relative">
+    <button class="nav-button trigger" (click)="accountHidden.update((x) => !x)">
       <img class="header-navbar-icon" ngSrc="assets/img/profile_icon.svg" alt="Profile" height="16" width="8" />
       <svg class="dropdown-icon"><use href="assets/img/arrow.svg#arrow"></use></svg>
     </button>
+    <div class="p-popover custom-popover" [class.hidden]="accountHidden()">
+      <ul>
+        <li><button (click)="clickLink('/committee')">Account</button></li>
+        <li><button (click)="clickLink('/committee/members')">Users</button></li>
+        <li><button (click)="clickLink('/login/select-committee')">Switch committees</button></li>
+        <li><button (click)="loginService.logOut()">Logout</button></li>
+      </ul>
+    </div>
   </li>
 </ul>
-
-<p-popover #toolsOp>
-  <ul>
-    <li><button appPopoverLink="/tools/update-cash-on-hand" [popover]="toolsOp">Update cash on hand</button></li>
-    @if (electionCycleStore.showElectionCycles() && showForm3) {
-      <li><button appPopoverLink="/tools/election-cycles" [popover]="toolsOp">Election cycles</button></li>
-    }
-  </ul>
-</p-popover>
-
-<p-popover #accountOp>
-  <ul>
-    <li><button appPopoverLink="/committee/" [popover]="accountOp">Account</button></li>
-    <li><button appPopoverLink="/committee/members" [popover]="accountOp">Users</button></li>
-    <li><button appPopoverLink="/login/select-committee/" [popover]="accountOp">Switch committees</button></li>
-    <li><button (click)="loginService.logOut()">Logout</button></li>
-  </ul>
-</p-popover>

@@ -21,7 +21,7 @@ describe('Manage profile', () => {
   it('Can navigate to the Committee members via the navbar', () => {
     const alias = PageUtils.getAlias('');
     cy.visit('/reports');
-    cy.get('#navbarProfileDropdownMenuLink').click();
+    cy.get('#account-menu-link').click();
     cy.get(alias).find('.p-popover').contains('Users').click();
     cy.location('pathname').should('include', '/members');
   });
@@ -31,7 +31,7 @@ describe('Manage profile', () => {
     cy.intercept('/profile').as('account');
     cy.visit('/reports');
 
-    cy.get('#navbarProfileDropdownMenuLink').click();
+    cy.get('#account-menu-link').click();
     cy.get(alias).find('.p-popover').contains('Account').click();
     cy.location('pathname').should('include', '/committee');
   });

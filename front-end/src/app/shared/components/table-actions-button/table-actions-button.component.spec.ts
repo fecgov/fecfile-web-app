@@ -1,4 +1,4 @@
-import { Component, viewChild } from '@angular/core';
+import { inputBinding, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -14,56 +14,32 @@ interface MockItem {
   name: string;
 }
 
-@Component({
-  imports: [TableActionsButtonComponent],
-  standalone: true,
-  template: `
-    <app-table-actions-button
-      [actionItem]="inputItem"
-      [tableActions]="actions"
-      (tableActionClick)="onActionClick($event)"
-    />
-  `,
-})
-class TestHostComponent {
-  inputItem: MockItem = { id: '123', status: 'active', name: 'Test Item' };
-  inputId: string = '';
-  fetchMethod: ((id: string) => Promise<MockItem>) | undefined = undefined;
-
-  actions: TableAction<MockItem>[] = [
-    new TableAction<MockItem>(
-      'Edit',
-      () => {},
-      (item: MockItem) => item.status === 'active',
-    ),
-    new TableAction<MockItem>('Delete', () => {}),
-  ];
-
-  component = viewChild.required(TableActionsButtonComponent);
-
-  onActionClick(event: { action: TableAction<MockItem>; actionItem: MockItem }) {
-    event.action.isAvailable(event.actionItem);
-  }
-}
+const inputItem = signal<MockItem>({ id: '123', status: 'active', name: 'Test Item' });
+const actions = signal<TableAction<MockItem>[]>([
+  new TableAction<MockItem>(
+    'Edit',
+    () => {},
+    (item: MockItem) => item.status === 'active',
+  ),
+  new TableAction<MockItem>('Delete', () => {}),
+]);
 
 describe('TableActionsButtonComponent', () => {
   let component: TableActionsButtonComponent<MockItem>;
-  let fixture: ComponentFixture<TestHostComponent>;
-  let host: TestHostComponent;
+  let fixture: ComponentFixture<TableActionsButtonComponent<MockItem>>;
 
   const mockActiveItem: MockItem = { id: '123', status: 'active', name: 'Test 1' };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PopoverModule, ButtonModule, TableActionsButtonComponent, TestHostComponent],
+      imports: [PopoverModule, ButtonModule, TableActionsButtonComponent],
       providers: [provideHttpClient(), provideHttpClientTesting(), ApiService],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TestHostComponent);
-    host = fixture.componentInstance;
-    component = host.component();
-
-    vi.spyOn(host, 'onActionClick');
+    fixture = TestBed.createComponent(TableActionsButtonComponent<MockItem>, {
+      bindings: [inputBinding('actionItem', inputItem), inputBinding('tableActions', actions)],
+    });
+    component = fixture.componentInstance;
   });
 
   it('should create', () => {
@@ -73,26 +49,22 @@ describe('TableActionsButtonComponent', () => {
 
   describe('User Interactions', () => {
     it('actionsClicked should toggle the popover', async () => {
-      host.inputItem = mockActiveItem;
+      inputItem.set(mockActiveItem);
       fixture.detectChanges();
-
-      const popoverInstance = component.op();
-      vi.spyOn(popoverInstance, 'toggle');
       expect(component.actionItem()).toEqual(mockActiveItem);
     });
 
     it('performAction should emit event and hide popover', () => {
-      host.inputItem = mockActiveItem;
+      const clickSpy = vi.spyOn(component.tableActionClick, 'emit');
+      inputItem.set(mockActiveItem);
       fixture.detectChanges();
-      const targetAction = host.actions[0];
-      const popoverInstance = component.op();
-      vi.spyOn(popoverInstance, 'hide');
+      const targetAction = component.tableActions()[0];
 
       component.performAction(targetAction);
       fixture.detectChanges();
 
-      expect(popoverInstance.hide).toHaveBeenCalled();
-      expect(host.onActionClick).toHaveBeenCalledWith({
+      expect(component.popoverHidden()).toBeTruthy();
+      expect(clickSpy).toHaveBeenCalledWith({
         action: targetAction,
         actionItem: mockActiveItem,
       });
