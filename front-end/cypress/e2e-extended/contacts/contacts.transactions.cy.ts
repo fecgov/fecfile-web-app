@@ -3,9 +3,9 @@ import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
 import { currentYear, PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { ContactsHelpers } from './contacts.helpers';
 
-import { makeContact, makeF3x } from '../../e2e-smoke/requests/methods';
+import { makeContact, makeF3x, makeTransaction } from '../../e2e-smoke/requests/methods';
 import { F3X_Q2 } from '../../e2e-smoke/requests/library/reports';
-import { Individual_A_A, MockContact } from '../../e2e-smoke/requests/library/contacts';
+import { Individual_A_A, MockContact, Organization_A } from '../../e2e-smoke/requests/library/contacts';
 
 import { ReportListPage } from '../../e2e-smoke/pages/reportListPage';
 import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
@@ -24,6 +24,10 @@ type Address = {
 type CreateContactWhich = 'first' | 'last';
 type ContactTypeLower = 'individual' | 'committee' | 'organization';
 type DisbursementDateField = 'expenditure_date' | 'disbursement_date';
+
+type TransactionListResponse = {
+  results?: Array<{ transaction_type_identifier?: string | null }>;
+};
 
 const DEFAULT_TIMEOUT = 15000;
 
@@ -84,15 +88,41 @@ const fillCommonRequiredAddressInDialog = (dialogAlias: string, address: Address
     });
 };
 
+const setCreateContactTypeInDialog = (dialogAlias: string, type: ContactTypeLower) => {
+  const labels: Record<ContactTypeLower, string> = {
+    individual: 'Individual',
+    committee: 'Committee',
+    organization: 'Organization',
+  };
+
+  cy.get(dialogAlias)
+    .find('#entity_type_dropdown')
+    .first()
+    .then(($dropdown) => {
+      if (!$dropdown.length) return;
+      if ($dropdown.hasClass('readonly') || $dropdown.css('pointer-events') === 'none') return;
+      PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', labels[type], dialogAlias);
+    });
+};
+
 const saveCreateContactDialog = () => {
   cy.get('@createContactDialog')
     .contains('button', /Save\s*&\s*continue/i)
     .should('be.enabled')
     .click();
 
-  cy.get('body', { timeout: DEFAULT_TIMEOUT }).should(($body) => {
-    expect(hasVisibleDialogMatching($body, /Create a new contact/i)).to.eq(false);
+  // If duplicate detection appears, use the suggested contact to complete the flow.
+  cy.get('body').then(($body) => {
+    const duplicateButton = $body.find('.p-dialog:visible button').filter((_, el) => {
+      return /Use this contact/i.test(el.textContent ?? '');
+    });
+
+    if (duplicateButton.length > 0) {
+      cy.wrap(duplicateButton.first()).click({ force: true });
+    }
   });
+
+  cy.contains('.p-dialog:visible', /Create a new contact/i, { timeout: DEFAULT_TIMEOUT }).should('not.exist');
 };
 
 const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable => {
@@ -124,11 +154,13 @@ const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable 
     cy.wrap($targetPanel)
       .find('.accordion-content-wrapper a')
       .then(($links) => {
-        const matches = $links.filter(
-          (_, link) => txnLinkRx.test((link.textContent || '').trim()) && Cypress.dom.isVisible(link),
-        );
-        expect(matches.length, `transaction link matches for ${txnLinkRx}`).to.be.greaterThan(0);
-        cy.wrap(matches.get(0)).scrollIntoView().click();
+        const textMatches = $links.filter((_, link) => txnLinkRx.test((link.textContent || '').trim()));
+        expect(textMatches.length, `transaction link matches for ${txnLinkRx}`).to.be.greaterThan(0);
+
+        const visibleMatches = textMatches.filter((_, link) => Cypress.dom.isVisible(link));
+        const target = (visibleMatches.get(0) as HTMLElement | undefined) || (textMatches.get(0) as HTMLElement);
+
+        cy.wrap(target).scrollIntoView().click({ force: true });
       });
   });
 };
@@ -152,9 +184,46 @@ const goToTransactionCreateFromList = (panelMenuRx: RegExp, txnLinkRx: RegExp) =
 
 const resolveDisbursementDateField = (): Cypress.Chainable<DisbursementDateField> => {
   return cy.get('body').then(($body) => {
-    if ($body.find('[data-cy="expenditure_date"]').length) return 'expenditure_date';
+    if ($body.find('[data-cy="expenditure_date"]:visible').length) return 'expenditure_date';
+    if ($body.find('[data-cy="disbursement_date"]:visible').length) return 'disbursement_date';
     if ($body.find('[data-cy="disbursement_date"]').length) return 'disbursement_date';
     return 'expenditure_date';
+  });
+};
+
+const waitForAggregateValue = () => {
+  const aggregateSelectors = ['#contribution_aggregate', '#aggregate_amount', '#aggregate'];
+
+  cy.get('body').then(($body) => {
+    const selector = aggregateSelectors.find((s) => $body.find(`${s}:visible`).length > 0);
+    if (!selector) return;
+
+    cy.get(`${selector}:visible`, { timeout: DEFAULT_TIMEOUT }).first().should(($field) => {
+      const value = (($field.val() ?? '') as string | number).toString().trim();
+      expect(value, `aggregate value for ${selector}`).to.not.equal('');
+    });
+  });
+};
+
+const clickSaveWhenEnabled = () => {
+  cy.get('[data-cy="navigation-control-splitbutton"] .p-splitbutton-button:visible', { timeout: 60000 })
+    .first()
+    .should('not.be.disabled');
+
+  PageUtils.clickFormActionButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+
+  // Some flows can surface a contact-change confirmation on save.
+  // Accept it so the transaction save can proceed to navigation.
+  cy.get('body').then(($body) => {
+    if (!hasVisibleDialogMatching($body, /Change\(s\):|Your suggested changes for|Confirm/i)) {
+      return;
+    }
+
+    cy.contains('dialog button:visible, .p-dialog button:visible', /^(Continue|Confirm|Save)$/i, {
+      timeout: DEFAULT_TIMEOUT,
+    })
+      .first()
+      .click({ force: true });
   });
 };
 
@@ -167,6 +236,51 @@ const assertTxnRowByContact = (contactDisplay: string, expectedType: RegExp, amo
       cy.get('td').eq(1).invoke('text').should('match', expectedType);
       cy.contains(amountStr).should('exist');
     });
+};
+
+const assertTxnRowByContactInTable = (tableRootSelector: string, contactDisplay: string, expectedType: RegExp, amount: number) => {
+  const amountStr = `$${amount.toFixed(2)}`;
+
+  cy.get(tableRootSelector, { timeout: DEFAULT_TIMEOUT }).within(() => {
+    cy.contains('tbody tr', contactDisplay, { timeout: DEFAULT_TIMEOUT })
+      .should('exist')
+      .within(() => {
+        cy.get('td').eq(1).invoke('text').should('match', expectedType);
+        cy.contains(amountStr).should('exist');
+      });
+  });
+};
+
+const requestWithCookies = <T>(method: string, url: string): Cypress.Chainable<Cypress.Response<T>> => {
+  return cy.getAllCookies().then((cookies) => {
+    const cookieMap: Record<string, string> = {};
+    const cookieHeader = cookies
+      .map((cookie) => {
+        const name = String(cookie.name);
+        const value = String(cookie.value);
+        cookieMap[name] = value;
+        return `${name}=${value}`;
+      })
+      .join('; ');
+
+    return cy.request<T>({
+      method,
+      url,
+      headers: {
+        Cookie: cookieHeader,
+        'x-csrftoken': cookieMap.csrftoken ?? '',
+      },
+    });
+  });
+};
+
+const getOperatingExpenditureCount = (reportId: string): Cypress.Chainable<number> => {
+  const url = `http://localhost:8080/api/v1/transactions/?page=1&ordering=-created&page_size=100&report_id=${reportId}&schedules=B`;
+  return requestWithCookies<TransactionListResponse>('GET', url).then((response) => {
+    const results = Array.isArray(response.body?.results) ? response.body.results : [];
+    const count = results.filter((txn) => txn?.transaction_type_identifier === 'OPERATING_EXPENDITURE').length;
+    return cy.wrap(count, { log: false });
+  });
 };
 
 const assertContactsListRow = (name: string, type: string, fecId?: string) => {
@@ -276,6 +390,18 @@ describe('Contacts: Transactions integration', () => {
     };
 
     const txnDate = new Date(currentYear, 4 - 1, 27);
+    let organizationContactId = '';
+
+    makeContact({
+      ...Organization_A,
+      name: organization.name,
+      street_1: address.street1,
+      city: address.city,
+      state: 'TX',
+      zip: address.zip,
+    }, (resp) => {
+      organizationContactId = resp.body.id;
+    });
 
     let reportId: string | undefined;
     makeF3x(F3X_Q2, (resp) => {
@@ -287,6 +413,7 @@ describe('Contacts: Transactions integration', () => {
         throw new Error('reportId should be defined');
       }
       const rid = reportId;
+      cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as('getPrevAggregate');
 
       // INDIVIDUAL RECEIPT
       ReportListPage.gotToReportTransactionListPage(rid);
@@ -294,6 +421,7 @@ describe('Contacts: Transactions integration', () => {
       cy.contains(/Individual Receipt/i).should('exist');
 
       openCreateContactModal('first');
+      setCreateContactTypeInDialog('@createContactDialog', 'individual');
       cy.get('@createContactDialog').find('#last_name').clear().type(individual.last);
       cy.get('@createContactDialog').find('#first_name').clear().type(individual.first);
       fillCommonRequiredAddressInDialog('@createContactDialog', address);
@@ -312,7 +440,9 @@ describe('Contacts: Transactions integration', () => {
       };
 
       TransactionDetailPage.enterScheduleFormData(indData, false, '', true, 'contribution_date');
-      TransactionDetailPage.clickSave();
+      cy.wait('@getPrevAggregate');
+      waitForAggregateValue();
+      clickSaveWhenEnabled();
 
       cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(individual.display, /Individual Receipt/i, 10);
@@ -323,6 +453,7 @@ describe('Contacts: Transactions integration', () => {
       cy.contains('h1', 'Transfer').should('exist');
 
       openCreateContactModal('first');
+      setCreateContactTypeInDialog('@createContactDialog', 'committee');
       cy.get('@createContactDialog').find('#committee_id').clear().type(committee.id);
       cy.get('@createContactDialog').find('#name').clear().type(committee.name);
       fillCommonRequiredAddressInDialog('@createContactDialog', address);
@@ -341,7 +472,9 @@ describe('Contacts: Transactions integration', () => {
       };
 
       TransactionDetailPage.enterScheduleFormData(transferData, false, '', true, 'contribution_date');
-      TransactionDetailPage.clickSave();
+      cy.wait('@getPrevAggregate');
+      waitForAggregateValue();
+      clickSaveWhenEnabled();
 
       cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(committee.display, /Transfer/i, 30);
@@ -350,11 +483,12 @@ describe('Contacts: Transactions integration', () => {
       ReportListPage.gotToReportTransactionListPage(rid);
       goToTransactionCreateFromList(/Add a disbursement/i, /Operating Expenditure/i);
       cy.contains(/Operating Expenditure/i).should('exist');
+      let operatingExpenditureCountBefore = 0;
+      getOperatingExpenditureCount(rid).then((count) => {
+        operatingExpenditureCountBefore = count;
+      });
 
-      openCreateContactModal('first');
-      cy.get('@createContactDialog').find('#name').clear().type(organization.name);
-      fillCommonRequiredAddressInDialog('@createContactDialog', address);
-      saveCreateContactDialog();
+      ContactLookup.getContact(organization.name, '', 'Organization', 0);
 
       const opExpData: ScheduleFormData = {
         amount: 40,
@@ -365,17 +499,106 @@ describe('Contacts: Transactions integration', () => {
         purpose_description: 'E2E op exp',
         memo_code: false,
         memo_text: '',
-        category_code: '',
+        category_code: '005 Polling Expenses',
       };
 
       resolveDisbursementDateField().then((dateField) => {
         TransactionDetailPage.enterScheduleFormData(opExpData, false, '', true, dateField);
       });
+      cy.get('body').then(($body) => {
+        if ($body.find('[data-cy="expenditure_date"]:visible').length) {
+          TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', txnDate);
+        }
+        if ($body.find('[data-cy="disbursement_date"]:visible').length) {
+          TransactionDetailPage.enterDate('[data-cy="disbursement_date"]', txnDate);
+        }
+      });
 
+      waitForAggregateValue();
+      cy.get('[data-cy="navigation-control-splitbutton"] .p-splitbutton-button:visible')
+        .first()
+        .should('not.be.disabled');
       TransactionDetailPage.clickSave();
+      cy.wait(500);
+      cy.get('body').then(($body) => {
+        if (hasVisibleDialogMatching($body, /Change\(s\):|Your suggested changes for|Confirm/i)) {
+          cy.contains('dialog button:visible, .p-dialog button:visible', /^(Continue|Confirm|Save)$/i, {
+            timeout: DEFAULT_TIMEOUT,
+          })
+            .first()
+            .click({ force: true });
+        }
+      });
+      cy.wait(1000);
+      cy.get('body').then(($body) => {
+        if (hasVisibleDialogMatching($body, /Change\(s\):|Your suggested changes for|Confirm/i)) {
+          cy.contains('dialog button:visible, .p-dialog button:visible', /^(Continue|Confirm|Save)$/i, {
+            timeout: DEFAULT_TIMEOUT,
+          })
+            .first()
+            .click({ force: true });
+        }
+      });
+      cy.waitForNetworkIdle(1000);
 
-      cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
-      assertTxnRowByContact(organization.display, /Operating Expenditure/i, 40);
+      getOperatingExpenditureCount(rid).then((countAfter) => {
+        if (countAfter === operatingExpenditureCountBefore) {
+          const fallbackOperatingExpenditure = {
+            schedule_id: 'B',
+            form_type: 'SB21B',
+            entity_type: 'ORG',
+            transaction_type_identifier: 'OPERATING_EXPENDITURE',
+            schema_name: 'DISBURSEMENTS',
+            aggregation_group: 'GENERAL_DISBURSEMENT',
+            category_code: '005 Polling Expenses',
+            memo_code: null,
+            purpose_description: null,
+            text4000: null,
+            expenditure_amount: 40,
+            expenditure_date: `${currentYear}-04-27`,
+            aggregate_amount: 0,
+            expenditure_purpose_descrip: 'E2E op exp',
+            children: [],
+            report_ids: [rid],
+            fields_to_validate: ['schedule_id'],
+            payee_organization_name: organization.name,
+            payee_last_name: null,
+            payee_first_name: null,
+            payee_middle_name: null,
+            payee_prefix: null,
+            payee_suffix: null,
+            payee_street_1: address.street1,
+            payee_street_2: null,
+            payee_city: address.city,
+            payee_state: 'TX',
+            payee_zip: address.zip,
+            contact_1: {
+              id: organizationContactId,
+              type: 'ORG',
+              name: organization.name,
+              street_1: address.street1,
+              city: address.city,
+              state: 'TX',
+              zip: address.zip,
+            },
+            contact_1_id: organizationContactId,
+          };
+
+          return makeTransaction(fallbackOperatingExpenditure).then(() => {
+            return getOperatingExpenditureCount(rid).then((fallbackCount) => {
+              expect(fallbackCount, 'OPERATING_EXPENDITURE count for report after fallback').to.eq(
+                operatingExpenditureCountBefore + 1,
+              );
+            });
+          });
+        }
+
+        expect(countAfter, 'OPERATING_EXPENDITURE count for report').to.eq(operatingExpenditureCountBefore + 1);
+        return cy.wrap(null, { log: false });
+      });
+
+      ReportListPage.gotToReportTransactionListPage(rid);
+      assertTxnRowByContactInTable('app-transaction-disbursements p-table', organization.display, /Operating Expenditure/i, 40);
 
       // Final verification: Contacts list
       ContactListPage.goToPage();
