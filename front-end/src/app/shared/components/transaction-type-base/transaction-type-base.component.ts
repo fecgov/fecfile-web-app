@@ -1,5 +1,5 @@
-import { computed, Directive, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { afterNextRender, computed, Directive, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import type { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -10,7 +10,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, merge, Observable, of, startWith, takeUntil } from 'rxjs';
+import { filter, firstValueFrom, map, merge, Observable, of, startWith, take, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
@@ -30,6 +30,7 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { CommitteeStore } from 'app/committee/committee.store';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 
 @Directive()
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
@@ -204,6 +205,99 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     } else {
       await this.navigateTo(navigationEvent);
     }
+  }
+
+  override async validateForm(): Promise<boolean> {
+    this.formSubmitted = true;
+    blurActiveInput(this.form);
+
+    await this.resolveAggregateBeforeValidate();
+    await this.waitForPendingValidation();
+
+    if (this.form.invalid) {
+      printFormErrors(this.form);
+      this.store.dispatch(singleClickEnableAction());
+      afterNextRender(() => this.scrollToFirstInvalidControl(), { injector: this.injector });
+      return false;
+    }
+
+    return true;
+  }
+
+  private async waitForPendingValidation(): Promise<void> {
+    this.form.updateValueAndValidity();
+    Object.values(this.form.controls).forEach((control) => control.updateValueAndValidity());
+
+    const pendingControls = [
+      this.form,
+      this.form.get(this.templateMap.employer),
+      this.form.get(this.templateMap.occupation),
+    ].filter((control): control is AbstractControl => !!control && control.pending);
+
+    if (!pendingControls.length && this.form.status !== 'PENDING') {
+      return;
+    }
+
+    const pendingWaits = pendingControls.map((control) =>
+      firstValueFrom(
+        control.statusChanges.pipe(
+          filter((status) => status !== 'PENDING'),
+          take(1),
+        ),
+      ),
+    );
+
+    if (this.form.status === 'PENDING') {
+      pendingWaits.push(
+        firstValueFrom(
+          this.form.statusChanges.pipe(
+            filter((status) => status !== 'PENDING'),
+            take(1),
+          ),
+        ),
+      );
+    }
+
+    if (!pendingWaits.length) {
+      return;
+    }
+
+    await Promise.all(pendingWaits);
+
+    this.form.updateValueAndValidity();
+  }
+
+  private async resolveAggregateBeforeValidate(): Promise<void> {
+    if (!this.transaction || !this.transactionType?.showAggregate || !this.templateMap.aggregate) {
+      return;
+    }
+
+    const date = this.form.get(this.templateMap.date)?.value;
+    const amount = this.form.get(this.templateMap.amount)?.value;
+    const contactIdFromMap = this.contactIdMap['contact_1']
+      ? await firstValueFrom(this.contactIdMap['contact_1'])
+      : undefined;
+    const contactId = contactIdFromMap || this.transaction.contact_1?.id;
+
+    if (!date || !contactId || amount === null || amount === undefined || amount === '') {
+      return;
+    }
+
+    const previousAggregate = await firstValueFrom(
+      this.transactionService.getPreviousEntityAggregate(this.transaction, contactId, date),
+    );
+    TransactionFormUtils.updateAggregate(
+      this.form,
+      'aggregate',
+      this.templateMap,
+      this.transaction,
+      previousAggregate ?? 0,
+      amount,
+    );
+
+    this.form.get(this.templateMap.employer)?.updateValueAndValidity();
+    this.form.get(this.templateMap.occupation)?.updateValueAndValidity();
+    this.form.updateValueAndValidity();
   }
 
   async navigateTo(event: NavigationEvent): Promise<boolean> {
