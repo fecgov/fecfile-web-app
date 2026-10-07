@@ -14,7 +14,7 @@ export interface QueryParams {
     | readonly (string | number | boolean)[];
 }
 
-function getHeaders(cookieService: CookieService, headersToAdd: object = {}) {
+export function getHeaders(cookieService: CookieService, headersToAdd: object = {}) {
   const csrfToken = `${cookieService.get('csrftoken')}`;
   const baseHeaders = {
     'Content-Type': 'application/json',

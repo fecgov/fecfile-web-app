@@ -78,8 +78,9 @@ export class ContactsHelpers {
     ContactsHelpers.fieldForLabel(/^Telephone/i, root)
       .find('input')
       .last()
-      .clear()
-      .type(value);
+      .scrollIntoView()
+      .clear({force: true})
+      .type(value, {force: true});
   }
 
   static setDropdownByLabel(labelRegex: RegExp, optionText: string, root = ContactsHelpers.CONTACT_DIALOG) {

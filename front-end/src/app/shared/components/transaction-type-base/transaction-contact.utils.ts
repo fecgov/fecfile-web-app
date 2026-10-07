@@ -134,6 +134,9 @@ export class TransactionContactUtils {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
+    if (transaction) {
+      transaction.contact_1 = contact;
+    }
     switch (contact.type) {
       case ContactTypes.INDIVIDUAL:
         form.get(templateMap.last_name)?.setValue(contact.last_name);
@@ -152,15 +155,17 @@ export class TransactionContactUtils {
       case ContactTypes.ORGANIZATION:
         form.get(templateMap.organization_name)?.setValue(contact.name);
         break;
+      case ContactTypes.CANDIDATE:
+        TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap);
+        form.get(templateMap.employer)?.setValue(contact.employer);
+        form.get(templateMap.occupation)?.setValue(contact.occupation);
+        break;
     }
     form.get(templateMap.street_1)?.setValue(contact.street_1);
     form.get(templateMap.street_2)?.setValue(contact.street_2);
     form.get(templateMap.city)?.setValue(contact.city);
     form.get(templateMap.state)?.setValue(contact.state);
     form.get(templateMap.zip)?.setValue(contact.zip);
-    if (transaction) {
-      transaction.contact_1 = contact;
-    }
     contactId$.next(contact.id ?? '');
   }
 
@@ -180,6 +185,15 @@ export class TransactionContactUtils {
     form.get(templateMap.middle_name)?.setValue(null);
     form.get(templateMap.prefix)?.setValue(null);
     form.get(templateMap.suffix)?.setValue(null);
+    form.get(templateMap.candidate_fec_id)?.setValue(null);
+    form.get(templateMap.candidate_last_name)?.setValue(null);
+    form.get(templateMap.candidate_first_name)?.setValue(null);
+    form.get(templateMap.candidate_middle_name)?.setValue(null);
+    form.get(templateMap.candidate_prefix)?.setValue(null);
+    form.get(templateMap.candidate_suffix)?.setValue(null);
+    form.get(templateMap.candidate_office)?.setValue(null);
+    form.get(templateMap.candidate_state)?.setValue(null);
+    form.get(templateMap.candidate_district)?.setValue(null);
     form.get(templateMap.employer)?.setValue(null);
     form.get(templateMap.occupation)?.setValue(null);
     if (transaction) {
@@ -207,6 +221,14 @@ export class TransactionContactUtils {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
+    TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap);
+    if (transaction) {
+      transaction.contact_2 = contact;
+    }
+    contactId$.next(contact.id ?? '');
+  }
+
+  static updateFormWithCandidateFields(contact: Contact, form: FormGroup, templateMap: TransactionTemplateMapType) {
     form.get(templateMap.candidate_fec_id)?.setValue(contact.candidate_id);
     form.get(templateMap.candidate_last_name)?.setValue(contact.last_name);
     form.get(templateMap.candidate_first_name)?.setValue(contact.first_name);
@@ -216,10 +238,6 @@ export class TransactionContactUtils {
     form.get(templateMap.candidate_office)?.setValue(contact.candidate_office);
     form.get(templateMap.candidate_state)?.setValue(contact.candidate_state);
     form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
-    if (transaction) {
-      transaction.contact_2 = contact;
-    }
-    contactId$.next(contact.id ?? '');
   }
 
   /**

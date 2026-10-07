@@ -39,7 +39,7 @@
     "@ngrx/store": "21.0.1",
     "@primeuix/themes": "2.0.3",
     "class-transformer": "0.5.1",
-    "fecfile-validate": "https://github.com/fecgov/fecfile-validate#cdfc56958288372ecbe9b0ab321edcc20d695cda",
+    "fecfile-validate": "https://github.com/fecgov/fecfile-validate#4af2f8433d60a489c829dfd1fd2f7fd9e24e50df",
     "intl-tel-input": "26.8.1",
     "ngrx-store-localstorage": "20.1.0",
     "ngx-cookie-service": "21.3.1",
@@ -79,7 +79,7 @@
     "cypress-network-idle": "~2.0.1",
     "eslint": "~10.2.0",
     "jsdom": "^29.0.1",
-    "knip": "~6.4.1",
+    "knip": "~6.5.0",
     "prettier": "3.8.1",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2",
@@ -97,7 +97,7 @@
     "crypto": false
   },
   "allowScripts": {
-    "github:fecgov/fecfile-validate#cdfc56958288372ecbe9b0ab321edcc20d695cda": true,
+    "github:fecgov/fecfile-validate#4af2f8433d60a489c829dfd1fd2f7fd9e24e50df": true,
     "esbuild@0.28.1": true
   }
 }

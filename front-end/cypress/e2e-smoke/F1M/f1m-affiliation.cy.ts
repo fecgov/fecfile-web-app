@@ -69,7 +69,7 @@ describe('Manage reports', () => {
       expect(candidates).to.have.lengthOf(candidateList.length);
 
       ReportListPage.createF1M();
-      PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C99999999');
+      cy.get('[data-cy="committee-id-input"]').should('have.value', 'C99999999');
       cy.get('[data-cy="state-party-radio"]').click();
       cy.get('[data-cy="qualification-radio"]').click();
       cy.get('[data-cy="qualification-radio"]').click();

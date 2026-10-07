@@ -3,11 +3,12 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_RECOUNT
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 
+import { ELECTION_FIELDS, ORGANIZATION, ORGANIZATION_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { ReportTypes } from '../reports/report.model';
 import { AggregationGroups } from '../transaction.model';
-import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class TRIBAL_RECOUNT_RECEIPT extends SchATransactionType {
-  formFields = ORGANIZATION_FORM_FIELDS;
+  formFields = [...ORGANIZATION_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT);
   schema = schema;
@@ -16,8 +17,12 @@ export class TRIBAL_RECOUNT_RECEIPT extends SchATransactionType {
     return 'Recount Account';
   }
 
-  override get isReattributable(): boolean {
+  override get isReattributable() {
     return false;
+  }
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
   }
 
   override isCloneableTransactionType = true;

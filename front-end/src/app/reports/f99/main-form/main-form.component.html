@@ -38,13 +38,7 @@
 
   <div class="field w-6">
     <span class="span-label" id="text_code_label">DOCUMENT TYPE</span>
-    <p-select
-      ariaLabelledBy="text_code_label"
-      inputId="text_code"
-      formControlName="text_code"
-      [options]="textCodes"
-      appendTo="body"
-    />
+    <p-select ariaLabelledBy="text_code_label" inputId="text_code" formControlName="text_code" [options]="textCodes" />
     <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted" />
   </div>
 

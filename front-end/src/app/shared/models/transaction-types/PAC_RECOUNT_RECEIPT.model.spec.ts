@@ -1,3 +1,4 @@
+import { ReportTypes } from '../reports/report.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { PAC_RECOUNT_RECEIPT } from './PAC_RECOUNT_RECEIPT.model';
 
@@ -13,7 +14,7 @@ describe('PAC_RECOUNT_RECEIPT', () => {
     expect(transactionType.scheduleId).toBe('A');
   });
 
-  it('#factory() should return a SchATransaction', () => {
+  it('#factory() should return a F3X SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
   });
@@ -21,5 +22,20 @@ describe('PAC_RECOUNT_RECEIPT', () => {
   it('#generatePurposeDescription() should return constant', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount Account');
+  });
+
+  it('#hasElectionInformation() should return true for F3 report type', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(result).toBe(true);
+  });
+
+  it('#hasElectionInformation() should return false for F3X', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(result).toBe(false);
+  });
+
+  it('#isReattributable() should return false', () => {
+    const result = transactionType.isReattributable;
+    expect(result).toBe(false);
   });
 });

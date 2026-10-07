@@ -89,7 +89,13 @@
           <div class="col-8">
             <div class="field">
               <label for="name">NAME</label>
-              <input type="text" pInputText id="name" formControlName="name" (input)="updateData($event, 'name')" />
+              <input
+                type="text"
+                pInputText
+                id="name"
+                formControlName="name"
+                (input)="type() === 'ORG' && updateData($event, 'name')"
+              />
               <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
@@ -106,7 +112,7 @@
                 pInputText
                 id="last_name"
                 formControlName="last_name"
-                (input)="updateData($event, 'last_name')"
+                (input)="type() === 'IND' && updateData($event, 'last_name')"
               />
               <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
             </div>
@@ -119,7 +125,7 @@
                 pInputText
                 id="first_name"
                 formControlName="first_name"
-                (input)="updateData($event, 'first_name')"
+                (input)="type() === 'IND' && updateData($event, 'first_name')"
               />
               <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
             </div>
@@ -167,6 +173,7 @@
               aria-labelledby="country_region_label"
               formControlName="country"
               [options]="countryOptions"
+              appendTo="body"
             />
           </div>
         </div>
@@ -298,6 +305,7 @@
             icon="pi pi-check"
             class="p-button-info"
             data-cy="save-continue"
+            [disabled]="disableSubmission()"
             (click)="submitForm()"
           ></button>
         } @else {
@@ -309,6 +317,7 @@
             icon="pi pi-check"
             class="p-button-primary"
             data-cy="save"
+            [disabled]="disableSubmission()"
             (click)="submitForm()"
           ></button>
           @if (isNewItem()) {
@@ -320,6 +329,7 @@
               icon="pi pi-check"
               class="p-button-info"
               data-cy="save-add-more"
+              [disabled]="disableSubmission()"
               (click)="submitForm('continue')"
             ></button>
           }

@@ -77,15 +77,13 @@ function setupLoanFromBank(setup: Setup) {
 
 // Helper for the “no Delete button” assertion so it doesn’t deepen nesting in the test.
 function assertNoDeleteButtonInLoanReceivedFromBankRow() {
-  cy.get('app-transaction-loans-and-debts').within(() => {
-    cy.contains('Loan Received from Bank')
+  cy.get('app-transaction-receipts').within(() => {
+    cy.contains('td', 'Loan Received from Bank')
       .closest('tr')
-      .find('button')
-      .each(($button) => {
-        const innerHTML = $button.html();
-        if (innerHTML.includes('Delete')) {
-          throw new Error('A button contains "Delete", test failed.');
-        }
+      .within(() => {
+        cy.get('.custom-popover button')
+          .contains('Delete')
+          .should('not.exist');
       });
   });
 }
@@ -118,8 +116,8 @@ function handleLoanAgreementSetup(q3: string) {
     PageUtils.locationCheck('/list');
     cy.contains('Loan Received from Bank').should('be.visible');
     clickLoan('Review loan agreement');
-    PageUtils.valueCheck('input[id^="loan-agreement-amount-"]', '$65,000.00');
-    PageUtils.valueCheck('#loan_incurred_date', `05/27/${currentYear}`);
+    cy.get('input[id^="loan-agreement-amount-"]').should('have.value', '$65,000.00');
+    cy.get('#loan_incurred_date').should('have.value', `05/27/${currentYear}`);
   };
 }
 

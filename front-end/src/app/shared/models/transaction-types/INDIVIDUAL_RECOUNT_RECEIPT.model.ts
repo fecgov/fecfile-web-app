@@ -3,17 +3,22 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_REC
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 
+import { ELECTION_FIELDS, INDIVIDUAL, INDIVIDUAL_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { ReportTypes } from '../reports/report.model';
 import { AggregationGroups } from '../transaction.model';
-import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 
 export class INDIVIDUAL_RECOUNT_RECEIPT extends SchATransactionType {
-  formFields = INDIVIDUAL_FORM_FIELDS;
+  formFields = [...INDIVIDUAL_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT);
   schema = schema;
 
   override generatePurposeDescription(): string {
     return 'Recount Account';
+  }
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
   }
 
   override isCloneableTransactionType = true;
