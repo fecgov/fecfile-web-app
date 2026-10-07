@@ -1,9 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { Transaction } from '../models/transaction.model';
+import { TransactionListService } from '../services/transaction-list.service';
 import { TransactionService } from '../services/transaction.service';
 import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
 import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
@@ -13,11 +16,8 @@ import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { buildClonedTransaction } from '../utils/transaction-clone.utils';
-import { MultipleEntryTransactionTypes, TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { TransactionListService } from '../services/transaction-list.service';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { isTransactionTypeDisabledForReport } from '../utils/transaction-disable.utils';
+import { MultipleEntryTransactionTypes, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 @Injectable({
   providedIn: 'root',

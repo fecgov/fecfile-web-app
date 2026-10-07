@@ -57,26 +57,6 @@ export class PageUtils {
       .click();
   }
 
-  static selectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
-    alias = PageUtils.getAlias(alias);
-
-    if (value) {
-      cy.get(alias)
-        .find(querySelector)
-        .eq(index)
-        .find('select')
-        .contains('option', value)
-        .then((option) => {
-          const optionValue = option.val();
-          expect(optionValue, `select option value for "${value}"`).to.not.be.oneOf([undefined, null]);
-          if (optionValue === undefined || optionValue === null) {
-            throw new Error(`Missing select option value for "${value}"`);
-          }
-
-          cy.get(alias).find(querySelector).eq(index).find('select').select(String(optionValue));
-        });
-    }
-  }
 
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
@@ -84,11 +64,8 @@ export class PageUtils {
     if (value) {
       cy.get(alias).find(querySelector).eq(index).click();
       cy.get('.p-select-overlay:visible')
-        .find('[role="option"]')
-        .filter((_, option) => PageUtils.exactText(value).test(option.textContent ?? ''))
+        .find(`[role="option"][aria-label="${value}"]`)
         .should('have.length', 1)
-        .first()
-        .scrollIntoView({ offset: { top: 0, left: 0 } })
         .click();
     }
   }
@@ -327,8 +304,13 @@ export class PageUtils {
   }
 
   static valueCheck(selector: string, input: any) {
-    cy.get(selector).should('have.value', input);
-  }
+  cy.get(selector).should(($el) => {
+    // Fix for Election Type having nbsp
+    const actualText = $el.text().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+    const expectedText = String(input).replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+    expect(actualText).to.include(expectedText);
+  });
+}
 
   static findOnPage(selector: string, value: string) {
     cy.get(selector).contains(value).should('exist');

@@ -4,12 +4,11 @@
       <app-select
         inputId="designated_or_subordinate_dropdown"
         label="ADD DESIGNATING COMMITTEE OR SUBORDINATE COMMITTEE?"
-        [optionalLabel]="true"
+        [required]="false"
         [options]="designatedOrSubordinateOptions"
         [form]="form"
         formControlName="filer_designated_to_make_coordinated_expenditures"
         [formSubmitted]="formSubmitted"
-        (update)="onDesignatedOrSubordinateChange($event)"
       />
     </div>
   </div>

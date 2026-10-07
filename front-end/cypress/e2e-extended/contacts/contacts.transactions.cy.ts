@@ -227,62 +227,6 @@ const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems:
   });
 };
 
-const REQUIRED_LOOKUP_TYPES = new Set(['Individual', 'Organization', 'Committee']);
-
-const hasAllRequiredLookupTypes = (sel: HTMLSelectElement) => {
-  const opts = new Set(Array.from(sel.options, (o) => o.text.trim()));
-  for (const req of REQUIRED_LOOKUP_TYPES) {
-    if (!opts.has(req)) return false;
-  }
-  return true;
-};
-
-const selectContactLookupType = (type: 'Individual' | 'Organization' | 'Committee') => {
-  cy.get('select').then(($selects) => {
-    let found: HTMLSelectElement | undefined;
-
-    for (const el of $selects.toArray()) {
-      if (!(el instanceof HTMLSelectElement)) continue;
-      if (hasAllRequiredLookupTypes(el)) {
-        found = el;
-        break;
-      }
-    }
-
-    expect(found, 'Contact Lookup type <select>').to.exist;
-    if (!found) {
-      throw new Error('Contact Lookup type <select> was not found');
-    }
-    cy.wrap(found).select(type);
-  });
-};
-
-const fillInputByLabel = (label: RegExp, value: string) => {
-  cy.contains('label', label)
-    .should('be.visible')
-    .then(($label) => {
-      const forAttr = $label.attr('for');
-      if (forAttr) {
-        cy.get(`#${forAttr}`).clear().type(value);
-        return;
-      }
-      cy.wrap($label).parent().find('input,textarea').first().clear().type(value);
-    });
-};
-
-const selectByLabel = (label: RegExp, value: string) => {
-  cy.contains('label', label)
-    .should('be.visible')
-    .then(($label) => {
-      const forAttr = $label.attr('for');
-      if (forAttr) {
-        cy.get(`#${forAttr}`).select(value);
-        return;
-      }
-      cy.wrap($label).parent().find('select').first().select(value);
-    });
-};
-
 describe('Contacts: Transactions integration', () => {
   beforeEach(() => {
     Initialize();
