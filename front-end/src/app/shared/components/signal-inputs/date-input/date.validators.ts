@@ -54,7 +54,7 @@ export function validateDateOverlap(
   url: string,
   cookieService: CookieService,
   options?: {
-    excludeId?: string;
+    excludeId?: string | null;
     message?: string;
   },
 ) {
@@ -78,7 +78,7 @@ export function validateDateOverlap(
         const startStr = DateUtils.convertDateToFecFormat(start);
         const endStr = DateUtils.convertDateToFecFormat(end);
         const params: QueryParams = { start_date: startStr, end_date: endStr };
-        if (options?.excludeId) params['exclude_id'] = options.excludeId;
+        if (options?.excludeId && options.excludeId !== 'initial') params['exclude_id'] = options.excludeId;
 
         return {
           url,

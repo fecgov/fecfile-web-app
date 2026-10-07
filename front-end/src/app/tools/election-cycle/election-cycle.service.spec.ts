@@ -11,6 +11,7 @@ describe('ElectionCycleService', () => {
   let apiServiceMock: {
     get: ReturnType<typeof vi.fn>;
     post: ReturnType<typeof vi.fn>;
+    put: ReturnType<typeof vi.fn>;
     delete: ReturnType<typeof vi.fn>;
   };
 
@@ -18,6 +19,7 @@ describe('ElectionCycleService', () => {
     apiServiceMock = {
       get: vi.fn(),
       post: vi.fn(),
+      put: vi.fn(),
       delete: vi.fn(),
     };
 
@@ -114,7 +116,7 @@ describe('ElectionCycleService', () => {
         toJson: vi.fn().mockReturnValue(mockToJsonPayload),
       } as unknown as ElectionCycle;
 
-      const mockApiResponse = { id: 456, name: '2028 Cycle' };
+      const mockApiResponse = { id: '456', name: '2028 Cycle' };
       apiServiceMock.post.mockResolvedValue(mockApiResponse);
 
       const result = await service.create(mockCycleInput);
@@ -122,7 +124,27 @@ describe('ElectionCycleService', () => {
       expect(mockCycleInput.toJson).toHaveBeenCalled();
       expect(apiServiceMock.post).toHaveBeenCalledWith('/election-cycles/', mockToJsonPayload);
       expect(ElectionCycle.fromJson).toHaveBeenCalledWith(mockApiResponse);
-      expect(result).toEqual({ id: 456, name: '2028 Cycle', isModelInstance: true });
+      expect(result).toEqual({ id: '456', name: '2028 Cycle', isModelInstance: true });
+    });
+  });
+
+  describe('update', () => {
+    it('should serialize payload, make put request, and return a parsed ElectionCycle instance', async () => {
+      const mockToJsonPayload = { id: '123', name: '2028 Cycle' };
+      const mockCycleInput = {
+        id: '123',
+        toJson: vi.fn().mockReturnValue(mockToJsonPayload),
+      } as unknown as ElectionCycle;
+
+      const mockApiResponse = { id: '123', name: '2028 Cycle' };
+      apiServiceMock.put.mockResolvedValue(mockApiResponse);
+
+      const result = await service.update(mockCycleInput);
+
+      expect(mockCycleInput.toJson).toHaveBeenCalled();
+      expect(apiServiceMock.put).toHaveBeenCalledWith('/election-cycles/123/', mockToJsonPayload);
+      expect(ElectionCycle.fromJson).toHaveBeenCalledWith(mockApiResponse);
+      expect(result).toEqual({ id: '123', name: '2028 Cycle', isModelInstance: true });
     });
   });
 });
