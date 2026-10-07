@@ -61,7 +61,6 @@ export class CONTRIBUTION_FROM_CANDIDATE extends SchATransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11D',
       transaction_type_identifier: ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE,
       aggregation_group: AggregationGroups.GENERAL,
     });
