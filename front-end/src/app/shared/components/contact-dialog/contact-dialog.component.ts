@@ -110,6 +110,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly committeePatternMessage = committeePatternMessage;
 
   readonly hideDuplicate = signal(false);
+  readonly loadingDuplicateContact = signal(false);
+  readonly editingDuplicateContact = signal(false);
   readonly data = signal<ValidatingFields>({
     name: '',
     first_name: '',
@@ -117,6 +119,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     candidate_id: '',
     committee_id: '',
   });
+  private duplicateContactReturnState?: { contact: Contact | undefined; type: ContactTypes };
 
   readonly formModel = signal({
     contactForm: this.form,
@@ -228,6 +231,16 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
+      this.loadingDuplicateContact.set(false);
+      if (this.editingDuplicateContact()) {
+        const returnState = this.duplicateContactReturnState;
+        if (returnState) {
+          this.contact.set(returnState.contact);
+          this.type.set(returnState.type);
+        }
+        this.duplicateContactReturnState = undefined;
+        this.editingDuplicateContact.set(false);
+      }
       this.detailVisibleChange.emit(false);
       this.visible.set(false);
       this.dialogVisible.set(false);
@@ -257,7 +270,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   override async submit(): Promise<void> {
     if (this.jump === 'continue') return this.saveContact(false);
-    if (this.headerTitle() || this.isNewItem()) return this.saveContact();
+    if ((this.headerTitle() && !this.editingDuplicateContact()) || this.isNewItem()) return this.saveContact();
     return this.confirmPropagation();
   }
 
@@ -309,9 +322,17 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.resetForm();
   }
 
-  useContact(contact: Contact) {
-    this.savedContact.emit(contact);
-    this.closeDialog();
+  async useContact(contact: Contact) {
+    this.duplicateContactReturnState = { contact: this.contact(), type: this.type() };
+    this.editingDuplicateContact.set(true);
+    this.loadingDuplicateContact.set(true);
+    await new Promise((resolve) => setTimeout(resolve, 750));
+    if (!this.visible()) return;
+
+    this.contact.set(contact);
+    this.type.set(contact.type);
+    this.openDialog();
+    this.loadingDuplicateContact.set(false);
   }
 
   updateData(event: Event, key: keyof ValidatingFields) {
