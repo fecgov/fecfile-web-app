@@ -225,44 +225,50 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   }
 
   private async waitForPendingValidation(): Promise<void> {
-    this.form.updateValueAndValidity();
-    Object.values(this.form.controls).forEach((control) => control.updateValueAndValidity());
+    let attempts = 0;
+    const maxAttempts = 5;
 
-    const pendingControls = [
-      this.form,
-      this.form.get(this.templateMap.employer),
-      this.form.get(this.templateMap.occupation),
-    ].filter((control): control is AbstractControl => !!control && control.pending);
+    while (attempts < maxAttempts) {
+      this.form.updateValueAndValidity();
+      Object.values(this.form.controls).forEach((control) => control.updateValueAndValidity());
 
-    if (!pendingControls.length && this.form.status !== 'PENDING') {
-      return;
-    }
+      const pendingControls = [
+        this.form,
+        this.form.get(this.templateMap.employer),
+        this.form.get(this.templateMap.occupation),
+      ].filter((control): control is AbstractControl => !!control && control.pending);
 
-    const pendingWaits = pendingControls.map((control) =>
-      firstValueFrom(
-        control.statusChanges.pipe(
-          filter((status) => status !== 'PENDING'),
-          take(1),
-        ),
-      ),
-    );
+      if (!pendingControls.length && this.form.status !== 'PENDING') {
+        return;
+      }
 
-    if (this.form.status === 'PENDING') {
-      pendingWaits.push(
+      const pendingWaits = pendingControls.map((control) =>
         firstValueFrom(
-          this.form.statusChanges.pipe(
+          control.statusChanges.pipe(
             filter((status) => status !== 'PENDING'),
             take(1),
           ),
         ),
       );
-    }
 
-    if (!pendingWaits.length) {
-      return;
-    }
+      if (this.form.status === 'PENDING') {
+        pendingWaits.push(
+          firstValueFrom(
+            this.form.statusChanges.pipe(
+              filter((status) => status !== 'PENDING'),
+              take(1),
+            ),
+          ),
+        );
+      }
 
-    await Promise.all(pendingWaits);
+      if (!pendingWaits.length) {
+        return;
+      }
+
+      await Promise.all(pendingWaits);
+      attempts += 1;
+    }
 
     this.form.updateValueAndValidity();
   }
@@ -291,7 +297,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       'aggregate',
       this.templateMap,
       this.transaction,
-      previousAggregate ?? 0,
+      previousAggregate,
       amount,
     );
 

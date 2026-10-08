@@ -276,28 +276,29 @@ export class TransactionFormUtils {
     contactIdMap: ContactIdMapType,
     templateMap: TransactionTemplateMapType,
   ) {
-    const contactId$ = contactIdMap['contact_2'].asObservable();
-    const previous_expenditure$: Observable<number | null> =
-      merge(
-        (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
-        (form.get(templateMap.general_election_year) as SubscriptionFormControl).valueChanges,
-        contactId$,
-      ).pipe(
-        switchMap(() => {
-          const expenditure_date = form.get(templateMap.date)?.value;
-          const general_election_year = form.get(templateMap.general_election_year)?.value;
-          const contact2Id = transaction.contact_2?.id;
+    const contactId$ = contactIdMap['contact_2']?.asObservable() ?? of(transaction.contact_2?.id ?? '');
+    const previous_expenditure$: Observable<number | null> = merge(
+      (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
+      (form.get(templateMap.general_election_year) as SubscriptionFormControl).valueChanges,
+      contactId$,
+    ).pipe(
+      switchMap(async () => {
+        const expenditure_date = form.get(templateMap.date)?.value;
+        const general_election_year = form.get(templateMap.general_election_year)?.value;
+        const contact2Id = contactIdMap['contact_2']
+          ? await firstValueFrom(contactIdMap['contact_2'])
+          : transaction.contact_2?.id;
 
-          return from(
-            component.transactionService.getPreviousPayeeCandidateAggregate(
-              transaction,
-              contact2Id,
-              expenditure_date,
-              general_election_year,
-            ),
-          );
-        }),
-      ) || of(undefined);
+        return component.transactionService.getPreviousPayeeCandidateAggregate(
+          transaction,
+          contact2Id,
+          expenditure_date,
+          general_election_year,
+        );
+      }),
+      switchMap((aggregate$) => aggregate$),
+    );
+
     form
       .get(templateMap.amount)
       ?.valueChanges.pipe(
@@ -306,9 +307,6 @@ export class TransactionFormUtils {
         takeUntil(component.destroy$),
       )
       .subscribe(([amount, previousAggregate, transaction]) => {
-        if (previousAggregate === null || previousAggregate === undefined) {
-          return;
-        }
         this.updateAggregate(
           form,
           'aggregate_general_elec_expended',
@@ -328,16 +326,14 @@ export class TransactionFormUtils {
     previousAggregate: number | null,
     amount: number,
   ) {
-    if (previousAggregate === null || previousAggregate === undefined) {
-      return;
-    }
+    const baseAggregate = previousAggregate ?? 0;
 
     if (transaction.force_unaggregated) {
-      form.get(templateMap[field])?.setValue(previousAggregate);
+      form.get(templateMap[field])?.setValue(baseAggregate);
     } else if (transaction.transactionType?.isRefund) {
-      form.get(templateMap[field])?.setValue(previousAggregate - +amount);
+      form.get(templateMap[field])?.setValue(baseAggregate - +amount);
     } else {
-      form.get(templateMap[field])?.setValue(previousAggregate + +amount);
+      form.get(templateMap[field])?.setValue(baseAggregate + +amount);
     }
   }
 
@@ -502,7 +498,7 @@ export class TransactionFormUtils {
       (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
         (previousAggregate) => {
           const amount = form.get(templateMap.amount)?.value;
-          this.updateAggregate(form, 'aggregate', templateMap, transaction, previousAggregate ?? 0, amount);
+          this.updateAggregate(form, 'aggregate', templateMap, transaction, previousAggregate, amount);
         },
         component.destroy$,
         [

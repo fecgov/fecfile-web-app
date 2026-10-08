@@ -17,7 +17,7 @@ import {
   testMockStore,
 } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { firstValueFrom, of, Subject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, of, Subject } from 'rxjs';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
@@ -399,6 +399,21 @@ describe('TransactionTypeBaseComponent', () => {
 
       expect(transactionServiceSpy.update).toHaveBeenCalled();
       expect(navigateToSpy).toHaveBeenCalled();
+    });
+
+    it('should initialize the aggregate to the current amount when the prior aggregate is still unknown before save', async () => {
+      fixture.detectChanges();
+      setupIndividualReceiptValidationForm();
+      component.contactIdMap['contact_1'] = new BehaviorSubject('test-contact-id');
+      transactionServiceSpy.getPreviousEntityAggregate.mockReturnValue(of(null));
+
+      component.form.get(component.templateMap.aggregate)?.setValue(null);
+      component.form.get(component.templateMap.amount)?.setValue(250);
+      component.form.get(component.templateMap.date)?.setValue(new Date('2024-04-27'));
+
+      await component.validateForm();
+
+      expect(component.form.get(component.templateMap.aggregate)?.value).toEqual(250);
     });
 
     it('should revalidate employer and occupation after computing aggregate before save', async () => {
