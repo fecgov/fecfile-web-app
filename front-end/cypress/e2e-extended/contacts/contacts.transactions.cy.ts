@@ -178,23 +178,6 @@ const assertContactsListRow = (name: string, type: string, fecId?: string) => {
     });
 };
 
-const assertCreatesNewContactConfirmMessage = (contactTypeLower: ContactTypeLower, contactDisplay: string) => {
-  getVisibleConfirmDialog().within(() => {
-    cy.get('p').should(($msg) => {
-      const text = normalizeText($msg.text());
-
-      const rx = new RegExp(
-        String.raw`By saving this transaction, you.?re also creating a new ${contactTypeLower} contact for ${ContactsHelpers.escapeRegExp(
-          contactDisplay,
-        )}\.?$`,
-        'i',
-      );
-
-      expect(text).to.match(rx);
-    });
-  });
-};
-
 const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems: string[]) => {
   getVisibleConfirmDialog().within(() => {
     cy.get('p').should(($msg) => {
@@ -224,6 +207,38 @@ const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems:
           expect(tightenHyphens($li.text())).to.eq(expectedItems[i]);
         });
     }
+  });
+};
+
+const createContactAndReport = (
+  lastName: string,
+  firstName: string,
+  overrides: Partial<MockContact> = {},
+) => {
+  const contactPayload: MockContact & {
+    employer?: string | null;
+    occupation?: string | null;
+  } = {
+    ...Individual_A_A,
+    last_name: lastName,
+    first_name: firstName,
+    employer: '',
+    occupation: '',
+    ...overrides,
+  };
+
+  makeContact(contactPayload);
+
+  let reportId: string | undefined;
+  makeF3x(F3X_Q2, (resp) => {
+    reportId = resp.body.id;
+  });
+
+  return cy.then(() => {
+    if (!reportId) {
+      throw new Error('F3X report id should be defined');
+    }
+    return reportId;
   });
 };
 
@@ -372,6 +387,44 @@ describe('Contacts: Transactions integration', () => {
     });
   });
 
+  it('blocks save when amount is entered over $200 without blurring and employer/occupation are blank', () => {
+    const unique = Date.now();
+    const id = unique % 1000000;
+
+    const lastName = `TxnNoBlurLn${id}`;
+    const firstName = `TxnNoBlurFn${id}`;
+
+    createContactAndReport(lastName, firstName).then((rid) => {
+
+      cy.intercept('GET', '**/api/v1/transactions/previous/entity/**', (req) => {
+        req.continue((res) => {
+          res.setDelay(1500);
+        });
+      }).as('getPrevAggregateDelayed');
+
+      ReportListPage.gotToReportTransactionListPage(rid);
+      StartTransaction.Receipts().Individual().IndividualReceipt();
+      cy.contains(/Individual Receipt/i).should('exist');
+
+      ContactLookup.getContact(lastName);
+
+      TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 4 - 1, 27));
+      cy.get('#amount').safeType('1000');
+      cy.get('#amount').should('be.focused');
+
+      TransactionDetailPage.clickSave();
+
+      cy.wait('@getPrevAggregateDelayed');
+      cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
+
+      cy.contains(/employer.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
+      cy.contains(/occupation.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
+
+      cy.get('#employer').should('have.value', '');
+      cy.get('#occupation').should('have.value', '');
+    });
+  });
+
   it('creating an Individual receipt transaction w/ aggregate >$200 updates contact employer and occupation', () => {
     const unique = Date.now();
     const id = unique % 1000000;
@@ -382,29 +435,7 @@ describe('Contacts: Transactions integration', () => {
     const newEmployer = `Employer-${id}`;
     const newOccupation = `Occupation-${id}`;
 
-    const contactPayload: MockContact & {
-      employer?: string | null;
-      occupation?: string | null;
-    } = {
-      ...Individual_A_A,
-      last_name: lastName,
-      first_name: firstName,
-      employer: '',
-      occupation: '',
-    };
-
-    makeContact(contactPayload);
-
-    let reportId: string | undefined;
-    makeF3x(F3X_Q2, (resp) => {
-      reportId = resp.body.id;
-    });
-
-    cy.then(() => {
-      if (!reportId) {
-        throw new Error('F3X report id should be defined');
-      }
-      const rid = reportId;
+    createContactAndReport(lastName, firstName).then((rid) => {
 
       cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as('getPrevAggregate');
 
@@ -424,24 +455,42 @@ describe('Contacts: Transactions integration', () => {
         memo_text: '',
       };
 
-      TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', false, 'contribution_date');
-
-      cy.wait('@getPrevAggregate');
-
+      TransactionDetailPage.enterDate('[data-cy="contribution_date"]', scheduleData.date_received as Date);
+      cy.get('#amount').safeType(String(scheduleData.amount));
+      cy.get('#amount').should('be.focused');
       cy.get('#employer').should('have.value', '').click();
       cy.get('#occupation').should('have.value', '').click();
 
       cy.contains('button', 'Save').scrollIntoView();
       TransactionDetailPage.clickSave();
 
+      cy.wait('@getPrevAggregate');
+
       cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
       cy.contains(/employer.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
       cy.contains(/occupation.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
 
-      cy.get('#employer').type(newEmployer);
-      cy.get('#occupation').type(newOccupation);
+      // Start a fresh add flow after intermediary warning checks to avoid pending-submit races.
+      ReportListPage.gotToReportTransactionListPage(rid);
+      StartTransaction.Receipts().Individual().IndividualReceipt();
+      cy.contains('Individual Receipt').should('exist');
 
-      TransactionDetailPage.clickSave();
+      ContactLookup.getContact(lastName);
+
+      TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', false, 'contribution_date');
+
+      cy.wait('@getPrevAggregate');
+
+      cy.get('#employer', { timeout: 10000 }).should('be.visible').clear().type(newEmployer);
+      cy.get('#occupation', { timeout: 10000 }).should('be.visible').clear().type(newOccupation);
+
+      cy.contains('button', 'Save', { timeout: 10000 }).then(($btn) => {
+        const saveBtn = $btn.get(0) as HTMLButtonElement | undefined;
+        if (!saveBtn) {
+          throw new Error('Expected Save button to exist on transaction form');
+        }
+        saveBtn.click();
+      });
 
       assertSuggestedChangesConfirmDialog(displayName, [
         `Updated employer to ${newEmployer}`,
@@ -449,6 +498,8 @@ describe('Contacts: Transactions integration', () => {
       ]);
 
       PageUtils.clickButton('Continue');
+
+      cy.url({ timeout: 10000 }).should('include', `/report/${rid}/list`);
 
       cy.contains('tbody tr', 'Individual Receipt')
         .should('contain.text', displayName)
