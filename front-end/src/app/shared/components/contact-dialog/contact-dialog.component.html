@@ -6,9 +6,7 @@
   <p-dialog
     [(visible)]="visible"
     [style]="{ width: '90%' }"
-    [header]="
-      editingDuplicateContact() ? 'Edit Contact' : (headerTitle() ?? (isNewItem() ? 'Add Contact' : 'Edit Contact'))
-    "
+    [header]="dialogHeader()"
     [modal]="true"
     (onShow)="openDialog()"
     (onHide)="closeDialog()"
@@ -311,7 +309,7 @@
             data-cy="cancel"
             (click)="closeDialog()"
           ></button>
-          @if (headerTitle() && !editingDuplicateContact()) {
+          @if (headerTitle() && !isDuplicateContactEdit()) {
             <button
               type="button"
               pButton

@@ -22,7 +22,11 @@ import { afterEach, vi } from 'vitest';
 @Component({
   imports: [ContactDialogComponent],
   standalone: true,
-  template: `<app-contact-dialog [(contact)]="contact" [contactTypeOptions]="contactTypeOptions" />`,
+  template: `<app-contact-dialog
+    [(contact)]="contact"
+    [contactTypeOptions]="contactTypeOptions"
+    headerTitle="Create a new contact"
+  />`,
 })
 class TestHostComponent {
   component = viewChild.required(ContactDialogComponent);
@@ -124,11 +128,13 @@ describe('ContactDialogComponent', () => {
     expect(component.loadingDuplicateContact()).toBe(false);
     expect(component.contact()?.id).toBe(selectedContact.id);
     expect(component.type()).toBe(selectedContact.type);
-    expect(component.editingDuplicateContact()).toBe(true);
+    expect(component.isDuplicateContactEdit()).toBe(true);
 
     component.closeDialog();
-    expect(component.editingDuplicateContact()).toBe(false);
+    expect(component.isDuplicateContactEdit()).toBe(false);
     expect(component.contact()?.id).toBeUndefined();
+    expect(component.contact()).toBeInstanceOf(Contact);
+    expect(component.type()).toBe(selectedContact.type);
   });
 
   it('should close dialog with flags set', () => {
@@ -162,6 +168,27 @@ describe('ContactDialogComponent', () => {
     });
     component.confirmPropagation();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should use a duplicate contact without confirmation or update when it has no changes', () => {
+    const selectedContact = testContact();
+    component.contact.set(selectedContact);
+    component.type.set(selectedContact.type);
+    component.visible.set(true);
+    for (const [field, control] of Object.entries(component.form.controls)) {
+      control.setValue(selectedContact[field as keyof Contact]);
+    }
+    const confirmSpy = vi.spyOn(testConfirmationService, 'confirm');
+    const savedContactSpy = vi.spyOn(component.savedContact, 'emit');
+    const updateSpy = vi.spyOn(contactService, 'update');
+
+    component.confirmPropagation();
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(updateSpy).not.toHaveBeenCalled();
+    expect(savedContactSpy).toHaveBeenCalledWith(selectedContact);
+    expect(component.visible()).toBe(false);
+    expect(component.contact()).toBeInstanceOf(Contact);
   });
 
   it('#updateContact happy path', () => {

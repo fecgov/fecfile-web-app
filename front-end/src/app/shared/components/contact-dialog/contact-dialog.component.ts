@@ -73,6 +73,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly contactTypeOptions = input<PrimeOptions>(LabelUtils.getPrimeOptions(ContactTypeLabels));
   readonly showHistory = input(false);
   readonly headerTitle = input<string>();
+  readonly dialogHeader = computed(() => (!this.isNewItem() ? 'Edit Contact' : (this.headerTitle() ?? 'Add Contact')));
   readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
 
   readonly detailVisibleChange = output<boolean>();
@@ -91,6 +92,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   );
 
   readonly isNewItem = computed(() => !this.contact()?.id);
+  readonly isDuplicateContactEdit = computed(() => !!this.headerTitle() && !this.isNewItem());
 
   readonly isEntity = computed(() => isEntity(this.type()));
   readonly isPerson = computed(() => isPerson(this.type()));
@@ -111,7 +113,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   readonly hideDuplicate = signal(false);
   readonly loadingDuplicateContact = signal(false);
-  readonly editingDuplicateContact = signal(false);
   readonly data = signal<ValidatingFields>({
     name: '',
     first_name: '',
@@ -119,7 +120,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     candidate_id: '',
     committee_id: '',
   });
-  private duplicateContactReturnState?: { contact: Contact | undefined; type: ContactTypes };
 
   readonly formModel = signal({
     contactForm: this.form,
@@ -232,14 +232,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
       this.loadingDuplicateContact.set(false);
-      if (this.editingDuplicateContact()) {
-        const returnState = this.duplicateContactReturnState;
-        if (returnState) {
-          this.contact.set(returnState.contact);
-          this.type.set(returnState.type);
-        }
-        this.duplicateContactReturnState = undefined;
-        this.editingDuplicateContact.set(false);
+      if (this.isDuplicateContactEdit()) {
+        this.contact.set(new Contact());
       }
       this.detailVisibleChange.emit(false);
       this.visible.set(false);
@@ -270,7 +264,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   override async submit(): Promise<void> {
     if (this.jump === 'continue') return this.saveContact(false);
-    if ((this.headerTitle() && !this.editingDuplicateContact()) || this.isNewItem()) return this.saveContact();
+    if ((this.headerTitle() && !this.isDuplicateContactEdit()) || this.isNewItem()) return this.saveContact();
     return this.confirmPropagation();
   }
 
@@ -279,6 +273,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const changes = Object.entries(this.form.controls)
       .filter(([field, control]: [string, AbstractControl]) => control?.value !== contact[field as keyof Contact])
       .map(([field, control]: [string, AbstractControl]) => [field, control.value]) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
+    if (this.isDuplicateContactEdit() && changes.length === 0) {
+      this.savedContact.emit(contact);
+      this.closeDialog();
+      return;
+    }
     const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact()!, changes);
     this.confirmationService.confirm({
       header: 'Confirm',
@@ -323,8 +322,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   async useContact(contact: Contact) {
-    this.duplicateContactReturnState = { contact: this.contact(), type: this.type() };
-    this.editingDuplicateContact.set(true);
     this.loadingDuplicateContact.set(true);
     await new Promise((resolve) => setTimeout(resolve, 750));
     if (!this.visible()) return;
