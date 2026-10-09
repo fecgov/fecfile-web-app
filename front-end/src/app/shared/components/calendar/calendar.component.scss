@@ -22,6 +22,10 @@
     padding-left: 10px;
     width: var(--date-field-width);
   }
+
+  .p-datepicker > .p-motion {
+    width: max-content;
+  }
 }
 
 .date-picker-field {
