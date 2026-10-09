@@ -24,7 +24,6 @@ export class FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT extends SchBTransactionTyp
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB30B',
       transaction_type_identifier: ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

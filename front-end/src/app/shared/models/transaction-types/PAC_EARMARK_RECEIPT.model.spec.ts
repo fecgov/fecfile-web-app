@@ -15,7 +15,6 @@ describe('PAC_EARMARK_RECEIPT', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
-    expect(transaction.form_type).toBe('SA11C');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
   });
 

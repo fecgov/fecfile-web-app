@@ -41,7 +41,6 @@ export class CONDUIT_EARMARK_OUT extends CommonConduitEarmarkOut {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB23',
       transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT,
     });
   }

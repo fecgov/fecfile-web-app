@@ -34,7 +34,6 @@ export class LOAN_REPAYMENT_MADE extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB26',
       transaction_type_identifier: ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE,
     });
   }

@@ -17,7 +17,6 @@ describe('EARMARK_RECEIPT_CONVENTION_ACCOUNT', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
-    expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
       ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
     );

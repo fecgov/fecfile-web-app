@@ -16,7 +16,6 @@ describe('TRIBAL_RECOUNT_RECEIPT', () => {
 
   it('#factory() should return a F3X SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT);
   });
 

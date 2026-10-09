@@ -25,7 +25,6 @@ export class IN_KIND_TRANSFER_OUT extends IN_KIND_OUT {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

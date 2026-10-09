@@ -18,7 +18,6 @@ describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction | undefined = transaction.transactionType?.getNewTransaction() as SchATransaction;
-    expect(txn?.form_type).toBe('SA17');
     expect(txn?.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT);
   });
 

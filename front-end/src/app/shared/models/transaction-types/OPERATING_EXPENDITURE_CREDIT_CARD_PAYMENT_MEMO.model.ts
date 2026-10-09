@@ -20,7 +20,6 @@ export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SCHEDULE_B_M
   override _navigationControls = CHILD_CONTROLS;
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

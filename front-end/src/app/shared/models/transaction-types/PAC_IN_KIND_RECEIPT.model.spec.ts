@@ -14,7 +14,6 @@ describe('PAC_IN_KIND_RECEIPT', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
-    expect(transaction.form_type).toBe('SA11C');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT);
   });
 });

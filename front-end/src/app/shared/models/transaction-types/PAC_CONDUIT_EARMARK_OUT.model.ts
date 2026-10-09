@@ -29,7 +29,6 @@ export class PAC_CONDUIT_EARMARK_OUT extends CONDUIT_EARMARK_OUT {
   }
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB23',
       transaction_type_identifier: ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT,
     });
   }

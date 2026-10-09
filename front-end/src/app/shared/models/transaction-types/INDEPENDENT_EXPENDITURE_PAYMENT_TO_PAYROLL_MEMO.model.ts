@@ -48,7 +48,6 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SchETransac
 
   getNewTransaction() {
     return SchETransaction.fromJSON({
-      form_type: 'SE',
       transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
       aggregation_group: null,
     });

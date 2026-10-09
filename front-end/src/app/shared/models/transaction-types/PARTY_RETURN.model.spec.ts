@@ -17,7 +17,6 @@ describe('PARTY_RETURN', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA11B');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTY_RETURN);
   });
 
