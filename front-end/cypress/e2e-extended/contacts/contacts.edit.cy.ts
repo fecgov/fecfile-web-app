@@ -285,7 +285,7 @@ describe('Contacts Edit', () => {
   }
 
   // INDIVIDUAL: update/check all editable fields, required fields, length validation
-  xit('updates all editable fields for an Individual, enforces required and length validation, and persists to list and edit form', () => {
+  it('updates all editable fields for an Individual, enforces required and length validation, and persists to list and edit form', () => {
     const newLast = `${IND_LAST}-Upd`;
     const newFirst = `${IND_FIRST}-Upd`;
     const newMiddle = 'MiddleUpd';
