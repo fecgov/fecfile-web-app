@@ -98,7 +98,7 @@ describe('FormUtils', () => {
     expect(aggregateFormControl.value).toBeNull();
   });
 
-  it('should initialize a first aggregate to the current amount when previous aggregate is unknown', () => {
+  it('should not write aggregate while previous aggregate is still unknown', () => {
     const form = new FormGroup({
       aggregate_amount: new SubscriptionFormControl(),
     });
@@ -119,7 +119,7 @@ describe('FormUtils', () => {
     );
 
     const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
-    expect(aggregateFormControl.value).toEqual(1000);
+    expect(aggregateFormControl.value).toBeNull();
   });
 
   it('hydrates primary candidate contact fields when editing a transaction', async () => {

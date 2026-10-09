@@ -291,7 +291,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       'aggregate',
       this.templateMap,
       this.transaction,
-      previousAggregate,
+      previousAggregate ?? 0,
       amount,
     );
 
