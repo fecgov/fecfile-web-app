@@ -1,343 +1,345 @@
-<div
+<p-dialog
+  [(visible)]="visible"
+  [style]="{ width: '90%' }"
+  [header]="headerTitle() ?? (isNewItem() ? 'Add Contact' : 'Edit Contact')"
+  [modal]="true"
+  [focusOnShow]="false"
+  (onShow)="openDialog()"
+  (onHide)="closeDialog()"
+  (visibleChange)="closeDialog($event)"
+  closeAriaLabel="closeDialog"
   data-cy="contact-dialog"
-  [style]="{ display: dialogVisible() ? '' : 'none' }"
-  [class.contact-dialog-not-submitted]="!formSubmitted"
 >
-  <p-dialog
-    [(visible)]="visible"
-    [style]="{ width: '90%' }"
-    [header]="headerTitle() ?? (isNewItem() ? 'Add Contact' : 'Edit Contact')"
-    [modal]="true"
-    (onShow)="openDialog()"
-    (onHide)="closeDialog()"
-    (visibleChange)="closeDialog($event)"
-    closeAriaLabel="closeDialog"
+  <form
+    id="form"
+    [formGroup]="form"
+    [class.ng-submitted]="formSubmitted"
+    novalidate
+    (submit)="$event.preventDefault()"
+    (ngSubmit)="$event.preventDefault()"
   >
-    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-      <div class="grid">
-        <div class="col-12">
-          <h3>Contact</h3>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Contact</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-10">
+        <div class="field">
+          <span class="span-label" id="contact_type_label">CONTACT TYPE</span>
+          <app-contact-lookup
+            ariaLabelledBy="contact_type_label"
+            [contactTypeOptions]="contactTypeOptions()"
+            [(type)]="type"
+            [showSearchBox]="showSearchBox()"
+            [showCreateNewContactButton]="false"
+            [includeFecfileResults]="false"
+            [autosave]="false"
+            [candidateOffice]="defaultCandidateOffice()"
+            (contactLookupSelect)="updateContact($event)"
+          >
+          </app-contact-lookup>
         </div>
       </div>
+      <div class="col-6"></div>
+    </div>
+    @if (type() === 'CAN') {
       <div class="grid">
-        <div class="col-10">
+        <div class="col-6">
           <div class="field">
-            <span class="span-label" id="contact_type_label">CONTACT TYPE</span>
-            <app-contact-lookup
-              ariaLabelledBy="contact_type_label"
-              [contactTypeOptions]="contactTypeOptions()"
-              [(type)]="type"
-              [showSearchBox]="showSearchBox()"
-              [showCreateNewContactButton]="false"
-              [includeFecfileResults]="false"
-              [autosave]="false"
-              [candidateOffice]="defaultCandidateOffice()"
-              (contactLookupSelect)="updateContact($event)"
-            >
-            </app-contact-lookup>
+            <label for="candidate_id">CANDIDATE ID</label>
+            <input
+              type="text"
+              pInputText
+              id="candidate_id"
+              appToUpper
+              formControlName="candidate_id"
+              (input)="updateData($event, 'candidate_id')"
+            />
+            <app-error-messages
+              [form]="form"
+              fieldName="candidate_id"
+              [formSubmitted]="formSubmitted"
+              [patternErrorMessage]="candidatePatternMessage"
+            />
           </div>
         </div>
-        <div class="col-6"></div>
       </div>
-      @if (type() === 'CAN') {
-        <div class="grid">
-          <div class="col-6">
+      <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
+    }
+    @if (isEntity()) {
+      <div class="grid">
+        @if (type() === 'COM') {
+          <div class="col-4">
             <div class="field">
-              <label for="candidate_id">CANDIDATE ID</label>
+              <label for="committee_id">COMMITTEE ID</label>
               <input
                 type="text"
                 pInputText
-                id="candidate_id"
+                id="committee_id"
                 appToUpper
-                formControlName="candidate_id"
-                (input)="updateData($event, 'candidate_id')"
+                formControlName="committee_id"
+                (input)="updateData($event, 'committee_id')"
               />
               <app-error-messages
                 [form]="form"
-                fieldName="candidate_id"
+                fieldName="committee_id"
                 [formSubmitted]="formSubmitted"
-                [patternErrorMessage]="candidatePatternMessage"
+                [patternErrorMessage]="committeePatternMessage"
               />
             </div>
           </div>
-        </div>
-        <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
-      }
-      @if (isEntity()) {
-        <div class="grid">
-          @if (type() === 'COM') {
-            <div class="col-4">
-              <div class="field">
-                <label for="committee_id">COMMITTEE ID</label>
-                <input
-                  type="text"
-                  pInputText
-                  id="committee_id"
-                  appToUpper
-                  formControlName="committee_id"
-                  (input)="updateData($event, 'committee_id')"
-                />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="committee_id"
-                  [formSubmitted]="formSubmitted"
-                  [patternErrorMessage]="committeePatternMessage"
-                />
-              </div>
-            </div>
-          }
-          <div class="col-8">
-            <div class="field">
-              <label for="name">NAME</label>
-              <input
-                type="text"
-                pInputText
-                id="name"
-                formControlName="name"
-                (input)="type() === 'ORG' && updateData($event, 'name')"
-              />
-              <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
-            </div>
-          </div>
-        </div>
-        <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
-      }
-      @if (isPerson()) {
-        <div class="grid">
-          <div class="col-4">
-            <div class="field">
-              <label for="last_name">LAST NAME</label>
-              <input
-                type="text"
-                pInputText
-                id="last_name"
-                formControlName="last_name"
-                (input)="type() === 'IND' && updateData($event, 'last_name')"
-              />
-              <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="field">
-              <label for="first_name">FIRST NAME</label>
-              <input
-                type="text"
-                pInputText
-                id="first_name"
-                formControlName="first_name"
-                (input)="type() === 'IND' && updateData($event, 'first_name')"
-              />
-              <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="field">
-              <label for="middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="middle_name" formControlName="middle_name" />
-              <app-error-messages [form]="form" fieldName="middle_name" [formSubmitted]="formSubmitted" />
-            </div>
-          </div>
-        </div>
-        @if (type() === 'IND') {
-          <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
         }
-        <div class="grid">
-          <div class="col-3">
-            <div class="field">
-              <label for="prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="prefix" formControlName="prefix" />
-              <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted" />
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field">
-              <label for="suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="suffix" formControlName="suffix" />
-              <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted" />
-            </div>
+        <div class="col-8">
+          <div class="field">
+            <label for="name">NAME</label>
+            <input
+              type="text"
+              pInputText
+              id="name"
+              formControlName="name"
+              (input)="type() === 'ORG' && updateData($event, 'name')"
+            />
+            <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
           </div>
         </div>
+      </div>
+      <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
+    }
+    @if (isPerson()) {
+      <div class="grid">
+        <div class="col-4">
+          <div class="field">
+            <label for="last_name">LAST NAME</label>
+            <input
+              type="text"
+              pInputText
+              id="last_name"
+              formControlName="last_name"
+              (input)="type() === 'IND' && updateData($event, 'last_name')"
+            />
+            <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="field">
+            <label for="first_name">FIRST NAME</label>
+            <input
+              type="text"
+              pInputText
+              id="first_name"
+              formControlName="first_name"
+              (input)="type() === 'IND' && updateData($event, 'first_name')"
+            />
+            <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="field">
+            <label for="middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
+            <input type="text" pInputText id="middle_name" formControlName="middle_name" />
+            <app-error-messages [form]="form" fieldName="middle_name" [formSubmitted]="formSubmitted" />
+          </div>
+        </div>
+      </div>
+      @if (type() === 'IND') {
+        <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
       }
+      <div class="grid">
+        <div class="col-3">
+          <div class="field">
+            <label for="prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
+            <input type="text" pInputText id="prefix" formControlName="prefix" />
+            <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted" />
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="field">
+            <label for="suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
+            <input type="text" pInputText id="suffix" formControlName="suffix" />
+            <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted" />
+          </div>
+        </div>
+      </div>
+    }
+    <hr />
+    <div class="grid">
+      <div class="col-12">
+        <h3>Address</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <span class="span-label" id="country_region_label">COUNTRY/REGION</span>
+          <p-select
+            inputId="country"
+            aria-labelledby="country_region_label"
+            formControlName="country"
+            [options]="countryOptions"
+          />
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="street_1">STREET ADDRESS</label>
+          <input type="text" pInputText id="street_1" formControlName="street_1" />
+          <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" />
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="field">
+          <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
+          <input type="text" pInputText id="street_2" formControlName="street_2" />
+          <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted" />
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="city">CITY</label>
+          <input type="text" pInputText id="city" formControlName="city" />
+          <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" />
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <span class="span-label" id="state_territory_label">STATE/TERRITORY</span>
+          <app-searchable-select
+            inputId="state"
+            aria-labelledby="state_territory_label"
+            controlName="state"
+            [form]="form"
+            [options]="stateOptions()"
+          />
+          <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="zip">ZIP/POSTAL CODE</label>
+          <input type="text" pInputText id="zip" formControlName="zip" />
+          <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted" />
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label id="telephone-label" for="telephone">TELEPHONE <span class="paren-label">(OPTIONAL)</span></label>
+          <app-fec-international-phone-input formControlName="telephone"> </app-fec-international-phone-input>
+          <app-error-messages
+            [form]="form"
+            fieldName="telephone"
+            [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must contain 10 numeric characters."
+          />
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    @if (isPerson()) {
       <hr />
       <div class="grid">
         <div class="col-12">
-          <h3>Address</h3>
+          <h3>Employer</h3>
         </div>
       </div>
       <div class="grid">
         <div class="col-6">
           <div class="field">
-            <span class="span-label" id="country_region_label">COUNTRY/REGION</span>
-            <p-select
-              inputId="country"
-              aria-labelledby="country_region_label"
-              formControlName="country"
-              [options]="countryOptions"
-              appendTo="body"
-            />
-          </div>
-        </div>
-        <div class="col-6"></div>
-      </div>
-      <div class="grid">
-        <div class="col-6">
-          <div class="field">
-            <label for="street_1">STREET ADDRESS</label>
-            <input type="text" pInputText id="street_1" formControlName="street_1" />
-            <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" />
+            <label for="employer">EMPLOYER <span class="paren-label">(OPTIONAL)</span></label>
+            <input type="text" pInputText id="employer" formControlName="employer" />
+            <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted" />
           </div>
         </div>
         <div class="col-6">
           <div class="field">
-            <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
-            <input type="text" pInputText id="street_2" formControlName="street_2" />
-            <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted" />
+            <label for="occupation">OCCUPATION <span class="paren-label">(OPTIONAL)</span></label>
+            <input type="text" pInputText id="occupation" formControlName="occupation" />
+            <app-error-messages [form]="form" fieldName="occupation" [formSubmitted]="formSubmitted" />
           </div>
         </div>
       </div>
-      <div class="grid">
-        <div class="col-6">
-          <div class="field">
-            <label for="city">CITY</label>
-            <input type="text" pInputText id="city" formControlName="city" />
-            <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" />
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="field">
-            <span class="span-label" id="state_territory_label">STATE/TERRITORY</span>
-            <app-searchable-select
-              inputId="state"
-              aria-labelledby="state_territory_label"
-              controlName="state"
-              [form]="form"
-              [options]="stateOptions()"
-              appendTo="body"
-            />
-            <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="field">
-            <label for="zip">ZIP/POSTAL CODE</label>
-            <input type="text" pInputText id="zip" formControlName="zip" />
-            <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted" />
-          </div>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-6">
-          <div class="field">
-            <label id="telephone-label" for="telephone">TELEPHONE <span class="paren-label">(OPTIONAL)</span></label>
-            <app-fec-international-phone-input formControlName="telephone"> </app-fec-international-phone-input>
-            <app-error-messages
-              [form]="form"
-              fieldName="telephone"
-              [formSubmitted]="formSubmitted"
-              patternErrorMessage="This field must contain 10 numeric characters."
-            />
-          </div>
-        </div>
-        <div class="col-6"></div>
-      </div>
-      @if (isPerson()) {
-        <hr />
-        <div class="grid">
-          <div class="col-12">
-            <h3>Employer</h3>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="employer">EMPLOYER <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="employer" formControlName="employer" />
-              <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted" />
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="field">
-              <label for="occupation">OCCUPATION <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="occupation" formControlName="occupation" />
-              <app-error-messages [form]="form" fieldName="occupation" [formSubmitted]="formSubmitted" />
-            </div>
-          </div>
-        </div>
-      }
-      @if (type() === 'CAN') {
-        <hr />
-        <div class="grid">
-          <div class="col-12">
-            <h3>Office</h3>
-          </div>
-        </div>
-        <app-candidate-office-input
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          officeFormControlName="candidate_office"
-          stateFormControlName="candidate_state"
-          districtFormControlName="candidate_district"
-        >
-        </app-candidate-office-input>
-      }
-    </form>
-
-    @if (showHistory() && !isNewItem()) {
-      <app-contact-transaction-table [contact]="contact()" />
     }
-    <ng-template #footer>
-      <div class="top-border-footer">
+    @if (type() === 'CAN') {
+      <hr />
+      <div class="grid">
+        <div class="col-12">
+          <h3>Office</h3>
+        </div>
+      </div>
+      <app-candidate-office-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        officeFormControlName="candidate_office"
+        stateFormControlName="candidate_state"
+        districtFormControlName="candidate_district"
+      >
+      </app-candidate-office-input>
+    }
+  </form>
+
+  @if (showHistory() && !isNewItem()) {
+    <app-contact-transaction-table [contact]="contact()" />
+  }
+  <ng-template #footer>
+    <div class="top-border-footer">
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-secondary mr-4"
+        data-cy="cancel"
+        (click)="closeDialog()"
+      ></button>
+      @if (headerTitle()) {
         <button
+          type="button"
           pButton
           pRipple
-          label="Cancel"
-          icon="pi pi-times"
-          class="p-button-secondary mr-4"
-          data-cy="cancel"
-          (click)="closeDialog()"
+          label="Save & continue"
+          icon="pi pi-check"
+          class="p-button-info"
+          data-cy="save-continue"
+          [disabled]="disableSubmission()"
+          (click)="submitForm()"
         ></button>
-        @if (headerTitle()) {
+      } @else {
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-primary"
+          data-cy="save"
+          [disabled]="disableSubmission()"
+          (click)="submitForm()"
+        ></button>
+        @if (isNewItem()) {
           <button
             type="button"
             pButton
             pRipple
-            label="Save & continue"
+            label="Save & Add More"
             icon="pi pi-check"
             class="p-button-info"
-            data-cy="save-continue"
+            data-cy="save-add-more"
             [disabled]="disableSubmission()"
-            (click)="submitForm()"
+            (click)="submitForm('continue')"
           ></button>
-        } @else {
-          <button
-            type="button"
-            pButton
-            pRipple
-            label="Save"
-            icon="pi pi-check"
-            class="p-button-primary"
-            data-cy="save"
-            [disabled]="disableSubmission()"
-            (click)="submitForm()"
-          ></button>
-          @if (isNewItem()) {
-            <button
-              type="button"
-              pButton
-              pRipple
-              label="Save & Add More"
-              icon="pi pi-check"
-              class="p-button-info"
-              data-cy="save-add-more"
-              [disabled]="disableSubmission()"
-              (click)="submitForm('continue')"
-            ></button>
-          }
         }
-      </div>
-    </ng-template>
-  </p-dialog>
-</div>
+      }
+    </div>
+  </ng-template>
+</p-dialog>
 
 <ng-template #duplicateContactTemplate>
   @if (headerTitle()) {

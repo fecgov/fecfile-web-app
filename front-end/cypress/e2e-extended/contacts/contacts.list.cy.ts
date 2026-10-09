@@ -43,7 +43,7 @@ describe('Contacts List (/contacts)', () => {
       contact_type: 'Candidate',
       candidate_id: candidateId,
       candidate_office: 'House',
-      candidate_state: 'Virginia',
+      candidate_state: 'Arizona',
       candidate_district: '01',
       last_name: `CandLn${uid}`,
       first_name: `CandFn${uid}`,

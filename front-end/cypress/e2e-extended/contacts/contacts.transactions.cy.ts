@@ -271,7 +271,7 @@ describe('Contacts: Transactions integration', () => {
     const address: Address = {
       street1: '123 Test Ln',
       city: 'Testville',
-      state: 'Texas',
+      state: 'Arizona',
       zip: '12345',
     };
 
