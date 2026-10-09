@@ -3,6 +3,7 @@
   [style]="{ width: '90%' }"
   [header]="headerTitle() ?? (isNewItem() ? 'Add Contact' : 'Edit Contact')"
   [modal]="true"
+  [focusOnShow]="false"
   (onShow)="openDialog()"
   (onHide)="closeDialog()"
   (visibleChange)="closeDialog($event)"

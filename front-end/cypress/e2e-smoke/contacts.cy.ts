@@ -94,7 +94,6 @@ describe('Manage contacts', () => {
 
   it('Empty required fields should display an error message', () => {
     ContactListPage.openAddContactDialog();
-    cy.get('#entity_type_dropdown').should('have.class', 'p-focus');
     ContactListPage.enterFormData({
       ...contactFormData,
       last_name: '',

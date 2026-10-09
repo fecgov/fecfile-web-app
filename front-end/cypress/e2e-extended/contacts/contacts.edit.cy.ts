@@ -27,9 +27,6 @@ const LOOKUP_CAND_FIRST = 'Beth';
 function clickEditKebab(IND_DISPLAY: string) {
   PageUtils.clickKababItem(IND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
-    cy.get('#entity_type_dropdown')
-      .should('have.class', 'p-focus')
-      .and('have.class', 'readonly');
 }
 
 describe('Contacts Edit', () => {
@@ -238,12 +235,8 @@ describe('Contacts Edit', () => {
   };
 
   const expectRequiredNearLabel = (labelRx: RegExp) => {
-    cy.contains('label', labelRx)
-      .parent()
-      .within(() => {
-        cy.contains(/This is a required field\./i).should('exist');
-      });
-  };
+      ContactsHelpers.expectErrorNearLabel(labelRx, /This is a required field\./i);
+    };
 
   function candidateLookup(lookupCandidateId: string, lookupLast: string, lookupFirst: string, lookupName: string) {
     // Candidate Lookup: deterministic selection (stubs)
@@ -304,10 +297,6 @@ describe('Contacts Edit', () => {
     const newOccupation = `${updatedOccupationBase}-ind-all`;
     const newDisplay = `${newLast}, ${newFirst}`;
     const oldDisplay = `${IND_LAST}, ${IND_FIRST}`;
-
-    const expectRequiredNearLabel = (labelRx: RegExp) => {
-      ContactsHelpers.expectErrorNearLabel(labelRx, /This is a required field\./i);
-    };
 
     const expectMaxErrorNearLabel = (labelRx: RegExp, text: RegExp) => {
       ContactsHelpers.expectErrorNearLabel(labelRx, text);
@@ -688,7 +677,7 @@ describe('Contacts Edit', () => {
 
     clickEditKebab(organizationDisplayName);
 
-    cy.get('#name').clear();
+    cy.get('#name').should('have.value', organizationDisplayName).clear();
     cy.get('#street_1').clear();
     cy.get('#city').clear();
     cy.get('#zip').clear();
