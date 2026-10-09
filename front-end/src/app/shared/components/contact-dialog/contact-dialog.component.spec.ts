@@ -16,11 +16,17 @@ import { ContactDialogComponent } from './contact-dialog.component';
 import { ContactService } from 'app/shared/services/contact.service';
 import { Component, signal, viewChild } from '@angular/core';
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { By } from '@angular/platform-browser';
+import { afterEach, vi } from 'vitest';
 
 @Component({
   imports: [ContactDialogComponent],
   standalone: true,
-  template: `<app-contact-dialog [(contact)]="contact" [contactTypeOptions]="contactTypeOptions" />`,
+  template: `<app-contact-dialog
+    [(contact)]="contact"
+    [contactTypeOptions]="contactTypeOptions"
+    headerTitle="Create a new contact"
+  />`,
 })
 class TestHostComponent {
   component = viewChild.required(ContactDialogComponent);
@@ -73,8 +79,62 @@ describe('ContactDialogComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should check for duplicates on add for every contact type, but not on edit', () => {
+    component.contact.set(new Contact());
+    component.visible.set(true);
+
+    for (const type of Object.values(ContactTypes)) {
+      component.type.set(type);
+      fixture.detectChanges();
+      expect(fixture.debugElement.query(By.css('app-duplicate-contact'))).not.toBeNull();
+    }
+
+    component.contact.set(testContact());
+    component.type.set(ContactTypes.INDIVIDUAL);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('app-duplicate-contact'))).toBeNull();
+  });
+
+  it('should show the loading flag before opening the selected contact for editing', async () => {
+    vi.useFakeTimers();
+    const selectedContact = testContact();
+    component.contact.set(new Contact());
+    component.visible.set(true);
+    component.dialogVisible.set(true);
+    fixture.detectChanges();
+
+    const transition = component.useContact(selectedContact);
+    fixture.detectChanges();
+
+    expect(component.loadingDuplicateContact()).toBe(true);
+    expect(fixture.debugElement.query(By.css('img[src="assets/img/fec-loading-flag.gif"]'))).not.toBeNull();
+    expect(component.contact()?.id).not.toBe(selectedContact.id);
+
+    await vi.advanceTimersByTimeAsync(749);
+    expect(component.contact()?.id).not.toBe(selectedContact.id);
+
+    await vi.advanceTimersByTimeAsync(1);
+    await transition;
+    fixture.detectChanges();
+
+    expect(component.loadingDuplicateContact()).toBe(false);
+    expect(component.contact()?.id).toBe(selectedContact.id);
+    expect(component.type()).toBe(selectedContact.type);
+    expect(component.isDuplicateContactEdit()).toBe(true);
+
+    component.closeDialog();
+    expect(component.isDuplicateContactEdit()).toBe(false);
+    expect(component.contact()?.id).toBeUndefined();
+    expect(component.contact()).toBeInstanceOf(Contact);
+    expect(component.type()).toBe(selectedContact.type);
   });
 
   it('should close dialog with flags set', () => {
@@ -108,6 +168,27 @@ describe('ContactDialogComponent', () => {
     });
     component.confirmPropagation();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should use a duplicate contact without confirmation or update when it has no changes', () => {
+    const selectedContact = testContact();
+    component.contact.set(selectedContact);
+    component.type.set(selectedContact.type);
+    component.visible.set(true);
+    for (const [field, control] of Object.entries(component.form.controls)) {
+      control.setValue(selectedContact[field as keyof Contact]);
+    }
+    const confirmSpy = vi.spyOn(testConfirmationService, 'confirm');
+    const savedContactSpy = vi.spyOn(component.savedContact, 'emit');
+    const updateSpy = vi.spyOn(contactService, 'update');
+
+    component.confirmPropagation();
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(updateSpy).not.toHaveBeenCalled();
+    expect(savedContactSpy).toHaveBeenCalledWith(selectedContact);
+    expect(component.visible()).toBe(false);
+    expect(component.contact()).toBeInstanceOf(Contact);
   });
 
   it('#updateContact happy path', () => {

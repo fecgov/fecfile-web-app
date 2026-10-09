@@ -6,14 +6,26 @@
   <p-dialog
     [(visible)]="visible"
     [style]="{ width: '90%' }"
-    [header]="headerTitle() ?? (isNewItem() ? 'Add Contact' : 'Edit Contact')"
+    [header]="dialogHeader()"
     [modal]="true"
     (onShow)="openDialog()"
     (onHide)="closeDialog()"
     (visibleChange)="closeDialog($event)"
     closeAriaLabel="closeDialog"
   >
-    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    @if (loadingDuplicateContact()) {
+      <div class="fec-loader-div">
+        <img
+          class="max-w-full fec-loader-image"
+          src="assets/img/fec-loading-flag.gif"
+          draggable="false"
+          alt="Loading selected contact..."
+          height="72.66"
+          width="80"
+        />
+      </div>
+    }
+    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" [hidden]="loadingDuplicateContact()">
       <div class="grid">
         <div class="col-12">
           <h3>Contact</h3>
@@ -286,61 +298,63 @@
       <app-contact-transaction-table [contact]="contact()" />
     }
     <ng-template #footer>
-      <div class="top-border-footer">
-        <button
-          pButton
-          pRipple
-          label="Cancel"
-          icon="pi pi-times"
-          class="p-button-secondary mr-4"
-          data-cy="cancel"
-          (click)="closeDialog()"
-        ></button>
-        @if (headerTitle()) {
+      @if (!loadingDuplicateContact()) {
+        <div class="top-border-footer">
           <button
-            type="button"
             pButton
             pRipple
-            label="Save & continue"
-            icon="pi pi-check"
-            class="p-button-info"
-            data-cy="save-continue"
-            [disabled]="disableSubmission()"
-            (click)="submitForm()"
+            label="Cancel"
+            icon="pi pi-times"
+            class="p-button-secondary mr-4"
+            data-cy="cancel"
+            (click)="closeDialog()"
           ></button>
-        } @else {
-          <button
-            type="button"
-            pButton
-            pRipple
-            label="Save"
-            icon="pi pi-check"
-            class="p-button-primary"
-            data-cy="save"
-            [disabled]="disableSubmission()"
-            (click)="submitForm()"
-          ></button>
-          @if (isNewItem()) {
+          @if (headerTitle() && !isDuplicateContactEdit()) {
             <button
               type="button"
               pButton
               pRipple
-              label="Save & Add More"
+              label="Save & continue"
               icon="pi pi-check"
               class="p-button-info"
-              data-cy="save-add-more"
+              data-cy="save-continue"
               [disabled]="disableSubmission()"
-              (click)="submitForm('continue')"
+              (click)="submitForm()"
             ></button>
+          } @else {
+            <button
+              type="button"
+              pButton
+              pRipple
+              label="Save"
+              icon="pi pi-check"
+              class="p-button-primary"
+              data-cy="save"
+              [disabled]="disableSubmission()"
+              (click)="submitForm()"
+            ></button>
+            @if (isNewItem()) {
+              <button
+                type="button"
+                pButton
+                pRipple
+                label="Save & Add More"
+                icon="pi pi-check"
+                class="p-button-info"
+                data-cy="save-add-more"
+                [disabled]="disableSubmission()"
+                (click)="submitForm('continue')"
+              ></button>
+            }
           }
-        }
-      </div>
+        </div>
+      }
     </ng-template>
   </p-dialog>
 </div>
 
 <ng-template #duplicateContactTemplate>
-  @if (headerTitle()) {
+  @if (isNewItem()) {
     <app-duplicate-contact
       [type]="type()"
       [data]="data()"
