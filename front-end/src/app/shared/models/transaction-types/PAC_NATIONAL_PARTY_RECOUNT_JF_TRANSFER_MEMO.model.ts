@@ -25,7 +25,6 @@ export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
     });
