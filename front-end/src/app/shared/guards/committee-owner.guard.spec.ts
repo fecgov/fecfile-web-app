@@ -47,6 +47,13 @@ describe('committeeOwnerGuard', () => {
     expect(TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state))).toBeTruthy();
   });
 
+  it('should not hit backend for members if no committee info yet', async () => {
+    needsSecondAdminMock.set(true);
+    committeeStore.setCommittee({} as CommitteeAccount);
+    const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
+    expect(safe).toEqual(router.createUrlTree(['/select-committee']));
+  });
+
   describe('has committee', () => {
     beforeEach(() => committeeStore.setCommittee(testCommitteeAccount()));
 
@@ -56,18 +63,11 @@ describe('committeeOwnerGuard', () => {
       expect(safe).toBe(true);
     });
 
-    it('should not hit backend for members if no committee info yet', async () => {
+    it('should route to reports page when memberService.needsSecondAdmin()', async () => {
       needsSecondAdminMock.set(true);
-      committeeStore.setCommittee({} as CommitteeAccount);
+      await new Promise((resolve) => setTimeout(resolve, 0));
       const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
-      expect(safe).toEqual(router.createUrlTree(['/select-committee']));
+      expect(safe).toEqual(router.createUrlTree(['/reports']));
     });
-  });
-
-  it('should route to reports page when memberService.needsSecondAdmin()', async () => {
-    needsSecondAdminMock.set(true);
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
-    expect(safe).toEqual(router.createUrlTree(['/reports']));
   });
 });
