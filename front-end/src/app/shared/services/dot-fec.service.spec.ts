@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { DotFecService, Download } from './dot-fec.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from '../utils/unit-test.utils';
+import { testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
 import { Actions } from '@ngrx/effects';
 import { Subject } from 'rxjs';
 import { Report } from '../models/reports/report.model';
@@ -51,6 +51,7 @@ describe('DotFecService', () => {
     type: string;
   }>();
   let apiService: ApiService;
+  let committeeStore: CommitteeStore;
   let report: Report;
   let download: Download;
 
@@ -70,6 +71,7 @@ describe('DotFecService', () => {
     });
     apiService = TestBed.inject(ApiService);
     service = TestBed.inject(DotFecService);
+    committeeStore = TestBed.inject(CommitteeStore);
 
     report = { id: 'a' } as Report;
     download = { taskId: '1', report, isComplete: false, name: 'Test.fec' };
@@ -148,10 +150,10 @@ describe('DotFecService', () => {
     expect(service.downloads()[0].id).toBe(response.id);
   });
 
-  it('should clear downloads on committee change', async () => {
-    service.downloads.set([download]);
-    expect(service.downloads().length).toEqual(1);
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(service.downloads().length).toEqual(0);
-  });
+  it('should clear downloads on committee change', () => {
+  service.downloads.set([download]);
+  expect(service.downloads().length).toEqual(1);
+  committeeStore.setCommittee(testCommitteeAccount());
+  expect(service.downloads().length).toEqual(0);
+});
 });

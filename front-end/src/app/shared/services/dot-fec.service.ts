@@ -1,13 +1,4 @@
-import {
-  effect,
-  inject,
-  Injectable,
-  linkedSignal,
-  Renderer2,
-  RendererFactory2,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { inject, Injectable, linkedSignal, Renderer2, RendererFactory2, WritableSignal } from '@angular/core';
 import { ApiService } from './api.service';
 import { Report } from '../models/reports/report.model';
 import { Actions } from '@ngrx/effects';
@@ -33,19 +24,16 @@ export class DotFecService {
   private readonly apiService = inject(ApiService);
   private readonly actions = inject(Actions);
   readonly rendererFactory = inject(RendererFactory2);
-  readonly downloads: WritableSignal<Download[]> = signal([]);
-  readonly showTray = linkedSignal(() => this.downloads().length > 0);
-  readonly renderer: Renderer2 = this.rendererFactory.createRenderer(null, null);
-
   private readonly loggedOut = toSignal(
     this.actions.pipe(filter((action) => action.type === '[User Login Data] Discarded')),
   );
 
-  constructor() {
-    effect(() => {
-      if (this.committeeStore.committee() || this.loggedOut()) this.downloads.set([]);
-    });
-  }
+  readonly downloads: WritableSignal<Download[]> = linkedSignal({
+    source: () => [this.committeeStore.committee(), this.loggedOut()],
+    computation: () => [],
+  });
+  readonly showTray = linkedSignal(() => this.downloads().length > 0);
+  readonly renderer: Renderer2 = this.rendererFactory.createRenderer(null, null);
 
   async generateFecFile(report: Report): Promise<Download> {
     this.showTray.set(true);
@@ -85,7 +73,7 @@ export class DotFecService {
       name: humanFilename,
       isComplete: false,
     };
-    this.downloads().push(download);
+    this.downloads.update((list) => [...list, download]);
 
     return download;
   }
