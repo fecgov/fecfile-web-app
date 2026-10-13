@@ -15,6 +15,7 @@ describe('LOAN_REPAYMENT_RECEIVED', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const transaction: SchATransaction = transactionType.getNewTransaction();
+    expect(transaction.form_type).toBe('SA14');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED);
   });
   it('#generatePurposeDescription() should generate loan repayment', () => {

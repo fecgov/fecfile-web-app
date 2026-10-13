@@ -16,6 +16,7 @@ describe('PAC_PAC_CONDUIT_EARMARK', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
+    expect(transaction.form_type).toBe('SA11C');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_CONDUIT_EARMARK);
   });
 

@@ -31,6 +31,7 @@ export class DEBT_OWED_BY_COMMITTEE extends SchDTransactionType {
 
   getNewTransaction() {
     return SchDTransaction.fromJSON({
+      form_type: 'SD10',
       transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
     });
   }

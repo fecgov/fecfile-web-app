@@ -28,6 +28,7 @@ export class CONDUIT_EARMARK_RECEIPT extends CONDUIT_EARMARK {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
+      form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED,
       memo_code: false,
     });

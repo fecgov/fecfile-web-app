@@ -17,6 +17,7 @@ describe('PARTNERSHIP_RECEIPT', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
+    expect(transaction.form_type).toBe('SA11AI');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
   });
 

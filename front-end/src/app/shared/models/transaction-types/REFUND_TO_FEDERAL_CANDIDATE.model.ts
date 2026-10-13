@@ -25,6 +25,7 @@ export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
+      form_type: 'SA16',
       transaction_type_identifier: ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
       aggregation_group: AggregationGroups.LINE_16,
     });

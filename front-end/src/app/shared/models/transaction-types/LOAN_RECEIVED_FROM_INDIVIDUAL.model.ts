@@ -69,6 +69,7 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
 
   getNewTransaction() {
     return SchCTransaction.fromJSON({
+      form_type: 'SC/10',
       transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
       receipt_line_number: '13',
     });

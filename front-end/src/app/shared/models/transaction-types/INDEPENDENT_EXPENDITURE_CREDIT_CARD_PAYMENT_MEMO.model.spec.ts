@@ -15,6 +15,7 @@ describe('INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO', () => {
 
   it('#factory() should return a SchETransaction', () => {
     const txn: SchETransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SE');
     expect(txn.transaction_type_identifier).toBe(
       ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
     );

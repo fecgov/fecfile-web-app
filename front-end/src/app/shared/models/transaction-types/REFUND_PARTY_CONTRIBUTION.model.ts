@@ -17,6 +17,7 @@ export class REFUND_PARTY_CONTRIBUTION extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
+      form_type: 'SB28B',
       transaction_type_identifier: ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
       aggregation_group: AggregationGroups.GENERAL,
     });

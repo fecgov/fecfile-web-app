@@ -16,6 +16,7 @@ describe('TRANSFER', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SA12');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRANSFER);
   });
 

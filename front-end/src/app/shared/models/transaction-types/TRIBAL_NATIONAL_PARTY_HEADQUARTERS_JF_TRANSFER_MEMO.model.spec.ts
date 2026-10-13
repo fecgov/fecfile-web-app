@@ -13,6 +13,7 @@ describe('TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
+    expect(transaction.form_type).toBe('SA17');
     expect(transaction.transaction_type_identifier).toBe(
       ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     );

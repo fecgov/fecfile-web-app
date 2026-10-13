@@ -19,6 +19,7 @@ export class IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY extends IN_KIND {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
+      form_type: 'SA12',
       transaction_type_identifier: ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
       aggregation_group: AggregationGroups.GENERAL,
     });

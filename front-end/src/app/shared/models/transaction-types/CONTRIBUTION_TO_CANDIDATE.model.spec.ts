@@ -16,6 +16,7 @@ describe('CONTRIBUTION_TO_CANDIDATE', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SB23');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE);
   });
 

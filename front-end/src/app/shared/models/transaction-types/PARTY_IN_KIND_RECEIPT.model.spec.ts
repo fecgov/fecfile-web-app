@@ -14,6 +14,7 @@ describe('PARTY_IN_KIND_RECEIPT', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
+    expect(transaction.form_type).toBe('SA11B');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT);
   });
 });
