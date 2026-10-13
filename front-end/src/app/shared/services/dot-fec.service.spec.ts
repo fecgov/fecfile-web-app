@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
 import { DotFecService, Download } from './dot-fec.service';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -22,7 +23,6 @@ class MockRendererFactory {
           [key: string]: string;
         } = {};
         return {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setAttribute: (element: any, name: string, value: string) => {
             element[name] = value;
           },
@@ -30,14 +30,12 @@ class MockRendererFactory {
           click: vi.fn(),
         };
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       appendChild: (parent: any, child: any) => {
         if (!childNodesMap.has(parent)) {
           childNodesMap.set(parent, []);
         }
         childNodesMap.get(parent).push(child);
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setAttribute: (element: any, name: string, value: string) => {
         element[name] = value;
       },
@@ -82,7 +80,7 @@ describe('DotFecService', () => {
   });
 
   it('should clear downloads list on logout', async () => {
-    service.downloads.set([download]);
+    (service as any)._downloads.set([download]);
     expect(service.downloads().length).toEqual(1);
 
     actions$.next({ type: '[User Login Data] Discarded' });
@@ -93,7 +91,6 @@ describe('DotFecService', () => {
 
   it('should generate FEC file', async () => {
     const response = { status: 'testStatus', task_id: 'testTaskId' };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(apiService, 'post').mockReturnValue(Promise.resolve(response) as Promise<any>);
 
     const result = await service.generateFecFile(report);
@@ -126,7 +123,6 @@ describe('DotFecService', () => {
         }
       },
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(document, 'createElement').mockReturnValue(link as any);
     vi.spyOn(service['renderer'], 'createElement').mockReturnValue(link);
     await service.downloadFecFile(download);
@@ -139,10 +135,9 @@ describe('DotFecService', () => {
 
   it('should check FEC file', async () => {
     const response = { done: true, id: 'testId' };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(apiService, 'get').mockReturnValue(Promise.resolve(response) as Promise<any>);
 
-    service.downloads.set([download]);
+    (service as any)._downloads.set([download]);
     await service.checkFecFileTask(download);
 
     expect(apiService.get).toHaveBeenCalledWith(`/web-services/dot-fec/check/${download.taskId}/`);
@@ -151,9 +146,9 @@ describe('DotFecService', () => {
   });
 
   it('should clear downloads on committee change', () => {
-  service.downloads.set([download]);
-  expect(service.downloads().length).toEqual(1);
-  committeeStore.setCommittee(testCommitteeAccount());
-  expect(service.downloads().length).toEqual(0);
-});
+    (service as any)._downloads.set([download]);
+    expect(service.downloads().length).toEqual(1);
+    committeeStore.setCommittee(testCommitteeAccount());
+    expect(service.downloads().length).toEqual(0);
+  });
 });

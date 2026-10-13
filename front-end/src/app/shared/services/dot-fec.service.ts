@@ -28,10 +28,11 @@ export class DotFecService {
     this.actions.pipe(filter((action) => action.type === '[User Login Data] Discarded')),
   );
 
-  readonly downloads: WritableSignal<Download[]> = linkedSignal({
+  private readonly _downloads: WritableSignal<Download[]> = linkedSignal({
     source: () => [this.committeeStore.committee(), this.loggedOut()],
     computation: () => [],
   });
+  readonly downloads = this._downloads.asReadonly();
   readonly showTray = linkedSignal(() => this.downloads().length > 0);
   readonly renderer: Renderer2 = this.rendererFactory.createRenderer(null, null);
 
@@ -73,7 +74,7 @@ export class DotFecService {
       name: humanFilename,
       isComplete: false,
     };
-    this.downloads.update((list) => [...list, download]);
+    this._downloads.update((list) => [...list, download]);
 
     return download;
   }
@@ -97,7 +98,7 @@ export class DotFecService {
       id = await this.checkFecFile(download.taskId);
       isComplete = !!id;
     }
-    this.downloads.update((downloads) => {
+    this._downloads.update((downloads) => {
       return downloads.map((d) => {
         if (d.name !== download.name) return d;
         d.isComplete = true;
@@ -105,6 +106,10 @@ export class DotFecService {
         return d;
       });
     });
+  }
+
+  removeDownload(download: Download) {
+    this._downloads.update((downloads) => downloads.filter((d) => d !== download));
   }
 
   private async checkFecFile(taskId: string): Promise<string | undefined> {
