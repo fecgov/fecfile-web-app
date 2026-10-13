@@ -34,16 +34,30 @@ export function validateDate(schemaPath: SchemaPath<StringDate, 1, PathKind.Chil
 }
 
 export function validateDateAfter(coverageSchema: SchemaPath<Coverage>) {
+  let lastStart: Date | string | null | undefined = null;
+  let lastEnd: Date | string | null | undefined = null;
+  let lastTouchedField: 'startDate' | 'endDate' = 'endDate';
+
   validateTree(coverageSchema, ({ value, fieldTree }) => {
     const start = value().startDate;
     const end = value().endDate;
+
+    if (start !== lastStart) {
+      lastTouchedField = 'startDate';
+      lastStart = start;
+    }
+    if (end !== lastEnd) {
+      lastTouchedField = 'endDate';
+      lastEnd = end;
+    }
 
     if (!start || !end || typeof start === 'string' || typeof end === 'string') return null;
     if (start.getTime() > end.getTime())
       return {
         kind: 'isAfter',
-        message: `END DATE must be after START DATE`,
-        fieldTree: fieldTree.endDate,
+        message:
+          lastTouchedField === 'startDate' ? 'START DATE must be before END DATE' : 'END DATE must be after START DATE',
+        fieldTree: fieldTree[lastTouchedField],
       };
     return null;
   });
@@ -54,7 +68,7 @@ export function validateDateOverlap(
   url: string,
   cookieService: CookieService,
   options?: {
-    excludeId?: string;
+    excludeId?: string | null;
     message?: string;
   },
 ) {
@@ -78,7 +92,7 @@ export function validateDateOverlap(
         const startStr = DateUtils.convertDateToFecFormat(start);
         const endStr = DateUtils.convertDateToFecFormat(end);
         const params: QueryParams = { start_date: startStr, end_date: endStr };
-        if (options?.excludeId) params['exclude_id'] = options.excludeId;
+        if (options?.excludeId && options.excludeId !== 'initial') params['exclude_id'] = options.excludeId;
 
         return {
           url,

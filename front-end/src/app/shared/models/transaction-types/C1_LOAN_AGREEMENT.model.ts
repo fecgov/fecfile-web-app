@@ -93,7 +93,6 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
 
   getNewTransaction() {
     return SchC1Transaction.fromJSON({
-      form_type: 'SC1/10',
       transaction_type_identifier: ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT,
     });
   }

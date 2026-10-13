@@ -16,7 +16,6 @@ describe('DEBT_OWED_BY_COMMITTEE', () => {
 
   it('#factory() should return a SchDTransaction', () => {
     const txn: SchDTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SD10');
     expect(txn.transaction_type_identifier).toBe(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE);
   });
 

@@ -41,6 +41,7 @@ describe('ElectionCyclesListComponent', () => {
     mockElectionCycleService = {
       getTableData: vi.fn().mockResolvedValue(mockDataResponse),
       create: vi.fn().mockResolvedValue({}),
+      update: vi.fn().mockResolvedValue({}),
     };
 
     await TestBed.configureTestingModule({
@@ -183,6 +184,41 @@ describe('ElectionCyclesListComponent', () => {
       vi.mocked(mockElectionCycleService.create!).mockRejectedValueOnce(new Error('Network Error'));
       const errorSpy = vi.spyOn(messageService, 'error');
       await component['create']();
+      expect(errorSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('Update Operations', () => {
+    beforeEach(() => {
+      component.editingId.set('123');
+      component.model.set({
+        office: 'Senate',
+        electionType: 'General',
+        electionYear: 2026,
+        coverage: {
+          startDate: new Date('2025-01-01'),
+          endDate: new Date('2026-11-03'),
+        },
+      });
+    });
+
+    it('should call service.update and trigger a success notification on successful save', async () => {
+      const reloadSpy = vi.spyOn(component.electionCycleData, 'reload');
+      const successSpy = vi.spyOn(messageService, 'success');
+
+      await component['update']();
+
+      expect(mockElectionCycleService.update).toHaveBeenCalled();
+      expect(component.newItem()).toBeNull();
+      expect(reloadSpy).toHaveBeenCalled();
+      expect(successSpy).toHaveBeenCalled();
+    });
+
+    it('should display error message when service.update fails', async () => {
+      vi.spyOn(console, 'log').mockImplementation(() => {});
+      vi.mocked(mockElectionCycleService.update!).mockRejectedValueOnce(new Error('Network Error'));
+      const errorSpy = vi.spyOn(messageService, 'error');
+      await component['update']();
       expect(errorSpy).toHaveBeenCalled();
     });
   });

@@ -20,7 +20,6 @@ export class TRANSFER extends SchATransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA12',
       transaction_type_identifier: ScheduleATransactionTypes.TRANSFER,
       aggregation_group: AggregationGroups.GENERAL,
     });

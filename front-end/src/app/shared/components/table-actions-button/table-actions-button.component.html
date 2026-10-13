@@ -2,12 +2,14 @@
   <button
     pButton
     pRipple
+    type="button"
     [icon]="buttonIcon()"
     [label]="buttonLabel()"
     [class.rounded-text]="rounded()"
     [class]="buttonStyleClass()"
     [ariaLabel]="buttonAriaLabel()"
     [attr.data-cy]="buttonDataCy()"
+    [disabled]="disabled()"
     (click)="popoverHidden.update((x) => !x)"
   ></button>
   <div class="p-popover custom-popover" [class.hidden]="popoverHidden()">

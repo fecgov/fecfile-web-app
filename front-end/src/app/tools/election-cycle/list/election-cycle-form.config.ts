@@ -1,4 +1,4 @@
-import type { WritableSignal } from '@angular/core';
+import type { Signal, WritableSignal } from '@angular/core';
 import { form, required } from '@angular/forms/signals';
 import {
   validateDate,
@@ -13,7 +13,6 @@ import type { OfficeType, ElectionType, Coverage } from '../election-cycle.model
 
 export const officeOptions = [
   { label: 'House', value: 'House' },
-  { label: 'Presidential', value: 'Presidential' },
   { label: 'Senate', value: 'Senate' },
 ];
 export const electionTypeOptions = [
@@ -36,6 +35,7 @@ export const INITIAL_FORM_VALUE: ElectionCycleForm = {
 
 export function createElectionCycleForm(
   model: WritableSignal<ElectionCycleForm>,
+  excludeId: Signal<string | null>,
   cookieService: CookieService,
   onSubmit: () => Promise<void>,
 ) {
@@ -54,6 +54,9 @@ export function createElectionCycleForm(
       validateDateAfter(schema.coverage);
       validateDateOverlap(schema.coverage, `${environment.apiUrl}/election-cycles/check-overlap/`, cookieService, {
         message: 'This date overlaps with another election cycle.',
+        get excludeId() {
+          return excludeId();
+        },
       });
     },
     {

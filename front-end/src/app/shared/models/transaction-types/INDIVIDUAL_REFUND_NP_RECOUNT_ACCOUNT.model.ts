@@ -21,7 +21,6 @@ export class INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB29',
       transaction_type_identifier: ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
     });
