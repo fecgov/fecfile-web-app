@@ -111,7 +111,6 @@ describe('ContactDialogComponent', () => {
     const selectedContact = testContact();
     component.contact.set(new Contact());
     component.visible.set(true);
-    component.dialogVisible.set(true);
     fixture.detectChanges();
 
     const transition = component.useContact(selectedContact);
