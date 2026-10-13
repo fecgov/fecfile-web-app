@@ -101,6 +101,13 @@ export class TransactionFormUtils {
       TransactionContactUtils.updateFormWithCandidateFields(primaryContact, form, templateMap);
     }
 
+    if (transaction?.contact_3 && templateMap.committee_name && !form.get(templateMap.committee_name)?.value) {
+      form.get(templateMap.committee_name)?.setValue(transaction.contact_3.name);
+    }
+    if (transaction?.contact_3 && templateMap.committee_fec_id && !form.get(templateMap.committee_fec_id)?.value) {
+      form.get(templateMap.committee_fec_id)?.setValue(transaction.contact_3.committee_id);
+    }
+
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
       const id = (transaction[contact as keyof Transaction] as Contact)?.id ?? '';
       contactIdMap[contact] = new BehaviorSubject<string>(id);

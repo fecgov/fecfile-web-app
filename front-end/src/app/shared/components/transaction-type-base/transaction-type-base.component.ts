@@ -268,7 +268,43 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   }
 
   private async resolveAggregateBeforeValidate(): Promise<void> {
-    if (!this.transaction || !this.transactionType?.showAggregate || !this.templateMap.aggregate) {
+    if (!this.transaction) {
+      return;
+    }
+
+    if (this.transactionType?.showPayeeCandidateYTD && this.templateMap.aggregate_general_elec_expended) {
+      const date = this.form.get(this.templateMap.date)?.value;
+      const amount = this.form.get(this.templateMap.amount)?.value;
+      const year = this.form.get(this.templateMap.general_election_year)?.value;
+      const contact2IdFromMap = this.contactIdMap['contact_2']
+        ? await firstValueFrom(this.contactIdMap['contact_2'])
+        : undefined;
+      const contact2Id = contact2IdFromMap || this.transaction.contact_2?.id;
+
+      if (date && year && contact2Id && amount !== null && amount !== undefined && amount !== '') {
+        const previousAggregate = await firstValueFrom(
+          this.transactionService.getPreviousPayeeCandidateAggregate(this.transaction, contact2Id, date, year),
+        );
+        TransactionFormUtils.updateAggregate(
+          this.form,
+          'aggregate_general_elec_expended',
+          this.templateMap,
+          this.transaction,
+          previousAggregate ?? 0,
+          amount,
+        );
+        this.form.updateValueAndValidity();
+      }
+    }
+
+    if (!this.transactionType?.showAggregate) {
+      if (this.templateMap.aggregate && this.form.get(this.templateMap.aggregate)?.value === null) {
+        this.form.get(this.templateMap.aggregate)?.setValue(0);
+      }
+      return;
+    }
+
+    if (!this.templateMap.aggregate) {
       return;
     }
 
