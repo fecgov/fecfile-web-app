@@ -334,6 +334,8 @@ export function buildScheduleF(
     children: [],
     report_ids: [report_id],
     fields_to_validate: ['schedule_id'],
+    payee_committee_name: contact_3.name,
+    payee_committee_id_number: contact_3.committee_id,
     ...getContactFields('payee', contact_1),
     ...getContactFields('payee_candidate', contact_2, 2),
     ...getContactFields('payee_committee', contact_3, 3),

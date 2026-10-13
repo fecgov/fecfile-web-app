@@ -34,6 +34,7 @@ export class SchFTransaction extends Transaction {
   aggregate_general_elec_expended: number | undefined; // calculated field
   expenditure_purpose_description: string | undefined;
   category_code: string | undefined;
+  payee_committee_name: string | undefined;
   payee_committee_id_number: string | undefined;
   payee_candidate_id_number: string | undefined;
   payee_candidate_last_name: string | undefined;
