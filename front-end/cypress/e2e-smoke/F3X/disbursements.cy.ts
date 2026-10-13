@@ -110,7 +110,11 @@ describe('Disbursements', () => {
       );
 
       PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
-      PageUtils.pSelectDropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');
+      cy.get(PageUtils.getAlias('')).find('[data-cy="select-form-24"]').eq(0).click();
+      cy.get('.p-select-overlay:visible')
+          .find(`[role="option"][aria-label="24-HOUR: Report of Independent Expenditure"]`)
+          .should('have.length', 1)
+          .click();
       PageUtils.clickButton('Confirm');
 
       ReportListPage.gotToReportTransactionListPage(result.f24);
