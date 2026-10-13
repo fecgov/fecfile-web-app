@@ -1,6 +1,7 @@
-import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO } from './OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { ReportTypes } from '../reports/report.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO } from './OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO.model';
 
 describe('OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO', () => {
   let transactionType: OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO;
@@ -21,5 +22,15 @@ describe('OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO', () => {
 
   it('#generatePurposeDescription() should not be defined', () => {
     expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
+  });
+
+  it('#hasElectionInformation() should return true for F3 report type', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(result).toBe(true);
+  });
+
+  it('#hasElectionInformation() should return false for F3X', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(result).toBe(false);
   });
 });
