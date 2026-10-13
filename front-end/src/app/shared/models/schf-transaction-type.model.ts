@@ -13,6 +13,7 @@ export abstract class SchFTransactionType extends TransactionType {
   override contact5IsRequired = (form: FormGroup) =>
     form.get('filer_designated_to_make_coordinated_expenditures')?.value === false;
   override candidateInfoPosition = 'high';
+  override synchronizeOrgComNameValues = false;
 
   //Labels
   override amountInputHeader = 'Expenditure information';

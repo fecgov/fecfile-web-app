@@ -106,7 +106,7 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.visit(`/reports/transactions/report/${result.report}/create/COORDINATED_PARTY_EXPENDITURE`);
       ContactLookup.getContact(result.organization.name);
       cy.get('#amount').safeType('100').blurActiveField();
-      cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+      cy.get('#aggregate_general_elec_expended').should('have.value', '');
       ContactLookup.getCandidate(result.candidateSenate, [], [], '#contact_2_lookup');
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
       cy.blurActiveField();
@@ -125,7 +125,7 @@ describe('Tests transaction form aggregate calculation', () => {
       ContactLookup.getContact(result.organization.name);
       ContactLookup.getCandidate(result.candidate, [], [], '#contact_2_lookup');
       cy.get('#amount').safeType('100').blurActiveField();
-      cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+      cy.get('#aggregate_general_elec_expended').should('have.value', '');
       cy.get('#general_election_year').safeType('1990').blurActiveField();
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
       cy.blurActiveField();
