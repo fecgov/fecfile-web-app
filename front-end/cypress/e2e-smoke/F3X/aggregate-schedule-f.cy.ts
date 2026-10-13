@@ -50,7 +50,7 @@ describe('Tests transaction form aggregate calculation', () => {
     Initialize();
   });
 
-  it('sets aggregate to value when no previous', () => {
+  it('keeps aggregate blank while no valid prior aggregate exists', () => {
     setCommitteeToPTY();
     cy.wrap(DataSetup({ organization: true, candidate: true, committee: true })).then((result: any) => {
       ReportListPage.gotToReportTransactionListPage(result.report);
@@ -64,7 +64,10 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('#general_election_year').safeType(currentYear).blurActiveField();
       cy.get('#amount').safeType(100).blurActiveField();
       cy.get('#purpose_description').first().safeType('test');
-      cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+      cy.get('#aggregate_general_elec_expended').should(($field) => {
+        const actual = $field.val();
+        expect(actual === '' || actual == null).to.equal(true);
+      });
     });
   });
 
