@@ -105,6 +105,7 @@ describe('ContactDialogComponent', () => {
 
   it('should show the loading flag before opening the selected contact for editing', async () => {
     vi.useFakeTimers();
+    fixture.componentRef.setInput('enableDuplicateContactViewing', true);
     const selectedContact = testContact();
     component.contact.set(new Contact());
     component.visible.set(true);
