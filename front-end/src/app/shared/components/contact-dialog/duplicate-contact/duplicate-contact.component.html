@@ -39,7 +39,7 @@
                 pButton
                 type="button"
                 class="p-button-primary fit-button col-action"
-                label="View contact"
+                [label]="viewContactMode() ? 'View contact' : 'Use this contact'"
                 (click)="useContact.emit(dup)"
               ></button>
             </li>

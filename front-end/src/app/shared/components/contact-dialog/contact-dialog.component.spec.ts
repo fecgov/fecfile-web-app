@@ -128,10 +128,8 @@ describe('ContactDialogComponent', () => {
     expect(component.loadingDuplicateContact()).toBe(false);
     expect(component.contact()?.id).toBe(selectedContact.id);
     expect(component.type()).toBe(selectedContact.type);
-    expect(component.isDuplicateContactEdit()).toBe(true);
 
     component.closeDialog();
-    expect(component.isDuplicateContactEdit()).toBe(false);
     expect(component.contact()?.id).toBeUndefined();
     expect(component.contact()).toBeInstanceOf(Contact);
     expect(component.type()).toBe(selectedContact.type);

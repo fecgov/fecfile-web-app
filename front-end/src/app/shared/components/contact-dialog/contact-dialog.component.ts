@@ -75,6 +75,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly headerTitle = input<string>();
   readonly dialogHeader = computed(() => (!this.isNewItem() ? 'Edit Contact' : (this.headerTitle() ?? 'Add Contact')));
   readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
+  readonly enableDuplicateContactViewing = input(false);
 
   readonly detailVisibleChange = output<boolean>();
   readonly savedContact = output<Contact>();
@@ -92,7 +93,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   );
 
   readonly isNewItem = computed(() => !this.contact()?.id);
-  readonly isDuplicateContactEdit = computed(() => !!this.headerTitle() && !this.isNewItem());
 
   readonly isEntity = computed(() => isEntity(this.type()));
   readonly isPerson = computed(() => isPerson(this.type()));
@@ -232,9 +232,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
       this.loadingDuplicateContact.set(false);
-      if (this.isDuplicateContactEdit()) {
-        this.contact.set(new Contact());
-      }
+      this.contact.set(new Contact());
       this.detailVisibleChange.emit(false);
       this.visible.set(false);
       this.dialogVisible.set(false);
@@ -264,7 +262,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   override async submit(): Promise<void> {
     if (this.jump === 'continue') return this.saveContact(false);
-    if ((this.headerTitle() && !this.isDuplicateContactEdit()) || this.isNewItem()) return this.saveContact();
+    if (this.isNewItem()) return this.saveContact();
     return this.confirmPropagation();
   }
 
@@ -273,7 +271,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const changes = Object.entries(this.form.controls)
       .filter(([field, control]: [string, AbstractControl]) => control?.value !== contact[field as keyof Contact])
       .map(([field, control]: [string, AbstractControl]) => [field, control.value]) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
-    if (this.isDuplicateContactEdit() && changes.length === 0) {
+    if (changes.length === 0) {
       this.savedContact.emit(contact);
       this.closeDialog();
       return;
@@ -322,6 +320,12 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   async useContact(contact: Contact) {
+    if (!this.enableDuplicateContactViewing()) {
+      this.savedContact.emit(contact);
+      this.closeDialog();
+      return;
+    }
+
     this.loadingDuplicateContact.set(true);
     await new Promise((resolve) => setTimeout(resolve, 750));
     if (!this.visible()) return;

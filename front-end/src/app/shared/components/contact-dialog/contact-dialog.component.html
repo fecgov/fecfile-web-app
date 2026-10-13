@@ -309,7 +309,7 @@
             data-cy="cancel"
             (click)="closeDialog()"
           ></button>
-          @if (headerTitle() && !isDuplicateContactEdit()) {
+          @if (headerTitle() && isNewItem()) {
             <button
               type="button"
               pButton
@@ -358,6 +358,7 @@
     <app-duplicate-contact
       [type]="type()"
       [data]="data()"
+      [viewContactMode]="enableDuplicateContactViewing()"
       [(hideDuplicate)]="hideDuplicate"
       (useContact)="useContact($event)"
     />

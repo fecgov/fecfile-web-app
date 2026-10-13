@@ -1,4 +1,4 @@
-import { Component, computed, inject, linkedSignal, resource, Signal, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, linkedSignal, model, resource, Signal, signal, viewChild } from '@angular/core';
 import { ElectionCycle } from '../election-cycle.model';
 import { ElectionCycleService } from '../election-cycle.service';
 import { ButtonModule } from 'primeng/button';
@@ -20,10 +20,12 @@ import { TableActionsButtonComponent } from 'app/shared/components/table-actions
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { MessageWrapperService } from 'app/shared/services/message-wrapper.service';
 import { electionColumns } from './election-cycle-table.config';
+import { Accordion, AccordionModule } from 'primeng/accordion';
 
 @Component({
   selector: 'app-election-cycle-list',
   imports: [
+    AccordionModule,
     ButtonModule,
     RippleModule,
     FormField,
@@ -47,6 +49,8 @@ export class ElectionCyclesListComponent {
   private readonly cookieService = inject(CookieService);
   protected itemService = inject(ElectionCycleService);
   readonly breakpointStore = inject(BreakpointStore);
+
+  readonly active = model<number>(-1);
 
   /* FORM PROPERTIES */
   readonly editingId = signal<string | null>(null);
