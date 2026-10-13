@@ -21,7 +21,6 @@ export class REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID extends SchBTran
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB28A',
       transaction_type_identifier: ScheduleBTransactionTypes.REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID,
       aggregation_group: AggregationGroups.GENERAL,
     });

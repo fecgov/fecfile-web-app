@@ -106,7 +106,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
   candidateDistrictOptions: PrimeOptions = [];
-  readonly dialogVisible = signal(false);
 
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
@@ -134,7 +133,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       },
     },
   });
-  readonly disableSubmission = computed(() => this.signalForm().submitting());
+  readonly disableSubmission = computed(() => this.signalForm().submitting() || this.signalForm().invalid());
   private jump?: 'continue';
 
   constructor() {
@@ -226,7 +225,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     if (contact.id) {
       this.type.set(contact.type);
     }
-    this.dialogVisible.set(true);
   }
 
   public closeDialog(visibleChangeFlag = false) {
@@ -235,7 +233,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       this.contact.set(new Contact());
       this.detailVisibleChange.emit(false);
       this.visible.set(false);
-      this.dialogVisible.set(false);
     }
   }
 

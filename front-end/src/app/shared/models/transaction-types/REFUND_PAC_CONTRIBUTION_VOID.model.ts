@@ -19,7 +19,6 @@ export class REFUND_PAC_CONTRIBUTION_VOID extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB28C',
       transaction_type_identifier: ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID,
       aggregation_group: AggregationGroups.GENERAL,
     });
