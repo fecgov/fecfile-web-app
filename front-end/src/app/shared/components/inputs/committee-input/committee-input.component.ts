@@ -22,7 +22,7 @@ export class CommitteeInputComponent extends BaseInputComponent implements OnIni
   readonly patternMessage = committeePatternMessage;
 
   ngOnInit(): void {
-    if (this.transactionType()?.synchronizeOrgComNameValues) {
+    if (!this.tertiaryContact && this.transactionType()?.synchronizeOrgComNameValues) {
       this.form
         .get(this.templateMap.organization_name)
         ?.valueChanges.pipe(takeUntil(this.destroy$))

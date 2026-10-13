@@ -48,6 +48,7 @@ function getContactFields(prefix: string, contact: Contact, contact_number = 1) 
     [`${prefix}_employer`]: contact.employer,
     [`${prefix}_occupation`]: contact.occupation,
     [`contact_${contact_number}`]: {
+      name: contact.name,
       first_name: contact.first_name,
       last_name: contact.last_name,
       middle_name: contact.middle_name,
@@ -60,6 +61,8 @@ function getContactFields(prefix: string, contact: Contact, contact_number = 1) 
       zip: contact.zip,
       employer: contact.employer,
       occupation: contact.occupation,
+      type: contact.type,
+      committee_id: contact.committee_id,
     },
     [`contact_${contact_number}_id`]: contact.id,
   };
