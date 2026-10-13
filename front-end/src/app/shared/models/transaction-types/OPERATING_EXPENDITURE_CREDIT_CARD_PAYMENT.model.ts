@@ -1,5 +1,9 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { ELECTION_FIELDS, ORGANIZATION, ORGANIZATION_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import {
+  ELECTION_FIELDS,
+  ORGANIZATION,
+  ORGANIZATION_B_FORM_FIELDS,
+} from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_PARENTS';
 import { ReportTypes } from '../reports/report.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
