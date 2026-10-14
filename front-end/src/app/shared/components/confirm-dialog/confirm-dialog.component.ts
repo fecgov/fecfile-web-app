@@ -26,10 +26,12 @@ export class ConfirmDialogComponent {
   cancelOption() {
     this.confirmation()?.reject?.();
     this.visible.set(false);
+    this.confirmationService.close();
   }
 
   confirmOption() {
     this.confirmation()?.accept?.();
     this.visible.set(false);
+    this.confirmationService.close();
   }
 }

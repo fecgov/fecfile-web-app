@@ -13,9 +13,11 @@ function syncPendingControlValues(form: FormGroup | FormArray) {
     } else if (control instanceof FormControl) {
       const ctrl = control as PendingChangeFormControl;
       if (ctrl._pendingChange) {
-        if (ctrl._pendingDirty) ctrl.markAsDirty();
-        ctrl.setValue(ctrl._pendingValue, { onlySelf: true, emitModelToViewChange: false });
-        if (ctrl.updateOn !== 'submit') ctrl.markAsTouched();
+        if (ctrl._pendingValue !== ctrl.value) {
+          if (ctrl._pendingDirty) ctrl.markAsDirty();
+          ctrl.setValue(ctrl._pendingValue, { onlySelf: true, emitModelToViewChange: false });
+          if (ctrl.updateOn !== 'submit') ctrl.markAsTouched();
+        }
         ctrl._pendingChange = false;
       }
     }
