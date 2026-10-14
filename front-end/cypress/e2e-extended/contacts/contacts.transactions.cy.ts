@@ -184,8 +184,7 @@ const goToTransactionCreateFromList = (panelMenuRx: RegExp, txnLinkRx: RegExp) =
 
 const resolveDisbursementDateField = (): Cypress.Chainable<DisbursementDateField> => {
   return cy.get('body').then(($body) => {
-    if ($body.find('[data-cy="expenditure_date"]:visible').length) return 'expenditure_date';
-    if ($body.find('[data-cy="disbursement_date"]:visible').length) return 'disbursement_date';
+    if ($body.find('[data-cy="expenditure_date"]').length) return 'expenditure_date';
     if ($body.find('[data-cy="disbursement_date"]').length) return 'disbursement_date';
     return 'expenditure_date';
   });
