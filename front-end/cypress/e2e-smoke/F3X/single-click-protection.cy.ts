@@ -84,4 +84,40 @@ describe('Single Click Protected Buttons', () => {
       });
     });
   });
+
+  it('Re-enables save button when validation errors are resolved after clicking save from unblurred amount', () => {
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+      ReportListPage.gotToReportTransactionListPage(result.report);
+      StartTransaction.Receipts().Individual().IndividualReceipt();
+
+      ContactLookup.getContact(result.individual.last_name);
+      cy.get('#employer').clear();
+      cy.get('#occupation').clear();
+
+      TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 20), '');
+
+      // Enter amount without blurring before clicking save
+      cy.get('#amount').safeType('250');
+      PageUtils.clickButton('Save', 'app-navigation-control-bar:visible');
+
+      // Aggregate updates and validation messages appear
+      cy.get('#aggregate').should('have.value', '$250.00');
+      cy.get('#employer').parent().contains('This is a required field.').should('exist');
+      cy.get('#occupation').parent().contains('This is a required field.').should('exist');
+
+      // Fill employer and occupation to resolve validation errors
+      cy.get('#employer').type('Test Employer');
+      cy.get('#occupation').type('Test Occupation');
+
+      // Click Save without blurring occupation
+      PageUtils.clickButton('Save', 'app-navigation-control-bar:visible');
+
+      // Confirmation dialog should appear
+      cy.get('app-confirm-dialog').should('be.visible');
+      PageUtils.clickButton('Continue');
+
+      // Transaction should be saved and navigate back to list
+      cy.url().should('include', '/list');
+    });
+  });
 });

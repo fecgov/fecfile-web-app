@@ -1,10 +1,33 @@
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+
+export type PendingChangeFormControl = FormControl & {
+  _pendingChange?: boolean;
+  _pendingDirty?: boolean;
+  _pendingValue?: unknown;
+};
+
+export function syncPendingControlValues(form: FormGroup | FormArray) {
+  Object.values(form.controls).forEach((control) => {
+    if (control instanceof FormGroup || control instanceof FormArray) {
+      syncPendingControlValues(control);
+    } else if (control instanceof FormControl) {
+      const ctrl = control as PendingChangeFormControl;
+      if (ctrl._pendingChange) {
+        if (ctrl._pendingDirty) ctrl.markAsDirty();
+        ctrl.setValue(ctrl._pendingValue, { onlySelf: true, emitModelToViewChange: false });
+        if (ctrl.updateOn !== 'submit') ctrl.markAsTouched();
+        ctrl._pendingChange = false;
+      }
+    }
+  });
+}
 
 export function blurActiveInput(form: FormGroup) {
   const activeElement = document.activeElement;
-  if (activeElement && activeElement.tagName === 'INPUT') {
-    (activeElement as HTMLElement).blur();
+  if (activeElement instanceof HTMLElement && activeElement !== document.body) {
+    activeElement.blur();
   }
+  syncPendingControlValues(form);
   form.updateValueAndValidity();
 }
 

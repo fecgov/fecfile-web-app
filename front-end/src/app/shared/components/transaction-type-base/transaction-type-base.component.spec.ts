@@ -18,6 +18,8 @@ import {
 } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { firstValueFrom, of, Subject } from 'rxjs';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { PendingChangeFormControl } from 'app/shared/utils/form.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
@@ -437,6 +439,55 @@ describe('TransactionTypeBaseComponent', () => {
       await expect(component.validateForm()).resolves.toBe(false);
       expect(asyncValidator).toHaveBeenCalled();
       expect(component.form.get(component.templateMap.occupation)?.errors?.['required']).toBeTruthy();
+    });
+
+    it('should dispatch singleClickEnableAction when save is attempted with unblurred amount that makes employer/occupation required', async () => {
+      fixture.detectChanges();
+      setupIndividualReceiptValidationForm();
+      const dispatchSpy = vi.spyOn(store, 'dispatch');
+
+      SchemaUtils.addJsonSchemaValidators(
+        component.form,
+        component.transaction!.transactionType.schema,
+        false,
+        component.transaction,
+      );
+
+      // Amount is 250, aggregate starts at null/0, getPreviousEntityAggregate returns 100
+      // When handleNavigate runs, aggregate will become 350 > 200, making employer and occupation required.
+      const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
+      await component.handleNavigate(navEvent);
+
+      expect(component.form.invalid).toBe(true);
+      expect(dispatchSpy).toHaveBeenCalledWith(expect.objectContaining({ type: '[SingleClickButtonDisabled] False' }));
+    });
+
+    it('should save when save is attempted with unblurred employer and occupation with pending changes', async () => {
+      fixture.detectChanges();
+      setupIndividualReceiptValidationForm('Acme Corp');
+
+      SchemaUtils.addJsonSchemaValidators(
+        component.form,
+        component.transaction!.transactionType.schema,
+        false,
+        component.transaction,
+      );
+
+      const occupationControl = component.form.get(component.templateMap.occupation) as PendingChangeFormControl;
+      occupationControl._pendingValue = 'Software Engineer';
+      occupationControl._pendingChange = true;
+      occupationControl._pendingDirty = true;
+
+      const confirmSpy = vi.spyOn(component, 'getConfirmations').mockResolvedValue(true);
+      const submitSpy = vi.spyOn(component, 'submit').mockResolvedValue();
+
+      const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
+      await component.handleNavigate(navEvent);
+
+      expect(occupationControl.value).toBe('Software Engineer');
+      expect(component.form.invalid).toBe(false);
+      expect(confirmSpy).toHaveBeenCalled();
+      expect(submitSpy).toHaveBeenCalled();
     });
   });
 

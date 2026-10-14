@@ -1,6 +1,6 @@
 import type { Mock } from 'vitest';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { blurActiveInput, printFormErrors } from './form.utils';
+import { blurActiveInput, printFormErrors, PendingChangeFormControl } from './form.utils';
 
 describe('blurActiveInput', () => {
   let form: FormGroup;
@@ -33,6 +33,20 @@ describe('blurActiveInput', () => {
     expect(form.updateValueAndValidity).toHaveBeenCalled();
 
     document.body.removeChild(divElement);
+  });
+
+  it('should commit pending control values for controls with updateOn blur', () => {
+    const control = new FormBuilder().control('', { updateOn: 'blur' }) as PendingChangeFormControl;
+    control._pendingValue = 'Software Engineer';
+    control._pendingChange = true;
+    control._pendingDirty = true;
+    form.addControl('occupation', control);
+
+    blurActiveInput(form);
+
+    expect(control.value).toBe('Software Engineer');
+    expect(control.dirty).toBe(true);
+    expect(control.touched).toBe(true);
   });
 });
 
