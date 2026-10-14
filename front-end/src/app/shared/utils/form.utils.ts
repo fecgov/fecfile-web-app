@@ -6,7 +6,7 @@ export type PendingChangeFormControl = FormControl & {
   _pendingValue?: unknown;
 };
 
-export function syncPendingControlValues(form: FormGroup | FormArray) {
+function syncPendingControlValues(form: FormGroup | FormArray) {
   Object.values(form.controls).forEach((control) => {
     if (control instanceof FormGroup || control instanceof FormArray) {
       syncPendingControlValues(control);
