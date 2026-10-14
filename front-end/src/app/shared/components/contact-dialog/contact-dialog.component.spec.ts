@@ -25,15 +25,14 @@ import { afterEach, vi } from 'vitest';
   template: `<app-contact-dialog
     [(contact)]="contact"
     [contactTypeOptions]="contactTypeOptions"
-    [enableDuplicateContactViewing]="enableDuplicateContactViewing()"
-    headerTitle="Create a new contact"
+    [headerTitle]="headerTitle()"
   />`,
 })
 class TestHostComponent {
   component = viewChild.required(ContactDialogComponent);
   contact = signal(new Contact());
   contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  enableDuplicateContactViewing = signal(false);
+  headerTitle = signal<string | undefined>('Create a new contact');
 }
 
 describe('ContactDialogComponent', () => {
@@ -107,7 +106,7 @@ describe('ContactDialogComponent', () => {
 
   it('should show the loading flag before opening the selected contact for editing', async () => {
     vi.useFakeTimers();
-    host.enableDuplicateContactViewing.set(true);
+    host.headerTitle.set(undefined);
     const selectedContact = testContact();
     component.contact.set(new Contact());
     component.visible.set(true);

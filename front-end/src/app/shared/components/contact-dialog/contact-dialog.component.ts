@@ -71,13 +71,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly type = model<ContactTypes>(ContactTypes.INDIVIDUAL);
   readonly visible = model(false);
   readonly contactTypeOptions = input<PrimeOptions>(LabelUtils.getPrimeOptions(ContactTypeLabels));
-  readonly showHistory = input(false);
   readonly headerTitle = input<string>();
   readonly dialogHeader = computed(() => (!this.isNewItem() ? 'Edit Contact' : (this.headerTitle() ?? 'Add Contact')));
   readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
-  readonly enableDuplicateContactViewing = input(false);
+  readonly enableDuplicateContactViewing = computed(() => !this.headerTitle());
 
-  readonly detailVisibleChange = output<boolean>();
   readonly savedContact = output<Contact>();
 
   form: FormGroup = this.fb.group(
@@ -231,7 +229,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     if (!visibleChangeFlag) {
       this.loadingDuplicateContact.set(false);
       this.contact.set(new Contact());
-      this.detailVisibleChange.emit(false);
       this.visible.set(false);
     }
   }
