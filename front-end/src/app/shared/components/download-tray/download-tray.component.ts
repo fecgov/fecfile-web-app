@@ -24,10 +24,6 @@ export class DownloadTrayComponent {
     return event instanceof NavigationEnd && event.urlAfterRedirects === '/reports' && this.dotFecService.showTray();
   });
 
-  removeDownload(download: Download) {
-    this.dotFecService.downloads.update((downloads) => downloads.filter((d) => d !== download));
-  }
-
   download(download: Download) {
     this.dotFecService.downloadFecFile(download);
   }
