@@ -24,7 +24,6 @@ export class NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT extends SchBTransact
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

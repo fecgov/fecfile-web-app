@@ -36,6 +36,8 @@ import { TransactionContactUtils } from '../transaction-type-base/transaction-co
 import { ContactTransactionTableComponent } from './contact-transaction-table/contact-transaction-table.component';
 import { DuplicateContactComponent, ValidatingFields } from './duplicate-contact/duplicate-contact.component';
 import { NgTemplateOutlet } from '@angular/common';
+import { compatForm } from '@angular/forms/signals/compat';
+import { submit } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -102,7 +104,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
   candidateDistrictOptions: PrimeOptions = [];
-  readonly dialogVisible = signal(false);
 
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
@@ -115,6 +116,22 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     candidate_id: '',
     committee_id: '',
   });
+
+  readonly formModel = signal({
+    contactForm: this.form,
+  });
+  readonly signalForm = compatForm(this.formModel, {
+    submission: {
+      ignoreValidators: 'none',
+      action: () => this.submit(),
+      onInvalid: () => {
+        this.form.markAllAsTouched();
+        this.scrollToFirstInvalidControl();
+      },
+    },
+  });
+  readonly disableSubmission = computed(() => this.signalForm().submitting() || this.signalForm().invalid());
+  private jump?: 'continue';
 
   constructor() {
     super();
@@ -205,14 +222,12 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     if (contact.id) {
       this.type.set(contact.type);
     }
-    this.dialogVisible.set(true);
   }
 
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
       this.detailVisibleChange.emit(false);
       this.visible.set(false);
-      this.dialogVisible.set(false);
     }
   }
 
@@ -237,8 +252,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.form.patchValue(contact);
   }
 
-  override async submit(jump: 'continue' | void): Promise<void> {
-    if (jump === 'continue') return this.saveContact(false);
+  override async submit(): Promise<void> {
+    if (this.jump === 'continue') return this.saveContact(false);
     if (this.headerTitle() || this.isNewItem()) return this.saveContact();
     return this.confirmPropagation();
   }
@@ -299,5 +314,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   updateData(event: Event, key: keyof ValidatingFields) {
     const value = (event.target as HTMLInputElement).value ?? '';
     this.data.update((d) => ({ ...d, [key]: value }));
+  }
+
+  override async submitForm(jump?: 'continue'): Promise<void> {
+    this.jump = jump;
+    submit(this.signalForm);
   }
 }

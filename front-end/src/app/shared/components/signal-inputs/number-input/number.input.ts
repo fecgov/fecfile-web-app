@@ -46,6 +46,7 @@ export function integer(field: SchemaPath<number | null>, options?: { message?: 
         [minlength]="minlength()"
         [maxlength]="maxlength()"
         (onBlur)="touched.set(true)"
+        [class.ng-invalid]="invalid()"
       />
       @if (touched() && invalid()) {
         <small class="p-error" role="alert">{{ errors()[0].message }}</small>

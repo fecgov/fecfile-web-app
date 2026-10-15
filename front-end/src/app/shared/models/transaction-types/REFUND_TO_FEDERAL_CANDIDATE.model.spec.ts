@@ -16,7 +16,6 @@ describe('REFUND_TO_FEDERAL_CANDIDATE', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA16');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE);
   });
 

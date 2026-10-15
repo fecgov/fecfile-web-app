@@ -1,4 +1,4 @@
-import { Component, viewChild } from '@angular/core';
+import { Component, linkedSignal, viewChild } from '@angular/core';
 import { DatePicker } from 'primeng/datepicker';
 import { BaseInput } from '../base.input';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +16,7 @@ export type StringDate = Date | string | null;
 })
 export class DateInput extends BaseInput<StringDate> {
   readonly datePicker = viewChild.required(DatePicker);
+  readonly tempValue = linkedSignal({ source: this.value, computation: (value) => value });
 
   onDateSelect(date: StringDate): void {
     let finalValue: StringDate = null;
@@ -26,8 +27,8 @@ export class DateInput extends BaseInput<StringDate> {
       const parsedDate = new Date(date);
       finalValue = Number.isNaN(parsedDate.getTime()) ? date : parsedDate;
     }
-
-    this.value.set(finalValue);
+    this.tempValue.set(finalValue);
+    this.commitValue();
   }
 
   onYearChange(event: Event, delta: -1 | 1) {
@@ -52,11 +53,18 @@ export class DateInput extends BaseInput<StringDate> {
     setTimeout(() => {
       const dp = this.datePicker();
       if (dp.overlayVisible) return;
-      this.touched.set(true);
+      this.commitValue();
     }, 0);
   }
 
   onCloseOverlay(): void {
+    this.commitValue();
+  }
+
+  private commitValue(): void {
+    if (this.value() !== this.tempValue()) {
+      this.value.set(this.tempValue());
+    }
     this.touched.set(true);
   }
 }

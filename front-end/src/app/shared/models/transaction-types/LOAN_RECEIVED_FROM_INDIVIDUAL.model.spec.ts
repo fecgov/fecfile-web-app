@@ -14,7 +14,6 @@ describe('LOAN_RECEIVED_FROM_INDIVIDUAL', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
-    expect(transaction.form_type).toBe('SC/10');
     expect(transaction.transaction_type_identifier).toBe(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
   });
 

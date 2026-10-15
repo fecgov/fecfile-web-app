@@ -79,10 +79,8 @@ describe('ContactDialogComponent', () => {
 
   it('should close dialog with flags set', () => {
     component.visible.set(true);
-    component.dialogVisible.set(true);
     component.closeDialog();
     expect(component.visible()).toBe(false);
-    expect(component.dialogVisible()).toBe(false);
   });
 
   it('should save contact', async () => {

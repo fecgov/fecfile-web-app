@@ -116,10 +116,10 @@ const Candidate_Senate_B: MockContact = {
 
 export const Candidate_House_A: MockContact = {
   type: ContactTypes.CANDIDATE,
-  candidate_id: 'H1AK00001',
+  candidate_id: 'H1AL00001',
   candidate_office: 'H',
-  candidate_state: 'AK',
-  candidate_district: '00',
+  candidate_state: 'AL',
+  candidate_district: '01',
   first_name: 'Aleph',
   last_name: 'House',
   ...address_fields,

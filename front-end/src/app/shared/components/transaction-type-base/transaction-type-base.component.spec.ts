@@ -80,31 +80,6 @@ describe('TransactionTypeBaseComponent', () => {
     expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(...[route, options].filter(Boolean));
   }
 
-  function setupIndividualReceiptValidationForm(employerValue = '') {
-    const transaction = getTestIndividualReceipt();
-    component.transaction = transaction;
-    const templateMap = transaction.transactionType.templateMap;
-
-    component.form = new FormBuilder().group(
-      {
-        ...component.form.controls,
-        contribution_amount: new SubscriptionFormControl(250),
-        contribution_date: new SubscriptionFormControl(new Date('2024-04-27')),
-        last_name: new SubscriptionFormControl('Doe'),
-        first_name: new SubscriptionFormControl('John'),
-        [templateMap.employer]: new SubscriptionFormControl(employerValue),
-        [templateMap.occupation]: new SubscriptionFormControl(''),
-        entity_type: new SubscriptionFormControl(ContactTypes.INDIVIDUAL),
-      },
-      { updateOn: 'blur' },
-    );
-
-    component.templateMap = templateMap;
-    component.transactionType = transaction.transactionType;
-    component.formProperties = transaction.transactionType.getFormControlNames();
-    transactionServiceSpy.getPreviousEntityAggregate.mockReturnValue(of(100));
-  }
-
   beforeAll(async () => {
     await import(`fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECEIPT.validator`);
   });
@@ -143,7 +118,7 @@ describe('TransactionTypeBaseComponent', () => {
             getPreviousEntityAggregate: vi
               .fn()
               .mockName('TransactionService.getPreviousEntityAggregate')
-              .mockReturnValue(of(undefined)),
+              .mockReturnValue(Promise.resolve(undefined)),
           },
         },
         ConfirmationService,
