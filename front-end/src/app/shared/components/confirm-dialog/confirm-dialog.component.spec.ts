@@ -14,6 +14,7 @@ describe('ConfirmDialogComponent', () => {
 
     confirmationServiceMock = {
       requireConfirmation$: confirmation$.asObservable(),
+      close: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
