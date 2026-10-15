@@ -15,6 +15,7 @@ export class TRANSFER_TO_AFFILIATES extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
+      form_type: 'SB22',
       transaction_type_identifier: ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
     });
   }

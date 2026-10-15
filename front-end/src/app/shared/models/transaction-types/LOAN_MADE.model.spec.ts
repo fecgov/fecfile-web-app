@@ -15,6 +15,7 @@ describe('LOAN_MADE', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const transaction: SchBTransaction = transactionType.getNewTransaction();
+    expect(transaction.form_type).toBe('SB27');
     expect(transaction.transaction_type_identifier).toBe(ScheduleBTransactionTypes.LOAN_MADE);
   });
 

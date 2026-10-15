@@ -48,6 +48,7 @@ export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO extends SchETransa
 
   getNewTransaction() {
     return SchETransaction.fromJSON({
+      form_type: 'SE',
       transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
       aggregation_group: null,
     });

@@ -9,6 +9,7 @@ describe('CONTRIBUTION_FROM_CANDIDATE', () => {
   it('creates a Schedule A candidate contribution', () => {
     const transaction = transactionType.getNewTransaction() as SchATransaction;
 
+    expect(transaction.form_type).toBe('SA11D');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE);
   });
 

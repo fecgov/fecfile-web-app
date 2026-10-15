@@ -16,6 +16,7 @@ describe('TRIBAL_RECEIPT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SA11AI');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_RECEIPT);
   });
 

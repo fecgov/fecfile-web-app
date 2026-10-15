@@ -1,5 +1,5 @@
-import { computed, Directive, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { afterNextRender, computed, Directive, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import type { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -10,7 +10,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, merge, Observable, of, startWith, takeUntil } from 'rxjs';
+import { filter, firstValueFrom, map, merge, Observable, of, startWith, take, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
@@ -30,6 +30,7 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { CommitteeStore } from 'app/committee/committee.store';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 
 @Directive()
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {

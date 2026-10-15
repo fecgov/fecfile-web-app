@@ -94,11 +94,12 @@ describe('Contacts Add (/contacts)', () => {
       contact_type: 'Candidate',
       candidate_id: 'HX000', // invalid format
       candidate_office: 'House',
-      candidate_state: 'Arizona',
+      candidate_state: 'Virginia',
       candidate_district: '01',
       last_name: 'Bad',
       first_name: 'Candidate',
     });
+    ContactListPage.clickSave();
     cy.get('#candidate_id')
       .parent()
       .invoke('text')
@@ -113,6 +114,7 @@ describe('Contacts Add (/contacts)', () => {
       committee_id: 'X123', // invalid format
       name: 'Bad Committee',
     });
+    ContactListPage.clickSave();
     cy.get('#committee_id')
       .parent()
       .invoke('text')
@@ -152,7 +154,7 @@ describe('Contacts Add (/contacts)', () => {
               first_name: 'CancelCandFn',
               candidate_id: 'H0VA00001',
               candidate_office: 'House',
-              candidate_state: 'Arizona',
+              candidate_state: 'Virginia',
               candidate_district: '01',
             };
           } else if (contactType === 'Committee') {
@@ -189,7 +191,8 @@ describe('Contacts Add (/contacts)', () => {
       city: '',
       state: '',
       zip: '',
-    }, false, ContactsHelpers.CONTACT_DIALOG);
+    });
+    ContactListPage.clickSave();
     cy.get('#last_name').parent().should('contain', 'This is a required field');
     cy.get('#first_name').parent().should('contain', 'This is a required field');
     cy.get('#street_1').parent().should('contain', 'This is a required field');
@@ -224,7 +227,7 @@ describe('Contacts Add (/contacts)', () => {
           ContactsHelpers.assertSuccessToastMessage();
 
           // Dialog is still open
-          cy.get(ContactsHelpers.CONTACT_DIALOG).contains('Add Contact').should('be.visible');
+          cy.get('[data-cy="contact-dialog"]').contains('Add Contact').should('be.visible');
 
           // keep your reset checks
           if (c.type === 'Individual' || c.type === 'Candidate') {

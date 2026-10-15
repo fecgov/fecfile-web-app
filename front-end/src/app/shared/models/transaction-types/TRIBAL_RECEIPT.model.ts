@@ -29,6 +29,7 @@ export class TRIBAL_RECEIPT extends SchATransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
+      form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_RECEIPT,
       aggregation_group: AggregationGroups.GENERAL,
     });

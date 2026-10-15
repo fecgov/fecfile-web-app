@@ -14,6 +14,7 @@ describe('IN_KIND_TRANSFER', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
+    expect(transaction.form_type).toBe('SA12');
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.IN_KIND_TRANSFER);
   });
 });

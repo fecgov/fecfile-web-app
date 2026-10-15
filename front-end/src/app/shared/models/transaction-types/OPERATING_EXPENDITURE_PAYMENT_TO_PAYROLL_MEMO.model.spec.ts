@@ -16,6 +16,7 @@ describe('OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SB21B');
     expect(txn.transaction_type_identifier).toBe(
       ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
     );

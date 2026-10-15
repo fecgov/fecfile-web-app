@@ -15,6 +15,7 @@ describe('TRANSFER_TO_AFFILIATES', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SB22');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES);
   });
 

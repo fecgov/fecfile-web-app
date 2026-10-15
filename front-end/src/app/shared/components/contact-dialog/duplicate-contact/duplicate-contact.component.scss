@@ -1,6 +1,4 @@
 :host {
-  --action-column-width: 145px;
-  --name-column-width: calc(0.6 * (100% - var(--action-column-width)));
   grid-column-end: span 12 !important;
   margin: 0;
 }
@@ -74,11 +72,10 @@
     column-gap: 0;
     row-gap: 16px;
     align-items: center;
-    grid-template-columns: fit-content(var(--name-column-width)) 1fr var(--action-column-width);
+    grid-template-columns: fit-content(60%) 1fr 145px;
 
     &.is-committee {
-      --name-column-width: calc(0.5 * (100% - 9ch - 40px - var(--action-column-width)));
-      grid-template-columns: fit-content(var(--name-column-width)) max-content 1fr var(--action-column-width);
+      grid-template-columns: fit-content(40%) fit-content(20%) 1fr 145px;
     }
   }
 
@@ -87,7 +84,6 @@
     display: grid;
     grid-template-columns: subgrid;
     align-items: center;
-    font-size: 14px;
 
     .col-name,
     .col-id {
@@ -106,6 +102,7 @@
       grid-row: auto;
       white-space: normal;
       overflow-wrap: anywhere;
+      word-break: word-break;
     }
 
     .col-action {

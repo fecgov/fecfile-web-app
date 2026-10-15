@@ -15,6 +15,7 @@ describe('REFUND_PARTY_CONTRIBUTION', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SB28B');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION);
   });
 

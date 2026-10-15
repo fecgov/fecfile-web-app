@@ -15,6 +15,7 @@ describe('NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SB29');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT);
   });
 

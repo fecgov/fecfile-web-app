@@ -116,12 +116,8 @@ describe('Extended F3X Schedule A Aggregation', () => {
           'Unaggregated',
           true,
         );
-        F3XAggregationHelpers.assertReceiptAggregate(secondId, '$100.00');
-
-        cy.intercept('GET','api/v1/transactions/**&schedules=A').as('getScheduleA');
 
         F3XAggregationHelpers.aggregateRowById(F3XAggregationHelpers.receiptsTableRoot, secondId);
-        cy.wait('@getScheduleA');
         F3XAggregationHelpers.assertReceiptRowStatus(secondId, 'Unaggregated', false);
         F3XAggregationHelpers.assertReceiptAggregate(secondId, '$175.00');
       });

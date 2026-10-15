@@ -16,6 +16,7 @@ describe('INDEPENDENT_EXPENDITURE_VOID', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchETransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SE');
     expect(txn.transaction_type_identifier).toBe(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID);
   });
 

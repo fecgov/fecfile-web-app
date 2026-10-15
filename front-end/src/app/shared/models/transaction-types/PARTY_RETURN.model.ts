@@ -26,6 +26,7 @@ export class PARTY_RETURN extends SchATransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
+      form_type: 'SA11B',
       transaction_type_identifier: ScheduleATransactionTypes.PARTY_RETURN,
       aggregation_group: AggregationGroups.GENERAL,
     });
