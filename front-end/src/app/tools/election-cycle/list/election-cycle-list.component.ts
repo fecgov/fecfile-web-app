@@ -1,4 +1,4 @@
-import { Component, computed, inject, linkedSignal, resource, Signal, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, linkedSignal, model, resource, Signal, signal, viewChild } from '@angular/core';
 import { ElectionCycle } from '../election-cycle.model';
 import { ElectionCycleService } from '../election-cycle.service';
 import { ButtonModule } from 'primeng/button';
@@ -20,12 +20,14 @@ import { TableActionsButtonComponent } from 'app/shared/components/table-actions
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { MessageWrapperService } from 'app/shared/services/message-wrapper.service';
 import { electionColumns } from './election-cycle-table.config';
+import { AccordionModule } from 'primeng/accordion';
 
 @Component({
   selector: 'app-election-cycle-list',
   imports: [
     ButtonModule,
     RippleModule,
+    AccordionModule,
     FormField,
     SelectInput,
     NumberInput,
@@ -61,6 +63,8 @@ export class ElectionCyclesListComponent {
   readonly disableSubmission = computed(() => this.form().invalid() || this.form().submitting());
   readonly officeOptions = FormConfig.officeOptions;
   readonly electionTypeOptions = FormConfig.electionTypeOptions;
+
+  readonly active = model<number>(-1);
 
   /* TABLE PROPERTIES */
   readonly rowsPerPage = signal(5);
