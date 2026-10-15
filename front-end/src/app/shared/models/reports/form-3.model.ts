@@ -148,6 +148,7 @@ export class Form3 extends BaseForm3 {
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
+    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
     ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
     ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
     ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
