@@ -241,9 +241,6 @@ export class TransactionFormUtils {
         takeUntil(component.destroy$),
       )
       .subscribe(([amount, previousAggregate]) => {
-        if (previousAggregate === null || previousAggregate === undefined) {
-          return;
-        }
         this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previousAggregate, amount);
       });
   }
@@ -306,9 +303,6 @@ export class TransactionFormUtils {
         takeUntil(component.destroy$),
       )
       .subscribe(([amount, previousAggregate, transaction]) => {
-        if (previousAggregate === null || previousAggregate === undefined) {
-          return;
-        }
         this.updateAggregate(
           form,
           'aggregate_general_elec_expended',
@@ -328,10 +322,7 @@ export class TransactionFormUtils {
     previousAggregate: number | null,
     amount: number,
   ) {
-    if (previousAggregate === null || previousAggregate === undefined) {
-      return;
-    }
-
+    previousAggregate = previousAggregate ?? 0;
     if (transaction.force_unaggregated) {
       form.get(templateMap[field])?.setValue(previousAggregate);
     } else if (transaction.transactionType?.isRefund) {
@@ -422,7 +413,7 @@ export class TransactionFormUtils {
     if (transaction?.transactionType) {
       form.patchValue({
         entity_type: defaultContactTypeOption,
-        [transaction.transactionType.templateMap.aggregate]: null,
+        [transaction.transactionType.templateMap.aggregate]: 0,
         memo_code: this.getMemoCodeConstant(transaction?.transactionType),
         [transaction.transactionType.templateMap.purpose_description]:
           transaction?.transactionType?.generatePurposeDescriptionWrapper(transaction),
@@ -501,8 +492,14 @@ export class TransactionFormUtils {
     firstValueFrom(contactId$).then((contactIdStart) => {
       (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
         (previousAggregate) => {
-          const amount = form.get(templateMap.amount)?.value;
-          this.updateAggregate(form, 'aggregate', templateMap, transaction, previousAggregate ?? 0, amount);
+          this.updateAggregate(
+            form,
+            'aggregate',
+            templateMap,
+            transaction,
+            previousAggregate,
+            form.get(templateMap.amount)?.value,
+          );
         },
         component.destroy$,
         [
