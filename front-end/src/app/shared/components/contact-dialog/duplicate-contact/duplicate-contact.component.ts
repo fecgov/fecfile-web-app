@@ -22,6 +22,7 @@ export class DuplicateContactComponent {
   readonly type = input.required<ContactTypes>();
   readonly data = input.required<ValidatingFields>();
   readonly useContact = output<Contact>();
+  readonly viewContactMode = input(false);
 
   readonly checkingForDuplicate = signal(false);
 
