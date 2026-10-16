@@ -256,6 +256,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     ) {
       this.childTransaction.contact_1 = this.transaction.contact_1;
       this.childForm.get('entity_type')?.setValue(selectItem.value.type);
+      if (selectItem.value.id) {
+        this.childContactIdMap['contact_1']?.next(selectItem.value.id);
+      }
     }
   }
 

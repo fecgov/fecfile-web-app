@@ -358,6 +358,9 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       const ancestor = this.transaction.parent_transaction ?? this.transaction.debt ?? this.transaction.loan;
       this.transaction.contact_1 = ancestor?.contact_1;
       this.transaction.contact_1_id = ancestor?.contact_1_id;
+      if (this.transaction.contact_1_id) {
+        this.contactIdMap['contact_1']?.next(this.transaction.contact_1_id);
+      }
 
       const entityTypeValue = ancestor?.contact_1?.type;
       if (entityTypeValue) this.form.get('entity_type')?.setValue(entityTypeValue);
