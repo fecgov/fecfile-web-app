@@ -38,6 +38,7 @@ import { DuplicateContactComponent, ValidatingFields } from './duplicate-contact
 import { NgTemplateOutlet } from '@angular/common';
 import { compatForm } from '@angular/forms/signals/compat';
 import { submit } from '@angular/forms/signals';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -79,7 +80,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly savedContact = output<Contact>();
 
   form: FormGroup = this.fb.group(
-    SchemaUtils.getFormGroupFields([
+    getFormGroupFields([
       ...new Set([
         ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
         ...SchemaUtils.getSchemaProperties(contactCandidateSchema),
@@ -87,7 +88,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ]),
-    { updateOn: 'blur' },
   );
 
   readonly isNewItem = computed(() => !this.contact()?.id);
@@ -339,4 +339,17 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.jump = jump;
     submit(this.signalForm);
   }
+}
+
+function getFormGroupFields(properties: string[]) {
+  const updateOnBlur = new Set(['candidate_id', 'committee_id']);
+  const group: { [key: string]: SubscriptionFormControl } = {};
+  properties.forEach((property) => {
+    const updateOn = updateOnBlur.has(property) ? 'blur' : 'change';
+    group[property] = new SubscriptionFormControl<string | Date | null | undefined>('', {
+      updateOn,
+    });
+  });
+
+  return group;
 }
