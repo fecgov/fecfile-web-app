@@ -24,7 +24,6 @@ export class FEDERAL_ELECTION_ACTIVITY_VOID extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB30B',
       transaction_type_identifier: ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

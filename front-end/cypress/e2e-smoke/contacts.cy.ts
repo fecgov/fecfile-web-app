@@ -15,7 +15,7 @@ describe('Manage contacts', () => {
     const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
     ContactListPage.clickSave();
-    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
+    cy.get('[data-cy="contact-dialog"]').children().should('have.length', 0);
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
@@ -31,7 +31,7 @@ describe('Manage contacts', () => {
     ContactListPage.enterFormData(formData);
 
     ContactListPage.clickSave();
-    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
+    cy.get('[data-cy="contact-dialog"]').children().should('have.length', 0);
   });
 
   it('Create a Candidate contact', () => {
@@ -42,12 +42,12 @@ describe('Manage contacts', () => {
       contact_type: 'Candidate',
       candidate_id: 'H0VA00001',
       candidate_office: 'House',
-      candidate_state: 'Virginia',
+      candidate_state: 'Arizona',
       candidate_district: '01',
     };
     ContactListPage.enterFormData(formData);
     ContactListPage.clickSave();
-    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
+    cy.get('[data-cy="contact-dialog"]').children().should('have.length', 0);
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
@@ -66,7 +66,7 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     ContactListPage.clickSave();
-    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
+    cy.get('[data-cy="contact-dialog"]').children().should('have.length', 0);
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -84,7 +84,7 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     ContactListPage.clickSave();
-    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
+    cy.get('[data-cy="contact-dialog"]').children().should('have.length', 0);
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -103,7 +103,6 @@ describe('Manage contacts', () => {
       state: '',
       zip: '',
     });
-    ContactListPage.clickSave();
     cy.get('#last_name').parent().should('contain', 'This is a required field');
     cy.get('#first_name').parent().should('contain', 'This is a required field');
     cy.get('#street_1').parent().should('contain', 'This is a required field');

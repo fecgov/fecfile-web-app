@@ -1,4 +1,4 @@
-import { Component, computed, inject, linkedSignal, resource, Signal, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, linkedSignal, model, resource, Signal, signal, viewChild } from '@angular/core';
 import { ElectionCycle } from '../election-cycle.model';
 import { ElectionCycleService } from '../election-cycle.service';
 import { ButtonModule } from 'primeng/button';
@@ -20,12 +20,14 @@ import { TableActionsButtonComponent } from 'app/shared/components/table-actions
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { MessageWrapperService } from 'app/shared/services/message-wrapper.service';
 import { electionColumns } from './election-cycle-table.config';
+import { AccordionModule } from 'primeng/accordion';
 
 @Component({
   selector: 'app-election-cycle-list',
   imports: [
     ButtonModule,
     RippleModule,
+    AccordionModule,
     FormField,
     SelectInput,
     NumberInput,
@@ -49,18 +51,25 @@ export class ElectionCyclesListComponent {
   readonly breakpointStore = inject(BreakpointStore);
 
   /* FORM PROPERTIES */
+  readonly editingId = signal<string | null>(null);
+  readonly isEditing = computed(() => this.editingId() !== null);
   readonly model = signal<FormConfig.ElectionCycleForm>(FormConfig.INITIAL_FORM_VALUE);
-  readonly form = FormConfig.createElectionCycleForm(this.model, this.cookieService, this.handleFormSubmit.bind(this));
+  readonly form = FormConfig.createElectionCycleForm(
+    this.model,
+    this.editingId,
+    this.cookieService,
+    this.handleFormSubmit.bind(this),
+  );
   readonly disableSubmission = computed(() => this.form().invalid() || this.form().submitting());
   readonly officeOptions = FormConfig.officeOptions;
   readonly electionTypeOptions = FormConfig.electionTypeOptions;
+
+  readonly active = model<number>(-1);
 
   /* TABLE PROPERTIES */
   readonly rowsPerPage = signal(5);
   readonly first = linkedSignal({ source: this.rowsPerPage, computation: () => 0 });
   readonly table = viewChild.required(Table);
-  readonly editingId = signal<string | null>(null);
-  readonly isEditing = computed(() => this.editingId() !== null);
 
   readonly params = computed(() => {
     const rows = this.rowsPerPage();
@@ -82,15 +91,13 @@ export class ElectionCyclesListComponent {
   readonly columns: Signal<ColumnDefinition<ElectionCycle>[]> = computed(() => electionColumns(this.breakpointStore));
 
   public rowActions: TableAction<ElectionCycle>[] = [
-    // new TableAction('Edit', this.editItem.bind(this)), Removed till editing added.
+    new TableAction('Edit', this.editItem.bind(this)),
     new TableAction('Delete', this.deleteItem.bind(this)),
   ];
 
   private async handleFormSubmit(): Promise<void> {
     if (this.newItem()) await this.create();
     else await this.update();
-    this.clearEditing();
-    this.form().reset(FormConfig.INITIAL_FORM_VALUE);
   }
 
   addItem() {
@@ -132,6 +139,8 @@ export class ElectionCyclesListComponent {
       await this.itemService.create(cycle);
       this.electionCycleData.reload();
       this.messageService.success('New Election cycle added');
+      this.clearEditing();
+      this.form().reset(FormConfig.INITIAL_FORM_VALUE);
     } catch (error) {
       console.log('error saving', error);
       this.messageService.error('There was an error creating your new election cycle');
@@ -139,7 +148,19 @@ export class ElectionCyclesListComponent {
   }
 
   private async update() {
-    // TODO
+    try {
+      const id = this.editingId();
+      if (!id) throw new Error('No Editing ID');
+      const cycle = new ElectionCycle({ ...(this.form().value() as Partial<ElectionCycle>), id });
+      await this.itemService.update(cycle);
+      this.electionCycleData.reload();
+      this.messageService.success(`Election cycle updated`);
+      this.clearEditing();
+      this.form().reset(FormConfig.INITIAL_FORM_VALUE);
+    } catch (error) {
+      console.log('error saving', error);
+      this.messageService.error('There was an error updating your election cycle');
+    }
   }
 
   private setEditing(id: string) {

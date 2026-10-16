@@ -48,7 +48,6 @@ export class INDEPENDENT_EXPENDITURE_VOID extends SchETransactionType {
 
   getNewTransaction() {
     return SchETransaction.fromJSON({
-      form_type: 'SE',
       transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
       aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
     });

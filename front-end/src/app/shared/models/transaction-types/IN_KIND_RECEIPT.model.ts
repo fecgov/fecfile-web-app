@@ -24,7 +24,6 @@ export class IN_KIND_RECEIPT extends IN_KIND {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.IN_KIND_RECEIPT,
       aggregation_group: AggregationGroups.GENERAL,
     });

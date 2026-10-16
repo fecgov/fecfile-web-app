@@ -20,7 +20,6 @@ export class OTHER_DISBURSEMENT_VOID extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB29',
       transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

@@ -1,3 +1,4 @@
+import { ReportTypes } from '../reports/report.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT } from './OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
 
@@ -15,7 +16,6 @@ describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SB21B');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT);
   });
 
@@ -30,5 +30,15 @@ describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
       } as SchBTransaction,
     ];
     expect(transactionType.generatePurposeDescription(txn)).toBe('Credit Card Memo: See Below');
+  });
+
+  it('#hasElectionInformation() should return true for F3 report type', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(result).toBe(true);
+  });
+
+  it('#hasElectionInformation() should return false for F3X', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(result).toBe(false);
   });
 });

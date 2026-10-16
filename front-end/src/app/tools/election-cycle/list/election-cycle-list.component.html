@@ -8,15 +8,68 @@
       for that office.
     </p>
     <p>
-      For current election cycle dates or information on special elections, visit
-      <a href="https://fec.gov" target="_blank" rel="noopener noreferrer">FEC.gov</a>.
-    </p>
-    <p>
-      Keep in mind that election cycles cannot overlap, so if you've already created future cycles, you may need to
-      update those cycles as well to reflect the new dates. In the event of a runoff, the cycle end date should be
-      updated to the day of the runoff election.
+      For current and future election cycle dates, visit the "<a
+        href="https://www.fec.gov/help-candidates-and-committees/filing-reports/election-cycle-aggregation/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Election cycle and aggregation</a
+      >" page on FEC.gov. For information on special election dates, visit "<a
+        href="https://www.fec.gov/help-candidates-and-committees/dates-and-deadlines/#special-elections"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Dates and deadlines</a
+      >".
     </p>
   </section>
+
+  <section id="election-cycle-accordion">
+    <p-accordion #acc [(value)]="active">
+      <p-accordion-panel [value]="0" data-cy="accordion-panel-0">
+        <p-accordion-header>
+          <div class="accordion-header-wrapper">
+            <div class="accordion-text">
+              <strong>How to edit election cycle dates</strong>
+            </div>
+            <img
+              class="accordion-icon"
+              [src]="active() === 0 ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"
+              [alt]="active() === 0 ? 'close content toggle' : 'open content toggle'"
+            />
+          </div>
+        </p-accordion-header>
+        <div
+          class="election-cycle-accordion-content"
+          [class.election-cycle-accordion-content-open]="active() === 0"
+          [id]="acc.id() + '_accordioncontent_0'"
+          role="region"
+          [attr.aria-labelledby]="acc.id() + '_accordionheader_0'"
+          [attr.aria-hidden]="active() !== 0"
+          [attr.inert]="active() !== 0 ? '' : null"
+          data-cy="accordion-1"
+        >
+          <div class="election-cycle-accordion-content-inner">
+            <div class="accordion-content-wrapper">
+              <p>
+                If your election cycle dates change due to the candidate running in a general runoff election, or for a
+                different office, you should edit the end date for the election cycle. Keep in mind that election cycles
+                cannot overlap, so if you’ve already created future cycles, you may need to update those cycles as well
+                to reflect the new dates.
+              </p>
+              <br />
+              <p>
+                Special elections: If the candidate runs in a special election after you already created the general
+                election cycle, you may need to adjust the start date of the existing general election cycle and then
+                create a new special election cycle so the two cycles do not overlap. Alternatively, you may convert the
+                existing general election cycle by changing the type to Special, editing the end date, and creating a
+                new general election cycle to cover the remaining period.
+              </p>
+            </div>
+          </div>
+        </div>
+      </p-accordion-panel>
+    </p-accordion>
+  </section>
+
   <section id="manage-election-cycles" aria-labelledby="manage-cycles-heading">
     <header class="flex mb-2 justify-content-between align-items-center">
       <h2 id="manage-cycles-heading">Manage election cycles</h2>
@@ -88,7 +141,7 @@
                   <app-select-input
                     [options]="electionTypeOptions"
                     [formField]="form.electionType"
-                    label="Election Type"
+                    label="Cycle Type"
                     labelStyleClass="sr-only"
                     appendTo="body"
                   />

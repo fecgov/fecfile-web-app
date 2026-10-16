@@ -17,7 +17,6 @@ describe('RETURN_RECEIPT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA11AI');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   });
   it('#generatePurposeDescription() should not be defined', () => {
