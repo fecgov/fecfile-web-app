@@ -683,5 +683,48 @@ describe('TransactionTypeBaseComponent', () => {
       await fixture.whenStable();
       expect(transactionServiceSpy.getPreviousEntityAggregate).toHaveBeenCalled();
     });
+
+    it('should keep aggregate null until all fields are provided, and calculate when present', async () => {
+      const form = new FormGroup(
+        {
+          expenditure_amount: new SubscriptionFormControl(null),
+          expenditure_date: new SubscriptionFormControl(null),
+          aggregate: new SubscriptionFormControl(null),
+        },
+        { updateOn: 'change' },
+      );
+      const contactId$ = new Subject<string>();
+      const contactIdMap: ContactIdMapType = { contact_1: contactId$ };
+
+      const transaction = SchETransaction.fromJSON({
+        transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+        aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      });
+
+      transactionServiceSpy.getPreviousEntityAggregate.mockReturnValue(of(100));
+
+      TransactionFormUtils.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, {
+        amount: 'expenditure_amount',
+        date: 'expenditure_date',
+        aggregate: 'aggregate',
+      } as TransactionTemplateMapType);
+
+      expect(form.get('aggregate')?.value).toBeNull();
+
+      contactId$.next('1234-abcd-1234-abcd');
+      form.get('expenditure_date')?.setValue(new Date('1-1-2013'));
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      // Still null because amount is missing
+      expect(form.get('aggregate')?.value).toBeNull();
+
+      form.get('expenditure_amount')?.setValue(50);
+      fixture.detectChanges();
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      await fixture.whenStable();
+
+      expect(form.get('aggregate')?.value).toBe(150);
+    });
   });
 });

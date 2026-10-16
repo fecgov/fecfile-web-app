@@ -23,6 +23,7 @@ import {
   filter,
   firstValueFrom,
   from,
+  isObservable,
   map,
   merge,
   Observable,
@@ -102,7 +103,11 @@ export class TransactionFormUtils {
     }
 
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
-      const id = (transaction[contact as keyof Transaction] as Contact)?.id ?? '';
+      let id = (transaction[contact as keyof Transaction] as Contact)?.id ?? '';
+      if (!id && contact === 'contact_1') {
+        const ancestor = transaction.parent_transaction ?? transaction.debt ?? transaction.loan;
+        id = ancestor?.contact_1?.id ?? ancestor?.contact_1_id ?? '';
+      }
       contactIdMap[contact] = new BehaviorSubject<string>(id);
     });
 
@@ -413,7 +418,7 @@ export class TransactionFormUtils {
     if (transaction?.transactionType) {
       form.patchValue({
         entity_type: defaultContactTypeOption,
-        [transaction.transactionType.templateMap.aggregate]: 0,
+        [transaction.transactionType.templateMap.aggregate]: transaction.transactionType.showAggregate ? null : 0,
         memo_code: this.getMemoCodeConstant(transaction?.transactionType),
         [transaction.transactionType.templateMap.purpose_description]:
           transaction?.transactionType?.generatePurposeDescriptionWrapper(transaction),
@@ -491,13 +496,19 @@ export class TransactionFormUtils {
 
     firstValueFrom(contactId$).then((contactIdStart) => {
       (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
-        (previousAggregate) => {
+        (result: { calculate: boolean; previousAggregate: number | null }) => {
+          if (!result || !result.calculate) {
+            if (templateMap.aggregate) {
+              form.get(templateMap.aggregate)?.setValue(null);
+            }
+            return;
+          }
           this.updateAggregate(
             form,
             'aggregate',
             templateMap,
             transaction,
-            previousAggregate,
+            result.previousAggregate,
             form.get(templateMap.amount)?.value,
           );
         },
@@ -515,8 +526,14 @@ export class TransactionFormUtils {
             return JSON.stringify(prev) === JSON.stringify(curr);
           }),
           switchMap(([date, amount, contactId]) => {
-            if (!date || !contactId || !amount) return of(null);
-            return component.transactionService.getPreviousEntityAggregate(transaction, contactId, date);
+            const hasAmount = amount !== null && amount !== undefined && amount !== '' && !isNaN(+amount);
+            if (!date || !contactId || !hasAmount) {
+              return of({ calculate: false, previousAggregate: null });
+            }
+            const res = component.transactionService.getPreviousEntityAggregate(transaction, contactId, date);
+            return (isObservable(res) ? res : from(res)).pipe(
+              map((previousAggregate: any) => ({ calculate: true, previousAggregate: previousAggregate ?? 0 })),
+            );
           }),
         ],
       );

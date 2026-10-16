@@ -174,6 +174,9 @@ export abstract class TripleTransactionTypeBaseComponent
     ) {
       this.childTransaction_2.contact_1 = this.transaction.contact_1;
       this.childForm_2.get('entity_type')?.setValue(selectItem.value.type);
+      if (selectItem.value.id) {
+        this.childContactIdMap_2['contact_1']?.next(selectItem.value.id);
+      }
     }
   }
 
