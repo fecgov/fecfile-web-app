@@ -54,7 +54,7 @@ describe("Users: Validation and API failure states", () => {
     UsersPage.openAddUserDialog();
 
     for (const badEmail of invalidEmails) {
-      UsersHelpers.emailInput().clear({ force: true }).type(badEmail, { delay: 0 });
+      UsersHelpers.emailInput().clear({ force: true }).type(badEmail, { delay: 0 }).blur();
       UsersHelpers.submitBtn().should('be.disabled');
       findEmailError()
         .should('be.visible')
