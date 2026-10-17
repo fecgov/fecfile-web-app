@@ -15,7 +15,6 @@ describe('OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SB29');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL);
   });
 

@@ -60,14 +60,19 @@ export class PageUtils {
 
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
-
     if (value) {
-      cy.get(alias).find(querySelector).eq(index).click();
-      cy.get('.p-select-overlay:visible')
-        .find(`[role="option"][aria-label="${value}"]`)
-        .should('have.length', 1)
-        .click();
-    }
+    cy.get(alias)
+      .find(querySelector)
+      .eq(index)
+      .find('[role="combobox"]')
+      .focus()
+      .type('{enter}');
+
+    cy.get('.p-select-overlay:visible')
+      .find(`[role="option"][aria-label="${value}"]`)
+      .should('be.visible')
+      .click();
+  }
   }
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
@@ -260,7 +265,7 @@ export class PageUtils {
       if (!button) {
         throw new Error(`Missing visible button match for ${String(name)}`);
       }
-
+     
       cy.wrap(button).click({ force });
     });
   }

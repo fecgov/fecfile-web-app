@@ -20,7 +20,6 @@ describe('CONDUIT_EARMARK_OUT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const transaction: SchBTransaction = transactionType.getNewTransaction();
-    expect(transaction.form_type).toBe('SB23');
     expect(transaction.transaction_type_identifier).toBe(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT);
   });
 

@@ -35,8 +35,17 @@
               </button>
             </td>
             <td>
-              <button pButton pRipple [rounded]="true" [text]="true" class="p-1" (click)="removeDownload(item)">
-                <img src="assets/img/x-circle.svg" draggable="false" alt="X in a circle" />
+              <button
+                pButton
+                pRipple
+                [rounded]="true"
+                [text]="true"
+                class="p-1"
+                (click)="dotFecService.removeDownload(item)"
+              >
+                <svg alt="remove download from tray" height="20" width="20" class="primary-icon">
+                  <use href="assets/img/x-circle.svg#x-icon"></use>
+                </svg>
               </button>
             </td>
           </tr>

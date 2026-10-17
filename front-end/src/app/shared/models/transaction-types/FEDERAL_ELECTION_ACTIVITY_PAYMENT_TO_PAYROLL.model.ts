@@ -19,7 +19,6 @@ export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL extends SchBTransactio
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB30B',
       transaction_type_identifier: ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DownloadTrayComponent } from './download-tray.component';
 import { Actions } from '@ngrx/effects';
@@ -53,13 +54,13 @@ describe('DownloadTrayComponent', () => {
   it('should update downloads and sidebarVisible', async () => {
     await component.router.navigateByUrl('/reports');
     const downloads = [download];
-    dotFecService.downloads.set(downloads);
+    (dotFecService as any)._downloads.set(downloads);
     expect(component.sidebarVisible()).toBe(true);
 
-    dotFecService.downloads.set([]);
+    (dotFecService as any)._downloads.set([]);
     expect(component.sidebarVisible()).toBe(false);
 
-    dotFecService.downloads.set(downloads);
+    (dotFecService as any)._downloads.set(downloads);
     expect(component.sidebarVisible()).toBe(true);
 
     await component.router.navigateByUrl('');
@@ -68,9 +69,9 @@ describe('DownloadTrayComponent', () => {
 
   it('should remove download and update sidebarVisible', () => {
     const downloads = [download];
-    dotFecService.downloads.set(downloads);
+    (dotFecService as any)._downloads.set(downloads);
 
-    component.removeDownload(download);
+    dotFecService.removeDownload(download);
 
     expect(dotFecService.downloads()).toEqual([]);
     expect(component.sidebarVisible()).toBe(false);
@@ -78,7 +79,7 @@ describe('DownloadTrayComponent', () => {
 
   it('should call downloadFecFile on download', () => {
     const downloads = [download];
-    dotFecService.downloads.set(downloads);
+    (dotFecService as any)._downloads.set(downloads);
     vi.spyOn(dotFecService, 'downloadFecFile');
 
     component.download(download);

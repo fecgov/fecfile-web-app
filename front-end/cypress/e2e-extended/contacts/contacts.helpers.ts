@@ -65,13 +65,29 @@ export class ContactsHelpers {
   }
 
   static fieldForLabel(labelRx: RegExp, root = ContactsHelpers.CONTACT_DIALOG) {
-    return cy.get(root).contains('label', labelRx).closest('.field, .p-field, div.field');
+    return cy.get(root)
+      .find('.span-label, label')
+      .filter((_, el) => labelRx.test(el.innerText || el.textContent || ''))
+      .closest('.field, .p-field, div.field, app-select');
   }
 
   static expectErrorNearLabel(labelRx: RegExp, errorRx: RegExp, root = ContactsHelpers.CONTACT_DIALOG) {
     ContactsHelpers.fieldForLabel(labelRx, root).within(() => {
       cy.contains(errorRx).should('exist');
     });
+  }
+
+  static setState(state: string, alias = ContactsHelpers.CONTACT_DIALOG) {
+    alias = PageUtils.getAlias(alias);
+    cy.get(alias).find('#state').eq(0).click();
+    if (state === '') {
+      cy.get(PageUtils.getAlias(ContactsHelpers.CONTACT_DIALOG)).click('topLeft');
+    } else {
+      cy.get('.p-select-overlay:visible')
+        .find(`[role="option"][aria-label="${state}"]`)
+        .should('have.length', 1)
+        .click();
+    }
   }
 
   static setTelephone(value: string, root = ContactsHelpers.CONTACT_DIALOG) {
@@ -235,17 +251,6 @@ export class ContactsHelpers {
     if (c === 'S') return 'Senate';
     if (c === 'P') return 'President';
     return undefined;
-  }
-
-  static stateCodeToName(code?: string | null) {
-    const m: Record<string, string> = {
-      AK: 'Alaska',
-      AL: 'Alabama',
-      TX: 'Texas',
-      VA: 'Virginia',
-    };
-    const c = (code ?? '').toUpperCase();
-    return m[c] ?? undefined;
   }
 
 
@@ -413,7 +418,7 @@ export class ContactsHelpers {
           first_name: candidateFirst,
           candidate_id: candidateId,
           candidate_office: 'House',
-          candidate_state: 'Virginia',
+          candidate_state: 'Arizona',
           candidate_district: '01',
         },
         rowText: candidateId,
@@ -486,10 +491,10 @@ export class ContactsHelpers {
           address_street_1: '123 Main St',
           address_street_2: '',
           address_city: 'Richmond',
-          address_state: 'VA',
+          address_state: 'AZ',
           address_zip: '23219',
           office: 'H',
-          state: 'VA',
+          state: 'AZ',
           district: '01',
         },
       }).as('entityDetails');
@@ -516,7 +521,7 @@ export class ContactsHelpers {
           street_1: '456 Main St',
           street_2: '',
           city: 'Richmond',
-          state: 'VA',
+          state: 'AZ',
           zip: '23219',
           treasurer_phone: '5555551234',
         },
@@ -524,7 +529,7 @@ export class ContactsHelpers {
     }
 
     ContactListPage.openAddContactDialog();
-    cy.get('#entity_type_dropdown').first().click();
+    PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', entityLabel);
 
     cy.contains('.p-select-option', entityLabel)
       .scrollIntoView({ offset: { top: 0, left: 0 } })
@@ -663,7 +668,7 @@ export class ContactsHelpers {
   }
 
   static clickDialogSave(shouldSucceed = false) {
-    PageUtils.clickButton('Save', ContactsHelpers.CONTACT_DIALOG);
+    ContactListPage.clickSave();
     cy.get(ContactsHelpers.CONTACT_DIALOG).should(shouldSucceed ? 'not.exist' : 'exist');
   }
 

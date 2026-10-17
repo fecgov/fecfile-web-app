@@ -15,7 +15,6 @@ describe('TRIBAL_REFUND_NP_RECOUNT_ACCOUNT', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SB29');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT);
   });
 

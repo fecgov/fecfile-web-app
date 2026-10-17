@@ -20,7 +20,6 @@ export class TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     });

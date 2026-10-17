@@ -28,7 +28,6 @@ export class IN_KIND_OUT extends CommonInKindOut {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_OUT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
