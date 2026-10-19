@@ -55,6 +55,7 @@
 <app-contact-dialog
   [contactTypeOptions]="dialogContactTypeOptions"
   [contact]="item"
+  [(type)]="type"
   [(visible)]="detailVisible"
   (savedContact)="saveContact()"
 />

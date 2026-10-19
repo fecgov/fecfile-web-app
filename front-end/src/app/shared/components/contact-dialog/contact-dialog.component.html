@@ -6,7 +6,6 @@
   [focusOnShow]="false"
   (onShow)="openDialog()"
   (onHide)="closeDialog()"
-  (visibleChange)="closeDialog($event)"
   closeAriaLabel="closeDialog"
   data-cy="contact-dialog"
 >
@@ -308,7 +307,7 @@
           icon="pi pi-times"
           class="p-button-secondary mr-4"
           data-cy="cancel"
-          (click)="closeDialog()"
+          (click)="visible.set(false)"
         ></button>
         @if (headerTitle()) {
           <button

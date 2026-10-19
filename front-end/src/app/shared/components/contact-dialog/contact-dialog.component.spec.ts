@@ -126,20 +126,36 @@ describe('ContactDialogComponent', () => {
     await transition;
     fixture.detectChanges();
 
-    expect(component.loadingDuplicateContact()).toBe(false);
-    expect(component.contact()?.id).toBe(selectedContact.id);
-    expect(component.type()).toBe(selectedContact.type);
-
-    component.closeDialog();
+    component.visible.set(false);
+    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component.contact()?.id).toBeUndefined();
     expect(component.contact()).toBeInstanceOf(Contact);
-    expect(component.type()).toBe(selectedContact.type);
-  });
+    expect(component.type()).toBe(ContactTypes.INDIVIDUAL);
 
-  it('should close dialog with flags set', () => {
-    component.visible.set(true);
-    component.closeDialog();
-    expect(component.visible()).toBe(false);
+    for (const type of [ContactTypes.CANDIDATE, ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION]) {
+      component.visible.set(false);
+      fixture.detectChanges();
+      component.visible.set(true);
+      fixture.detectChanges();
+      const selectedContact = testContact();
+      selectedContact.id = `duplicate-${type}`;
+      selectedContact.type = type;
+      const transition = component.useContact(selectedContact);
+      fixture.detectChanges();
+
+      expect(component.loadingDuplicateContact()).toBe(true);
+      expect(fixture.debugElement.query(By.css('img[src="assets/img/fec-loading-flag.gif"]'))).not.toBeNull();
+      expect(component.contact()?.id).not.toBe(selectedContact.id);
+
+      await vi.advanceTimersByTimeAsync(750);
+      await transition;
+      fixture.detectChanges();
+
+      expect(component.loadingDuplicateContact()).toBe(false);
+      expect(component.contact()?.id).toBe(selectedContact.id);
+      expect(component.type()).toBe(type);
+    }
   });
 
   it('should save contact', async () => {
