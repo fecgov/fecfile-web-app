@@ -1,4 +1,4 @@
-import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, inject, signal, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../../shared/components/table/table.component';
@@ -109,9 +109,11 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     return new Contact();
   }
 
+  readonly type = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
   public override addItem() {
     this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     super.addItem();
+    this.type.set(ContactTypes.INDIVIDUAL);
   }
 
   public override editItem(item: Contact) {
