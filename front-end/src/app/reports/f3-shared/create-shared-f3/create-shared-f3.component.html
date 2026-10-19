@@ -21,7 +21,7 @@
         [allowEmpty]="false"
         formControlName="filing_frequency"
       />
-      <app-error-messages fieldName="filing_frequency" [formSubmitted]="formSubmitted" />
+      <app-error-messages [form]="form" fieldName="filing_frequency" [formSubmitted]="formSubmitted" />
     </div>
   }
 
@@ -33,7 +33,7 @@
       [allowEmpty]="false"
       formControlName="report_type_category"
     />
-    <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted" />
+    <app-error-messages [form]="form" fieldName="report_type_category" [formSubmitted]="formSubmitted" />
   </div>
 
   <div class="field" data-cy="report_code">
@@ -79,7 +79,7 @@
           [options]="stateOptions"
           [pt]="{ label: 'w-15em' }"
         />
-        <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted" />
+        <app-error-messages [form]="form" fieldName="state_of_election" [formSubmitted]="formSubmitted" />
       </div>
     </div>
   }
