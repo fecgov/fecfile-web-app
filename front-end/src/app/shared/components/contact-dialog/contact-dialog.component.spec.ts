@@ -5,7 +5,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testContact, testIndividual, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
@@ -104,36 +104,59 @@ describe('ContactDialogComponent', () => {
     expect(fixture.debugElement.query(By.css('app-duplicate-contact'))).toBeNull();
   });
 
+  it('should check for duplicates after changing the type of an existing contact and switching back', () => {
+    const contact = testContact();
+    component.contact.set(contact);
+    component.type.set(contact.type);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('app-duplicate-contact'))).toBeNull();
+
+    component.type.set(contact.type === ContactTypes.INDIVIDUAL ? ContactTypes.ORGANIZATION : ContactTypes.INDIVIDUAL);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('app-duplicate-contact'))).not.toBeNull();
+
+    component.type.set(contact.type);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('app-duplicate-contact'))).not.toBeNull();
+  });
+
   it('should show the loading flag before opening the selected contact for editing', async () => {
     vi.useFakeTimers();
     host.headerTitle.set(undefined);
-    const selectedContact = testContact();
     component.contact.set(new Contact());
     component.visible.set(true);
     fixture.detectChanges();
 
-    const transition = component.useContact(selectedContact);
-    fixture.detectChanges();
+    for (const type of [ContactTypes.CANDIDATE, ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION]) {
+      const selectedContact = testContact();
+      selectedContact.id = `duplicate-${type}`;
+      selectedContact.type = type;
+      const transition = component.useContact(selectedContact);
+      fixture.detectChanges();
 
-    expect(component.loadingDuplicateContact()).toBe(true);
-    expect(fixture.debugElement.query(By.css('img[src="assets/img/fec-loading-flag.gif"]'))).not.toBeNull();
-    expect(component.contact()?.id).not.toBe(selectedContact.id);
+      expect(component.loadingDuplicateContact()).toBe(true);
+      expect(fixture.debugElement.query(By.css('img[src="assets/img/fec-loading-flag.gif"]'))).not.toBeNull();
+      expect(component.contact()?.id).not.toBe(selectedContact.id);
 
-    await vi.advanceTimersByTimeAsync(749);
-    expect(component.contact()?.id).not.toBe(selectedContact.id);
+      await vi.advanceTimersByTimeAsync(750);
+      await transition;
+      fixture.detectChanges();
 
-    await vi.advanceTimersByTimeAsync(1);
-    await transition;
-    fixture.detectChanges();
+      expect(component.loadingDuplicateContact()).toBe(false);
+      expect(component.contact()?.id).toBe(selectedContact.id);
+      expect(component.type()).toBe(type);
 
-    expect(component.loadingDuplicateContact()).toBe(false);
-    expect(component.contact()?.id).toBe(selectedContact.id);
-    expect(component.type()).toBe(selectedContact.type);
+      component.closeDialog();
+      component.visible.set(true);
+      fixture.detectChanges();
+    }
 
     component.closeDialog();
     expect(component.contact()?.id).toBeUndefined();
     expect(component.contact()).toBeInstanceOf(Contact);
-    expect(component.type()).toBe(selectedContact.type);
+    expect(component.type()).toBe(ContactTypes.ORGANIZATION);
   });
 
   it('should close dialog with flags set', () => {
@@ -186,6 +209,36 @@ describe('ContactDialogComponent', () => {
     expect(savedContactSpy).toHaveBeenCalledWith(selectedContact);
     expect(component.visible()).toBe(false);
     expect(component.contact()).toBeInstanceOf(Contact);
+  });
+
+  it('should save a viewed duplicate contact without requiring a field edit', async () => {
+    vi.useFakeTimers();
+    host.headerTitle.set(undefined);
+    const selectedContact = testIndividual();
+    component.contact.set(new Contact());
+    component.visible.set(true);
+    fixture.detectChanges();
+
+    const transition = component.useContact(selectedContact);
+    await vi.advanceTimersByTimeAsync(750);
+    await transition;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.unchangedExistingContact()).toBe(true);
+    expect(component.disableSubmission()).toBe(false);
+    const confirmSpy = vi.spyOn(testConfirmationService, 'confirm');
+    const savedContactSpy = vi.spyOn(component.savedContact, 'emit');
+
+    const saveButton = fixture.debugElement.nativeElement.querySelector('[data-cy="save"]') as HTMLButtonElement;
+    expect(saveButton.disabled).toBe(false);
+    saveButton.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(savedContactSpy).toHaveBeenCalledWith(selectedContact);
+    expect(component.visible()).toBe(false);
   });
 
   it('#updateContact happy path', () => {

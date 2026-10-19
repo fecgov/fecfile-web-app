@@ -91,6 +91,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   );
 
   readonly isNewItem = computed(() => !this.contact()?.id);
+  readonly shouldCheckForDuplicates = computed(() => this.isNewItem() || this.hasChangedContactType());
 
   readonly isEntity = computed(() => isEntity(this.type()));
   readonly isPerson = computed(() => isPerson(this.type()));
@@ -109,6 +110,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly committeePatternMessage = committeePatternMessage;
 
   readonly hideDuplicate = signal(false);
+  readonly hasChangedContactType = signal(false);
   readonly loadingDuplicateContact = signal(false);
   readonly data = signal<ValidatingFields>({
     name: '',
@@ -131,7 +133,12 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       },
     },
   });
-  readonly disableSubmission = computed(() => this.signalForm().submitting() || this.signalForm().invalid());
+  readonly unchangedExistingContact = computed(
+    () => !this.isNewItem() && !this.signalForm().dirty() && !this.hasChangedContactType(),
+  );
+  readonly disableSubmission = computed(
+    () => this.signalForm().submitting() || (this.signalForm().invalid() && !this.unchangedExistingContact()),
+  );
   private jump?: 'continue';
 
   constructor() {
@@ -187,6 +194,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
    */
   contactTypeChanged(contactType: ContactTypes) {
     if (!this.contact()) this.contact.set(new Contact());
+    if (this.contact()?.id && contactType !== this.contact()?.type) this.hasChangedContactType.set(true);
 
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so
@@ -218,6 +226,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   public openDialog() {
     this.resetForm();
+    this.hasChangedContactType.set(false);
     const contact = this.contact()!;
     this.form.patchValue(contact);
     if (contact.id) {
@@ -248,6 +257,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   updateContact(contact: Contact) {
     const current = this.contact();
     if (current?.id && !contact.id) contact.id = current.id;
+    this.hasChangedContactType.set(false);
     this.contact.set(contact);
     this.type.set(contact.type);
     this.form.markAllAsDirty();
@@ -337,6 +347,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   override async submitForm(jump?: 'continue'): Promise<void> {
     this.jump = jump;
+    if (this.unchangedExistingContact()) {
+      this.savedContact.emit(this.contact()!);
+      this.closeDialog();
+      return;
+    }
     submit(this.signalForm);
   }
 }

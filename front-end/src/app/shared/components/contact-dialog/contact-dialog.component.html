@@ -353,7 +353,7 @@
 </p-dialog>
 
 <ng-template #duplicateContactTemplate>
-  @if (isNewItem()) {
+  @if (shouldCheckForDuplicates()) {
     <app-duplicate-contact
       [type]="type()"
       [data]="data()"
