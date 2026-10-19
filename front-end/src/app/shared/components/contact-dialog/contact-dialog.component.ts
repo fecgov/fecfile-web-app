@@ -71,7 +71,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly contact = model<Contact>();
   readonly type = model<ContactTypes>(ContactTypes.INDIVIDUAL);
   readonly visible = model(false);
-  readonly contactTypeOptions = input<PrimeOptions>(LabelUtils.getPrimeOptions(ContactTypeLabels));
+  readonly contactTypeOptions = model<PrimeOptions>(LabelUtils.getPrimeOptions(ContactTypeLabels));
   readonly headerTitle = input<string>();
   readonly dialogHeader = computed(() => (!this.isNewItem() ? 'Edit Contact' : (this.headerTitle() ?? 'Add Contact')));
   readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
@@ -224,6 +224,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const contact = this.contact()!;
     this.form.patchValue(contact);
     if (contact.id) {
+      this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contact.type]));
       this.type.set(contact.type);
     }
   }

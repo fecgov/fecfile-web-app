@@ -55,11 +55,7 @@ export class ContactLookupComponent {
         if (options.length === 0) return null;
         return options[0].value as ContactTypes;
       },
-      (type) => {
-        if (!this.contactTypeOptions().some((option) => option.value === this.type())) {
-          this.type.set(type);
-        }
-      },
+      (type) => this.type.set(type),
     );
   }
 
