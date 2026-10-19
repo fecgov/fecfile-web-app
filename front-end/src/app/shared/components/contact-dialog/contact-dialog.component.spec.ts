@@ -108,6 +108,7 @@ describe('ContactDialogComponent', () => {
     const contact = testContact();
     component.contact.set(contact);
     component.type.set(contact.type);
+    component.visible.set(true);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('app-duplicate-contact'))).toBeNull();
 
