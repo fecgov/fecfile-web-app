@@ -123,7 +123,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   });
   readonly signalForm = compatForm(this.formModel, {
     submission: {
-      ignoreValidators: 'none',
       action: () => this.submit(),
       onInvalid: () => {
         this.form.markAllAsTouched();
@@ -131,7 +130,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       },
     },
   });
-  readonly disableSubmission = computed(() => this.signalForm().submitting() || this.signalForm().invalid());
+  readonly disableSubmission = computed(() => {
+    const sf = this.signalForm();
+    return sf.submitting() || sf.invalid() || !sf.dirty();
+  });
   private jump?: 'continue';
 
   constructor() {
@@ -187,6 +189,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
    */
   contactTypeChanged(contactType: ContactTypes) {
     if (!this.contact()) this.contact.set(new Contact());
+    this.hideDuplicate.set(false);
 
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so
@@ -225,12 +228,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
   }
 
-  public closeDialog(visibleChangeFlag = false) {
-    if (!visibleChangeFlag) {
-      this.loadingDuplicateContact.set(false);
-      this.contact.set(new Contact());
-      this.visible.set(false);
-    }
+  public closeDialog() {
+    this.resetForm();
+    this.loadingDuplicateContact.set(false);
+    this.type.set(this.contactTypeOptions()[0].value as ContactTypes);
+    this.contact.set(new Contact());
   }
 
   private resetForm() {
@@ -267,7 +269,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       .map(([field, control]: [string, AbstractControl]) => [field, control.value]) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
     if (changes.length === 0) {
       this.savedContact.emit(contact);
-      this.closeDialog();
+      this.visible.set(false);
       return;
     }
     const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact()!, changes);
@@ -307,16 +309,14 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
     this.savedContact.emit(contact);
 
-    if (closeDialog) {
-      this.closeDialog();
-    }
+    if (closeDialog) this.visible.set(false);
     this.resetForm();
   }
 
   async useContact(contact: Contact) {
     if (!this.enableDuplicateContactViewing()) {
       this.savedContact.emit(contact);
-      this.closeDialog();
+      this.visible.set(false);
       return;
     }
 
