@@ -12,7 +12,7 @@ export class CashOnHandService {
 
   public async getCashOnHand(year: number): Promise<CashOnHand | undefined> {
     const response = await this.apiService.get<HttpResponse<CashOnHand>>(`${this.apiEndpoint}/year/${year}/`);
-    return CashOnHand.fromJSON(response.body);
+    return CashOnHand.fromJSON(response);
   }
   public async setCashOnHand(year: number, cashOnHand: number): Promise<CashOnHand> {
     return this.apiService.post<CashOnHand>(`${this.apiEndpoint}/year/${year}/`, { cash_on_hand: cashOnHand });
