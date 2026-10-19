@@ -53,194 +53,194 @@ async function setup(params: { reportId?: string; mockUrl?: string }) {
   });
 }
 
-// describe('CreateSharedF3Component: New', () => {
-//   const mockCoverageDates = [
-//     {
-//       report_code: ReportCodes.Q1,
-//       coverage_from_date: new Date('2024-01-01'),
-//       coverage_through_date: new Date('2024-03-31'),
-//     },
-//   ];
+describe('CreateSharedF3Component: New', () => {
+  const mockCoverageDates = [
+    {
+      report_code: ReportCodes.Q1,
+      coverage_from_date: new Date('2024-01-01'),
+      coverage_through_date: new Date('2024-03-31'),
+    },
+  ];
 
-//   let coverageDateSpy: Mock;
-//   beforeEach(async () => {
-//     await setup({});
+  let coverageDateSpy: Mock;
+  beforeEach(async () => {
+    await setup({});
 
-//     coverageDateSpy = vi.spyOn(activeServiceInstance, 'getCoverageDates').mockResolvedValue(mockCoverageDates);
-//     fixture = TestBed.createComponent(CreateSharedF3Component);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+    coverageDateSpy = vi.spyOn(activeServiceInstance, 'getCoverageDates').mockResolvedValue(mockCoverageDates);
+    fixture = TestBed.createComponent(CreateSharedF3Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-//   it('should create and initialize the form for a new report', async () => {
-//     expect(component).toBeTruthy();
-//     expect(component.isF3X()).toBe(true);
-//     expect(component.title()).toBe('Form 3X');
-//     expect(component.reportId()).toBeNull();
+  it('should create and initialize the form for a new report', async () => {
+    expect(component).toBeTruthy();
+    expect(component.isF3X()).toBe(true);
+    expect(component.title()).toBe('Form 3X');
+    expect(component.reportId()).toBeNull();
 
-//     await fixture.whenStable();
-//     fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
 
-//     expect(component.form.get('filing_frequency')?.value).toBe('Q');
-//     expect(component.form.get('form_type')?.value).toBe(F3xFormTypes.F3XN);
-//     expect(coverageDateSpy).toHaveBeenCalled();
-//   });
+    expect(component.form.get('filing_frequency')?.value).toBe('Q');
+    expect(component.form.get('form_type')?.value).toBe(F3xFormTypes.F3XN);
+    expect(coverageDateSpy).toHaveBeenCalled();
+  });
 
-//   it('should call create method on save when form is valid', async () => {
-//     const mockForm3X = new Form3X();
-//     mockForm3X.id = '999';
-//     const createSpy = vi.spyOn(activeServiceInstance, 'create').mockResolvedValue(mockForm3X);
+  it('should call create method on save when form is valid', async () => {
+    const mockForm3X = new Form3X();
+    mockForm3X.id = '999';
+    const createSpy = vi.spyOn(activeServiceInstance, 'create').mockResolvedValue(mockForm3X);
 
-//     component.form.patchValue({
-//       report_code: ReportCodes.Q2,
-//       coverage_from_date: new Date('2024-04-01'),
-//       coverage_through_date: new Date('2024-06-30'),
-//     });
-//     fixture.detectChanges();
+    component.form.patchValue({
+      report_code: ReportCodes.Q2,
+      coverage_from_date: new Date('2024-04-01'),
+      coverage_through_date: new Date('2024-06-30'),
+    });
+    fixture.detectChanges();
 
-//     await component.submitForm('continue');
+    await component.submitForm('continue');
 
-//     expect(createSpy).toHaveBeenCalled();
-//     expect(router.navigateByUrl).toHaveBeenCalledWith(`/reports/transactions/report/999/list`);
-//   });
+    expect(createSpy).toHaveBeenCalled();
+    expect(router.navigateByUrl).toHaveBeenCalledWith(`/reports/transactions/report/999/list`);
+  });
 
-//   it('should not save and should dispatch singleClickEnableAction if form is invalid', async () => {
-//     const createSpy = vi.spyOn(activeServiceInstance, 'create');
-//     const updateSpy = vi.spyOn(activeServiceInstance, 'updateWithAllowedErrorCodes');
+  it('should not save and should dispatch singleClickEnableAction if form is invalid', async () => {
+    const createSpy = vi.spyOn(activeServiceInstance, 'create');
+    const updateSpy = vi.spyOn(activeServiceInstance, 'updateWithAllowedErrorCodes');
 
-//     await fixture.whenStable();
-//     fixture.detectChanges();
-//     // now invalidate the form
-//     component.form.patchValue({ coverage_from_date: null });
-//     expect(component.form.valid).toBe(false);
+    await fixture.whenStable();
+    fixture.detectChanges();
+    // now invalidate the form
+    component.form.patchValue({ coverage_from_date: null });
+    expect(component.form.valid).toBe(false);
 
-//     await component.submitForm();
+    await component.submitForm();
 
-//     expect(component.formSubmitted).toBe(true);
-//     expect(createSpy).not.toHaveBeenCalled();
-//     expect(updateSpy).not.toHaveBeenCalled();
-//     expect(store.dispatch).toHaveBeenCalled();
-//     expect(store.dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: '[SingleClickButtonDisabled] False' }));
-//   });
-// });
+    expect(component.formSubmitted).toBe(true);
+    expect(createSpy).not.toHaveBeenCalled();
+    expect(updateSpy).not.toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: '[SingleClickButtonDisabled] False' }));
+  });
+});
 
-// describe('CreateSharedF3Component: Edit', () => {
-//   let messageService: MessageService;
-//   let getSpy: Mock;
-//   let messageSpy: Mock;
-//   const mockReportId = '123';
-//   const mockReport = Form3X.fromJSON({
-//     id: mockReportId,
-//     filing_frequency: 'M',
-//     report_type_category: ReportTypeCategories.ELECTION_YEAR,
-//     report_code: ReportCodes.M4,
-//     coverage_from_date: '2024-04-05',
-//     coverage_through_date: '2024-04-30',
-//   });
+describe('CreateSharedF3Component: Edit', () => {
+  let messageService: MessageService;
+  let getSpy: Mock;
+  let messageSpy: Mock;
+  const mockReportId = '123';
+  const mockReport = Form3X.fromJSON({
+    id: mockReportId,
+    filing_frequency: 'M',
+    report_type_category: ReportTypeCategories.ELECTION_YEAR,
+    report_code: ReportCodes.M4,
+    coverage_from_date: '2024-04-05',
+    coverage_through_date: '2024-04-30',
+  });
 
-//   beforeEach(async () => {
-//     await setup({ reportId: mockReportId });
+  beforeEach(async () => {
+    await setup({ reportId: mockReportId });
 
-//     messageService = TestBed.inject(MessageService);
-//     getSpy = vi.spyOn(activeServiceInstance, 'get').mockResolvedValue(mockReport);
-//     messageSpy = vi.spyOn(messageService, 'add');
+    messageService = TestBed.inject(MessageService);
+    getSpy = vi.spyOn(activeServiceInstance, 'get').mockResolvedValue(mockReport);
+    messageSpy = vi.spyOn(messageService, 'add');
 
-//     fixture = TestBed.createComponent(CreateSharedF3Component);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+    fixture = TestBed.createComponent(CreateSharedF3Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-//   it('should fetch existing report and patch form', () => {
-//     expect(component.reportId()).toBe(mockReportId);
-//     expect(getSpy).toHaveBeenCalledWith(mockReportId);
-//     fixture.detectChanges();
-//     expect(component.form.get('report_code')?.value).toBe(ReportCodes.M4);
-//     expect(component.form.get('filing_frequency')?.value).toBe('M');
-//     const coverage_from_date: Date = component.form.get('coverage_from_date')?.value;
-//     expect(coverage_from_date.getMonth()).toEqual(3); // April
-//     expect(coverage_from_date.getDate()).toEqual(5); // 5th
-//     expect(coverage_from_date.getFullYear()).toEqual(2024); // 2024
-//   });
+  it('should fetch existing report and patch form', () => {
+    expect(component.reportId()).toBe(mockReportId);
+    expect(getSpy).toHaveBeenCalledWith(mockReportId);
+    fixture.detectChanges();
+    expect(component.form.get('report_code')?.value).toBe(ReportCodes.M4);
+    expect(component.form.get('filing_frequency')?.value).toBe('M');
+    const coverage_from_date: Date = component.form.get('coverage_from_date')?.value;
+    expect(coverage_from_date.getMonth()).toEqual(3); // April
+    expect(coverage_from_date.getDate()).toEqual(5); // 5th
+    expect(coverage_from_date.getFullYear()).toEqual(2024); // 2024
+  });
 
-//   it('should call update method on save', async () => {
-//     const updateSpy = vi.spyOn(activeServiceInstance, 'updateWithAllowedErrorCodes').mockResolvedValue(mockReport);
-//     component.form.patchValue({ coverage_from_date: new Date('2024-06-01') });
-//     component.form.patchValue({ coverage_through_date: new Date('2024-07-01') });
-//     await component.submitForm();
+  it('should call update method on save', async () => {
+    const updateSpy = vi.spyOn(activeServiceInstance, 'updateWithAllowedErrorCodes').mockResolvedValue(mockReport);
+    component.form.patchValue({ coverage_from_date: new Date('2024-06-01') });
+    component.form.patchValue({ coverage_through_date: new Date('2024-07-01') });
+    await component.submitForm();
 
-//     expect(updateSpy).toHaveBeenCalled();
-//     expect(router.navigateByUrl).toHaveBeenCalledWith('/reports');
-//     expect(messageSpy).toHaveBeenCalled();
-//   });
+    expect(updateSpy).toHaveBeenCalled();
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/reports');
+    expect(messageSpy).toHaveBeenCalled();
+  });
 
-//   describe('Reactive Logic', () => {
-//     it('should update reportCodes when filing frequency and category change', () => {
-//       component.form.patchValue({
-//         filing_frequency: 'M',
-//         report_type_category: ReportTypeCategories.ELECTION_YEAR,
-//       });
-//       fixture.detectChanges();
-//       expect(component.reportCodes()).toContainEqual(ReportCodes.M2);
+  describe('Reactive Logic', () => {
+    it('should update reportCodes when filing frequency and category change', () => {
+      component.form.patchValue({
+        filing_frequency: 'M',
+        report_type_category: ReportTypeCategories.ELECTION_YEAR,
+      });
+      fixture.detectChanges();
+      expect(component.reportCodes()).toContainEqual(ReportCodes.M2);
 
-//       component.form.patchValue({ filing_frequency: 'Q' });
-//       fixture.detectChanges();
-//       expect(component.reportCodes()).toContainEqual(ReportCodes.Q1);
-//     });
+      component.form.patchValue({ filing_frequency: 'Q' });
+      fixture.detectChanges();
+      expect(component.reportCodes()).toContainEqual(ReportCodes.Q1);
+    });
 
-//     it('should automatically update coverage dates when report code changes', () => {
-//       component.form.get('report_code')?.setValue(ReportCodes.M2);
+    it('should automatically update coverage dates when report code changes', () => {
+      component.form.get('report_code')?.setValue(ReportCodes.M2);
 
-//       fixture.detectChanges();
+      fixture.detectChanges();
 
-//       const fromDate = component.form.get('coverage_from_date')?.value;
-//       const throughDate = component.form.get('coverage_through_date')?.value;
+      const fromDate = component.form.get('coverage_from_date')?.value;
+      const throughDate = component.form.get('coverage_through_date')?.value;
 
-//       expect(fromDate.getMonth()).toBe(3);
-//       expect(throughDate.getMonth()).toBe(3);
-//     });
-//   });
-// });
+      expect(fromDate.getMonth()).toBe(3);
+      expect(throughDate.getMonth()).toBe(3);
+    });
+  });
+});
 
-// describe('Default Report Type Category Logic', () => {
-//   beforeEach(async () => {
-//     await setup({});
-//     vi.useFakeTimers();
-//   });
+describe('Default Report Type Category Logic', () => {
+  beforeEach(async () => {
+    await setup({});
+    vi.useFakeTimers();
+  });
 
-//   afterEach(() => {
-//     vi.useRealTimers();
-//   });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
-//   const setupComponent = () => {
-//     fixture = TestBed.createComponent(CreateSharedF3Component);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   };
+  const setupComponent = () => {
+    fixture = TestBed.createComponent(CreateSharedF3Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  };
 
-//   it('should be ELECTION_YEAR in an even year after January', () => {
-//     vi.setSystemTime(new Date(2024, 1, 1));
-//     setupComponent();
-//     expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.ELECTION_YEAR);
-//   });
+  it('should be ELECTION_YEAR in an even year after January', () => {
+    vi.setSystemTime(new Date(2024, 1, 1));
+    setupComponent();
+    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.ELECTION_YEAR);
+  });
 
-//   it('should be ELECTION_YEAR in an odd year during January', () => {
-//     vi.setSystemTime(new Date(2025, 0, 15));
-//     setupComponent();
-//     expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.ELECTION_YEAR);
-//   });
+  it('should be ELECTION_YEAR in an odd year during January', () => {
+    vi.setSystemTime(new Date(2025, 0, 15));
+    setupComponent();
+    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.ELECTION_YEAR);
+  });
 
-//   it('should be NON_ELECTION_YEAR in an odd year after January', () => {
-//     vi.setSystemTime(new Date(2025, 2, 20));
-//     setupComponent();
-//     expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.NON_ELECTION_YEAR);
-//   });
+  it('should be NON_ELECTION_YEAR in an odd year after January', () => {
+    vi.setSystemTime(new Date(2025, 2, 20));
+    setupComponent();
+    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.NON_ELECTION_YEAR);
+  });
 
-//   it('should be NON_ELECTION_YEAR in an even year during January', () => {
-//     vi.setSystemTime(new Date(2024, 0, 10));
-//     setupComponent();
-//     expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.NON_ELECTION_YEAR);
-//   });
-// });
+  it('should be NON_ELECTION_YEAR in an even year during January', () => {
+    vi.setSystemTime(new Date(2024, 0, 10));
+    setupComponent();
+    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.NON_ELECTION_YEAR);
+  });
+});
 
 describe('Election Date and State Validators', () => {
   beforeEach(async () => {
