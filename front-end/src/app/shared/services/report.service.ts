@@ -45,15 +45,14 @@ export class ReportService<T extends Report> implements TableListService<Report>
     return response;
   }
 
-  public async getAllReports(): Promise<T[]> {
+  public async getAllReports(params: QueryParams = {}): Promise<T[]> {
     const reports: T[] = [];
     let next = this.apiEndpoint + '/?page=1';
     while (next) {
-      const response = await this.apiService.get<ListRestResponse>(next);
+      const response = await this.apiService.get<ListRestResponse>(next, params);
       next = response.next;
-      if (response.results) {
-        reports.push(...response.results.map((item) => getReportFromJSON<T>(item)));
-      }
+      const items = response.results ?? (Array.isArray(response) ? response : []);
+      reports.push(...items.map((item) => getReportFromJSON<T>(item)));
     }
     return reports;
   }

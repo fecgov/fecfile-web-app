@@ -123,4 +123,17 @@ describe('ReportService', () => {
     req.flush(mockResponse);
     httpTestingController.verify();
   });
+
+  it('#getAllReports() with params', async () => {
+    const mockResponse = [Form3X.fromJSON({ id: 1 })];
+
+    service.getAllReports({ in_progress: 'true' }).then((response) => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/?page=1&in_progress=true`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(mockResponse);
+    httpTestingController.verify();
+  });
 });
