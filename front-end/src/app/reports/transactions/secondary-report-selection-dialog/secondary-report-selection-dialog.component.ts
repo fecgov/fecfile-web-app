@@ -16,6 +16,7 @@ import { Toast } from 'primeng/toast';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
+import { QueryParams } from 'app/shared/services/api.service';
 
 @Component({
   selector: 'app-secondary-report-selection-dialog',
@@ -49,20 +50,20 @@ export class SecondaryReportSelectionDialogComponent {
   });
 
   readonly reportType = input.required<ReportTypes | undefined>();
+  readonly isForm24 = computed(() => this.reportType() === ReportTypes.F24);
 
   readonly reports = derivedAsync(
     async () => {
       const type = this.reportType();
       if (!type) return [];
-      const reports = await this.reportService().getAllReports({ in_progress: 'true' });
+      const params: QueryParams = this.isForm24() ? { in_progress: 'true', page_size: 100 } : {};
+      const reports = await this.reportService().getAllReports(params);
       return reports.filter((report) => {
         return report.report_status === ReportStatus.IN_PROGRESS;
       });
     },
     { initialValue: [] },
   );
-
-  readonly isForm24 = computed(() => this.reportType() === ReportTypes.F24);
 
   readonly reportLabels: Signal<LabelList> = computed(() =>
     this.reports().map((report) => [report.id as string, report.report_code_label ?? '']),
