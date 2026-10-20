@@ -69,7 +69,13 @@ export class TransactionService {
     return this.fetchPreviousAggregate(
       transaction,
       '/transactions/previous/election/',
-      { date, election_code, candidate_office, candidate_state: candidate_state || '', candidate_district: candidate_district || '' },
+      {
+        date,
+        election_code,
+        candidate_office,
+        candidate_state: candidate_state || '',
+        candidate_district: candidate_district || '',
+      },
       'calendar_ytd_per_election_office',
       isValid,
     );
