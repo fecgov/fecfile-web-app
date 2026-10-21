@@ -29,12 +29,20 @@ p {
 .grid-section {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 0 8px;
+  gap: 0 20px;
   align-items: start;
   grid-auto-rows: auto auto auto;
 
   & > * {
     margin: 0;
     grid-column-end: span 12;
+  }
+  & > app-date-input {
+    grid-column-end: auto !important;
+    width: fit-content;
+  }
+  & > app-select-input {
+    grid-column-end: auto !important;
+    width: max-content;
   }
 }

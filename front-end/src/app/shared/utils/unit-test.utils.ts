@@ -558,3 +558,7 @@ export function testTemplateMap(): TransactionTemplateMapType {
     quinary_zip: 'subordinate_zip',
   };
 }
+
+export const detectChangesAndWait = () => {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+};

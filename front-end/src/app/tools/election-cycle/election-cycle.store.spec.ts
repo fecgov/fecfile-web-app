@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { ElectionCycleStore } from './election-cycle.store';
-import { testCommitteeAccount } from 'app/shared/utils/unit-test.utils';
+import { detectChangesAndWait, testCommitteeAccount } from 'app/shared/utils/unit-test.utils';
 import { CommitteeStore } from 'app/committee/committee.store';
 
 describe('ElectionCycleStore', () => {
@@ -66,14 +66,14 @@ describe('ElectionCycleStore', () => {
     it('should return true if non-Form3 committee has Form3 reports', async () => {
       form3ServiceSpy.getTableData.mockResolvedValue({ count: 2 });
       committeeStore.setCommittee(mockCommitteeWithoutF3);
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await detectChangesAndWait();
       expect(ecstore.showElectionCycles()).toBe(true);
     });
 
     it('should return false if non-Form3 committee has no Form3 reports', async () => {
       form3ServiceSpy.getTableData.mockResolvedValue({ count: 0 });
       committeeStore.setCommittee(mockCommitteeWithoutF3);
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await detectChangesAndWait();
       expect(ecstore.showElectionCycles()).toBe(false);
     });
   });

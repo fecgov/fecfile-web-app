@@ -1,21 +1,18 @@
 import { signal } from '@angular/core';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { CreateSharedF3Component } from './create-shared-f3.component';
-import { SharedForm3Store } from './shared-form3.store';
-import { ReportTypeCategories } from './create-shared-f3.utils';
-
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { MessageWrapperService } from 'app/shared/services/message-wrapper.service';
 import { BreakpointStore } from 'app/store/breakpoint.store';
 import { CommitteeStore } from 'app/committee/committee.store';
 import { ElectionCycleService } from 'app/tools/election-cycle/election-cycle.service';
-
 import { F3FormTypes, Form3 } from 'app/shared/models';
-import { ReportCodes } from 'app/shared/utils/report-code.utils';
+import { FilingFrequency, ReportCodes } from 'app/shared/utils/report-code.utils';
+import { ReportTypeCategories } from './shared-form3.model';
+import { SharedForm3Store } from './shared-form3.store';
 
 describe('CreateSharedF3Component', () => {
   let fixture: ComponentFixture<CreateSharedF3Component>;
@@ -31,10 +28,6 @@ describe('CreateSharedF3Component', () => {
     isF3X: boolean;
     create: ReturnType<typeof vi.fn>;
     update: ReturnType<typeof vi.fn>;
-  };
-
-  let routerMock: {
-    navigateByUrl: ReturnType<typeof vi.fn>;
   };
 
   let messageServiceMock: {
@@ -63,10 +56,6 @@ describe('CreateSharedF3Component', () => {
       update: vi.fn().mockResolvedValue({ id: 'updated-report-id' }),
     };
 
-    routerMock = {
-      navigateByUrl: vi.fn().mockResolvedValue(true),
-    };
-
     messageServiceMock = {
       success: vi.fn(),
     };
@@ -76,30 +65,24 @@ describe('CreateSharedF3Component', () => {
     };
 
     committeeStoreMock = {
-      filingFrequency: signal<'Q' | 'M'>('Q'),
+      filingFrequency: signal<FilingFrequency>('Q'),
       committee: signal({ candidate_state: 'VA' }),
     };
 
     await TestBed.configureTestingModule({
       imports: [CreateSharedF3Component],
-      providers: [
-        provideRouter([]),
-        CookieService,
-        { provide: Router, useValue: routerMock },
-        { provide: FORM_3_SERVICE, useValue: activeServiceMock },
-      ],
+      providers: [provideRouter([]), CookieService, { provide: FORM_3_SERVICE, useValue: activeServiceMock }],
     })
       .overrideComponent(CreateSharedF3Component, {
         set: {
-          // These tests focus on component logic, not template rendering.
           template: '',
           imports: [],
           providers: [
-            { provide: SharedForm3Store, useValue: reportStoreMock },
             { provide: BreakpointStore, useValue: breakpointStoreMock },
             { provide: MessageWrapperService, useValue: messageServiceMock },
             { provide: ElectionCycleService, useValue: {} },
             { provide: CommitteeStore, useValue: committeeStoreMock },
+            { provide: SharedForm3Store, useValue: reportStoreMock },
           ],
         },
       })
@@ -160,7 +143,11 @@ describe('CreateSharedF3Component', () => {
         },
       }));
 
-      await component.create();
+      await component.create(
+        component.form().value(),
+        component.activeService.isF3X,
+        !component.form.electionReport().hidden(),
+      );
 
       expect(activeServiceMock.create).toHaveBeenCalledOnce();
       expect(activeServiceMock.update).not.toHaveBeenCalled();
@@ -184,10 +171,6 @@ describe('CreateSharedF3Component', () => {
         startDate: existingReport.coverage_from_date,
         endDate: existingReport.coverage_through_date,
       });
-    });
-
-    it('should preserve the existing report code as the default', () => {
-      expect(component.defaultReportCode()).toBe(existingReport.report_code);
     });
   });
 });
