@@ -189,7 +189,7 @@
               </p-cellEditor>
             </td>
             <td>
-              @if (!editing) {
+              @if (!editing && !disableRowActions) {
                 <app-table-actions-button
                   [tableActions]="rowActions"
                   [actionItem]="item"
