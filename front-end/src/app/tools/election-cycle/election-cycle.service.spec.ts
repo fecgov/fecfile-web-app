@@ -3,8 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ElectionCycleService } from './election-cycle.service';
 import { ApiService } from 'app/shared/services/api.service';
-import { ElectionCycle } from './election-cycle.model';
+import { Coverage, ElectionCycle } from './election-cycle.model';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
+import { DateUtils } from 'app/shared/utils/date.utils';
 
 describe('ElectionCycleService', () => {
   let service: ElectionCycleService;
@@ -36,6 +37,8 @@ describe('ElectionCycleService', () => {
           isModelInstance: true,
         }) as any,
     );
+
+    vi.clearAllMocks();
   });
 
   it('should be created', () => {
@@ -145,6 +148,56 @@ describe('ElectionCycleService', () => {
       expect(apiServiceMock.put).toHaveBeenCalledWith('/election-cycles/123/', mockToJsonPayload);
       expect(ElectionCycle.fromJson).toHaveBeenCalledWith(mockApiResponse);
       expect(result).toEqual({ id: '123', name: '2028 Cycle', isModelInstance: true });
+    });
+  });
+
+  describe('findByCoverage', () => {
+    it('should fetch an election cycle using formatted coverage dates and return a parsed ElectionCycle', async () => {
+      const coverage = {
+        startDate: new Date(2026, 2, 1),
+        endDate: new Date(2026, 8, 1),
+      } as Coverage;
+
+      const mockApiResponse = {
+        id: '123',
+        election_year: 2026,
+        election_type: 'General',
+        office: 'House',
+      };
+
+      apiServiceMock.get.mockResolvedValue(mockApiResponse);
+
+      const result = await service.findByCoverage(coverage);
+
+      expect(apiServiceMock.get).toHaveBeenCalledWith('/election-cycles/find-by-coverage/', {
+        start_date: DateUtils.convertDateToFecFormat(coverage.startDate),
+        end_date: DateUtils.convertDateToFecFormat(coverage.endDate),
+      });
+      expect(ElectionCycle.fromJson).toHaveBeenCalledWith(mockApiResponse);
+      expect(result).toEqual({
+        ...mockApiResponse,
+        isModelInstance: true,
+      });
+    });
+
+    it('should return null when the API response contains a message', async () => {
+      const coverage = {
+        startDate: new Date(2026, 2, 1),
+        endDate: new Date(2026, 8, 1),
+      } as Coverage;
+
+      apiServiceMock.get.mockResolvedValue({
+        message: 'No matching election cycle found.',
+      });
+
+      const result = await service.findByCoverage(coverage);
+
+      expect(apiServiceMock.get).toHaveBeenCalledWith('/election-cycles/find-by-coverage/', {
+        start_date: DateUtils.convertDateToFecFormat(coverage.startDate),
+        end_date: DateUtils.convertDateToFecFormat(coverage.endDate),
+      });
+      expect(result).toBeNull();
+      expect(ElectionCycle.fromJson).not.toHaveBeenCalled();
     });
   });
 });

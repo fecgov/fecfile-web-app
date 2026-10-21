@@ -22,44 +22,22 @@
       [formField]="form.reportTypeCategory"
     />
 
-    <fieldset class="flex gap-20px">
-      @let reportCodeLabelMap = reportStore.reportCodeLabelMap.value();
-      @let disabledReportCodes = reportStore.disabledReportCodes();
-      <legend [class.sr-only]="!reportStore.isF3X" class="p-0 mb-2">{{ filingFrequencyLabel() }}</legend>
-
-      @for (reportCodeColumn of reportCodesColumns(); track reportCodeColumn) {
-        <div class="flex flex-column gap-20px">
-          @for (reportCode of reportCodeColumn; track reportCode) {
-            <div class="p-field-checkbox flex">
-              <p-radioButton
-                [inputId]="reportCode"
-                name="report_code"
-                [value]="reportCode"
-                [formField]="form.reportCode"
-                [disabled]="disabledReportCodes[reportCode]"
-                [class]="disabledReportCodes[reportCode] ? 'p-disabled border-none bg-transparent' : ''"
-              />
-              <label [for]="reportCode" class="ml-2" [class.p-disabled]="disabledReportCodes[reportCode]">
-                {{ reportCodeLabelMap?.[reportCode] ?? '' }}
-              </label>
-            </div>
-          }
-        </div>
-      }
-    </fieldset>
+    <app-radio-button-input
+      [formField]="form.reportCode"
+      [label]="filingFrequencyLabel()"
+      [columnCount]="columnCount()"
+      [options]="reportCodes()"
+      [disabledOptions]="disabledOptions()"
+      [labelFunction]="labelFn"
+      [hideTitle]="!activeService.isF3X"
+    />
 
     @if (!form.electionReport().hidden()) {
       <section class="grid-section">
         <h3 class="sr-only">Election Report</h3>
-        <app-date-input
-          data-cy="date-of-election"
-          class="grid-col-3"
-          [formField]="form.electionReport.date"
-          label="ELECTION ON"
-        />
+        <app-date-input data-cy="date-of-election" [formField]="form.electionReport.date" label="ELECTION ON" />
         <app-select-input
           data-cy="state-of-election"
-          class="grid-col-4"
           [formField]="form.electionReport.state"
           [options]="stateOptions"
           label="IN THE STATE/TERRITORY OF"
@@ -78,7 +56,7 @@
     />
     <app-date-input data-cy="coverage-through-date" class="grid-col-3" [formField]="form.coverage.endDate" label="TO" />
   </section>
-  @if (!reportStore.isF3X) {
+  @if (!activeService.isF3X) {
     <app-election-cycle-selection
       [coverage]="form.coverage().value()"
       (electionCycle)="form.electionCycle().value.set($event)"
@@ -88,7 +66,6 @@
   <footer class="flex justify-content-between border-top-2 pt-5">
     <button
       pButton
-      pRipple
       type="button"
       label="Back"
       (click)="router.navigateByUrl('/reports')"
@@ -97,7 +74,6 @@
     <div>
       <button
         pButton
-        pRipple
         type="submit"
         label="Save"
         class="p-button-primary"
@@ -108,7 +84,6 @@
       ></button>
       <button
         pButton
-        pRipple
         type="submit"
         label="Save & continue"
         (click)="jump = 'continue'"
@@ -120,3 +95,27 @@
     </div>
   </footer>
 </form>
+
+@if (reportStore.report(); as report) {
+  <app-dialog
+    [(visible)]="coverageDatesDialogVisible"
+    header="Can't save report"
+    tabindex="-1"
+    aria-labelledby="dialog-title"
+  >
+    <p class="mb-0">
+      Some transactions would now fall outside your new coverage dates. To fix this, delete those transactions.
+    </p>
+    <ng-container dialog-footer #dialogFooterRef>
+      <div class="flex justify-content-center">
+        <p-button
+          type="button"
+          label="Manage your transactions"
+          class="p-button-primary dialog-button"
+          [routerLink]="['/reports/transactions/report', report.id, 'list']"
+          [autofocus]="true"
+        ></p-button>
+      </div>
+    </ng-container>
+  </app-dialog>
+}

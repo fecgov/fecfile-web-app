@@ -7,6 +7,7 @@ import type { Mock } from 'vitest';
 import { environment } from '../../../environments/environment';
 import { CommitteeMember, ListRestResponse, Roles } from '../models';
 import {
+  detectChangesAndWait,
   testCommitteeAccount,
   testCommitteeAdminLoginData,
   testMockStore,
@@ -107,7 +108,7 @@ describe('CommitteeMemberService', () => {
     committeeStore.setCommittee(testCommitteeAccount());
     mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData());
     mockStore.refreshState();
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await detectChangesAndWait();
     const needSecondAdmin = service.needsSecondAdmin();
 
     expect(needSecondAdmin).toBe(true);
@@ -139,7 +140,7 @@ describe('CommitteeMemberService', () => {
     apiSpy.mockResolvedValue({ id: '1', email: 'admin1@test.com', role: 'MANAGER' } as CommitteeMember);
 
     await service.update({ ...member, role: 'MANAGER' } as CommitteeMember);
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await detectChangesAndWait();
     expect(getMemberCountSpy).toHaveBeenCalledOnce();
     expect(getAdminCountSpy).toHaveBeenCalledOnce();
   });

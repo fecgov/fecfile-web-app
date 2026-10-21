@@ -4,7 +4,7 @@ import { ElectionCycle, Coverage } from 'app/tools/election-cycle/election-cycle
 import { ElectionCycleService } from 'app/tools/election-cycle/election-cycle.service';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ElectionCycleSelectionComponent } from './election-cycle-selection.component';
-import { ActivatedRoute } from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 describe('ElectionCycleSelectionComponent', () => {
   let fixture: ComponentFixture<ElectionCycleSelectionComponent>;
@@ -41,12 +41,7 @@ describe('ElectionCycleSelectionComponent', () => {
           provide: ElectionCycleService,
           useValue: electionCycleService,
         },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: { params: {} },
-          },
-        },
+        provideRouter([]),
       ],
     });
 
@@ -109,7 +104,6 @@ describe('ElectionCycleSelectionComponent', () => {
       coverage.set(c);
 
       await detectChangesAndWait();
-      console.log('coverage', c);
 
       expect(electionCycleService.findByCoverage).toHaveBeenCalledWith(c);
       expect(getElectionCycleText()).toContain('House General 2026');
