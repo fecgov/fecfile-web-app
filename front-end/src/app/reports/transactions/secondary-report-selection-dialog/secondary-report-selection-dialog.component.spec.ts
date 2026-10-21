@@ -138,7 +138,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(form24Service.getAllReports).toHaveBeenCalled();
+    expect(form24Service.getAllReports).toHaveBeenCalledWith({ in_progress: 'true', page_size: 20 });
     const filteredReports = component.reports();
     expect(filteredReports.length).toBe(3);
     expect(filteredReports[0].id).toBe('1');
