@@ -56,7 +56,7 @@ export class SecondaryReportSelectionDialogComponent {
     async () => {
       const type = this.reportType();
       if (!type) return [];
-      const params: QueryParams = this.isForm24() ? { in_progress: 'true' } : {};
+      const params: QueryParams = this.isForm24() ? { in_progress: 'true', page_size: 20 } : {};
       const reports = await this.reportService().getAllReports(params);
       return reports.filter((report) => {
         return report.report_status === ReportStatus.IN_PROGRESS;
