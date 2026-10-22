@@ -59,11 +59,9 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   }
 
   updateForm = ([cashOnHandOverride, previousYear]: [CashOnHand | undefined, Form3X | undefined]): void => {
-    if (cashOnHandOverride) {
-      this.currentAmountFormControl.setValue(cashOnHandOverride.cash_on_hand ?? 0);
-    } else {
-      this.currentAmountFormControl.setValue(previousYear?.L8_cash_on_hand_close_ytd ?? 0);
-    }
+    this.currentAmountFormControl.setValue(
+      cashOnHandOverride?.cash_on_hand ?? previousYear?.L8_cash_on_hand_close_ytd ?? 0,
+    );
     this.newAmountFormControl.reset();
   };
 
