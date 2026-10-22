@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
@@ -22,22 +21,8 @@ class MockLayoutService {
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
   let fixture: ComponentFixture<LayoutComponent>;
-  let layoutService: MockLayoutService;
-
-  let matchMediaMock: any;
-  let mediaQueryListener: (e: any) => void;
 
   const configureModule = async () => {
-    matchMediaMock = {
-      matches: false,
-      addEventListener: vi.fn().mockImplementation((evt, cb) => (mediaQueryListener = cb)),
-      removeEventListener: vi.fn(),
-    };
-    Object.defineProperty(globalThis, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockReturnValue(matchMediaMock),
-    });
-
     await TestBed.configureTestingModule({
       imports: [
         MenubarModule,
@@ -59,8 +44,6 @@ describe('LayoutComponent', () => {
 
     fixture = TestBed.createComponent(LayoutComponent);
     component = fixture.componentInstance;
-
-    layoutService = TestBed.inject(LayoutService) as unknown as MockLayoutService;
 
     fixture.detectChanges();
   };
