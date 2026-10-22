@@ -1,3 +1,4 @@
+import { CashOnHandPage } from './cashOnHandPage';
 import { ContactListPage } from './contactListPage';
 import { PageUtils } from './pageUtils';
 import { ReportListPage } from './reportListPage';
@@ -84,6 +85,7 @@ export function Initialize() {
   LoginPage.login();
   ReportListPage.deleteAllReports();
   ContactListPage.deleteAllContacts();
+  CashOnHandPage.deleteAllCashOnHandOverrides();
 }
 
 function setCommitteeType(committeeType = 'O') {
