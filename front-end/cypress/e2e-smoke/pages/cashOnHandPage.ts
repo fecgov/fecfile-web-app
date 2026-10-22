@@ -1,7 +1,7 @@
 
 
 export class CashOnHandPage {
-  //Deletes all contacts belonging to the logged-in committee
+  //Deletes all cash on hand overrides belonging to the logged-in committee
   static deleteAllCashOnHandOverrides() {
     cy.getCookie('csrftoken').then((cookie) => {
       cy.request({
