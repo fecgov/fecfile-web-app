@@ -16,6 +16,7 @@
       data-cy="select-form-24"
       [placeholder]="placeholder()"
       [disabled]="reports().length === 0"
+      appendTo="body"
     >
       <ng-template #selectedItem let-selectedOption>
         <span class="option">
