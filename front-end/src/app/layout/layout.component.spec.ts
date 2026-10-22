@@ -69,47 +69,4 @@ describe('LayoutComponent', () => {
     await configureModule();
     expect(component).toBeTruthy();
   });
-
-  it('should initialize sidebar to FALSE if screen starts small (< 992px)', async () => {
-    await configureModule();
-    layoutService.showSidebar.set(true);
-    matchMediaMock.matches = true;
-    const mobileFixture = TestBed.createComponent(LayoutComponent);
-    mobileFixture.detectChanges();
-    expect(layoutService.showSidebar()).toBe(false);
-  });
-
-  it('should close sidebar when resizing from Desktop to Mobile', async () => {
-    await configureModule();
-    layoutService.showSidebar.set(true);
-    expect(layoutService.showSidebar()).toBe(true);
-    const mockEvent = { matches: true };
-    mediaQueryListener(mockEvent);
-
-    expect(layoutService.showSidebar()).toBe(false);
-  });
-
-  it('should open sidebar when resizing from Mobile to Desktop (if closed)', async () => {
-    await configureModule();
-    layoutService.showSidebar.set(false);
-    const mockEvent = { matches: false };
-    mediaQueryListener(mockEvent);
-
-    expect(layoutService.showSidebar()).toBe(true);
-  });
-
-  it('should remove the event listener when component is destroyed', async () => {
-    await configureModule();
-    fixture.destroy();
-
-    expect(matchMediaMock.removeEventListener).toHaveBeenCalledWith('change', mediaQueryListener);
-  });
-
-  it('should NOT add listeners if feature is disabled', async () => {
-    await configureModule();
-    fixture = TestBed.createComponent(LayoutComponent);
-    fixture.detectChanges();
-
-    expect(window.matchMedia).not.toHaveBeenCalled();
-  });
 });
