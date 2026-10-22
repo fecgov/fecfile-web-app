@@ -1,19 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LayoutComponent } from './layout.component';
-import { FooterComponent } from './footer/footer.component';
-import { BannerComponent } from './banner/banner.component';
-import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
-import { SharedModule } from 'primeng/api';
-import { MenubarModule } from 'primeng/menubar';
-import { StoreModule } from '@ngrx/store';
-import { provideMockStore } from '@ngrx/store/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { signal } from '@angular/core';
-import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { SharedModule } from 'primeng/api';
+import { MenubarModule } from 'primeng/menubar';
+import { BannerComponent } from './banner/banner.component';
+import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
+import { FooterComponent } from './footer/footer.component';
+import { LayoutComponent } from './layout.component';
 import { LayoutService } from './layout.service';
 
 class MockLayoutService {
@@ -28,7 +27,7 @@ describe('LayoutComponent', () => {
   let matchMediaMock: any;
   let mediaQueryListener: (e: any) => void;
 
-  const configureModule = async (dynamicSidebarEnabled: boolean) => {
+  const configureModule = async () => {
     matchMediaMock = {
       matches: false,
       addEventListener: vi.fn().mockImplementation((evt, cb) => (mediaQueryListener = cb)),
@@ -55,7 +54,6 @@ describe('LayoutComponent', () => {
         provideRouter([]),
         provideMockStore(testMockStore()),
         { provide: LayoutService, useClass: MockLayoutService },
-        { provide: USE_DYNAMIC_SIDEBAR, useValue: dynamicSidebarEnabled },
       ],
     }).compileComponents();
 
@@ -68,12 +66,12 @@ describe('LayoutComponent', () => {
   };
 
   it('should create', async () => {
-    await configureModule(false);
+    await configureModule();
     expect(component).toBeTruthy();
   });
 
   it('should initialize sidebar to FALSE if screen starts small (< 992px)', async () => {
-    await configureModule(true);
+    await configureModule();
     layoutService.showSidebar.set(true);
     matchMediaMock.matches = true;
     const mobileFixture = TestBed.createComponent(LayoutComponent);
@@ -82,7 +80,7 @@ describe('LayoutComponent', () => {
   });
 
   it('should close sidebar when resizing from Desktop to Mobile', async () => {
-    await configureModule(true);
+    await configureModule();
     layoutService.showSidebar.set(true);
     expect(layoutService.showSidebar()).toBe(true);
     const mockEvent = { matches: true };
@@ -92,7 +90,7 @@ describe('LayoutComponent', () => {
   });
 
   it('should open sidebar when resizing from Mobile to Desktop (if closed)', async () => {
-    await configureModule(true);
+    await configureModule();
     layoutService.showSidebar.set(false);
     const mockEvent = { matches: false };
     mediaQueryListener(mockEvent);
@@ -101,14 +99,14 @@ describe('LayoutComponent', () => {
   });
 
   it('should remove the event listener when component is destroyed', async () => {
-    await configureModule(true);
+    await configureModule();
     fixture.destroy();
 
     expect(matchMediaMock.removeEventListener).toHaveBeenCalledWith('change', mediaQueryListener);
   });
 
   it('should NOT add listeners if feature is disabled', async () => {
-    await configureModule(false);
+    await configureModule();
     fixture = TestBed.createComponent(LayoutComponent);
     fixture.detectChanges();
 

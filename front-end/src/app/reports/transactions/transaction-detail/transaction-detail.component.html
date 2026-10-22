@@ -8,17 +8,6 @@
       {{ transactionType?.title }}
     </h1>
   }
-
-  @if (showGlossary) {
-    <img
-      class="cursor-pointer"
-      src="assets/img/i-book.svg"
-      draggable="false"
-      alt="book"
-      (click)="openGlossary()"
-      (keypress)="openGlossary()"
-    />
-  }
 </div>
 <hr class="solid" />
 @if (transactionType?.showParentTransactionTitle) {
