@@ -312,6 +312,9 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
     if (closeDialog) this.visible.set(false);
     this.resetForm();
+    if (!closeDialog) {
+      this.contact.set(Contact.fromJSON({ type: this.type() }));
+    }
   }
 
   async useContact(contact: Contact) {
