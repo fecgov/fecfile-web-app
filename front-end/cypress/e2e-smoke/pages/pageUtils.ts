@@ -277,6 +277,11 @@ export class PageUtils {
         if ($body.find('.p-datepicker-panel:visible').length > 0) {
           cy.get('body').click(0, 0);
         }
+
+        // wait for aggregate to resolve before continuing
+        if ($body.find('#aggregate:visible').length > 0 && $body.find('#amount:visible').val()) {
+          cy.get('#aggregate').should('not.have.value', '');
+        }
       })
       .blurActiveField()
       .then(() => PageUtils.clickButton(name, alias, force));
