@@ -66,6 +66,7 @@ function createFormValue(overrides: Partial<SharedForm3Model> = {}): SharedForm3
       state: 'VA',
     },
     electionCycle: null,
+    nextElectionCycle: null,
     ...overrides,
   };
 }
@@ -227,6 +228,7 @@ describe('shared-form3.model', () => {
             state: 'VA',
           },
           electionCycle: null,
+          nextElectionCycle: null,
         });
       });
 

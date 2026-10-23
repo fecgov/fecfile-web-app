@@ -59,7 +59,7 @@
   @if (!activeService.isF3X) {
     <app-election-cycle-selection
       [coverage]="form.coverage().value()"
-      (electionCycle)="form.electionCycle().value.set($event)"
+      (electionCycle)="onElectionCycleLookup($event)"
     />
   }
 

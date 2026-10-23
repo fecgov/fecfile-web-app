@@ -29,6 +29,11 @@ export class Form3 extends BaseForm3 {
   @Transform(({ value }) => (value instanceof ElectionCycle ? value.id : value), { toPlainOnly: true })
   electionCycle!: ElectionCycle;
 
+  @Expose({ name: 'next_election_cycle' })
+  @Type(() => ElectionCycle)
+  @Transform(({ value }) => (value instanceof ElectionCycle ? value.id : value), { toPlainOnly: true })
+  nextElectionCycle: ElectionCycle | null = null;
+
   L6a_total_contributions_period: number | undefined;
   L6b_total_contribution_refunds_period: number | undefined;
   L6c_net_contributions_period: number | undefined;

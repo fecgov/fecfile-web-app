@@ -24,7 +24,10 @@ import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { F3FormTypes, F3xFormTypes, Form3, Form3X } from 'app/shared/models';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 import { MessageWrapperService } from 'app/shared/services/message-wrapper.service';
-import { ElectionCycleService } from 'app/tools/election-cycle/election-cycle.service';
+import {
+  ElectionCycleCoverageLookupResponse,
+  ElectionCycleService,
+} from 'app/tools/election-cycle/election-cycle.service';
 import { ElectionCycleSelectionComponent } from './election-cycle-selection/election-cycle-selection.component';
 import { CommitteeStore } from 'app/committee/committee.store';
 import {
@@ -68,6 +71,7 @@ export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Mode
   private readonly committeeStore = inject(CommitteeStore);
 
   readonly coverageDatesDialogVisible = signal(false);
+  readonly nextElectionCycleRequired = signal(false);
   readonly isElectionReport = computed(() => electionReportCodes.includes(this.form.reportCode().value()!));
 
   readonly filingFrequencyLabel = computed(() =>
@@ -113,7 +117,10 @@ export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Mode
       required(schema.reportCode, { message: requiredMessage });
       required(schema.coverage.startDate, { message: requiredMessage });
       required(schema.coverage.endDate, { message: requiredMessage });
-      if (!this.activeService.isF3X) required(schema.electionCycle);
+      if (!this.activeService.isF3X) {
+        required(schema.electionCycle);
+        required(schema.nextElectionCycle, { when: () => this.nextElectionCycleRequired() });
+      }
 
       hidden(schema.filingFrequency, () => !this.activeService.isF3X || !environment.userCanSetFilingFrequency);
       hidden(schema.electionReport, () => !this.isElectionReport());
@@ -213,4 +220,10 @@ export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Mode
     const disabled = this.reportStore.disabledReportCodes();
     return new Set(options.filter((o) => disabled[o]));
   });
+
+  onElectionCycleLookup($event: ElectionCycleCoverageLookupResponse) {
+    this.form.electionCycle().value.set($event.electionCycle);
+    this.form.nextElectionCycle().value.set($event.nextElectionCycle);
+    this.nextElectionCycleRequired.set($event.needsNextCycle);
+  }
 }
