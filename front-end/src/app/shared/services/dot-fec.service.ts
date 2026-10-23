@@ -1,13 +1,4 @@
-import {
-  effect,
-  inject,
-  Injectable,
-  linkedSignal,
-  Renderer2,
-  RendererFactory2,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { inject, Injectable, linkedSignal, Renderer2, RendererFactory2, WritableSignal } from '@angular/core';
 import { ApiService } from './api.service';
 import { Report } from '../models/reports/report.model';
 import { Actions } from '@ngrx/effects';
@@ -33,19 +24,17 @@ export class DotFecService {
   private readonly apiService = inject(ApiService);
   private readonly actions = inject(Actions);
   readonly rendererFactory = inject(RendererFactory2);
-  readonly downloads: WritableSignal<Download[]> = signal([]);
-  readonly showTray = linkedSignal(() => this.downloads().length > 0);
-  readonly renderer: Renderer2 = this.rendererFactory.createRenderer(null, null);
-
   private readonly loggedOut = toSignal(
     this.actions.pipe(filter((action) => action.type === '[User Login Data] Discarded')),
   );
 
-  constructor() {
-    effect(() => {
-      if (this.committeeStore.committee() || this.loggedOut()) this.downloads.set([]);
-    });
-  }
+  private readonly _downloads: WritableSignal<Download[]> = linkedSignal({
+    source: () => [this.committeeStore.committee(), this.loggedOut()],
+    computation: () => [],
+  });
+  readonly downloads = this._downloads.asReadonly();
+  readonly showTray = linkedSignal(() => this.downloads().length > 0);
+  readonly renderer: Renderer2 = this.rendererFactory.createRenderer(null, null);
 
   async generateFecFile(report: Report): Promise<Download> {
     this.showTray.set(true);
@@ -85,7 +74,7 @@ export class DotFecService {
       name: humanFilename,
       isComplete: false,
     };
-    this.downloads().push(download);
+    this._downloads.update((list) => [...list, download]);
 
     return download;
   }
@@ -109,7 +98,7 @@ export class DotFecService {
       id = await this.checkFecFile(download.taskId);
       isComplete = !!id;
     }
-    this.downloads.update((downloads) => {
+    this._downloads.update((downloads) => {
       return downloads.map((d) => {
         if (d.name !== download.name) return d;
         d.isComplete = true;
@@ -117,6 +106,10 @@ export class DotFecService {
         return d;
       });
     });
+  }
+
+  removeDownload(download: Download) {
+    this._downloads.update((downloads) => downloads.filter((d) => d !== download));
   }
 
   private async checkFecFile(taskId: string): Promise<string | undefined> {

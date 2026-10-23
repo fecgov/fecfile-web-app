@@ -15,7 +15,6 @@ describe('IN_KIND_OUT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const transaction: SchBTransaction = transactionType.getNewTransaction();
-    expect(transaction.form_type).toBe('SB21B');
     expect(transaction.transaction_type_identifier).toBe(ScheduleBTransactionTypes.PAC_IN_KIND_OUT);
   });
 

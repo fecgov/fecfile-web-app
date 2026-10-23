@@ -27,7 +27,6 @@ export class TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
     });

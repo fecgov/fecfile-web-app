@@ -1,5 +1,9 @@
 @use 'breakpoints' as *;
 
+a {
+  border-bottom: 1px solid #112e51;
+}
+
 h1 {
   margin-bottom: 32px;
   padding-bottom: 8px;
@@ -13,7 +17,6 @@ h2 {
 }
 
 p {
-  line-height: normal;
   margin: 0;
 }
 
@@ -25,7 +28,95 @@ p {
   margin-bottom: 32px;
 }
 
+#election-cycle-accordion {
+  margin-bottom: 32px;
+}
+
 :host::ng-deep {
+  .p-accordion {
+    position: relative;
+  }
+
+  .p-accordion::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: #121212;
+  }
+
+  .p-accordionpanel {
+    border-bottom: 1px solid #121212;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .p-accordionheader {
+    --p-accordion-header-last-bottom-border-radius: 0;
+    --p-accordion-header-first-top-border-radius: 0;
+    padding: 0 20px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
+
+  .election-cycle-accordion-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    background-color: var(--p-accordion-header-background);
+    transition: grid-template-rows 400ms cubic-bezier(0.86, 0, 0.07, 1);
+  }
+
+  .election-cycle-accordion-content-open {
+    grid-template-rows: 1fr;
+    border-top: 1px solid #121212;
+  }
+
+  .election-cycle-accordion-content-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .accordion-number-icon {
+    height: 64px;
+    width: 64px;
+    padding: 8px 10px;
+    flex-shrink: 0;
+  }
+
+  .accordion-content-wrapper {
+    padding: 20px 20px;
+    border: none;
+  }
+
+  .accordion-content-wrapper p {
+    font-family: var(--karla);
+  }
+
+  .accordion-content-wrapper a,
+  .accordion-content-wrapper .disabled {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .accordion-header-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    line-height: 20px;
+  }
+
+  .accordion-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .election-cycle-accordion-content {
+      transition: none;
+    }
+  }
+
   @media (max-width: $md) {
     th {
       padding: 10px 6px !important;
@@ -34,6 +125,10 @@ p {
 
   @media (min-width: $md) {
     #election-cycle-info {
+      width: 562px;
+    }
+
+    .accordion-content-wrapper {
       width: 562px;
     }
   }

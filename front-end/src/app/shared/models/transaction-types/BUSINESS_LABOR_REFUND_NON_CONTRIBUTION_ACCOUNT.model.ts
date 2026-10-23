@@ -19,7 +19,6 @@ export class BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransact
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB29',
       transaction_type_identifier: ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
       aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
     });
