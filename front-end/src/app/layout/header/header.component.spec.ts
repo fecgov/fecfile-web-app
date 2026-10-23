@@ -1,13 +1,13 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MenubarModule } from 'primeng/menubar';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { LayoutService } from '../layout.service';
 import { HeaderComponent } from './header.component';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
-import { USE_DYNAMIC_SIDEBAR, LayoutService } from '../layout.service';
-import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -22,7 +22,6 @@ describe('HeaderComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideMockStore(testMockStore()),
-        { provide: USE_DYNAMIC_SIDEBAR, useValue: true },
       ],
     }).compileComponents();
   });
