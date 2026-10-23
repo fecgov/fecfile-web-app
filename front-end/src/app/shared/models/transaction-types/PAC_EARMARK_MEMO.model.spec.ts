@@ -15,7 +15,6 @@ describe('PAC_EARMARK_MEMO', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA11C');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_EARMARK_MEMO);
   });
 

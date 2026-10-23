@@ -22,7 +22,6 @@ export class LOAN_REPAYMENT_RECEIVED extends SchATransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA14',
       transaction_type_identifier: ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED,
       aggregation_group: AggregationGroups.LINE_14,
     });

@@ -14,7 +14,6 @@ describe('LOAN_BY_COMMITTEE', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
-    expect(transaction.form_type).toBe('SC/9');
     expect(transaction.transaction_type_identifier).toBe(ScheduleCTransactionTypes.LOAN_BY_COMMITTEE);
   });
 });

@@ -36,6 +36,9 @@ import { TransactionContactUtils } from '../transaction-type-base/transaction-co
 import { ContactTransactionTableComponent } from './contact-transaction-table/contact-transaction-table.component';
 import { DuplicateContactComponent, ValidatingFields } from './duplicate-contact/duplicate-contact.component';
 import { NgTemplateOutlet } from '@angular/common';
+import { compatForm } from '@angular/forms/signals/compat';
+import { submit } from '@angular/forms/signals';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -68,16 +71,16 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly contact = model<Contact>();
   readonly type = model<ContactTypes>(ContactTypes.INDIVIDUAL);
   readonly visible = model(false);
-  readonly contactTypeOptions = input<PrimeOptions>(LabelUtils.getPrimeOptions(ContactTypeLabels));
-  readonly showHistory = input(false);
+  readonly contactTypeOptions = model<PrimeOptions>(LabelUtils.getPrimeOptions(ContactTypeLabels));
   readonly headerTitle = input<string>();
+  readonly dialogHeader = computed(() => (!this.isNewItem() ? 'Edit Contact' : (this.headerTitle() ?? 'Add Contact')));
   readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
+  readonly enableDuplicateContactViewing = computed(() => !this.headerTitle());
 
-  readonly detailVisibleChange = output<boolean>();
   readonly savedContact = output<Contact>();
 
   form: FormGroup = this.fb.group(
-    SchemaUtils.getFormGroupFields([
+    getFormGroupFields([
       ...new Set([
         ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
         ...SchemaUtils.getSchemaProperties(contactCandidateSchema),
@@ -85,7 +88,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ]),
-    { updateOn: 'blur' },
   );
 
   readonly isNewItem = computed(() => !this.contact()?.id);
@@ -102,12 +104,12 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
   candidateDistrictOptions: PrimeOptions = [];
-  readonly dialogVisible = signal(false);
 
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
 
   readonly hideDuplicate = signal(false);
+  readonly loadingDuplicateContact = signal(false);
   readonly data = signal<ValidatingFields>({
     name: '',
     first_name: '',
@@ -115,6 +117,24 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     candidate_id: '',
     committee_id: '',
   });
+
+  readonly formModel = signal({
+    contactForm: this.form,
+  });
+  readonly signalForm = compatForm(this.formModel, {
+    submission: {
+      action: () => this.submit(),
+      onInvalid: () => {
+        this.form.markAllAsTouched();
+        this.scrollToFirstInvalidControl();
+      },
+    },
+  });
+  readonly disableSubmission = computed(() => {
+    const sf = this.signalForm();
+    return sf.submitting() || sf.invalid() || !sf.dirty();
+  });
+  private jump?: 'continue';
 
   constructor() {
     super();
@@ -169,6 +189,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
    */
   contactTypeChanged(contactType: ContactTypes) {
     if (!this.contact()) this.contact.set(new Contact());
+    this.hideDuplicate.set(false);
 
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so
@@ -203,17 +224,16 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const contact = this.contact()!;
     this.form.patchValue(contact);
     if (contact.id) {
+      this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contact.type]));
       this.type.set(contact.type);
     }
-    this.dialogVisible.set(true);
   }
 
-  public closeDialog(visibleChangeFlag = false) {
-    if (!visibleChangeFlag) {
-      this.detailVisibleChange.emit(false);
-      this.visible.set(false);
-      this.dialogVisible.set(false);
-    }
+  public closeDialog() {
+    this.resetForm();
+    this.loadingDuplicateContact.set(false);
+    this.type.set(this.contactTypeOptions()[0].value as ContactTypes);
+    this.contact.set(new Contact());
   }
 
   private resetForm() {
@@ -237,9 +257,9 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.form.patchValue(contact);
   }
 
-  override async submit(jump: 'continue' | void): Promise<void> {
-    if (jump === 'continue') return this.saveContact(false);
-    if (this.headerTitle() || this.isNewItem()) return this.saveContact();
+  override async submit(): Promise<void> {
+    if (this.jump === 'continue') return this.saveContact(false);
+    if (this.isNewItem()) return this.saveContact();
     return this.confirmPropagation();
   }
 
@@ -248,6 +268,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const changes = Object.entries(this.form.controls)
       .filter(([field, control]: [string, AbstractControl]) => control?.value !== contact[field as keyof Contact])
       .map(([field, control]: [string, AbstractControl]) => [field, control.value]) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
+    if (changes.length === 0) {
+      this.savedContact.emit(contact);
+      this.visible.set(false);
+      return;
+    }
     const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact()!, changes);
     this.confirmationService.confirm({
       header: 'Confirm',
@@ -285,19 +310,47 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
     this.savedContact.emit(contact);
 
-    if (closeDialog) {
-      this.closeDialog();
-    }
+    if (closeDialog) this.visible.set(false);
     this.resetForm();
   }
 
-  useContact(contact: Contact) {
-    this.savedContact.emit(contact);
-    this.closeDialog();
+  async useContact(contact: Contact) {
+    if (!this.enableDuplicateContactViewing()) {
+      this.savedContact.emit(contact);
+      this.visible.set(false);
+      return;
+    }
+
+    this.loadingDuplicateContact.set(true);
+    await new Promise((resolve) => setTimeout(resolve, 750));
+    if (!this.visible()) return;
+
+    this.contact.set(contact);
+    this.type.set(contact.type);
+    this.openDialog();
+    this.loadingDuplicateContact.set(false);
   }
 
   updateData(event: Event, key: keyof ValidatingFields) {
     const value = (event.target as HTMLInputElement).value ?? '';
     this.data.update((d) => ({ ...d, [key]: value }));
   }
+
+  override async submitForm(jump?: 'continue'): Promise<void> {
+    this.jump = jump;
+    submit(this.signalForm);
+  }
+}
+
+function getFormGroupFields(properties: string[]) {
+  const updateOnBlur = new Set(['candidate_id', 'committee_id']);
+  const group: { [key: string]: SubscriptionFormControl } = {};
+  properties.forEach((property) => {
+    const updateOn = updateOnBlur.has(property) ? 'blur' : 'change';
+    group[property] = new SubscriptionFormControl<string | Date | null | undefined>('', {
+      updateOn,
+    });
+  });
+
+  return group;
 }

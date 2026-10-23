@@ -242,6 +242,21 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
       this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
     });
 
+    effect(() => {
+      const isElectionReport = this.isElectionReport();
+      if (isElectionReport) {
+        this.form.controls['date_of_election'].setValidators([Validators.required]);
+        this.form.controls['date_of_election'].updateValueAndValidity();
+        this.form.controls['state_of_election'].setValidators([Validators.required]);
+        this.form.controls['state_of_election'].updateValueAndValidity();
+      } else {
+        this.form.controls['date_of_election'].clearValidators();
+        this.form.controls['date_of_election'].updateValueAndValidity();
+        this.form.controls['state_of_election'].clearValidators();
+        this.form.controls['state_of_election'].updateValueAndValidity();
+      }
+    });
+
     this.detectScreenWidth();
   }
 

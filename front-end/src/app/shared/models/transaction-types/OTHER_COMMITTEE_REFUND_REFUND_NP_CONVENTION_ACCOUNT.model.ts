@@ -24,7 +24,6 @@ export class OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT extends SchBTra
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });

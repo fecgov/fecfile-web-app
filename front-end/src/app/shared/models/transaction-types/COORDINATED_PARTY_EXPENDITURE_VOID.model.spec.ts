@@ -16,7 +16,6 @@ describe('COORDINATED_PARTY_EXPENDITURE_VOID', () => {
 
   it('#factory() should return a SchFTransaction', () => {
     const txn: SchFTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SF');
     expect(txn.transaction_type_identifier).toBe(ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID);
   });
 

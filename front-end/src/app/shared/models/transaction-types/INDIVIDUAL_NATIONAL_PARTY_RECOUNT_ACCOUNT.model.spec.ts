@@ -15,7 +15,6 @@ describe('INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT);
   });
 

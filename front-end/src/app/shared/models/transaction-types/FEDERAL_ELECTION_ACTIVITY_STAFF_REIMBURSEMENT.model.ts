@@ -19,7 +19,6 @@ export class FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT extends SchBTransacti
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB30B',
       transaction_type_identifier: ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

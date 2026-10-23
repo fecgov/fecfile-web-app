@@ -21,7 +21,6 @@ export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO extends SCHEDULE_B_MEMO 
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB29',
       transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
