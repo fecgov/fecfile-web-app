@@ -3,7 +3,7 @@ import { form, FormField, FormRoot, hidden, required } from '@angular/forms/sign
 import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
 import { mapResponseToErrors } from './create-shared-f3.utils';
 import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
-import { environment } from 'environments/environment.local';
+import { environment } from 'environments/environment';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { electionReportCodes, getCoverageDates, getReportCodes, ReportCodes } from 'app/shared/utils/report-code.utils';
