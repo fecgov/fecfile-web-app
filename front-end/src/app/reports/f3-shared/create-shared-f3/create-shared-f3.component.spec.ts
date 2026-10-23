@@ -241,3 +241,43 @@ describe('Default Report Type Category Logic', () => {
     expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.NON_ELECTION_YEAR);
   });
 });
+
+describe('Election Date and State Validators', () => {
+  beforeEach(async () => {
+    await setup({});
+    setupComponent();
+  });
+
+  const setupComponent = () => {
+    fixture = TestBed.createComponent(CreateSharedF3Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  };
+
+  it('should require date_of_election and state_of_election for election reports', () => {
+    component.form.patchValue({ report_code: ReportCodes['12G'] });
+    fixture.detectChanges();
+    const dateOfElectionControl = component.form.get('date_of_election');
+    const stateOfElectionControl = component.form.get('state_of_election');
+    dateOfElectionControl?.updateValueAndValidity();
+    stateOfElectionControl?.updateValueAndValidity();
+    expect(dateOfElectionControl?.invalid).toEqual(true);
+    expect(stateOfElectionControl?.invalid).toEqual(true);
+    component.form.patchValue({ date_of_election: '2024-11-05', state_of_election: 'CA' });
+    dateOfElectionControl?.updateValueAndValidity();
+    stateOfElectionControl?.updateValueAndValidity();
+    expect(dateOfElectionControl?.invalid).toEqual(false);
+    expect(stateOfElectionControl?.invalid).toEqual(false);
+  });
+
+  it('should not require date_of_election and state_of_election for non-election reports', () => {
+    component.form.patchValue({ report_code: ReportCodes.Q1 });
+    fixture.detectChanges();
+    const dateOfElectionControl = component.form.get('date_of_election');
+    const stateOfElectionControl = component.form.get('state_of_election');
+    dateOfElectionControl?.updateValueAndValidity();
+    stateOfElectionControl?.updateValueAndValidity();
+    expect(dateOfElectionControl?.invalid).toEqual(false);
+    expect(stateOfElectionControl?.invalid).toEqual(false);
+  });
+});
