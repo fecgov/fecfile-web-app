@@ -90,13 +90,14 @@ export class ReportListPage {
     });
   }
 
-  static createF3X(fd = defaultReportFormData) {
+  static createF3X(fd = defaultReportFormData, clickSave=true) {
     ReportListPage.goToPage();
     F3xCreateReportPage.coverageCall();
     ReportListPage.clickCreateAndSelectForm('F3X');
     F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(fd);
-    PageUtils.clickFormActionButton('Save & continue', '[data-cy="save-cancel-actions"]:visible');
+    if (clickSave)
+      PageUtils.clickFormActionButton('Save & continue', '[data-cy="save-cancel-actions"]:visible');
   }
 
   static createF1M() {

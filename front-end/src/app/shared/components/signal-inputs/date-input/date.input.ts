@@ -15,19 +15,20 @@ export type StringDate = Date | string | null;
   styleUrls: ['../input.scss', './date.input.scss'],
 })
 export class DateInput extends BaseInput<StringDate> {
+  onInput(event: InputEvent) {
+    const input = event.target as HTMLInputElement;
+    const suffix = 'MM/DD/YYYY';
+
+    if (input.value.endsWith(suffix)) {
+      input.value = input.value.slice(0, -suffix.length);
+    }
+    this.stringToDateConversion(input.value);
+  }
   readonly datePicker = viewChild.required(DatePicker);
   readonly tempValue = linkedSignal({ source: this.value, computation: (value) => value });
 
   onDateSelect(date: StringDate): void {
-    let finalValue: StringDate = null;
-
-    if (date instanceof Date) {
-      finalValue = date;
-    } else if (typeof date === 'string' && date.trim() !== '') {
-      const parsedDate = new Date(date);
-      finalValue = Number.isNaN(parsedDate.getTime()) ? date : parsedDate;
-    }
-    this.tempValue.set(finalValue);
+    this.stringToDateConversion(date);
     this.commitValue();
   }
 
@@ -66,5 +67,17 @@ export class DateInput extends BaseInput<StringDate> {
       this.value.set(this.tempValue());
     }
     this.touched.set(true);
+  }
+
+  private stringToDateConversion(date: StringDate) {
+    let finalValue: StringDate = null;
+
+    if (date instanceof Date) {
+      finalValue = date;
+    } else if (typeof date === 'string' && date.trim() !== '') {
+      const parsedDate = new Date(date);
+      finalValue = Number.isNaN(parsedDate.getTime()) ? date : parsedDate;
+    }
+    this.tempValue.set(finalValue);
   }
 }

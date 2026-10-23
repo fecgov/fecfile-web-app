@@ -1,0 +1,21 @@
+#election-cycle {
+  background-color: var(--surface-ground);
+  color: var(--p-content-color);
+  opacity: 0.65;
+  border: 2px var(--fec-grey-alt) solid;
+  border-radius: var(--border-radius);
+  font-family: var(--karla);
+  font-size: var(--input-font-size);
+  height: var(--input-height);
+  line-height: 1.2;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  width: 406px;
+  align-items: center;
+  padding: 1rem;
+}
+
+p {
+  margin-bottom: 16px;
+}

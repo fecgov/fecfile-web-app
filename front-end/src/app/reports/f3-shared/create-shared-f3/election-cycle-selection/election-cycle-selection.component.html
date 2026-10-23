@@ -1,0 +1,28 @@
+<h2>Election cycle</h2>
+<p>
+  The election cycle will populate below based on your report covering period dates and current election cycle. If the
+  report covering period does not fall completely within an election cycle, an additional election cycle is needed to
+  cover the remaining dates.
+</p>
+<p>If you need to edit an existing election cycle, you can do so under "Election cycles" in "Tools."</p>
+
+<span class="mb-2 span-label">ELECTION CYCLE</span>
+<div id="election-cycle">
+  @if (!hasCoverage()) {
+    {{ coverageNeeded }}
+  } @else if (electionCycleResource.value(); as cycle) {
+    <span>{{ cycle.office }} {{ cycle.electionType }} {{ cycle.electionYear }}</span>
+    <span> {{ cycle.coverage.startDate | fecDate }} — {{ cycle.coverage.endDate | fecDate }} </span>
+  } @else {
+    {{ noElectionCycleMatch }}
+  }
+</div>
+<button
+  pButton
+  pRipple
+  type="button"
+  label="Add new cycle"
+  class="add-button"
+  routerLink="/tools/election-cycles/"
+  [disabled]="disableAdd()"
+></button>
