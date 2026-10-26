@@ -25,13 +25,11 @@ describe('CashOnHandService', () => {
   it('should get cash on hand', async () => {
     const cashOnHandPromise = service.getCashOnHand(1990);
     const request = httpTestingController.expectOne(`${environment.apiUrl}/cash_on_hand/year/1990/`);
-    const mockResponse: HttpResponse<CashOnHand> = new HttpResponse<CashOnHand>({
-      body: {
-        cash_on_hand: 25.0,
-        year: '2024',
-      },
-      status: 200,
+    const mockResponse = CashOnHand.fromJSON({
+      cash_on_hand: 25.0,
+      year: '2024',
     });
+
     request.flush(mockResponse);
     await cashOnHandPromise;
     httpTestingController.verify();
@@ -40,9 +38,7 @@ describe('CashOnHandService', () => {
   it('should miss cash on hand', async () => {
     const cashOnHandPromise = service.getCashOnHand(1990);
     const request = httpTestingController.expectOne(`${environment.apiUrl}/cash_on_hand/year/1990/`);
-    const mockResponse: HttpResponse<CashOnHand> = new HttpResponse<CashOnHand>({
-      status: 404,
-    });
+    const mockResponse = {};
     request.flush(mockResponse);
     await cashOnHandPromise;
     httpTestingController.verify();
@@ -51,7 +47,7 @@ describe('CashOnHandService', () => {
   it('should set cash on hand', async () => {
     const cashOnHandPromise = service.setCashOnHand(1990, 25.0);
     const request = httpTestingController.expectOne(`${environment.apiUrl}/cash_on_hand/year/1990/`);
-    const mockResponse: HttpResponse<CashOnHand> = new HttpResponse<CashOnHand>({
+    const mockResponse = new HttpResponse({
       status: 200,
     });
     request.flush(mockResponse);
