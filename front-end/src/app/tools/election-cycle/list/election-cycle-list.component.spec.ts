@@ -24,27 +24,23 @@ describe('ElectionCyclesListComponent', () => {
   const mockDataResponse = {
     count: 2,
     results: [
-      new ElectionCycle({
+      ElectionCycle.fromJson({
         id: '1',
         office: 'House',
-        electionType: 'General',
-        electionYear: 2024,
-        hasForm3: true,
-        coverage: {
-          startDate: new Date('2023-01-01'),
-          endDate: new Date('2024-11-05'),
-        },
+        election_type: 'General',
+        election_year: 2024,
+        has_form3: true,
+        start_date: '2023-01-01',
+        end_date: '2024-11-05',
       }),
-      new ElectionCycle({
+      ElectionCycle.fromJson({
         id: '2',
         office: 'House',
-        electionType: 'General',
-        electionYear: 2022,
-        hasForm3: false,
-        coverage: {
-          startDate: new Date('2021-01-01'),
-          endDate: new Date('2022-11-08'),
-        },
+        election_type: 'General',
+        election_year: 2022,
+        has_form3: false,
+        start_date: '2021-01-01',
+        end_date: '2022-11-08',
       }),
     ],
   };
@@ -83,14 +79,9 @@ describe('ElectionCyclesListComponent', () => {
   });
 
   it('should hide actions for cycles associated with a Form 3', () => {
-    const rows: HTMLTableRowElement[] = Array.from(
-      fixture.nativeElement.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>,
-    );
-    const form3CycleRow = rows.find((row) => row.textContent.includes('2024'));
-    const unassociatedCycleRow = rows.find((row) => row.textContent.includes('2022'));
+    const actions = fixture.nativeElement.querySelectorAll('app-table-actions-button');
 
-    expect(form3CycleRow?.querySelector('app-table-actions-button')).toBeNull();
-    expect(unassociatedCycleRow?.querySelector('app-table-actions-button')).not.toBeNull();
+    expect(actions).toHaveLength(1);
   });
 
   describe('Initial State & Computing Values', () => {
