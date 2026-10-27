@@ -37,6 +37,7 @@ export interface SharedForm3Model {
     state: string | null;
   };
   electionCycle: ElectionCycle | null;
+  nextElectionCycle: ElectionCycle | null;
 }
 
 export function createInitialModel(
@@ -73,6 +74,7 @@ function createFormModel(
       state,
     },
     electionCycle: null,
+    nextElectionCycle: null,
   };
 }
 
@@ -90,6 +92,7 @@ function editFormModel(report: BaseForm3, isF3X: boolean, defaultState: string |
       state: report.state_of_election ?? defaultState,
     },
     electionCycle: (report as Form3).electionCycle ?? null,
+    nextElectionCycle: (report as Form3).nextElectionCycle ?? null,
   };
 }
 
@@ -118,7 +121,10 @@ function getDefaultTypeCategory() {
 
 export function buildJson(report: BaseForm3, formValue: SharedForm3Model, isF3X: boolean, hasElectionReport: boolean) {
   if (isF3X) (report as Form3X).filing_frequency = formValue.filingFrequency!;
-  else (report as Form3).electionCycle = formValue.electionCycle!;
+  else {
+    (report as Form3).electionCycle = formValue.electionCycle!;
+    (report as Form3).nextElectionCycle = formValue.nextElectionCycle;
+  }
   report.report_type_category = formValue.reportTypeCategory!;
   report.report_code = formValue.reportCode!;
   if (report.report_code === ReportCodes.TER) {
