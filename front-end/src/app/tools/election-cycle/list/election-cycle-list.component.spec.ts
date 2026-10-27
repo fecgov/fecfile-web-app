@@ -22,16 +22,28 @@ describe('ElectionCyclesListComponent', () => {
   };
 
   const mockDataResponse = {
-    count: 1,
+    count: 2,
     results: [
       new ElectionCycle({
         id: '1',
         office: 'House',
         electionType: 'General',
         electionYear: 2024,
+        hasForm3: true,
         coverage: {
           startDate: new Date('2023-01-01'),
           endDate: new Date('2024-11-05'),
+        },
+      }),
+      new ElectionCycle({
+        id: '2',
+        office: 'House',
+        electionType: 'General',
+        electionYear: 2022,
+        hasForm3: false,
+        coverage: {
+          startDate: new Date('2021-01-01'),
+          endDate: new Date('2022-11-08'),
         },
       }),
     ],
@@ -68,6 +80,15 @@ describe('ElectionCyclesListComponent', () => {
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should hide actions for cycles associated with a Form 3', () => {
+    const rows = Array.from(fixture.nativeElement.querySelectorAll('tbody tr'));
+    const form3CycleRow = rows.find((row) => row.textContent.includes('2024'));
+    const unassociatedCycleRow = rows.find((row) => row.textContent.includes('2022'));
+
+    expect(form3CycleRow?.querySelector('app-table-actions-button')).toBeNull();
+    expect(unassociatedCycleRow?.querySelector('app-table-actions-button')).not.toBeNull();
   });
 
   describe('Initial State & Computing Values', () => {
@@ -124,7 +145,7 @@ describe('ElectionCyclesListComponent', () => {
       component.addItem();
       const currentItems = component.items();
 
-      expect(currentItems).toHaveLength(2);
+      expect(currentItems).toHaveLength(3);
       expect(currentItems[0].id).toBe('initial');
     });
 
