@@ -63,7 +63,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   readonly debtId: Signal<string | undefined> = computed(() => this.queryParams$()?.get('debt') ?? undefined);
 
   readonly active = model<number>(-1);
-  readonly isF3 = computed(() => this.report().report_type === ReportTypes.F3);
+  readonly isF3 = computed(() => this.report().isF3);
 
   readonly transactionGroups: Signal<Array<{ label: string; transactionTypes: Set<TransactionTypes> }>> = computed(
     () => CategoryPicker.get(this.category()) ?? [],

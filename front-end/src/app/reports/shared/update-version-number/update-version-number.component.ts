@@ -29,7 +29,7 @@ export class UpdateVersionNumberComponent extends SignalFormComponent<VersionDat
   private readonly store = inject(Store);
   protected readonly messageService = inject(MessageService);
   protected readonly report = this.store.selectSignal(selectActiveReport);
-  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
+  readonly isF24 = computed(() => this.report().isF24);
 
   protected readonly model = signal<VersionData>({
     original: 0,
