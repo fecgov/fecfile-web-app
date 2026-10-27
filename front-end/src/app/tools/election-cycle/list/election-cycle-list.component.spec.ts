@@ -83,7 +83,9 @@ describe('ElectionCyclesListComponent', () => {
   });
 
   it('should hide actions for cycles associated with a Form 3', () => {
-    const rows = Array.from(fixture.nativeElement.querySelectorAll('tbody tr'));
+    const rows: HTMLTableRowElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>,
+    );
     const form3CycleRow = rows.find((row) => row.textContent.includes('2024'));
     const unassociatedCycleRow = rows.find((row) => row.textContent.includes('2022'));
 
