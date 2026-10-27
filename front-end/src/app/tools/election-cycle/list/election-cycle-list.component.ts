@@ -90,8 +90,6 @@ export class ElectionCyclesListComponent {
 
   readonly columns: Signal<ColumnDefinition<ElectionCycle>[]> = computed(() => electionColumns(this.breakpointStore));
 
-  readonly disableRowActions = true;
-
   public rowActions: TableAction<ElectionCycle>[] = [
     new TableAction('Edit', this.editItem.bind(this)),
     new TableAction('Delete', this.deleteItem.bind(this)),
