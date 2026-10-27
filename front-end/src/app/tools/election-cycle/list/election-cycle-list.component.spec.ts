@@ -78,7 +78,11 @@ describe('ElectionCyclesListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should hide actions for cycles associated with a Form 3', () => {
+  it('should hide actions for cycles associated with a Form 3', async () => {
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(component.items().map((cycle) => cycle.hasForm3)).toEqual([true, false]);
     const actions = fixture.nativeElement.querySelectorAll('app-table-actions-button');
 
     expect(actions).toHaveLength(1);
