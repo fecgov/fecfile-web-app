@@ -28,8 +28,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
 
     /*** DISBURSEMENT **********************************************/
     // OPERATING EXPENDITURES
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
     // CONTRIBUTIONS/EXPENDITURES
     ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
