@@ -5,7 +5,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CommitteeStore } from 'app/committee/committee.store';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';

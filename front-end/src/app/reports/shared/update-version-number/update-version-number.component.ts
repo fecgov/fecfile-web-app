@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { disabled, form, FormField, FormRoot, min, required, validate } from '@angular/forms/signals';
 import { Store } from '@ngrx/store';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';

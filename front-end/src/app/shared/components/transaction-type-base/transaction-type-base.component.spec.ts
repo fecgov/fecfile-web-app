@@ -669,10 +669,17 @@ describe('TransactionTypeBaseComponent', () => {
         expenditure_amount: 50,
       });
 
-      TransactionFormUtils.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, {
-        amount: 'expenditure_amount',
-        date: 'expenditure_date',
-      } as TransactionTemplateMapType);
+      TransactionFormUtils.handleShowAggregateValueChanges(
+        component,
+        form,
+        transaction,
+        contactIdMap,
+        {
+          amount: 'expenditure_amount',
+          date: 'expenditure_date',
+        } as TransactionTemplateMapType,
+        false,
+      );
 
       form.get('expenditure_amount')?.setValue(25);
       form.get('expenditure_date')?.setValue(new Date('1-1-2013'));
@@ -703,11 +710,18 @@ describe('TransactionTypeBaseComponent', () => {
 
       transactionServiceSpy.getPreviousEntityAggregate.mockReturnValue(of(100));
 
-      TransactionFormUtils.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, {
-        amount: 'expenditure_amount',
-        date: 'expenditure_date',
-        aggregate: 'aggregate',
-      } as TransactionTemplateMapType);
+      TransactionFormUtils.handleShowAggregateValueChanges(
+        component,
+        form,
+        transaction,
+        contactIdMap,
+        {
+          amount: 'expenditure_amount',
+          date: 'expenditure_date',
+          aggregate: 'aggregate',
+        } as TransactionTemplateMapType,
+        false,
+      );
 
       expect(form.get('aggregate')?.value).toBeNull();
 

@@ -31,7 +31,8 @@ import { TransactionFormUtils } from './transaction-form.utils';
 @Directive()
 export abstract class TripleTransactionTypeBaseComponent
   extends DoubleTransactionTypeBaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   childFormProperties_2: string[] = [];
   childTransactionType_2?: TransactionType;
   childTransaction_2?: Transaction;
