@@ -10,10 +10,6 @@
   <app-download-tray />
 </div>
 
-@if (showGlossary) {
-  <app-glossary />
-}
-
 @if (showCommitteeChangedDialog()) {
   <app-dialog header="Committee changed" [visible]="true" [noInput]="true" [dismissible]="false">
     <p class="karla mb-0">
