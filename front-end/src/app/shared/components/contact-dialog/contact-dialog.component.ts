@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
-import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -30,15 +30,19 @@ import { ContactLookupComponent } from '../contact-lookup/contact-lookup.compone
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { FormComponent } from '../form.component';
-import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { ContactTransactionTableComponent } from './contact-transaction-table/contact-transaction-table.component';
 import { DuplicateContactComponent, ValidatingFields } from './duplicate-contact/duplicate-contact.component';
 import { NgTemplateOutlet } from '@angular/common';
 import { compatForm } from '@angular/forms/signals/compat';
-import { submit } from '@angular/forms/signals';
+import { applyWhen, hidden, submit } from '@angular/forms/signals';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import {
+  blankCandidateOfficeModel,
+  buildCandidateSchema,
+  CandidateOfficeFormComponent,
+} from '../signal-form/candidate-office-form/candidate-office-form.component';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -52,7 +56,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
     ErrorMessagesComponent,
     Select,
     FecInternationalPhoneInputComponent,
-    CandidateOfficeInputComponent,
+    CandidateOfficeFormComponent,
     ButtonDirective,
     Ripple,
     SearchableSelectComponent,
@@ -76,6 +80,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly dialogHeader = computed(() => (!this.isNewItem() ? 'Edit Contact' : (this.headerTitle() ?? 'Add Contact')));
   readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
   readonly enableDuplicateContactViewing = computed(() => !this.headerTitle());
+  readonly presidentialScheduleE = input(false);
 
   readonly savedContact = output<Contact>();
 
@@ -103,8 +108,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   );
   readonly countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
-  candidateDistrictOptions: PrimeOptions = [];
-
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
 
@@ -120,16 +123,35 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   readonly formModel = signal({
     contactForm: this.form,
-  });
-  readonly signalForm = compatForm(this.formModel, {
-    submission: {
-      action: () => this.submit(),
-      onInvalid: () => {
-        this.form.markAllAsTouched();
-        this.scrollToFirstInvalidControl();
-      },
+    candidateOffice: {
+      candidate_office: this.defaultCandidateOffice() ?? null,
+      candidate_state: null as string | null,
+      candidate_district: null as string | null,
     },
   });
+  readonly signalForm = compatForm(
+    this.formModel,
+    (schema) => {
+      hidden(schema.candidateOffice, () => this.type() !== 'CAN');
+      applyWhen(
+        schema.candidateOffice,
+        () => this.type() === 'CAN',
+        buildCandidateSchema({
+          defaultOffice: this.defaultCandidateOffice,
+          presidentialScheduleE: this.presidentialScheduleE,
+        }),
+      );
+    },
+    {
+      submission: {
+        action: () => this.submit(),
+        onInvalid: () => {
+          this.form.markAllAsTouched();
+          this.scrollToFirstInvalidControl();
+        },
+      },
+    },
+  );
   readonly disableSubmission = computed(() => {
     const sf = this.signalForm();
     return sf.submitting() || sf.invalid() || !sf.dirty();
@@ -161,23 +183,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         }
       });
 
-    this.form
-      ?.get('candidate_state')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (!!value && this.form.get('candidate_office')?.value === CandidateOfficeTypes.HOUSE) {
-          this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
-        } else {
-          this.candidateDistrictOptions = [];
-        }
-      });
-
-    // If there is a default candidate office (e.g. 'P') set, then make the
-    // candidate office select read-only disabled.
-    if (this.defaultCandidateOffice()) {
-      this.form.get('candidate_office')?.disable();
-    }
-
     this.contactTypeChanged(this.type());
   }
 
@@ -201,6 +206,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     switch (contactType) {
       case ContactTypes.CANDIDATE:
         this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
+        this.signalForm.candidateOffice().reset(blankCandidateOfficeModel());
         break;
       case ContactTypes.COMMITTEE:
         this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
@@ -226,6 +232,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     if (contact.id) {
       this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contact.type]));
       this.type.set(contact.type);
+      this.signalForm.candidateOffice().reset({
+        candidate_office: contact.candidate_office ?? null,
+        candidate_state: contact.candidate_state ?? null,
+        candidate_district: contact.candidate_district ?? null,
+      });
     }
   }
 
@@ -238,11 +249,9 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   private resetForm() {
     this.form.reset();
+    this.signalForm.candidateOffice().reset(blankCandidateOfficeModel());
     this.form.get('country')?.setValue(this.countryOptions[0]['value']);
     this.form.get('state')?.setValue(null);
-    if (this.defaultCandidateOffice) {
-      this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
-    }
     this.formSubmitted = false;
     this.data.set({ name: '', first_name: '', last_name: '', candidate_id: '', committee_id: '' });
     this.hideDuplicate.set(false);
@@ -265,9 +274,15 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   confirmPropagation() {
     const contact = this.contact()!;
-    const changes = Object.entries(this.form.controls)
-      .filter(([field, control]: [string, AbstractControl]) => control?.value !== contact[field as keyof Contact])
-      .map(([field, control]: [string, AbstractControl]) => [field, control.value]) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const { contactForm, candidateOffice } = this.signalForm().value();
+    const values = {
+      ...contactForm.value,
+      ...candidateOffice,
+    };
+
+    const changes = Object.entries(values)
+      .filter(([field, value]) => value !== contact[field as keyof Contact])
+      .map(([field, value]) => [field, value] as [string, unknown]);
     if (changes.length === 0) {
       this.savedContact.emit(contact);
       this.visible.set(false);
@@ -297,6 +312,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const payload: Contact = Contact.fromJSON({
       ...this.contact(),
       ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.type())),
+      ...this.signalForm().value().candidateOffice,
       type: this.type(),
     });
 

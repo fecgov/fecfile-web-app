@@ -6,7 +6,7 @@ import { SelectModule } from 'primeng/select';
 import { LabelComponent } from '../label.component';
 import { BaseInput } from '../base.input';
 
-type StringBooleanNull = string | boolean | null;
+export type StringBooleanNull = string | boolean | null;
 
 @Component({
   selector: 'app-select-input',
@@ -17,7 +17,7 @@ type StringBooleanNull = string | boolean | null;
         [span]="true"
         [label]="label()"
         [inputId]="inputId()"
-        [optional]="!required()"
+        [optional]="showOptional() && !required()"
         [labelStyleClass]="labelStyleClass()"
       />
       <p-select
