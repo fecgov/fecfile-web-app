@@ -145,7 +145,7 @@ describe('FormUtils', () => {
       getFecIdValidator: () => () => of(null),
     } as unknown as ContactService;
 
-    await TransactionFormUtils.onInit(component, form, transaction, {}, contactService);
+    await TransactionFormUtils.onInit(component, form, transaction, {}, contactService, false);
 
     expect(form.get('donor_candidate_fec_id')?.value).toBe('C12345678');
     expect(form.get('donor_candidate_last_name')?.value).toBe('Candidate');

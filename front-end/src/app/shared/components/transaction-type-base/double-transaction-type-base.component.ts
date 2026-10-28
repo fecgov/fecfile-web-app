@@ -7,19 +7,19 @@ import {
   TransactionType,
 } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { blurActiveInput, printFormErrors, scrollToTop } from 'app/shared/utils/form.utils';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
+import { AccordionPanel } from 'primeng/accordion';
 import { SelectItem } from 'primeng/api';
 import { firstValueFrom, of } from 'rxjs';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { blurActiveInput, printFormErrors, scrollToTop } from 'app/shared/utils/form.utils';
-import { AccordionPanel } from 'primeng/accordion';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -121,6 +121,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childTransaction,
       this.childContactIdMap,
       this.contactService,
+      this.activeReport().isF3,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
     // Determine which accordion pane to open initially based on transaction id in page URL

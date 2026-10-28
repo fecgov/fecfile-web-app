@@ -65,6 +65,7 @@ export class TransactionFormUtils {
    * @param transaction - parent or child
    * @param contactIdMap - parent or child
    * @param contactService
+   * @param isF3
    */
   static async onInit(
     component: TransactionTypeBaseComponent,
@@ -72,6 +73,7 @@ export class TransactionFormUtils {
     transaction: Transaction | undefined,
     contactIdMap: ContactIdMapType,
     contactService: ContactService,
+    isF3: boolean,
   ): Promise<void> {
     const shouldPatchFromTransaction =
       !!transaction && TransactionFormUtils.shouldInitializeFromTransaction(transaction);
@@ -148,7 +150,7 @@ export class TransactionFormUtils {
     }
 
     if (transactionType.showAggregate) {
-      this.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, templateMap);
+      this.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, templateMap, isF3);
     }
 
     if (transactionType.showCalendarYTD) {
@@ -491,6 +493,7 @@ export class TransactionFormUtils {
     transaction: Transaction,
     contactIdMap: ContactIdMapType,
     templateMap: TransactionTemplateMapType,
+    isF3: boolean,
   ) {
     const contactId$ = contactIdMap['contact_1'].asObservable();
 
@@ -530,7 +533,9 @@ export class TransactionFormUtils {
             if (!date || !contactId || !hasAmount) {
               return of({ calculate: false, previousAggregate: null });
             }
-            const res = component.transactionService.getPreviousEntityAggregate(transaction, contactId, date);
+            const res = isF3
+              ? component.transactionService.getPreviousEntityElectionCycleToDate(transaction, contactId, date)
+              : component.transactionService.getPreviousEntityAggregate(transaction, contactId, date);
             return (isObservable(res) ? res : from(res)).pipe(
               map((previousAggregate: any) => ({ calculate: true, previousAggregate: previousAggregate ?? 0 })),
             );

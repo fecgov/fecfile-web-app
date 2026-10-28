@@ -8,8 +8,8 @@ import {
 } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
@@ -91,6 +91,7 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childTransaction_2,
       this.childContactIdMap_2,
       this.contactService,
+      this.activeReport().isF3,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2);
     this.forms = [this.form, this.childForm, this.childForm_2];

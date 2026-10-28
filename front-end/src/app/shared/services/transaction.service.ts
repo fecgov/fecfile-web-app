@@ -1,22 +1,23 @@
 import { formatDate } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
+import { map, Observable, of } from 'rxjs';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
 import { CandidateOfficeTypes } from '../models/contact.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
-import { getFromJSON } from '../utils/transaction-type.utils';
 import { CloneEligibilityTransaction, isCloneable } from '../utils/transaction-clone.utils';
+import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
-import { map, Observable, of } from 'rxjs';
 
 interface PreviousAggregate {
   aggregate: number;
   calendar_ytd_per_election_office: number;
   aggregate_general_elec_expended: number;
+  entity_election_cycle_to_date: number;
 }
 
 type PreviousAggregateField = keyof Pick<
   PreviousAggregate,
-  'aggregate' | 'calendar_ytd_per_election_office' | 'aggregate_general_elec_expended'
+  'aggregate' | 'calendar_ytd_per_election_office' | 'aggregate_general_elec_expended' | 'entity_election_cycle_to_date'
 >;
 
 @Injectable({
@@ -96,6 +97,22 @@ export class TransactionService {
       { contact_2_id, date, general_election_year },
       'aggregate_general_elec_expended',
       !!(contact_2_id && general_election_year),
+    );
+  }
+
+  public getPreviousEntityElectionCycleToDate(
+    transaction: Transaction,
+    contact_1_id: string,
+    action_date: Date | string,
+  ): Observable<number | null> {
+    const date = this.getActionDateString(action_date);
+
+    return this.fetchPreviousAggregate(
+      transaction,
+      '/transactions/previous/entity-election-cycle/',
+      { contact_1_id, date },
+      'entity_election_cycle_to_date',
+      !!contact_1_id,
     );
   }
 
