@@ -3,6 +3,8 @@ import { FormGroup } from '@angular/forms';
 import { TransactionContactUtils } from '../components/transaction-type-base/transaction-contact.utils';
 import { Transaction, Contact, TransactionTemplateMapType, ContactTypes } from '../models';
 import { ConfirmationService } from 'primeng/api';
+import { CandidateOfficeModel } from '../components/signal-form/candidate-office-form/candidate-office-form.component';
+import { CandidateOfficeModels } from 'app/reports/f1m/main-form/main-form.component';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +22,7 @@ export class ConfirmationWrapperService {
     getContact: (contactKey: string, transaction?: Transaction) => Contact | null,
     getTemplateMap: (contactKey: string, transaction?: Transaction) => TransactionTemplateMapType | undefined,
     transaction?: Transaction,
+    candidateOffices?: CandidateOfficeModels,
   ): Promise<boolean> {
     for (const [contactKey, config] of Object.entries(contactConfig)) {
       const templateMap = getTemplateMap(contactKey, transaction);
@@ -31,7 +34,13 @@ export class ConfirmationWrapperService {
       if (contact === null) continue;
       let result = await this.createContactConfirmation(contact, form, templateMap, contactKey);
       if (!result) return false;
-      result = await this.contactChangesConfirmation(contact, form, templateMap, config, transaction);
+      let candidateOffice: CandidateOfficeModel | undefined = undefined;
+      if (candidateOffices) {
+        const candidateKey = contactKey.split('contact_candidate_');
+        candidateOffice = candidateOffices[candidateKey[1] as keyof CandidateOfficeModels];
+      }
+
+      result = await this.contactChangesConfirmation(contact, form, templateMap, config, transaction, candidateOffice);
       if (!result) return false;
     }
     return true;
@@ -43,8 +52,16 @@ export class ConfirmationWrapperService {
     templateMap: TransactionTemplateMapType,
     config: { [formField: string]: string },
     transaction?: Transaction,
+    candidateOffice?: CandidateOfficeModel,
   ): Promise<boolean> {
-    const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config, transaction);
+    const changes = TransactionContactUtils.getContactChanges(
+      form,
+      contact,
+      templateMap,
+      config,
+      transaction,
+      candidateOffice,
+    );
     if (changes.length > 0) {
       const message = TransactionContactUtils.getContactChangesMessage(contact, changes);
       return this.displayConfirmationPopup(message);

@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ContactManagementService, ContactManager } from 'app/shared/services/contact-management.service';
 import { provideRouter } from '@angular/router';
-import { ContactTypes, CandidateOfficeTypes, Contact } from '../../models/contact.model';
+import { ContactTypes, Contact } from '../../models/contact.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { testContact } from 'app/shared/utils/unit-test.utils';
 import { firstValueFrom } from 'rxjs';
@@ -77,22 +77,6 @@ describe('ContactModalComponent', () => {
     fixture.detectChanges();
 
     expect(component.form.get('state')?.enabled).toBe(true);
-  });
-
-  it('should update candidate district options when candidate state changes', () => {
-    component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.HOUSE);
-    component.form.get('candidate_state')?.setValue('CA');
-    fixture.detectChanges();
-
-    expect(component.candidateDistrictOptions.length).toBeGreaterThan(0);
-  });
-
-  it('should clear candidate district options when candidate office is not HOUSE', () => {
-    component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.SENATE);
-    component.form.get('candidate_state')?.setValue('CA');
-    fixture.detectChanges();
-
-    expect(component.candidateDistrictOptions.length).toEqual(0);
   });
 
   it('should not save contact if form is invalid', async () => {

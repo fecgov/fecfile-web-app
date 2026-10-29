@@ -7,6 +7,7 @@ import { LabelComponent } from '../label.component';
 import { BaseInput } from '../base.input';
 
 export type StringBooleanNull = string | boolean | null;
+export type StringDateBooleanNull = Date | StringBooleanNull;
 
 @Component({
   selector: 'app-select-input',

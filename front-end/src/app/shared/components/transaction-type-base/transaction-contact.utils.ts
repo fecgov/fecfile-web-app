@@ -4,6 +4,8 @@ import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
+import { StringDateBooleanNull } from '../signal-inputs/select-input/select.input';
+import { CandidateOfficeModel } from '../signal-form/candidate-office-form/candidate-office-form.component';
 
 export class TransactionContactUtils {
   /**
@@ -21,34 +23,39 @@ export class TransactionContactUtils {
     templateMap: TransactionTemplateMapType,
     contactConfig: { [formField: string]: string },
     transaction?: Transaction,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): any[] {
-    return Object.entries(contactConfig)
-      .map(([field, property]: string[]) => {
-        const contactValue = contact[property as keyof Contact] ?? undefined;
+    candidateOffice?: CandidateOfficeModel,
+  ): [string, StringDateBooleanNull][] {
+    const result: [string, StringDateBooleanNull][] = [];
+    for (const [field, property] of Object.entries(contactConfig)) {
+      const contactValue = contact[property as keyof Contact] ?? undefined;
+      let formFieldValue: StringDateBooleanNull;
+
+      if (candidateOffice && field in candidateOffice) {
+        formFieldValue = candidateOffice[field as keyof CandidateOfficeModel] ?? null;
+      } else {
         const formField = form.get(templateMap[field as keyof TransactionTemplateMapType]);
-        let formFieldValue = formField?.value ?? undefined;
+        formFieldValue = formField?.value as StringDateBooleanNull;
+      }
 
-        // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
-        // This value needs to be saved on the transaction *but not* on the contact, so we detect "undefined"
-        // as the value for the contact.
-        if (field === 'candidate_state' && transaction?.transactionType.scheduleId === ScheduleIds.E) {
-          const candidateOfficeField = form.get(templateMap.candidate_office);
-          const electionCodeField = form.get(templateMap.election_code);
-          const candidateOffice = candidateOfficeField?.value ?? '';
-          const electionCode = electionCodeField?.value ?? '';
+      // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
+      // This value needs to be saved on the transaction *but not* on the contact, so we detect "undefined"
+      // as the value for the contact.
+      if (field === 'candidate_state' && transaction?.transactionType.scheduleId === ScheduleIds.E) {
+        const candidateOfficeField = form.get(templateMap.candidate_office);
+        const electionCodeField = form.get(templateMap.election_code);
+        const candidateOffice = candidateOfficeField?.value ?? '';
+        const electionCode = electionCodeField?.value ?? '';
 
-          if (electionCode?.startsWith('P') && candidateOffice === CandidateOfficeTypes.PRESIDENTIAL) {
-            formFieldValue = null;
-          }
+        if (electionCode?.startsWith('P') && candidateOffice === CandidateOfficeTypes.PRESIDENTIAL) {
+          formFieldValue = null;
         }
+      }
 
-        if (formField && formFieldValue !== contactValue) {
-          return [property, formFieldValue];
-        }
-        return undefined;
-      })
-      .filter((change) => !!change);
+      if ((formFieldValue ?? null) !== (contactValue ?? null)) {
+        result.push([property, formFieldValue]);
+      }
+    }
+    return result;
   }
 
   /**
@@ -95,7 +102,12 @@ export class TransactionContactUtils {
    * @param templateMap
    * @param form
    */
-  static updateContactsWithForm(transaction: Transaction, templateMap: TransactionTemplateMapType, form: FormGroup) {
+  static updateContactsWithForm(
+    transaction: Transaction,
+    templateMap: TransactionTemplateMapType,
+    form: FormGroup,
+    candidateOffice?: CandidateOfficeModel,
+  ) {
     Object.entries(transaction.transactionType?.contactConfig ?? {}).forEach(
       ([contactKey, config]: [string, { [formField: string]: string }]) => {
         if (transaction[contactKey as keyof Transaction]) {
@@ -106,11 +118,9 @@ export class TransactionContactUtils {
             templateMap,
             config,
             transaction,
+            candidateOffice,
           );
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
-            contact[property] = value as never;
-          });
+          contactChanges.forEach(([property, value]) => (contact[property as keyof Contact] = value as never));
         }
       },
     );

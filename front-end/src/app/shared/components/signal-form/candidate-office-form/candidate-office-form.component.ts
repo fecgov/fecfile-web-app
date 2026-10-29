@@ -5,7 +5,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { SelectInput, StringBooleanNull } from '../../signal-inputs/select-input/select.input';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 
-interface CandidateOfficeModel {
+export interface CandidateOfficeModel {
   candidate_office: CandidateOfficeTypes | null;
   candidate_state: string | null;
   candidate_district: string | null;

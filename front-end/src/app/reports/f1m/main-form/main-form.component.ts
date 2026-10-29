@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -16,7 +16,12 @@ import { RadioButton } from 'primeng/radiobutton';
 import { CalendarComponent } from '../../../shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
 import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
-import { CandidateOfficeInputComponent } from '../../../shared/components/inputs/candidate-office-input/candidate-office-input.component';
+import {
+  blankCandidateOfficeModel,
+  buildCandidateSchema,
+  CandidateOfficeFormComponent,
+  CandidateOfficeModel,
+} from 'app/shared/components/signal-form/candidate-office-form/candidate-office-form.component';
 import { NameInputComponent } from '../../../shared/components/inputs/name-input/name-input.component';
 import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
@@ -26,7 +31,20 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ContactModalComponent } from 'app/shared/components/contact-modal/contact-modal.component';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import { candidatePatternMessage } from 'app/shared/models/candidate.model';
+import { committeePatternMessage } from 'app/shared/models/committee-account.model';
+import { compatForm } from '@angular/forms/signals/compat';
+import { applyWhen, required, submit, FormField } from '@angular/forms/signals';
+import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
+import { RadioButtonInput } from 'app/shared/components/signal-inputs/radio-button-input/radio-button.input';
+
+export type CandidateOfficeModels = Record<F1MCandidateTag, CandidateOfficeModel>;
+
+interface MainFormModel {
+  statusBy: 'qualification' | 'affiliation' | null;
+  contactForm: FormGroup;
+  candidateOffices: CandidateOfficeModels;
+}
 
 @Component({
   selector: 'app-main-form',
@@ -40,11 +58,13 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
     ReportContactLookupComponent,
     CalendarComponent,
     NameInputComponent,
-    CandidateOfficeInputComponent,
+    CandidateOfficeFormComponent,
     SaveCancelComponent,
     ConfirmDialog,
     ContactModalComponent,
     ToUpperDirective,
+    RadioButtonInput,
+    FormField,
   ],
   styleUrl: './main-form.component.scss',
 })
@@ -75,9 +95,6 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     'I_candidate_middle_name',
     'I_candidate_prefix',
     'I_candidate_suffix',
-    'I_candidate_office',
-    'I_candidate_state',
-    'I_candidate_district',
     'I_date_of_contribution',
     'II_candidate_id_number',
     'II_candidate_last_name',
@@ -85,9 +102,6 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     'II_candidate_middle_name',
     'II_candidate_prefix',
     'II_candidate_suffix',
-    'II_candidate_office',
-    'II_candidate_state',
-    'II_candidate_district',
     'II_date_of_contribution',
     'III_candidate_id_number',
     'III_candidate_last_name',
@@ -95,9 +109,6 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     'III_candidate_middle_name',
     'III_candidate_prefix',
     'III_candidate_suffix',
-    'III_candidate_office',
-    'III_candidate_state',
-    'III_candidate_district',
     'III_date_of_contribution',
     'IV_candidate_id_number',
     'IV_candidate_last_name',
@@ -105,9 +116,6 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     'IV_candidate_middle_name',
     'IV_candidate_prefix',
     'IV_candidate_suffix',
-    'IV_candidate_office',
-    'IV_candidate_state',
-    'IV_candidate_district',
     'IV_date_of_contribution',
     'V_candidate_id_number',
     'V_candidate_last_name',
@@ -115,18 +123,14 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     'V_candidate_middle_name',
     'V_candidate_prefix',
     'V_candidate_suffix',
-    'V_candidate_office',
-    'V_candidate_state',
-    'V_candidate_district',
     'V_date_of_contribution',
     'date_of_original_registration',
     'date_of_51st_contributor',
     'date_committee_met_requirements',
-
-    'statusBy',
   ];
   readonly schema = f1mSchema;
   readonly webprintURL = '/reports/f1m/web-print/';
+  readonly statusByOptions = ['affiliation', 'qualification'];
 
   contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
   templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
@@ -134,80 +138,59 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
   readonly form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
 
   committeeTypeControl: AbstractControl | null = null;
-  statusByControl: SubscriptionFormControl | null = null;
   affiliatedContact: AffiliatedContact = {} as AffiliatedContact;
   candidateContacts: CandidateContact[] = [];
 
   report = new Form1M();
 
-  override ngOnInit(): void {
-    super.ngOnInit();
-    // A deep copy of activeReport has to be made because the actual activeReport
-    // object is set to read-only by the NgRx store.
-    if (this.reportId) this.report = Form1M.fromJSON(structuredClone(this.activeReport()));
+  readonly formModel = signal<MainFormModel>({
+    contactForm: this.form,
+    statusBy: null,
+    candidateOffices: {
+      I: blankCandidateOfficeModel(),
+      II: blankCandidateOfficeModel(),
+      III: blankCandidateOfficeModel(),
+      IV: blankCandidateOfficeModel(),
+      V: blankCandidateOfficeModel(),
+    },
+  });
 
-    this.initForm();
-
-    if (this.reportId) {
-      // Set the statusBy radio button based on form values
-      if (this.report.affiliated_committee_name) {
-        this.statusByControl?.setValue('affiliation');
-      } else {
-        this.statusByControl?.setValue('qualification');
+  readonly signalForm = compatForm(
+    this.formModel,
+    (schema) => {
+      required(schema.statusBy, { message: requiredMessage });
+      for (const item of f1mCandidateTags) {
+        applyWhen(
+          schema.candidateOffices[item],
+          ({ valueOf }) => valueOf(schema.statusBy) === 'qualification',
+          buildCandidateSchema({
+            defaultOffice: () => undefined,
+            presidentialScheduleE: () => false,
+          }),
+        );
       }
-    }
-    this.statusByControl?.updateValueAndValidity();
-  }
+    },
+    {
+      submission: {
+        action: () => this.submit(),
+        onInvalid: () => {
+          this.form.markAllAsTouched();
+          this.scrollToFirstInvalidControl();
+        },
+      },
+    },
+  );
 
-  override ngOnDestroy(): void {
-    super.ngOnDestroy();
-    this.cmservice.get('contact_affiliated').outerContact.set(null);
-    f1mCandidateTags.forEach((tag) => this.cmservice.get(`contact_candidate_${tag}`).outerContact.set(null));
-  }
+  readonly disableSubmission = computed(() => {
+    const sf = this.signalForm();
+    return sf.submitting() || sf.invalid() || !sf.dirty();
+  });
+  private jump?: 'continue';
 
-  async getConfirmations(): Promise<boolean> {
-    if (!this.report) return false;
-    return this.confirmationService.confirmWithUser(
-      this.form,
-      this.contactConfigs,
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
-    );
-  }
-
-  getContact(contactKey: string) {
-    if (this.report[contactKey as keyof Form1M]) {
-      return this.report[contactKey as keyof Form1M] as Contact;
-    }
-    return null;
-  }
-
-  getTemplateMap(contactKey: string): TransactionTemplateMapType | undefined {
-    return this.templateMapConfigs[contactKey];
-  }
-
-  initForm() {
-    this.committeeTypeControl = this.form.get('committee_type');
-    this.statusByControl = this.form.get('statusBy') as SubscriptionFormControl;
-    this.statusByControl?.addValidators(Validators.required);
-    this.affiliatedContact = new AffiliatedContact(this);
-    this.candidateContacts = f1mCandidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
-
-    // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
-    f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-      (this.form.get(`${tag}_candidate_id_number`) as SubscriptionFormControl)?.addSubscription(() => {
-        f1mCandidateTags
-          .filter((t) => t !== tag)
-          .forEach((t) => {
-            const control = this.form.get(`${t}_candidate_id_number`);
-            if (control?.invalid && control.errors && 'fecIdMustBeUnique' in control.errors) {
-              this.form.get(`${t}_candidate_id_number`)?.updateValueAndValidity();
-            }
-          });
-      });
-    });
-
-    this.statusByControl?.addSubscription((value: 'affiliation' | 'qualification') => {
+  constructor() {
+    super();
+    effect(() => {
+      const value = this.signalForm.statusBy().value();
       SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
       if (value === 'affiliation') {
         this.enableValidation([this.affiliatedContact]);
@@ -231,6 +214,92 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     });
   }
 
+  override ngOnInit(): void {
+    super.ngOnInit();
+    const reportId = this.reportId();
+    this.initForm();
+
+    // A deep copy of activeReport has to be made because the actual activeReport
+    // object is set to read-only by the NgRx store.
+    if (reportId) {
+      this.report = Form1M.fromJSON(structuredClone(this.activeReport()));
+      // Set the statusBy radio button based on form values
+
+      this.signalForm().value.update((v) => {
+        return {
+          statusBy: this.report.affiliated_committee_name ? 'affiliation' : 'qualification',
+          contactForm: v.contactForm,
+          candidateOffices: this.getCandidateOffices(),
+        };
+      });
+    }
+  }
+
+  private getCandidateOffices(): CandidateOfficeModels {
+    const getOffice = (tag: F1MCandidateTag): CandidateOfficeModel => ({
+      candidate_office: this.report[`${tag}_candidate_office`] ?? null,
+      candidate_state: this.report[`${tag}_candidate_state`] ?? null,
+      candidate_district: this.report[`${tag}_candidate_district`] ?? null,
+    });
+
+    return {
+      I: getOffice('I'),
+      II: getOffice('II'),
+      III: getOffice('III'),
+      IV: getOffice('IV'),
+      V: getOffice('V'),
+    };
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.cmservice.get('contact_affiliated').outerContact.set(null);
+    f1mCandidateTags.forEach((tag) => this.cmservice.get(`contact_candidate_${tag}`).outerContact.set(null));
+  }
+
+  async getConfirmations(): Promise<boolean> {
+    if (!this.report) return false;
+    return this.confirmationService.confirmWithUser(
+      this.form,
+      this.contactConfigs,
+      this.getContact.bind(this),
+      this.getTemplateMap.bind(this),
+      undefined,
+      this.signalForm.candidateOffices().value(),
+    );
+  }
+
+  getContact(contactKey: string) {
+    if (this.report[contactKey as keyof Form1M]) {
+      return this.report[contactKey as keyof Form1M] as Contact;
+    }
+    return null;
+  }
+
+  getTemplateMap(contactKey: string): TransactionTemplateMapType | undefined {
+    return this.templateMapConfigs[contactKey];
+  }
+
+  initForm() {
+    this.committeeTypeControl = this.form.get('committee_type');
+    this.affiliatedContact = new AffiliatedContact(this);
+    this.candidateContacts = f1mCandidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
+
+    // Clear matching CANDIDATE ID form fields of error message when a duplicate is edited
+    f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
+      (this.form.get(`${tag}_candidate_id_number`) as SubscriptionFormControl)?.addSubscription(() => {
+        f1mCandidateTags
+          .filter((t) => t !== tag)
+          .forEach((t) => {
+            const control = this.form.get(`${t}_candidate_id_number`);
+            if (control?.invalid && control.errors && 'fecIdMustBeUnique' in control.errors) {
+              this.form.get(`${t}_candidate_id_number`)?.updateValueAndValidity();
+            }
+          });
+      });
+    });
+  }
+
   enableValidation(contacts: F1MContact[]) {
     contacts.forEach((contact: F1MContact) => contact.enableValidation());
   }
@@ -241,32 +310,34 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
 
   getReportPayload(): Form1M {
     const data = SchemaUtils.getFormValues(this.form, this.schema, this.formProperties);
-    this.updateContactsWithForm(this.report, this.form);
+    this.updateContactsWithForm();
     return Object.assign(this.report, data);
   }
 
-  public override async submit(jump: 'continue' | void): Promise<void> {
+  public override async submit(): Promise<void> {
     const confirmed = await this.getConfirmations();
     // if every confirmation was accepted
-    if (confirmed) super.submit(jump);
+    if (confirmed) super.submit(this.jump);
     else this.store.dispatch(singleClickEnableAction());
   }
 
-  updateContactsWithForm(report: Form1M, form: FormGroup) {
+  updateContactsWithForm() {
     Object.entries(this.contactConfigs).forEach(([contactKey, config]: [string, { [formField: string]: string }]) => {
-      if (report[contactKey as keyof Form1M]) {
-        const contact = report[contactKey as keyof Form1M] as Contact;
+      if (this.report[contactKey as keyof Form1M]) {
+        const contact = this.report[contactKey as keyof Form1M] as Contact;
         const contactChanges = TransactionContactUtils.getContactChanges(
-          form,
+          this.form,
           contact,
           this.templateMapConfigs[contactKey],
           config,
         );
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
-          contact[property] = value as never;
-        });
+        contactChanges.forEach(([property, value]) => (contact[property as keyof Contact] = value as never));
       }
     });
+  }
+
+  override async submitForm(jump: 'continue' | void): Promise<void> {
+    this.jump = jump ?? undefined;
+    submit(this.signalForm);
   }
 }

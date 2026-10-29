@@ -1,7 +1,7 @@
 import type { Mock, MockedObject } from 'vitest';
 import { DatePipe } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
   NavigationAction,
@@ -334,6 +334,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should exit if form is invalid', async () => {
+      component.form.addControl('test', new FormControl(null, Validators.required));
       await component.handleNavigate(navEvent);
       expect(navigateToSpy).toHaveBeenCalledTimes(0);
     });
