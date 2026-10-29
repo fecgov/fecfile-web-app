@@ -35,7 +35,7 @@ export const buildCandidateSchema = (options: CandidateOfficeSchemaOptions) =>
       const office = valueOf(schema.candidate_office);
       const state = valueOf(schema.candidate_state);
       if (office !== CandidateOfficeTypes.HOUSE || !state) return true;
-      return LabelUtils.getCongressionalDistrictLabels(state).length < 2;
+      return LabelUtils.getCongressionalDistrictLabels(state).length === 1;
     });
 
     required(schema.candidate_office, { message: requiredMessage });
@@ -71,7 +71,7 @@ export class CandidateOfficeFormComponent {
     const fields = this.fields();
     if (fields.candidate_office().value() !== CandidateOfficeTypes.HOUSE || fields.candidate_state().value() === null)
       return false;
-    return this.districtOptions().length < 2;
+    return this.districtOptions().length === 1;
   });
 
   private updateDistrict(state: string | null, office?: CandidateOfficeTypes | null): void {

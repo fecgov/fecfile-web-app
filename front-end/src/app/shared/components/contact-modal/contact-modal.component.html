@@ -1,5 +1,12 @@
 <p-dialog [(visible)]="cmservice.showDialog" [style]="{ width: '90%' }" header="Add Contact" [modal]="true">
-  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+  <form
+    id="form"
+    [formGroup]="form"
+    novalidate
+    (submit)="$event.preventDefault()"
+    (ngSubmit)="$event.preventDefault()"
+    [class.ng-submitted]="formSubmitted"
+  >
     <div class="grid">
       <div class="col-12">
         <h3>Contact</h3>
@@ -219,13 +226,7 @@
           <h3>Office</h3>
         </div>
       </div>
-      <app-candidate-office-input
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        officeFormControlName="candidate_office"
-        stateFormControlName="candidate_state"
-        districtFormControlName="candidate_district"
-      />
+      <app-candidate-office-form class="grid-form" [fields]="signalForm.candidateOffice" />
     }
   </form>
 
@@ -233,7 +234,7 @@
     <div class="top-border-footer">
       <button
         pButton
-        pRipple
+        type="button"
         label="Cancel"
         icon="pi pi-times"
         class="p-button-secondary mr-4"
@@ -241,12 +242,11 @@
       ></button>
 
       <button
-        type="button"
         pButton
-        pRipple
         label="Save & continue"
         icon="pi pi-check"
         class="p-button-info"
+        [disabled]="disableSubmission()"
         (click)="saveContact()"
       ></button>
     </div>
