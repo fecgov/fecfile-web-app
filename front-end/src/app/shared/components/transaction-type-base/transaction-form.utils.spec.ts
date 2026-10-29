@@ -74,28 +74,45 @@ describe('FormUtils', () => {
     expect(aggregateFormControl.value).toEqual(50);
   });
 
-  it('should initialize Schedule B aggregate_amount as a number', () => {
-    const form = new FormGroup({
+  it('should initialize Schedule A aggregate_amount as null and Schedule B as 0', () => {
+    const formA = new FormGroup({
+      entity_type: new SubscriptionFormControl(),
+      contribution_aggregate: new SubscriptionFormControl(),
+      memo_code: new SubscriptionFormControl(),
+      contribution_purpose_descrip: new SubscriptionFormControl(),
+    });
+
+    const transactionA = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
+    TransactionFormUtils.resetForm(
+      formA,
+      transactionA,
+      [{ label: 'Individual', value: ContactTypes.INDIVIDUAL }],
+      undefined,
+    );
+    const aggregateFormControlA = formA.get('contribution_aggregate') as SubscriptionFormControl;
+    expect(aggregateFormControlA.value).toBeNull();
+
+    const formB = new FormGroup({
       entity_type: new SubscriptionFormControl(),
       aggregate_amount: new SubscriptionFormControl(),
       memo_code: new SubscriptionFormControl(),
       expenditure_purpose_descrip: new SubscriptionFormControl(),
     });
 
-    const transaction = SchBTransaction.fromJSON({
+    const transactionB = SchBTransaction.fromJSON({
       transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
       report_ids: ['1'],
     });
 
     TransactionFormUtils.resetForm(
-      form,
-      transaction,
+      formB,
+      transactionB,
       [{ label: 'Organization', value: ContactTypes.ORGANIZATION }],
       undefined,
     );
 
-    const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
-    expect(aggregateFormControl.value).toEqual(0);
+    const aggregateFormControlB = formB.get('aggregate_amount') as SubscriptionFormControl;
+    expect(aggregateFormControlB.value).toEqual(0);
   });
 
   it('hydrates primary candidate contact fields when editing a transaction', async () => {
@@ -128,7 +145,7 @@ describe('FormUtils', () => {
       getFecIdValidator: () => () => of(null),
     } as unknown as ContactService;
 
-    await TransactionFormUtils.onInit(component, form, transaction, {}, contactService);
+    await TransactionFormUtils.onInit(component, form, transaction, {}, contactService, false);
 
     expect(form.get('donor_candidate_fec_id')?.value).toBe('C12345678');
     expect(form.get('donor_candidate_last_name')?.value).toBe('Candidate');

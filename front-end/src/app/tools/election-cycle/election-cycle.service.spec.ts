@@ -3,8 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ElectionCycleService } from './election-cycle.service';
 import { ApiService } from 'app/shared/services/api.service';
-import { ElectionCycle } from './election-cycle.model';
+import { Coverage, ElectionCycle } from './election-cycle.model';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
+import { DateUtils } from 'app/shared/utils/date.utils';
 
 describe('ElectionCycleService', () => {
   let service: ElectionCycleService;
@@ -36,6 +37,8 @@ describe('ElectionCycleService', () => {
           isModelInstance: true,
         }) as any,
     );
+
+    vi.clearAllMocks();
   });
 
   it('should be created', () => {
@@ -145,6 +148,120 @@ describe('ElectionCycleService', () => {
       expect(apiServiceMock.put).toHaveBeenCalledWith('/election-cycles/123/', mockToJsonPayload);
       expect(ElectionCycle.fromJson).toHaveBeenCalledWith(mockApiResponse);
       expect(result).toEqual({ id: '123', name: '2028 Cycle', isModelInstance: true });
+    });
+  });
+
+  describe('findByCoverage', () => {
+    const coverage = {
+      startDate: new Date(2026, 2, 1),
+      endDate: new Date(2026, 8, 1),
+    } as Coverage;
+
+    const expectedParams = {
+      start_date: DateUtils.convertDateToFecFormat(coverage.startDate),
+      end_date: DateUtils.convertDateToFecFormat(coverage.endDate),
+    };
+
+    const mockElectionCycle = {
+      id: '123',
+      election_year: 2026,
+      election_type: 'General',
+      office: 'House',
+    };
+
+    const mockNextElectionCycle = {
+      id: '456',
+      election_year: 2028,
+      election_type: 'General',
+      office: 'House',
+    };
+
+    it('should fetch coverage using formatted dates and return a parsed election cycle', async () => {
+      apiServiceMock.get.mockResolvedValue({
+        needs_cycle: false,
+        needs_next_cycle: false,
+        election_cycle: mockElectionCycle,
+      });
+
+      const result = await service.findByCoverage(coverage);
+
+      expect(apiServiceMock.get).toHaveBeenCalledWith('/election-cycles/find-by-coverage/', expectedParams);
+      expect(ElectionCycle.fromJson).toHaveBeenCalledExactlyOnceWith(mockElectionCycle);
+      expect(result).toEqual({
+        needsCycle: false,
+        needsNextCycle: false,
+        electionCycle: {
+          ...mockElectionCycle,
+          isModelInstance: true,
+        },
+        nextElectionCycle: null,
+      });
+    });
+
+    it('should indicate when an election cycle is needed', async () => {
+      apiServiceMock.get.mockResolvedValue({
+        needs_cycle: true,
+        needs_next_cycle: false,
+      });
+
+      const result = await service.findByCoverage(coverage);
+
+      expect(apiServiceMock.get).toHaveBeenCalledWith('/election-cycles/find-by-coverage/', expectedParams);
+      expect(ElectionCycle.fromJson).not.toHaveBeenCalled();
+      expect(result).toEqual({
+        needsCycle: true,
+        needsNextCycle: false,
+        electionCycle: null,
+        nextElectionCycle: null,
+      });
+    });
+
+    it('should indicate when a next election cycle is needed', async () => {
+      apiServiceMock.get.mockResolvedValue({
+        needs_cycle: false,
+        needs_next_cycle: true,
+        election_cycle: mockElectionCycle,
+      });
+
+      const result = await service.findByCoverage(coverage);
+
+      expect(ElectionCycle.fromJson).toHaveBeenCalledExactlyOnceWith(mockElectionCycle);
+      expect(result).toEqual({
+        needsCycle: false,
+        needsNextCycle: true,
+        electionCycle: {
+          ...mockElectionCycle,
+          isModelInstance: true,
+        },
+        nextElectionCycle: null,
+      });
+    });
+
+    it('should parse and return both election cycles when both match the coverage', async () => {
+      apiServiceMock.get.mockResolvedValue({
+        needs_cycle: false,
+        needs_next_cycle: false,
+        election_cycle: mockElectionCycle,
+        next_election_cycle: mockNextElectionCycle,
+      });
+
+      const result = await service.findByCoverage(coverage);
+
+      expect(ElectionCycle.fromJson).toHaveBeenCalledTimes(2);
+      expect(ElectionCycle.fromJson).toHaveBeenNthCalledWith(1, mockElectionCycle);
+      expect(ElectionCycle.fromJson).toHaveBeenNthCalledWith(2, mockNextElectionCycle);
+      expect(result).toEqual({
+        needsCycle: false,
+        needsNextCycle: false,
+        electionCycle: {
+          ...mockElectionCycle,
+          isModelInstance: true,
+        },
+        nextElectionCycle: {
+          ...mockNextElectionCycle,
+          isModelInstance: true,
+        },
+      });
     });
   });
 });

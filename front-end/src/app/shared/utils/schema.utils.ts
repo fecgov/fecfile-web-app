@@ -46,6 +46,13 @@ export class SchemaUtils {
     'perfected_interest',
     'future_income',
     'collateral',
+    'amount',
+    'contribution_amount',
+    'expenditure_amount',
+    'loan_amount',
+    'guaranteed_amount',
+    'incurred_amount',
+    'payment_amount',
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { disabled, form, FormField, FormRoot, min, required, validate } from '@angular/forms/signals';
 import { Store } from '@ngrx/store';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -29,7 +28,7 @@ export class UpdateVersionNumberComponent extends SignalFormComponent<VersionDat
   private readonly store = inject(Store);
   protected readonly messageService = inject(MessageService);
   protected readonly report = this.store.selectSignal(selectActiveReport);
-  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
+  readonly isF24 = computed(() => this.report().isF24);
 
   protected readonly model = signal<VersionData>({
     original: 0,

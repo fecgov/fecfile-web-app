@@ -2,7 +2,7 @@
 import { TestBed } from '@angular/core/testing';
 import { DotFecService, Download } from './dot-fec.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
+import { detectChangesAndWait, testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
 import { Actions } from '@ngrx/effects';
 import { Subject } from 'rxjs';
 import { Report } from '../models/reports/report.model';
@@ -85,7 +85,7 @@ describe('DotFecService', () => {
 
     actions$.next({ type: '[User Login Data] Discarded' });
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await detectChangesAndWait();
     expect(service.downloads().length).toEqual(0);
   });
 

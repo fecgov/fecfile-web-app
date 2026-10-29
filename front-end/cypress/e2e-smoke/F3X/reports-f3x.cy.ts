@@ -67,14 +67,13 @@ describe('Manage reports', () => {
       ...defaultForm3XData,
       report_code: '30G',
     };
-    ReportListPage.createF3X(formData);
+    ReportListPage.createF3X(formData, false);
 
     // Check for error messages caused by the overlapping dates
-    const errorMessage = `You have entered coverage dates that overlap the coverage dates of the following report: 12-DAY PRE-GENERAL (12G)  04/01/${currentYear} - 04/30/${currentYear}`;
-    cy.get('app-error-messages[data-cy="coverage_from_date-error"]').should('contain', errorMessage);
-    // https://fecgov.atlassian.net/browse/FECFILE-2661
-    // This error looks to be behaving very strangely. I feel like it's also behaving odd on develop however...
-    // cy.get('app-error-messages[data-cy="coverage_through_date-error"]').should('contain', errorMessage);
+    const errorMessage = `You have entered coverage dates that overlap the coverage dates of the following report: 12-DAY PRE-GENERAL (12G) 04/01/${currentYear} - 04/30/${currentYear}`;
+    const alias = PageUtils.getAlias('');
+    cy.get(alias).find('[data-cy="coverage-from-date"] small.p-error').should('contain', errorMessage);
+    cy.get(alias).find('[data-cy="coverage-through-date"]').should('contain', errorMessage);
   });
 
   xit('Create report with previous existing report types disabled', () => {
