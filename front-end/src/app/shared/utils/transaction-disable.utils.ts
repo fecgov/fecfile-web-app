@@ -34,8 +34,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
     // OTHER EXPENDITURES
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
     ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
     ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
     ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
