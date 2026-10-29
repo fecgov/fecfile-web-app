@@ -1,27 +1,7 @@
 import { computed, Directive, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import type { Transaction } from 'app/shared/models/transaction.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ContactService } from 'app/shared/services/contact.service';
-import { ReportService } from 'app/shared/services/report.service';
-import { TransactionService } from 'app/shared/services/transaction.service';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, merge, Observable, of, startWith, takeUntil } from 'rxjs';
-import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
-import { TransactionFormUtils } from './transaction-form.utils';
-import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
-import { navigationEventClearAction } from 'app/store/navigation-event.actions';
-import { FormComponent } from '../form.component';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
-import { GlossaryService } from '../glossary/glossary.service';
-import { environment } from 'environments/environment';
-import type { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
+import { CommitteeStore } from 'app/committee/committee.store';
 import { Contact, ContactTypeLabels } from 'app/shared/models/contact.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import {
@@ -29,7 +9,27 @@ import {
   NavigationAction,
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
-import { CommitteeStore } from 'app/committee/committee.store';
+import type { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { ContactService } from 'app/shared/services/contact.service';
+import { ReportService } from 'app/shared/services/report.service';
+import { TransactionService } from 'app/shared/services/transaction.service';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
+import { navigationEventClearAction } from 'app/store/navigation-event.actions';
+import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { environment } from 'environments/environment';
+import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
+import { map, merge, Observable, of, startWith, takeUntil } from 'rxjs';
+import { FormComponent } from '../form.component';
+import { GlossaryService } from '../glossary/glossary.service';
+import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
+import { TransactionFormUtils } from './transaction-form.utils';
 
 @Directive()
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
@@ -103,7 +103,14 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
     this.memoHasOptional$ = this.getMemoHasOptional$(this.form, this.transactionType);
 
-    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
+    TransactionFormUtils.onInit(
+      this,
+      this.form,
+      this.transaction,
+      this.contactIdMap,
+      this.contactService,
+      this.activeReport().isF3,
+    );
 
     // Determine if amount should always be negative and then force it to be so if needed
     if (this.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
@@ -358,6 +365,9 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       const ancestor = this.transaction.parent_transaction ?? this.transaction.debt ?? this.transaction.loan;
       this.transaction.contact_1 = ancestor?.contact_1;
       this.transaction.contact_1_id = ancestor?.contact_1_id;
+      if (this.transaction.contact_1_id) {
+        this.contactIdMap['contact_1']?.next(this.transaction.contact_1_id);
+      }
 
       const entityTypeValue = ancestor?.contact_1?.type;
       if (entityTypeValue) this.form.get('entity_type')?.setValue(entityTypeValue);

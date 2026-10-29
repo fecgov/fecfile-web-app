@@ -1,4 +1,4 @@
-import { Exclude, plainToInstance } from 'class-transformer';
+import { Exclude, Expose, plainToInstance, Transform, Type } from 'class-transformer';
 import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
@@ -8,6 +8,7 @@ import { ScheduleFTransactionTypes } from '../schf-transaction.model';
 import { TransactionTypes } from '../transaction.model';
 import { BaseForm3 } from './base-form-3';
 import { ReportTypes } from './report.model';
+import { ElectionCycle } from 'app/tools/election-cycle/election-cycle.model';
 
 export const F3FormTypes = {
   F3N: 'F3N',
@@ -22,6 +23,16 @@ export class Form3 extends BaseForm3 {
   form_type: F3FormTypes = F3FormTypes.F3N;
   election_state: string | undefined;
   election_district: string | undefined;
+
+  @Expose({ name: 'election_cycle' })
+  @Type(() => ElectionCycle)
+  @Transform(({ value }) => (value instanceof ElectionCycle ? value.id : value), { toPlainOnly: true })
+  electionCycle!: ElectionCycle;
+
+  @Expose({ name: 'next_election_cycle' })
+  @Type(() => ElectionCycle)
+  @Transform(({ value }) => (value instanceof ElectionCycle ? value.id : value), { toPlainOnly: true })
+  nextElectionCycle: ElectionCycle | null = null;
 
   L6a_total_contributions_period: number | undefined;
   L6b_total_contribution_refunds_period: number | undefined;

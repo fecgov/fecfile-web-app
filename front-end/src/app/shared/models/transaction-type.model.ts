@@ -118,6 +118,7 @@ export abstract class TransactionType {
   date2Label = '';
   aggregateLabel = 'AGGREGATE';
   calendarYTDLabel = 'CALENDAR YEAR-TO-DATE PER ELECTION FOR OFFICE SOUGHT';
+  entityElectionCycleToDateLabel = 'AGGREGATE';
   amountInputHeader = '';
   amountLabel = 'AMOUNT';
   electionLabelPrefix = ''; // Prefix to labels in app-election-input component
@@ -302,6 +303,7 @@ export type TransactionTemplateMapType = {
   aggregate: string;
   calendar_ytd: string;
   aggregate_general_elec_expended: string;
+  entity_election_cycle_to_date: string;
   general_election_year: string;
   purpose_description: string;
   text4000: string;
