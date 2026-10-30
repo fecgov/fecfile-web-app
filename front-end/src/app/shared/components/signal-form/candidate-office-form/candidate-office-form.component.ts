@@ -56,7 +56,7 @@ export const buildCandidateSchema = (options: CandidateOfficeSchemaOptions) =>
   styles: ``,
 })
 export class CandidateOfficeFormComponent {
-  readonly fields = input.required<FieldTree<CandidateOfficeModel, string>>();
+  readonly fields = input.required<FieldTree<CandidateOfficeModel, string | number>>();
 
   readonly officeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
   readonly stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());

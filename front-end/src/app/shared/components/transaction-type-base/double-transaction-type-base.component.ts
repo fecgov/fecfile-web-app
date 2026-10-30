@@ -160,6 +160,8 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.activeReportId,
       this.form,
       this.formProperties,
+      this.templateMap,
+      this.candidateOfficeModel(),
     );
 
     payload.children = [
@@ -168,6 +170,8 @@ export abstract class DoubleTransactionTypeBaseComponent
         this.activeReportId,
         this.childForm,
         this.childFormProperties,
+        this.childTemplateMap,
+        this.candidateOfficeModel(),
       ),
     ];
     payload.children[0].reports = payload.reports;

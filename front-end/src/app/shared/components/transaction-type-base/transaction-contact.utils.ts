@@ -27,7 +27,8 @@ export class TransactionContactUtils {
   ): [string, StringDateBooleanNull][] {
     const result: [string, StringDateBooleanNull][] = [];
     for (const [field, property] of Object.entries(contactConfig)) {
-      const contactValue = contact[property as keyof Contact] ?? undefined;
+      if (templateMap[field as keyof TransactionTemplateMapType] === '') continue;
+      const contactValue = contact[property as keyof Contact] ?? null;
       let formFieldValue: StringDateBooleanNull;
 
       if (candidateOffice && field in candidateOffice) {
@@ -41,12 +42,10 @@ export class TransactionContactUtils {
       // This value needs to be saved on the transaction *but not* on the contact, so we detect "undefined"
       // as the value for the contact.
       if (field === 'candidate_state' && transaction?.transactionType.scheduleId === ScheduleIds.E) {
-        const candidateOfficeField = form.get(templateMap.candidate_office);
-        const electionCodeField = form.get(templateMap.election_code);
-        const candidateOffice = candidateOfficeField?.value ?? '';
-        const electionCode = electionCodeField?.value ?? '';
+        const office = candidateOffice?.candidate_office;
+        const electionCode = form.get(templateMap.election_code)?.value ?? '';
 
-        if (electionCode?.startsWith('P') && candidateOffice === CandidateOfficeTypes.PRESIDENTIAL) {
+        if (electionCode?.startsWith('P') && office === CandidateOfficeTypes.PRESIDENTIAL) {
           formFieldValue = null;
         }
       }
@@ -245,9 +244,6 @@ export class TransactionContactUtils {
     form.get(templateMap.candidate_middle_name)?.setValue(contact.middle_name);
     form.get(templateMap.candidate_prefix)?.setValue(contact.prefix);
     form.get(templateMap.candidate_suffix)?.setValue(contact.suffix);
-    form.get(templateMap.candidate_office)?.setValue(contact.candidate_office);
-    form.get(templateMap.candidate_state)?.setValue(contact.candidate_state);
-    form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
   }
 
   /**

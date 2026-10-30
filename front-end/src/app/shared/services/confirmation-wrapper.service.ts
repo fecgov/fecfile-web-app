@@ -22,7 +22,8 @@ export class ConfirmationWrapperService {
     getContact: (contactKey: string, transaction?: Transaction) => Contact | null,
     getTemplateMap: (contactKey: string, transaction?: Transaction) => TransactionTemplateMapType | undefined,
     transaction?: Transaction,
-    candidateOffices?: CandidateOfficeModels,
+    candidateOffices?: CandidateOfficeModels, // For Form 1M
+    candidateOffice?: CandidateOfficeModel, // For all others
   ): Promise<boolean> {
     for (const [contactKey, config] of Object.entries(contactConfig)) {
       const templateMap = getTemplateMap(contactKey, transaction);
@@ -34,7 +35,7 @@ export class ConfirmationWrapperService {
       if (contact === null) continue;
       let result = await this.createContactConfirmation(contact, form, templateMap, contactKey);
       if (!result) return false;
-      let candidateOffice: CandidateOfficeModel | undefined = undefined;
+
       if (candidateOffices) {
         const candidateKey = contactKey.split('contact_candidate_');
         candidateOffice = candidateOffices[candidateKey[1] as keyof CandidateOfficeModels];

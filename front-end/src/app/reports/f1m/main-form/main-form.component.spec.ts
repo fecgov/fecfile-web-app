@@ -87,7 +87,7 @@ describe('MainFormComponent', () => {
 
   it('ngOnInit should set up an edited report', () => {
     fixture.detectChanges();
-    
+
     expect(component.signalForm.statusBy().value()).toBe('affiliation');
   });
 

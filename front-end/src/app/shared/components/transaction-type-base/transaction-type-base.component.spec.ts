@@ -161,7 +161,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should set the contact type options', () => {
       fixture.detectChanges();
       expect(component.contactTypeOptions).toContainEqual({ label: 'Individual', value: ContactTypes.INDIVIDUAL });
-      expect(component.contactTypeOptions.length).toEqual(1);
+      expect(component.contactTypeOptions).toHaveLength(1);
     });
 
     it('should pre-populate clone-like transactions without an id', () => {
@@ -211,6 +211,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should update contacts form if there is a transaction', async () => {
+      component.ngOnInit();
       const contactSpy = vi.spyOn(TransactionContactUtils, 'updateContactsWithForm');
       await component.submitForm(navEvent);
       expect(contactSpy).toHaveBeenCalled();
@@ -229,17 +230,6 @@ describe('TransactionTypeBaseComponent', () => {
       navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
     });
 
-    it('should set processing to false if no transaction type identifier on payload', async () => {
-      const payload = TransactionFormUtils.getPayloadTransaction(
-        component.transaction,
-        '999',
-        component.form,
-        component.formProperties,
-      );
-      payload.transaction_type_identifier = undefined;
-      await component.processPayload(payload, navEvent);
-    });
-
     it('should update data and then set processing to false', async () => {
       fixture.detectChanges();
       const payload = TransactionFormUtils.getPayloadTransaction(
@@ -247,6 +237,8 @@ describe('TransactionTypeBaseComponent', () => {
         '999',
         component.form,
         component.formProperties,
+        component.templateMap,
+        component.candidateOfficeModel(),
       );
       await component.processPayload(payload, navEvent);
       expect(transactionServiceSpy.update).toHaveBeenCalled();
@@ -262,6 +254,8 @@ describe('TransactionTypeBaseComponent', () => {
         '999',
         component.form,
         component.formProperties,
+        component.templateMap,
+        component.candidateOfficeModel(),
       );
       expect(payload.report_ids?.length).toEqual(2);
       expect(payload.report_ids?.includes('321')).toBe(true);
@@ -290,6 +284,8 @@ describe('TransactionTypeBaseComponent', () => {
         '999',
         component.form,
         component.formProperties,
+        component.templateMap,
+        component.candidateOfficeModel(),
       );
       expect(Object.keys(component.transaction.transactionType.contactConfig)[0]).toEqual('contact_1');
       payload.transactionType.useParentContact = true;

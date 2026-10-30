@@ -104,6 +104,8 @@ export abstract class TripleTransactionTypeBaseComponent
       this.activeReportId,
       this.form,
       this.formProperties,
+      this.templateMap,
+      this.candidateOfficeModel(),
     );
 
     payload.children = [
@@ -112,12 +114,16 @@ export abstract class TripleTransactionTypeBaseComponent
         this.activeReportId,
         this.childForm,
         this.childFormProperties,
+        this.childTemplateMap,
+        this.candidateOfficeModel(),
       ),
       TransactionFormUtils.getPayloadTransaction(
         this.childTransaction_2,
         this.activeReportId,
         this.childForm_2,
         this.childFormProperties_2,
+        this.childTemplateMap_2,
+        this.candidateOfficeModel(),
       ),
     ];
     payload.children[0].report_ids = payload.report_ids;

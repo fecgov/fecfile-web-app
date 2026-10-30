@@ -11,6 +11,7 @@ import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models';
+import { CandidateOfficeModel } from '../signal-form/candidate-office-form/candidate-office-form.component';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
@@ -41,9 +42,6 @@ describe('ContactUtils', () => {
         donor_candidate_middle_name: new SubscriptionFormControl(''),
         donor_candidate_prefix: new SubscriptionFormControl(''),
         donor_candidate_suffix: new SubscriptionFormControl(''),
-        donor_candidate_office: new SubscriptionFormControl(''),
-        donor_candidate_state: new SubscriptionFormControl(''),
-        donor_candidate_district: new SubscriptionFormControl(''),
         ind_name_account_location: new SubscriptionFormControl('secondary_org_name'),
         account_street_1: new SubscriptionFormControl(''),
         account_street_2: new SubscriptionFormControl(''),
@@ -141,9 +139,6 @@ describe('ContactUtils', () => {
     expect(form.get('donor_candidate_middle_name')?.value).toBe('James');
     expect(form.get('donor_candidate_prefix')?.value).toBe('Mr');
     expect(form.get('donor_candidate_suffix')?.value).toBe('Jr');
-    expect(form.get('donor_candidate_office')?.value).toBe('H');
-    expect(form.get('donor_candidate_state')?.value).toBe('VA');
-    expect(form.get('donor_candidate_district')?.value).toBe('1');
     expect(transaction.contact_2).toBeTruthy();
   });
 
@@ -242,10 +237,14 @@ describe('ContactUtils', () => {
       so_candidate_id_number: 'P000000000',
       so_candidate_last_name: 'Last',
       so_candidate_first_name: 'First',
-      so_candidate_office: CandidateOfficeTypes.PRESIDENTIAL,
-      so_candidate_state: 'AK',
       election_code: 'P1912',
     });
+
+    const candidate: CandidateOfficeModel = {
+      candidate_office: CandidateOfficeTypes.PRESIDENTIAL,
+      candidate_state: 'AK',
+      candidate_district: null,
+    };
 
     const changes = TransactionContactUtils.getContactChanges(
       form,
@@ -253,6 +252,7 @@ describe('ContactUtils', () => {
       transaction.transactionType.templateMap,
       transaction.transactionType.contactConfig['contact_2'],
       transaction,
+      candidate,
     );
 
     expect(Object.values(changes)).toContainEqual(['candidate_state', null]);
@@ -265,20 +265,20 @@ describe('ContactUtils', () => {
       transaction.transactionType.templateMap,
       transaction.transactionType.contactConfig['contact_2'],
       transaction,
+      candidate,
     );
 
     expect(Object.values(changesB)).toContainEqual(['candidate_state', 'AK']);
 
-    form.patchValue({
-      so_candidate_office: CandidateOfficeTypes.SENATE,
-      election_code: 'P1912',
-    });
+    candidate.candidate_office = CandidateOfficeTypes.SENATE;
+    form.patchValue({ election_code: 'P1912' });
     const changesC = TransactionContactUtils.getContactChanges(
       form,
       transaction.contact_2,
       transaction.transactionType.templateMap,
       transaction.transactionType.contactConfig['contact_2'],
       transaction,
+      candidate,
     );
 
     expect(Object.values(changesC)).toContainEqual(['candidate_state', 'AK']);
