@@ -206,7 +206,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
-        detail: payload.id ? 'Contact Updated' : 'Contact created',
+        detail: payload.id ? 'Contact updated' : 'Contact created',
         life: 3000,
       });
 
