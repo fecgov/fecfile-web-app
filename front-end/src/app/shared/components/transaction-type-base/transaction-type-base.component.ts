@@ -234,13 +234,11 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
   async handleNavigate(navigationEvent: NavigationEvent): Promise<void> {
     this.formSubmitted = true;
-    console.log('navigationEvent', navigationEvent);
     if (navigationEvent.action === NavigationAction.SAVE) {
       if (!(await this.validateForm())) return;
 
       const confirmed = await this.getConfirmations();
       // if every confirmation was accepted
-      console.log('confirmed', confirmed);
       if (confirmed) await this.submit(navigationEvent);
       else this.store.dispatch(singleClickEnableAction());
     } else {
@@ -249,15 +247,11 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   }
 
   override async validateForm() {
-    console.log('validateForm');
     this.candidateOfficeForm.candidate_office().markAsTouched();
     this.candidateOfficeForm.candidate_state().markAsTouched();
     this.candidateOfficeForm.candidate_district().markAsTouched();
     if ((await super.validateForm()) === false) return false;
-    console.log('super valid');
-    console.log('office valid?', this.candidateOfficeForm().valid());
     const isCandidateOfficeRequired = this.transactionType?.schema.required.includes(this.templateMap.candidate_office);
-    console.log('isCandidateOfficeRequired', isCandidateOfficeRequired);
     return !isCandidateOfficeRequired || this.candidateOfficeForm().valid();
   }
 

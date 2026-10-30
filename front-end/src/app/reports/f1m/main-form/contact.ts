@@ -7,6 +7,7 @@ import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators
 import { MainFormComponent } from './main-form.component';
 import { effect, untracked } from '@angular/core';
 import { ContactManager } from 'app/shared/services/contact-management.service';
+import { candidateOfficeFields } from 'app/shared/components/signal-form/candidate-office-form/candidate-office-form.component';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
@@ -205,7 +206,6 @@ export class CandidateContact extends F1MContact {
     this.updateValueAndValidity();
   }
 
-  readonly candidateOfficeFields = new Set(['candidate_office', 'candidate_state', 'candidate_district']);
   override update(contact: Contact) {
     (this.component.report[this.key] as Contact) = contact;
     (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = contact.id ?? null;
@@ -215,7 +215,7 @@ export class CandidateContact extends F1MContact {
       candidate_district: contact.candidate_district ?? null,
     });
     for (const [key, value] of Object.entries(this.component.contactConfigs[this.key])) {
-      if (!this.candidateOfficeFields.has(key)) {
+      if (!candidateOfficeFields.has(key)) {
         this.component.form
           .get(this.component.templateMapConfigs[this.key][key as keyof TransactionTemplateMapType])
           ?.setValue(contact[value as keyof Contact]);

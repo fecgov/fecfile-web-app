@@ -317,7 +317,7 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
   public override async submit(): Promise<void> {
     const confirmed = await this.getConfirmations();
     // if every confirmation was accepted
-    if (confirmed) super.submit(this.jump);
+    if (confirmed) return super.submit(this.jump);
     else this.store.dispatch(singleClickEnableAction());
   }
 
@@ -338,6 +338,6 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
 
   override async submitForm(jump: 'continue' | void): Promise<void> {
     this.jump = jump ?? undefined;
-    submit(this.signalForm);
+    await submit(this.signalForm);
   }
 }

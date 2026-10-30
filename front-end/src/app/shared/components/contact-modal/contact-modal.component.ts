@@ -204,7 +204,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
   }
 
   submitForm() {
-    submit(this.signalForm);
+    return submit(this.signalForm);
   }
 
   async saveContact() {

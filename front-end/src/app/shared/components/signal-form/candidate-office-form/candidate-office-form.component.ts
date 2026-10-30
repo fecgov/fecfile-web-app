@@ -5,6 +5,8 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { SelectInput, StringBooleanNull } from '../../signal-inputs/select-input/select.input';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 
+export const candidateOfficeFields = new Set(['candidate_office', 'candidate_state', 'candidate_district']);
+
 export interface CandidateOfficeModel {
   candidate_office: CandidateOfficeTypes | null;
   candidate_state: string | null;

@@ -5,7 +5,10 @@ import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
 import { StringDateBooleanNull } from '../signal-inputs/select-input/select.input';
-import { CandidateOfficeModel } from '../signal-form/candidate-office-form/candidate-office-form.component';
+import {
+  candidateOfficeFields,
+  CandidateOfficeModel,
+} from '../signal-form/candidate-office-form/candidate-office-form.component';
 
 export class TransactionContactUtils {
   /**
@@ -26,34 +29,16 @@ export class TransactionContactUtils {
     candidateOffice?: CandidateOfficeModel,
   ): [string, StringDateBooleanNull][] {
     const result: [string, StringDateBooleanNull][] = [];
+
     for (const [field, property] of Object.entries(contactConfig)) {
-      if (templateMap[field as keyof TransactionTemplateMapType] === '') continue;
+      const templateField = templateMap[field as keyof TransactionTemplateMapType];
+      if (templateField === '' || (!candidateOfficeFields.has(field) && !form.get(templateField))) continue;
+
       const contactValue = contact[property as keyof Contact] ?? null;
-      let formFieldValue: StringDateBooleanNull;
-
-      if (candidateOffice && field in candidateOffice) {
-        formFieldValue = candidateOffice[field as keyof CandidateOfficeModel] ?? null;
-      } else {
-        const formField = form.get(templateMap[field as keyof TransactionTemplateMapType]);
-        formFieldValue = formField?.value as StringDateBooleanNull;
-      }
-
-      // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
-      // This value needs to be saved on the transaction *but not* on the contact, so we detect "undefined"
-      // as the value for the contact.
-      if (field === 'candidate_state' && transaction?.transactionType.scheduleId === ScheduleIds.E) {
-        const office = candidateOffice?.candidate_office;
-        const electionCode = form.get(templateMap.election_code)?.value ?? '';
-
-        if (electionCode?.startsWith('P') && office === CandidateOfficeTypes.PRESIDENTIAL) {
-          formFieldValue = null;
-        }
-      }
-
-      if ((formFieldValue ?? null) !== (contactValue ?? null)) {
-        result.push([property, formFieldValue]);
-      }
+      const formFieldValue = getContactFormValue(field, form, templateMap, transaction, candidateOffice) ?? null;
+      if (formFieldValue !== contactValue) result.push([property, formFieldValue]);
     }
+
     return result;
   }
 
@@ -370,3 +355,43 @@ export class TransactionContactUtils {
 }
 
 export type ContactIdMapType = { [contact: string]: Subject<string> };
+
+function getContactFormValue(
+  field: string,
+  form: FormGroup,
+  templateMap: TransactionTemplateMapType,
+  transaction?: Transaction,
+  candidateOffice?: CandidateOfficeModel,
+): StringDateBooleanNull {
+  if (candidateOffice && field in candidateOffice) {
+    return getCandidateOfficeValue(field, candidateOffice, form, templateMap, transaction);
+  }
+
+  return form.get(templateMap[field as keyof TransactionTemplateMapType])?.value ?? null;
+}
+
+function getCandidateOfficeValue(
+  field: string,
+  candidateOffice: CandidateOfficeModel,
+  form: FormGroup,
+  templateMap: TransactionTemplateMapType,
+  transaction?: Transaction,
+): StringDateBooleanNull {
+  const value = candidateOffice[field as keyof CandidateOfficeModel] ?? null;
+  if (field !== 'candidate_state' || !isPresidentialPrimary(transaction, form, templateMap, candidateOffice)) {
+    return value;
+  }
+
+  return null;
+}
+
+function isPresidentialPrimary(
+  transaction: Transaction | undefined,
+  form: FormGroup,
+  templateMap: TransactionTemplateMapType,
+  candidateOffice: CandidateOfficeModel,
+): boolean {
+  if (transaction?.transactionType.scheduleId !== ScheduleIds.E) return false;
+  const electionCode = form.get(templateMap.election_code)?.value ?? '';
+  return electionCode.startsWith('P') && candidateOffice.candidate_office === CandidateOfficeTypes.PRESIDENTIAL;
+}
