@@ -65,7 +65,7 @@ describe('ContactModalComponent', () => {
   });
 
   it('should refresh contact field validators when the modal opens for a committee', async () => {
-    manager.contactType.set(ContactTypes.COMMITTEE);
+    manager.setAsSingle(ContactTypes.COMMITTEE);
     component.onShow();
     fixture.detectChanges();
     await fixture.whenStable();
