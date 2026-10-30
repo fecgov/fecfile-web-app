@@ -102,10 +102,7 @@ export class TransactionContactLookupComponent {
   }
 
   setContact(contact: Contact) {
-    if (
-      !contact.id &&
-      (contact.type === ContactTypes.CANDIDATE || contact.type === ContactTypes.COMMITTEE)
-    ) {
+    if (!contact.id && (contact.type === ContactTypes.CANDIDATE || contact.type === ContactTypes.COMMITTEE)) {
       this.newContact.set(contact);
       this.currentType.set(contact.type);
       this.detailVisible.set(true);
