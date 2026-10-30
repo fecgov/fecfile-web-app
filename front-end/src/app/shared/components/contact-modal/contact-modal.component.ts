@@ -15,7 +15,7 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
-import { takeUntil } from 'rxjs';
+import { filter, firstValueFrom, take, takeUntil } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
 import { DestroyerComponent } from '../destroyer.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
@@ -92,10 +92,11 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
   constructor() {
     super();
     effect(() => {
+      const contactType = this.manager().contactType();
       const contact = this.manager().contact();
 
       untracked(() => {
-        this.updateContactType();
+        this.updateContactType(contactType);
         this.form.patchValue(contact, { emitEvent: false });
       });
     });
@@ -134,7 +135,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
         }
       });
 
-    this.updateContactType();
+    this.updateContactType(this.manager().contactType());
   }
 
   reset() {
@@ -143,9 +144,17 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     this.formSubmitted = false;
   }
 
-  updateContactType() {
-    const contactType = this.manager().contactType();
+  onHide() {
+    this.manager().clearOnLoad.set(true);
+  }
 
+  onShow() {
+    const manager = this.manager();
+    this.updateContactType(manager.contactType());
+    this.form.patchValue(manager.contact(), { emitEvent: false });
+  }
+
+  updateContactType(contactType = this.manager().contactType()) {
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so
     // we keep the 'type' value on the contact dialog form up-to-date in the background.
@@ -165,13 +174,23 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
           ?.addAsyncValidators(this.contactService.getFecIdValidator(this.manager().contact().id));
         break;
     }
+    Object.values(this.form.controls).forEach((control) => control.updateValueAndValidity({ onlySelf: true }));
     this.form.updateValueAndValidity();
   }
 
   async saveContact() {
     this.formSubmitted = true;
+    this.updateContactType(this.manager().contactType());
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
+    if (this.form.pending) {
+      await firstValueFrom(
+        this.form.statusChanges.pipe(
+          filter((status) => status !== 'PENDING'),
+          take(1),
+        ),
+      );
+    }
 
     if (!this.form.valid) {
       printFormErrors(this.form);
@@ -187,7 +206,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
-        detail: payload.id ? 'Contact Updated' : 'Contact Created',
+        detail: payload.id ? 'Contact updated' : 'Contact created',
         life: 3000,
       });
 

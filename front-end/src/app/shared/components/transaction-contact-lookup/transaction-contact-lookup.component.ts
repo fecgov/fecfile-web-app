@@ -28,6 +28,10 @@ export class TransactionContactLookupComponent {
 
   readonly detailVisible = signal(false);
   readonly currentType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
+  readonly newContact = signal<Contact>(new Contact());
+  readonly shouldAutosave = computed(
+    () => this.currentType() !== ContactTypes.CANDIDATE && this.currentType() !== ContactTypes.COMMITTEE,
+  );
 
   readonly errorMessage = computed(() => {
     const type = this.currentType();
@@ -98,6 +102,13 @@ export class TransactionContactLookupComponent {
   }
 
   setContact(contact: Contact) {
+    if (!contact.id && (contact.type === ContactTypes.CANDIDATE || contact.type === ContactTypes.COMMITTEE)) {
+      this.newContact.set(contact);
+      this.currentType.set(contact.type);
+      this.detailVisible.set(true);
+      return;
+    }
+
     this.contactSelect.emit({ value: contact });
     this.detailVisible.set(false);
   }

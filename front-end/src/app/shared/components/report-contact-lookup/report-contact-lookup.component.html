@@ -1,5 +1,5 @@
 <div class="flex">
-  <app-contact-search [key]="key()" />
+  <app-contact-search [key]="key()" [openNewContactDialog]="true" />
   <div class="add-contact-container">
     or
     <span tabindex="0" (click)="openDialog()" (keydown.enter)="openDialog()" (keydown.space)="openDialog()">
