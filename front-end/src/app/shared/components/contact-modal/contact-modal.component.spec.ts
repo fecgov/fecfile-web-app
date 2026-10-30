@@ -81,7 +81,8 @@ describe('ContactModalComponent', () => {
     expect(component.form.get('type')?.value).toBe(ContactTypes.COMMITTEE);
     expect(component.form.get('first_name')?.hasError('required')).toBe(false);
     expect(component.form.get('last_name')?.hasError('required')).toBe(false);
-    expect(component.form.get('name')?.hasError('required')).toBe(true);
+    expect(component.form.get('name')?.hasError('required')).toBe(false);
+    expect(component.form.get('name')?.value).toBe('Registered Committee');
   });
 
   it('should use the selected manager type on the first dialog open', async () => {
