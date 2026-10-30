@@ -66,10 +66,18 @@ describe('ContactModalComponent', () => {
 
   it('should refresh contact field validators when the modal opens for a committee', async () => {
     manager.setAsSingle(ContactTypes.COMMITTEE);
+    manager.contact.set(
+      Contact.fromJSON({
+        type: ContactTypes.COMMITTEE,
+        committee_id: 'C12345678',
+        name: 'Registered Committee',
+      }),
+    );
     component.onShow();
     fixture.detectChanges();
     await fixture.whenStable();
 
+    expect(manager.contactType()).toBe(ContactTypes.COMMITTEE);
     expect(component.form.get('type')?.value).toBe(ContactTypes.COMMITTEE);
     expect(component.form.get('first_name')?.hasError('required')).toBe(false);
     expect(component.form.get('last_name')?.hasError('required')).toBe(false);
