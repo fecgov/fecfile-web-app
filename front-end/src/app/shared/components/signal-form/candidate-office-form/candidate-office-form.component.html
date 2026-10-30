@@ -1,5 +1,6 @@
 <app-select-input
   class="grid-col-6"
+  overrideId="candidate-office"
   labelId="candidate-office-label"
   label="CANDIDATE OFFICE"
   [formField]="fields().candidate_office"
@@ -9,6 +10,7 @@
 />
 <app-select-input
   class="grid-col-3"
+  overrideId="candidate-state"
   labelId="candidate-state-label"
   label="CANDIDATE STATE"
   [formField]="fields().candidate_state"
@@ -25,6 +27,7 @@
 } @else {
   <app-select-input
     class="grid-col-3"
+    overrideId="candidate-district"
     labelId="candidate-district-label"
     label="CANDIDATE DISTRICT"
     [formField]="fields().candidate_district"

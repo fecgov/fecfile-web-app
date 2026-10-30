@@ -65,6 +65,7 @@ export class CandidateOfficeFormComponent {
   readonly districtOptions = computed(() => {
     const fields = this.fields();
     const office = fields.candidate_office().value();
+    console.log('office in district options', office);
     const state = fields.candidate_state().value();
     if (office !== CandidateOfficeTypes.HOUSE || !state) return [];
     return LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(state));
@@ -92,6 +93,7 @@ export class CandidateOfficeFormComponent {
   }
 
   onOfficeChanged(newOffice: StringBooleanNull): void {
+    console.log('onofficechanged', newOffice);
     const fields = this.fields();
     if (newOffice === CandidateOfficeTypes.PRESIDENTIAL) {
       fields.candidate_state().value.set(null);

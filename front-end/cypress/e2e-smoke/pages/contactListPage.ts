@@ -59,18 +59,18 @@ export class ContactListPage {
     if (formData['contact_type'] == 'Candidate') {
       cy.get(alias).find('#candidate_id').clear().safeType(formData['candidate_id']).blur();
 
-      PageUtils.pSelectDropdownSetValue("app-select[inputid='candidate_office']", formData['candidate_office'], alias);
+      PageUtils.pSelectDropdownSetValue("app-select-input[overrideid='candidate-office']", formData['candidate_office'], alias);
 
       if (formData['candidate_office'] != 'Presidential') {
         PageUtils.pSelectDropdownSetValue(
-          "app-select[inputid='candidate_state']",
+          "app-select-input[overrideid='candidate-state']",
           formData['candidate_state'],
           alias,
         );
 
         const singleDistrictStates = ['Alaska', 'Delaware', 'North Dakota', 'South Dakota', 'Vermont', 'Wyoming'];
         if (formData['candidate_office'] == 'House' && !singleDistrictStates.includes(formData['candidate_state'])) {
-          PageUtils.pSelectDropdownSetValue("app-select[inputid='candidate_district']", formData['candidate_district'], alias);
+          PageUtils.pSelectDropdownSetValue("app-select-input[overrideid='candidate-district']", formData['candidate_district'], alias);
         }
       }
     }
@@ -122,9 +122,9 @@ export class ContactListPage {
     cy.get(alias).find('#zip').should('have.value', formData['zip']);
 
     if (formData['contact_type'] === 'Candidate') {
-      cy.get(alias).find('[inputid="candidate_office"]').should('contain', formData['candidate_office']);
-      cy.get(alias).find('[inputid="candidate_state"]').should('contain', formData['candidate_state']);
-      cy.get(alias).find('[inputid="candidate_district"]').should('contain', formData['candidate_district']);
+      cy.get(alias).find('[overrideid="candidate-office"]').should('contain', formData['candidate_office']);
+      cy.get(alias).find('[overrideid="candidate-state"]').should('contain', formData['candidate_state']);
+      cy.get(alias).find('[overrideid="candidate-district"]').should('contain', formData['candidate_district']);
     }
   }
 

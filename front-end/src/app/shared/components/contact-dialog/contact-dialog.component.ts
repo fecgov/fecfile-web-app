@@ -39,7 +39,6 @@ import { compatForm } from '@angular/forms/signals/compat';
 import { applyWhen, hidden, submit } from '@angular/forms/signals';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import {
-  blankCandidateOfficeModel,
   buildCandidateSchema,
   CandidateOfficeFormComponent,
 } from '../signal-form/candidate-office-form/candidate-office-form.component';
@@ -186,6 +185,14 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.contactTypeChanged(this.type());
   }
 
+  updateContactOffice(contact: Contact | null) {
+    this.signalForm.candidateOffice().reset({
+      candidate_office: contact?.candidate_office ?? null,
+      candidate_state: contact?.candidate_state ?? null,
+      candidate_district: contact?.candidate_district ?? null,
+    });
+  }
+
   /**
    * On ngOnInit and when a user changes the selection of the ContactType for the contact
    * entry form (as known by the emitter from the contact-lookup component), update the necessary
@@ -206,7 +213,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     switch (contactType) {
       case ContactTypes.CANDIDATE:
         this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
-        this.signalForm.candidateOffice().reset(blankCandidateOfficeModel());
+        this.updateContactOffice(this.contact()!);
         break;
       case ContactTypes.COMMITTEE:
         this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
@@ -232,11 +239,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     if (contact.id) {
       this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contact.type]));
       this.type.set(contact.type);
-      this.signalForm.candidateOffice().reset({
-        candidate_office: contact.candidate_office ?? null,
-        candidate_state: contact.candidate_state ?? null,
-        candidate_district: contact.candidate_district ?? null,
-      });
+      this.updateContactOffice(contact);
     }
   }
 
@@ -249,7 +252,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   private resetForm() {
     this.form.reset();
-    this.signalForm.candidateOffice().reset(blankCandidateOfficeModel());
+    this.updateContactOffice(null);
     this.form.get('country')?.setValue(this.countryOptions[0]['value']);
     this.form.get('state')?.setValue(null);
     this.formSubmitted = false;
@@ -264,6 +267,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.type.set(contact.type);
     this.form.markAllAsDirty();
     this.form.patchValue(contact);
+    this.updateContactOffice(contact);
   }
 
   override async submit(): Promise<void> {
