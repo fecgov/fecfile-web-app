@@ -13,11 +13,16 @@ import { CommitteeAccount } from 'app/shared/models';
 @Component({
   imports: [ContactSearchComponent],
   standalone: true,
-  template: `<app-contact-search [key]="key" [isBare]="isBare" />`,
+  template: `<app-contact-search
+    [key]="key"
+    [isBare]="isBare"
+    [openNewContactDialog]="openNewContactDialog"
+  />`,
 })
 class TestHostComponent {
   key = 'contact_1';
   isBare = true;
+  openNewContactDialog = false;
 
   component = viewChild.required(ContactSearchComponent);
 }
@@ -197,6 +202,37 @@ describe('ContactSearchComponent', () => {
       if (component.isBare()) {
         expect(component.manager().outerContact.set).toHaveBeenCalled();
       }
+    });
+
+    it('should open the contact dialog with a new committee lookup result when enabled', async () => {
+      host.openNewContactDialog = true;
+      fixture.detectChanges();
+
+      const committeeData = { id: 'C456' } as FecApiCommitteeLookupData;
+      const committeeDetails = CommitteeAccount.fromJSON({
+        committee_id: 'C456',
+        name: 'Committee ABC',
+        street_1: '456 Elm St',
+        city: 'Anytown',
+        state: 'NY',
+        zip: '67890',
+      });
+      vi.spyOn(component.contactService, 'getCommitteeDetails').mockResolvedValue(committeeDetails);
+      const createSpy = vi.spyOn(component.contactService, 'create');
+      const event = { value: committeeData } as AutoCompleteSelectEvent;
+
+      await component.onContactLookupSelect(event);
+
+      expect(component.manager().contact()).toMatchObject({
+        type: ContactTypes.COMMITTEE,
+        committee_id: 'C456',
+        name: 'Committee ABC',
+      });
+      expect(component.manager().contactType()).toBe(ContactTypes.COMMITTEE);
+      expect(component.manager().clearOnLoad()).toBe(false);
+      expect(contactManagementService.activeKey()).toBe(host.key);
+      expect(contactManagementService.showDialog()).toBe(true);
+      expect(createSpy).not.toHaveBeenCalled();
     });
 
     it('should do nothing if event.value is null or undefined', async () => {

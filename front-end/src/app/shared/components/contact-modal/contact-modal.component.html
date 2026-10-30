@@ -1,4 +1,11 @@
-<p-dialog [(visible)]="cmservice.showDialog" [style]="{ width: '90%' }" header="Add Contact" [modal]="true">
+<p-dialog
+  [(visible)]="cmservice.showDialog"
+  [style]="{ width: '90%' }"
+  header="Add Contact"
+  [modal]="true"
+  (onShow)="onShow()"
+  (onHide)="onHide()"
+>
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
