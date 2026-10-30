@@ -1,0 +1,38 @@
+<app-select-input
+  class="grid-col-6"
+  overrideId="candidate-office"
+  labelId="candidate-office-label"
+  label="CANDIDATE OFFICE"
+  [formField]="fields().candidate_office"
+  [options]="officeTypeOptions"
+  appendTo="body"
+  (valueChange)="onOfficeChanged($event)"
+/>
+<app-select-input
+  class="grid-col-3"
+  overrideId="candidate-state"
+  labelId="candidate-state-label"
+  label="CANDIDATE STATE"
+  [formField]="fields().candidate_state"
+  [options]="stateOptions"
+  [showOptional]="false"
+  (valueChange)="onStateChanged($event)"
+  appendTo="body"
+/>
+@if (this.districtOverride()) {
+  <div class="grid-col-3">
+    <label for="district_00">CANDIDATE DISTRICT</label>
+    <input id="district_00" value="00" [disabled]="true" />
+  </div>
+} @else {
+  <app-select-input
+    class="grid-col-3"
+    overrideId="candidate-district"
+    labelId="candidate-district-label"
+    label="CANDIDATE DISTRICT"
+    [formField]="fields().candidate_district"
+    [options]="districtOptions()"
+    [showOptional]="false"
+    appendTo="body"
+  />
+}

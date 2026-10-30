@@ -229,14 +229,13 @@ describe('ContactDialogComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should use a duplicate contact without confirmation or update when it has no changes', () => {
+  it('should use a duplicate contact without confirmation or update when it has no changes', async () => {
     const selectedContact = testContact();
     component.contact.set(selectedContact);
     component.type.set(selectedContact.type);
     component.visible.set(true);
-    for (const [field, control] of Object.entries(component.form.controls)) {
-      control.setValue(selectedContact[field as keyof Contact]);
-    }
+    fixture.detectChanges();
+    await fixture.whenStable();
     const confirmSpy = vi.spyOn(testConfirmationService, 'confirm');
     const savedContactSpy = vi.spyOn(component.savedContact, 'emit');
     const updateSpy = vi.spyOn(contactService, 'update');

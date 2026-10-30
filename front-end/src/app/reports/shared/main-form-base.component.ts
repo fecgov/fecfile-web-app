@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommitteeStore } from 'app/committee/committee.store';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -22,21 +22,20 @@ export abstract class MainFormBaseComponent<T extends Report> extends FormCompon
   abstract getReportPayload(): T;
   abstract webprintURL: string;
 
-  reportId?: string;
+  readonly reportId = input<string>();
 
   constructor() {
     super();
 
     effect(() => {
       this.setConstantFormValues(this.committeeStore.committee());
-      if (this.reportId) {
+      if (this.reportId()) {
         this.form.patchValue(this.activeReport());
       }
     });
   }
 
   ngOnInit(): void {
-    this.reportId = this.activatedRoute.snapshot.params['reportId'];
     SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
   }
 
@@ -60,8 +59,9 @@ export abstract class MainFormBaseComponent<T extends Report> extends FormCompon
   public async submit(jump: 'continue' | void) {
     const payload: T = this.getReportPayload();
     let report: T;
-    if (this.reportId) {
-      payload.id = this.reportId;
+    const reportId = this.reportId();
+    if (reportId) {
+      payload.id = reportId;
       report = await this.reportService.update(payload, this.formProperties);
     } else {
       report = await this.reportService.create(payload, this.formProperties);

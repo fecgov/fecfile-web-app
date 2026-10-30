@@ -1,9 +1,9 @@
-import { Component, computed, effect, inject, OnInit, untracked } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ContactService } from 'app/shared/services/contact.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
-import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
+import { CountryCodeLabels, LabelUtils, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
@@ -13,19 +13,24 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
-import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypes } from '../../models/contact.model';
 import { DestroyerComponent } from '../destroyer.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
-import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactSearchComponent } from '../contact-search/contact-search.component';
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import {
+  blankCandidateOfficeModel,
+  buildCandidateSchema,
+  CandidateOfficeFormComponent,
+} from '../signal-form/candidate-office-form/candidate-office-form.component';
+import { hidden, applyWhen, submit } from '@angular/forms/signals';
+import { compatForm } from '@angular/forms/signals/compat';
 
 @Component({
   selector: 'app-contact-modal',
@@ -39,9 +44,8 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
     ErrorMessagesComponent,
     Select,
     FecInternationalPhoneInputComponent,
-    CandidateOfficeInputComponent,
+    CandidateOfficeFormComponent,
     ButtonDirective,
-    Ripple,
     SearchableSelectComponent,
     ToUpperDirective,
   ],
@@ -69,6 +73,41 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
 
   readonly manager = computed(() => this.cmservice.activeManager());
 
+  readonly formModel = signal({
+    contactForm: this.form,
+    candidateOffice: blankCandidateOfficeModel(),
+  });
+  readonly signalForm = compatForm(
+    this.formModel,
+    (schema) => {
+      hidden(schema.candidateOffice, () => this.manager().contactType() !== 'CAN');
+      applyWhen(
+        schema.candidateOffice,
+        () => this.manager().contactType() === 'CAN',
+        buildCandidateSchema({
+          defaultOffice: () => undefined,
+          presidentialScheduleE: () => false,
+        }),
+      );
+    },
+    {
+      submission: {
+        action: () => this.saveContact(),
+        onInvalid: () => {
+          this.form.markAllAsTouched();
+          blurActiveInput(this.form);
+          this.form.updateValueAndValidity();
+          printFormErrors(this.form);
+        },
+      },
+    },
+  );
+
+  readonly disableSubmission = computed(() => {
+    const sf = this.signalForm();
+    return sf.submitting() || sf.invalid() || !sf.dirty();
+  });
+
   readonly stateOptions = computed(() => {
     if (this.manager().contactType() === ContactTypes.CANDIDATE) {
       return LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
@@ -78,7 +117,6 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
   });
   readonly countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
   readonly candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-  candidateDistrictOptions: PrimeOptions = [];
   emptyMessage = 'No data available in table';
 
   readonly candidatePatternMessage = candidatePatternMessage;
@@ -97,6 +135,11 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
       untracked(() => {
         this.updateContactType();
         this.form.patchValue(contact, { emitEvent: false });
+        this.signalForm.candidateOffice().reset({
+          candidate_office: contact.candidate_office ?? null,
+          candidate_state: contact.candidate_state ?? null,
+          candidate_district: contact.candidate_district ?? null,
+        });
       });
     });
 
@@ -122,17 +165,9 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
           this.form.get('state')?.enable();
         }
       });
-
-    this.form
-      .get('candidate_state')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (!!value && this.form.get('candidate_office')?.value === CandidateOfficeTypes.HOUSE) {
-          this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
-        } else {
-          this.candidateDistrictOptions = [];
-        }
-      });
+    this.form.removeControl('candidate_office');
+    this.form.removeControl('candidate_state');
+    this.form.removeControl('candidate_district');
 
     this.updateContactType();
   }
@@ -168,19 +203,16 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     this.form.updateValueAndValidity();
   }
 
-  async saveContact() {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    this.form.updateValueAndValidity();
+  submitForm() {
+    return submit(this.signalForm);
+  }
 
-    if (!this.form.valid) {
-      printFormErrors(this.form);
-      return;
-    }
+  async saveContact() {
     try {
       const payload: Contact = Contact.fromJSON({
         ...this.manager().contact(),
         ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.manager().contactType())),
+        ...this.signalForm().value().candidateOffice,
         type: this.manager().contactType(),
       });
       const contact = await (payload.id ? this.contactService.update(payload) : this.contactService.create(payload));

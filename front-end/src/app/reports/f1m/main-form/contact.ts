@@ -7,6 +7,7 @@ import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators
 import { MainFormComponent } from './main-form.component';
 import { effect, untracked } from '@angular/core';
 import { ContactManager } from 'app/shared/services/contact-management.service';
+import { candidateOfficeFields } from 'app/shared/components/signal-form/candidate-office-form/candidate-office-form.component';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
@@ -56,25 +57,7 @@ export abstract class F1MContact {
    * report object when the contact changes in the ContactManager
    * @param contact
    */
-  update(contact: Contact) {
-    (this.component.report[this.key] as Contact) = contact;
-    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = contact.id ?? null;
-    for (const [key, value] of Object.entries(this.component.contactConfigs[this.key])) {
-      this.component.form
-        .get(this.component.templateMapConfigs[this.key][key as keyof TransactionTemplateMapType])
-        ?.setValue(contact[value as keyof Contact]);
-    }
-
-    // Touch the invalid contact id form control so the duplicate contact id message will appear if necessary.
-    const candidateIdControl = this.component.form.get(this.component.templateMapConfigs[this.key]['candidate_fec_id']);
-    if (candidateIdControl?.invalid) {
-      candidateIdControl.markAsTouched();
-    }
-
-    this.control?.clearValidators();
-    this.control?.clearAsyncValidators();
-    this.control?.updateValueAndValidity();
-  }
+  abstract update(contact: Contact): void;
 
   disableValidation() {
     this.control?.clearValidators();
@@ -126,6 +109,20 @@ export class AffiliatedContact extends F1MContact {
     this.formFields.forEach((field: string) => this.component.form.get(field)?.addValidators(Validators.required));
     this.updateValueAndValidity();
   }
+
+  update(contact: Contact) {
+    (this.component.report[this.key] as Contact) = contact;
+    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = contact.id ?? null;
+    for (const [key, value] of Object.entries(this.component.contactConfigs[this.key])) {
+      this.component.form
+        .get(this.component.templateMapConfigs[this.key][key as keyof TransactionTemplateMapType])
+        ?.setValue(contact[value as keyof Contact]);
+    }
+
+    this.control?.clearValidators();
+    this.control?.clearAsyncValidators();
+    this.control?.updateValueAndValidity();
+  }
 }
 
 export class CandidateContact extends F1MContact {
@@ -153,9 +150,6 @@ export class CandidateContact extends F1MContact {
       `${tag}_candidate_middle_name`,
       `${tag}_candidate_prefix`,
       `${tag}_candidate_suffix`,
-      `${tag}_candidate_office`,
-      `${tag}_candidate_state`,
-      `${tag}_candidate_district`,
       `${tag}_date_of_contribution`,
     ];
 
@@ -178,9 +172,6 @@ export class CandidateContact extends F1MContact {
       candidate_middle_name: `${tag}_candidate_middle_name`,
       candidate_prefix: `${tag}_candidate_prefix`,
       candidate_suffix: `${tag}_candidate_suffix`,
-      candidate_office: `${tag}_candidate_office`,
-      candidate_state: `${tag}_candidate_state`,
-      candidate_district: `${tag}_candidate_district`,
     } as TransactionTemplateMapType;
   }
 
@@ -211,8 +202,34 @@ export class CandidateContact extends F1MContact {
       ]);
     this.component.form.get(`${this.tag}_candidate_last_name`)?.addValidators(Validators.required);
     this.component.form.get(`${this.tag}_candidate_first_name`)?.addValidators(Validators.required);
-    this.component.form.get(`${this.tag}_candidate_office`)?.addValidators(Validators.required);
     this.component.form.get(`${this.tag}_date_of_contribution`)?.addValidators(Validators.required);
     this.updateValueAndValidity();
+  }
+
+  override update(contact: Contact) {
+    (this.component.report[this.key] as Contact) = contact;
+    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = contact.id ?? null;
+    this.component.signalForm.candidateOffices[this.tag]().value.set({
+      candidate_office: contact.candidate_office ?? null,
+      candidate_state: contact.candidate_state ?? null,
+      candidate_district: contact.candidate_district ?? null,
+    });
+    for (const [key, value] of Object.entries(this.component.contactConfigs[this.key])) {
+      if (!candidateOfficeFields.has(key)) {
+        this.component.form
+          .get(this.component.templateMapConfigs[this.key][key as keyof TransactionTemplateMapType])
+          ?.setValue(contact[value as keyof Contact]);
+      }
+    }
+
+    // Touch the invalid contact id form control so the duplicate contact id message will appear if necessary.
+    const candidateIdControl = this.component.form.get(this.component.templateMapConfigs[this.key]['candidate_fec_id']);
+    if (candidateIdControl?.invalid) {
+      candidateIdControl.markAsTouched();
+    }
+
+    this.control?.clearValidators();
+    this.control?.clearAsyncValidators();
+    this.control?.updateValueAndValidity();
   }
 }

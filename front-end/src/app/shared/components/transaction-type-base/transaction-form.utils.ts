@@ -33,9 +33,10 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs';
-import { Contact, ContactTypes } from '../../models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { CandidateOfficeModel } from '../signal-form/candidate-office-form/candidate-office-form.component';
 
 export type DateType = Date | string | undefined;
 
@@ -98,11 +99,18 @@ export class TransactionFormUtils {
     if (!transactionType || !templateMap) {
       throw new Error('FECfile+: Cannot find template map when initializing transaction form');
     }
+    form.removeControl(templateMap.candidate_office);
+    form.removeControl(templateMap.candidate_state);
+    form.removeControl(templateMap.candidate_district);
 
     const primaryContact = transaction?.contact_1;
     if (form.get('entity_type')?.value === ContactTypes.CANDIDATE && primaryContact?.type === ContactTypes.CANDIDATE) {
       TransactionContactUtils.updateFormWithCandidateFields(primaryContact, form, templateMap);
     }
+
+    component.candidateOfficeModel.set(
+      TransactionFormUtils.getCandidateOfficeFromTransaction(transaction, templateMap),
+    );
 
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
       let id = (transaction[contact as keyof Transaction] as Contact)?.id ?? '';
@@ -193,6 +201,28 @@ export class TransactionFormUtils {
     });
   }
 
+  private static getCandidateOfficeFromTransaction(
+    transaction: Transaction,
+    templateMap: TransactionTemplateMapType,
+  ): CandidateOfficeModel {
+    const primaryContact = transaction.contact_1;
+
+    if (primaryContact?.type === ContactTypes.CANDIDATE) {
+      return {
+        candidate_office: primaryContact.candidate_office ?? null,
+        candidate_state: primaryContact.candidate_state ?? null,
+        candidate_district: primaryContact.candidate_district ?? null,
+      };
+    }
+
+    return {
+      candidate_office: (transaction[templateMap.candidate_office as keyof Transaction] ??
+        null) as CandidateOfficeTypes | null,
+      candidate_state: (transaction[templateMap.candidate_state as keyof Transaction] ?? null) as string | null,
+      candidate_district: (transaction[templateMap.candidate_district as keyof Transaction] ?? null) as string | null,
+    };
+  }
+
   // Only dynamically update non-inherited calendar_ytd values on the form input.
   // Inherited calendar_ytd display the value of the parent transaction and do not
   // include or change with the amount value of the child transaction.
@@ -214,9 +244,7 @@ export class TransactionFormUtils {
         (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
         (form.get(templateMap.date2) as SubscriptionFormControl).valueChanges,
         (form.get(templateMap.election_code) as SubscriptionFormControl).valueChanges,
-        (form.get(templateMap.candidate_office) as SubscriptionFormControl).valueChanges,
-        (form.get(templateMap.candidate_state) as SubscriptionFormControl).valueChanges,
-        (form.get(templateMap.candidate_district) as SubscriptionFormControl).valueChanges,
+        component.candidateOffice$,
       ).pipe(
         debounceTime(100),
         filter(() => {
@@ -224,14 +252,15 @@ export class TransactionFormUtils {
           return !code || code.toString().length === 5;
         }),
         switchMap(() => {
+          const candidateOffice = component.candidateOfficeModel();
           return component.transactionService.getPreviousElectionAggregate(
             transaction,
             form.get(templateMap.date)?.value,
             form.get(templateMap.date2)?.value,
             form.get(templateMap.election_code)?.value,
-            form.get(templateMap.candidate_office)?.value,
-            form.get(templateMap.candidate_state)?.value,
-            form.get(templateMap.candidate_district)?.value,
+            candidateOffice.candidate_office ?? undefined,
+            candidateOffice.candidate_state ?? undefined,
+            candidateOffice.candidate_district ?? undefined,
           );
         }),
         shareReplay(1),
@@ -344,6 +373,8 @@ export class TransactionFormUtils {
     activeReportId: string,
     form: FormGroup,
     formProperties: string[],
+    templateMap: TransactionTemplateMapType,
+    candidateOffice: CandidateOfficeModel,
   ): Transaction {
     if (!transaction) {
       throw new Error('FECfile+: Payload transaction not found');
@@ -359,6 +390,9 @@ export class TransactionFormUtils {
     }
 
     let formValues = SchemaUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
+    formValues[templateMap.candidate_office] = candidateOffice.candidate_office;
+    formValues[templateMap.candidate_state] = candidateOffice.candidate_state;
+    formValues[templateMap.candidate_district] = candidateOffice.candidate_district;
     formValues = TransactionFormUtils.retrieveMemoText(transaction, form, formValues);
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);

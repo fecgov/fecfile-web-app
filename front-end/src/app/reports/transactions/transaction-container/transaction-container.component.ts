@@ -1,9 +1,7 @@
-import { Component, computed, effect, inject, Signal, linkedSignal } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, computed, effect, inject, linkedSignal, input } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
-import { selectActiveReport } from '../../../store/active-report.selectors';
 import { ReportService } from '../../../shared/services/report.service';
 import { TransactionDetailComponent } from '../transaction-detail/transaction-detail.component';
 import { DoubleTransactionDetailComponent } from '../double-transaction-detail/double-transaction-detail.component';
@@ -11,8 +9,6 @@ import { TripleTransactionDetailComponent } from '../triple-transaction-detail/t
 import { ReattRedesTransactionTypeDetailComponent } from '../reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 import { TransactionChildrenListContainerComponent } from '../transaction-children-list-container/transaction-children-list-container.component';
 import { TransactionNavigationComponent } from '../transaction-navigation/transaction-navigation.component';
-import { injectRouteData } from 'ngxtension/inject-route-data';
-import { injectQueryParams } from 'ngxtension/inject-query-params';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ButtonDirective } from 'primeng/button';
 
@@ -32,16 +28,14 @@ import { ButtonDirective } from 'primeng/button';
   ],
 })
 export class TransactionContainerComponent {
-  private readonly store = inject(Store);
   private readonly titleService = inject(Title);
   private readonly reportService = inject(ReportService);
-  readonly report = this.store.selectSignal(selectActiveReport);
+  readonly report = input<Report>();
   readonly isEditableReport = computed(() => this.reportService.isEditable(this.report()));
-  private readonly cloneParam = injectQueryParams('clone');
-  readonly showClonedTransactionDialog = linkedSignal(() => !!this.cloneParam());
+  readonly clone = input<string>();
+  readonly showClonedTransactionDialog = linkedSignal(() => !!this.clone());
 
-  private readonly _transaction: Signal<Transaction | null> = injectRouteData('transaction');
-  readonly transaction = computed(() => this._transaction() ?? undefined);
+  readonly transaction = input<Transaction>();
   readonly isEditableTransaction = computed(() => !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()));
 
   readonly transactionCardinality = computed(() => {

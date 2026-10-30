@@ -68,7 +68,7 @@ export class ContactsHelpers {
     return cy.get(root)
       .find('.span-label, label')
       .filter((_, el) => labelRx.test(el.innerText || el.textContent || ''))
-      .closest('.field, .p-field, div.field, app-select');
+      .closest('.field, .p-field, div.field, app-select, app-select-input');
   }
 
   static expectErrorNearLabel(labelRx: RegExp, errorRx: RegExp, root = ContactsHelpers.CONTACT_DIALOG) {

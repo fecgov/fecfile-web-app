@@ -19,6 +19,7 @@ import { Form1M } from 'app/shared/models/reports/form-1m.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { firstValueFrom } from 'rxjs';
+import { inputBinding, signal } from '@angular/core';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
@@ -75,7 +76,7 @@ describe('MainFormComponent', () => {
         },
       ],
     });
-    fixture = TestBed.createComponent(MainFormComponent);
+    fixture = TestBed.createComponent(MainFormComponent, { bindings: [inputBinding('reportId', signal('99'))] });
     component = fixture.componentInstance;
   });
 
@@ -87,7 +88,7 @@ describe('MainFormComponent', () => {
   it('ngOnInit should set up an edited report', () => {
     fixture.detectChanges();
 
-    expect(component.form.get('statusBy')?.value).toBe('affiliation');
+    expect(component.signalForm.statusBy().value()).toBe('affiliation');
   });
 
   it('ngOnInit should set form controls', async () => {
@@ -115,13 +116,13 @@ describe('MainFormComponent', () => {
     component.report.contact_affiliated = contact_affiliated;
 
     component.ngOnInit();
-    component.form.patchValue({ statusBy: 'affiliation' });
+    component.signalForm.statusBy().value.set('affiliation');
     component.form.patchValue({ affiliated_committee_name: '' });
     fixture.detectChanges();
     const affiliated = component.form.get('affiliated_committee_name')!;
     expect(affiliated.valid).toBe(false);
 
-    component.form.patchValue({ statusBy: 'qualification' });
+    component.signalForm.statusBy().value.set('qualification');
     fixture.detectChanges();
 
     if (affiliated.pending) {
