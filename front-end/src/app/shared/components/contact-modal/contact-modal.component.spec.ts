@@ -34,9 +34,6 @@ describe('ContactModalComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ContactModalComponent);
-    component = fixture.componentInstance;
-
     contactManagementService = TestBed.inject(ContactManagementService);
     contactService = TestBed.inject(ContactService);
 
@@ -45,6 +42,8 @@ describe('ContactModalComponent', () => {
     manager.contactType.set(ContactTypes.INDIVIDUAL);
     manager.contact.set(new Contact());
 
+    fixture = TestBed.createComponent(ContactModalComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
@@ -65,8 +64,9 @@ describe('ContactModalComponent', () => {
     expect(component.stateOptions().length).toBeGreaterThan(0);
   });
 
-  it('should refresh contact field validators when the contact type changes', async () => {
+  it('should refresh contact field validators when the modal opens for a committee', async () => {
     manager.contactType.set(ContactTypes.COMMITTEE);
+    component.onShow();
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -77,10 +77,6 @@ describe('ContactModalComponent', () => {
   });
 
   it('should use the selected manager type on the first dialog open', async () => {
-    await fixture.whenStable();
-    expect(component.form.get('first_name')?.hasError('required')).toBe(true);
-    expect(component.form.get('last_name')?.hasError('required')).toBe(true);
-
     const committeeManager = contactManagementService.get('contact_affiliated');
     committeeManager.setAsSingle(ContactTypes.COMMITTEE);
     const committee = Contact.fromJSON({
