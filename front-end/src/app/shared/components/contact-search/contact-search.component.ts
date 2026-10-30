@@ -29,6 +29,7 @@ export class ContactSearchComponent {
 
   readonly key = input.required<string>();
   readonly isBare = input(true);
+  readonly openNewContactDialog = input(false);
 
   readonly manager = computed(() => this.cmservice.get(this.key()));
 
@@ -81,6 +82,19 @@ export class ContactSearchComponent {
     } else {
       payload = await this.onFecApiCommitteeLookupDataSelect(event.value);
     }
+    if (
+      this.openNewContactDialog() &&
+      !payload.id &&
+      (payload.type === ContactTypes.CANDIDATE || payload.type === ContactTypes.COMMITTEE)
+    ) {
+      this.manager().clearOnLoad.set(false);
+      this.cmservice.activeKey.set(this.key());
+      this.manager().contactType.set(payload.type);
+      this.manager().contact.set(payload);
+      this.cmservice.showDialog.set(true);
+      return;
+    }
+
     const contact = payload.id ? payload : await this.contactService.create(payload);
     this.manager().contact.set(contact);
     if (this.isBare()) this.manager().outerContact.set(contact);

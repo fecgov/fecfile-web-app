@@ -304,7 +304,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',
-      detail: payload.id ? 'Contact Updated' : 'Contact Created',
+      detail: payload.id ? 'Contact Updated' : 'Contact created',
       life: 3000,
     });
 
