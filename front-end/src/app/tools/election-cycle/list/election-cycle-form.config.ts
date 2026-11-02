@@ -55,7 +55,7 @@ export function createElectionCycleForm(
       validateDateOverlap(schema.coverage, `${environment.apiUrl}/election-cycles/check-overlap/`, cookieService, {
         message: 'This date overlaps with another election cycle.',
         get excludeId() {
-          return excludeId();
+          return excludeId() ?? undefined;
         },
       });
     },

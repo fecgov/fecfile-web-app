@@ -23,11 +23,11 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, merge, Observable, of, startWith, takeUntil } from 'rxjs';
-import { FormComponent } from '../form.component';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { MessageService, ToastMessageOptions, SelectItem } from 'primeng/api';
+import { of, takeUntil, Observable, merge, startWith, map } from 'rxjs';
+import { FormComponent } from '../form.component';
 
 @Directive()
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
@@ -99,7 +99,14 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
     this.memoHasOptional$ = this.getMemoHasOptional$(this.form, this.transactionType);
 
-    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
+    TransactionFormUtils.onInit(
+      this,
+      this.form,
+      this.transaction,
+      this.contactIdMap,
+      this.contactService,
+      this.activeReport().isF3,
+    );
 
     // Determine if amount should always be negative and then force it to be so if needed
     if (this.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
@@ -354,6 +361,9 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       const ancestor = this.transaction.parent_transaction ?? this.transaction.debt ?? this.transaction.loan;
       this.transaction.contact_1 = ancestor?.contact_1;
       this.transaction.contact_1_id = ancestor?.contact_1_id;
+      if (this.transaction.contact_1_id) {
+        this.contactIdMap['contact_1']?.next(this.transaction.contact_1_id);
+      }
 
       const entityTypeValue = ancestor?.contact_1?.type;
       if (entityTypeValue) this.form.get('entity_type')?.setValue(entityTypeValue);

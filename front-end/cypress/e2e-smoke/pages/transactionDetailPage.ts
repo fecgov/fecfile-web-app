@@ -134,7 +134,18 @@ export class TransactionDetailPage {
 
     this.enterCommon(formData, alias, includeMemo);
     if (!readOnlyAmount) {
-      cy.get(alias).find('#amount').safeType(formData['amount']).blur();
+      const amount =
+        typeof formData['amount'] === 'number' && formData['amount'] < 0
+          ? Math.abs(formData['amount'])
+          : formData['amount'];
+      cy.get(alias).find('#amount').safeType(amount).blur();
+
+      // added for debounce and API resolution timing
+      cy.get(alias).then(($container) => {
+        if ($container.find('#aggregate:visible').length > 0) {
+          cy.wrap($container).find('#aggregate').should('not.have.value', '');
+        }
+      });
     }
     this.enterElection(formData, alias);
   }

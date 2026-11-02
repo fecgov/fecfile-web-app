@@ -1,0 +1,22 @@
+@let labelFn = labelFunction();
+<fieldset class="flex gap-20px">
+  <legend [class.sr-only]="hideTitle()" class="p-0 mb-2">{{ label() }}</legend>
+
+  @for (column of columns(); track column) {
+  <div class="flex flex-column gap-20px">
+    @for (option of column; track option) { @let disabledOpt = disabledOptions().has(option);
+    <div class="p-field-checkbox flex">
+      <p-radioButton
+        [inputId]="''+option"
+        [name]="name()"
+        [value]="option"
+        [(ngModel)]="value"
+        [disabled]="disabledOpt"
+        [class]="disabledOpt? 'p-disabled border-none bg-transparent' : ''"
+      />
+      <label [for]="option" class="ml-2" [class.p-disabled]="disabledOpt"> {{ labelFn(option) }} </label>
+    </div>
+    }
+  </div>
+  }
+</fieldset>

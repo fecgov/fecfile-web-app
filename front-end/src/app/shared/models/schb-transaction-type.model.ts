@@ -50,6 +50,7 @@ export abstract class SchBTransactionType extends TransactionType {
     aggregate: 'aggregate_amount',
     calendar_ytd: '',
     aggregate_general_elec_expended: '',
+    entity_election_cycle_to_date: 'entity_election_cycle_to_date',
     general_election_year: '',
     purpose_description: 'expenditure_purpose_descrip',
     text4000: 'text4000',

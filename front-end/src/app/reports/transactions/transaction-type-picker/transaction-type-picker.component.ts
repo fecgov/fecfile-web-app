@@ -5,7 +5,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CommitteeStore } from 'app/committee/committee.store';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
@@ -63,7 +62,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   readonly debtId: Signal<string | undefined> = computed(() => this.queryParams$()?.get('debt') ?? undefined);
 
   readonly active = model<number>(-1);
-  readonly isF3 = computed(() => this.report().report_type === ReportTypes.F3);
+  readonly isF3 = computed(() => this.report().isF3);
 
   readonly transactionGroups: Signal<Array<{ label: string; transactionTypes: Set<TransactionTypes> }>> = computed(
     () => CategoryPicker.get(this.category()) ?? [],

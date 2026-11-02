@@ -97,25 +97,46 @@
       </div>
     </div>
     @if (showAggregate()) {
-      <div class="col-6">
-        <div class="field">
-          <span class="span-label" id="amount_input_aggregate_label">{{ transactionType()?.aggregateLabel }}</span>
-          <app-input-number
-            inputId="aggregate"
-            ariaLabelledBy="amount_input_aggregate_label"
-            [formControlName]="templateMap['aggregate']"
-            [readonly]="true"
-            inputStyleClass="readonly"
-          />
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['aggregate']"
-            [formSubmitted]="formSubmitted"
-            patternErrorMessage="This field must be a number"
-            maxLengthErrorMessage="The aggregate can be 12 digits max"
-          />
+      @if (isF3()) {
+        <div class="col-6">
+          <div class="field">
+            <label for="entity_election_cycle_to_date">{{ transactionType()?.entityElectionCycleToDateLabel }}</label>
+            <app-input-number
+              inputId="entity_election_cycle_to_date"
+              [formControlName]="templateMap['entity_election_cycle_to_date']"
+              [readonly]="true"
+              inputStyleClass="readonly"
+            />
+            <app-error-messages
+              [form]="form"
+              [fieldName]="templateMap['entity_election_cycle_to_date']"
+              [formSubmitted]="formSubmitted"
+              patternErrorMessage="This field must be a number"
+              maxLengthErrorMessage="The aggregate can be 12 digits max"
+            />
+          </div>
         </div>
-      </div>
+      } @else {
+        <div class="col-6">
+          <div class="field">
+            <span class="span-label" id="amount_input_aggregate_label">{{ transactionType()?.aggregateLabel }}</span>
+            <app-input-number
+              inputId="aggregate"
+              ariaLabelledBy="amount_input_aggregate_label"
+              [formControlName]="templateMap['aggregate']"
+              [readonly]="true"
+              inputStyleClass="readonly"
+            />
+            <app-error-messages
+              [form]="form"
+              [fieldName]="templateMap['aggregate']"
+              [formSubmitted]="formSubmitted"
+              patternErrorMessage="This field must be a number"
+              maxLengthErrorMessage="The aggregate can be 12 digits max"
+            />
+          </div>
+        </div>
+      }
     }
     @if (showCalendarYTD()) {
       <div class="col-6">

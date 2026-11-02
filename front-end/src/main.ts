@@ -16,6 +16,7 @@ import {
   RouteReuseStrategy,
   Router,
   provideRouter,
+  withComponentInputBinding,
   withInMemoryScrolling,
 } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
@@ -140,7 +141,7 @@ bootstrapApplication(AppComponent, {
       ToastModule,
       CheckboxModule,
     ),
-    provideRouter(ROUTES, inMemoryScrollingFeature),
+    provideRouter(ROUTES, inMemoryScrollingFeature, withComponentInputBinding()),
     providePrimeNG({
       csp: {
         nonce: ngCspNonce,
