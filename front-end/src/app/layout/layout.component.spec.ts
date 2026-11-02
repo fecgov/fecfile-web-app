@@ -1,6 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
@@ -12,11 +11,6 @@ import { BannerComponent } from './banner/banner.component';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { FooterComponent } from './footer/footer.component';
 import { LayoutComponent } from './layout.component';
-import { LayoutService } from './layout.service';
-
-class MockLayoutService {
-  showSidebar = signal(true);
-}
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -38,7 +32,6 @@ describe('LayoutComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideMockStore(testMockStore()),
-        { provide: LayoutService, useClass: MockLayoutService },
       ],
     }).compileComponents();
 

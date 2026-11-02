@@ -6,13 +6,11 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MenubarModule } from 'primeng/menubar';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { LayoutService } from '../layout.service';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  let layoutService: LayoutService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -31,7 +29,6 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-    layoutService = TestBed.inject(LayoutService);
     fixture.detectChanges();
   });
 
@@ -57,12 +54,5 @@ describe('HeaderComponent', () => {
     expect(component['document'].documentElement.style.getPropertyValue('--header-total')).toBe(
       'calc(80px + var(--header-top))',
     );
-  });
-
-  it('should toggle the sidebar when the seal image is clicked', () => {
-    const sealImage = fixture.nativeElement.querySelector('img.seal-and-title');
-    expect(layoutService.showSidebar()).toBe(true);
-    sealImage.click();
-    expect(layoutService.showSidebar()).toBe(false);
   });
 });

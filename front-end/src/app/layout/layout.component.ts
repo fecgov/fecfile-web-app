@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -14,7 +14,6 @@ import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.co
 import { FooterComponent } from './footer/footer.component';
 import { HeaderStyles } from './header/header-styles';
 import { HeaderComponent } from './header/header.component';
-import { LayoutService } from './layout.service';
 import { ServiceUnavailableBannerComponent } from './service-unavailable-banner/service-unavailable-banner.component';
 import { ReportSidebarComponent } from './sidebar/report-sidebar/report-sidebar.component';
 import { SecurityNoticeSidebarComponent } from './sidebar/security-notice-sidebar/security-notice-sidebar.component';
@@ -52,10 +51,8 @@ export type Sidebar = (typeof Sidebar)[keyof typeof Sidebar];
 export class LayoutComponent {
   Sidebar = Sidebar;
   private readonly router = inject(Router);
-  readonly layoutService = inject(LayoutService);
   readonly loginService = inject(LoginService);
   private readonly store = inject(Store);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
 
   private readonly navEnd = toSignal(injectNavigationEnd());
