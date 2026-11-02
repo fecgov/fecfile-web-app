@@ -65,13 +65,13 @@ export class TransactionFormUtils {
    * @param contactIdMap - parent or child
    * @param contactService
    */
-  static async onInit(
+  static onInit(
     component: TransactionTypeBaseComponent,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactIdMap: ContactIdMapType,
     contactService: ContactService,
-  ): Promise<void> {
+  ) {
     const shouldPatchFromTransaction =
       !!transaction && TransactionFormUtils.shouldInitializeFromTransaction(transaction);
 
