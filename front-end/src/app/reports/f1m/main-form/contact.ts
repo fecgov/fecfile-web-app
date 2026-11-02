@@ -29,7 +29,7 @@ export abstract class F1MContact {
     this.component = component;
     this.manager = this.component.cmservice.get(this.key);
 
-    const contact = this.component.report[this.key] as Contact | undefined;
+    const contact = this.component.report()?.[this.key] as Contact | undefined;
     if (contact) this.manager.outerContact.set(contact);
 
     const managers: ContactManager[] = [];
@@ -61,11 +61,13 @@ export abstract class F1MContact {
 
   disableValidation() {
     this.control?.clearValidators();
-    (this.component.report[this.key] as Contact | undefined) = undefined;
-    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = null;
+    const report = this.component.report();
+    if (!report) return;
+    (report[this.key] as Contact | undefined) = undefined;
+    (report[`${this.key}_id` as keyof Form1M] as string | null) = null;
 
     this.formFields.forEach((field: string) => {
-      (this.component.report[field as keyof Form1M] as string | undefined) = undefined;
+      (report[field as keyof Form1M] as string | undefined) = undefined;
       const f = this.component.form.get(field);
       if (!f) return;
       f.clearValidators();
@@ -102,7 +104,7 @@ export class AffiliatedContact extends F1MContact {
 
   enableValidation() {
     // Enable validation to lookup control if missing contact info
-    if (!this.component.report.contact_affiliated) {
+    if (!this.component.report()?.contact_affiliated) {
       this.control?.addValidators(Validators.required);
     }
 
@@ -111,8 +113,10 @@ export class AffiliatedContact extends F1MContact {
   }
 
   update(contact: Contact) {
-    (this.component.report[this.key] as Contact) = contact;
-    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = contact.id ?? null;
+    const report = this.component.report();
+    if (!report) return;
+    (report[this.key] as Contact) = contact;
+    (report[`${this.key}_id` as keyof Form1M] as string | null) = contact.id ?? null;
     for (const [key, value] of Object.entries(this.component.contactConfigs[this.key])) {
       this.component.form
         .get(this.component.templateMapConfigs[this.key][key as keyof TransactionTemplateMapType])
@@ -177,7 +181,7 @@ export class CandidateContact extends F1MContact {
 
   enableValidation() {
     // Enable validation to lookup control if missing contact info
-    if (!this.component.report[`contact_candidate_${this.tag}`]) {
+    if (!this.component.report()?.[`contact_candidate_${this.tag}`]) {
       this.control?.addValidators(Validators.required);
     }
 
@@ -207,8 +211,10 @@ export class CandidateContact extends F1MContact {
   }
 
   override update(contact: Contact) {
-    (this.component.report[this.key] as Contact) = contact;
-    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = contact.id ?? null;
+    const report = this.component.report();
+    if (!report) return;
+    (report[this.key] as Contact) = contact;
+    (report[`${this.key}_id` as keyof Form1M] as string | null) = contact.id ?? null;
     this.component.signalForm.candidateOffices[this.tag]().value.set({
       candidate_office: contact.candidate_office ?? null,
       candidate_state: contact.candidate_state ?? null,

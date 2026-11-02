@@ -21,6 +21,22 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { firstValueFrom } from 'rxjs';
 import { inputBinding, signal } from '@angular/core';
 
+const createDefaultReport = (): Form1M => {
+  const report = Form1M.fromJSON({
+    id: '99',
+    affiliated_committee_name: 'abc',
+  });
+
+  report.contact_affiliated = Contact.fromJSON({
+    id: '10',
+    name: 'abc',
+    committee_id: 'C000000009',
+  });
+
+  return report;
+};
+const reportSignal = signal(createDefaultReport());
+
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
   let fixture: ComponentFixture<MainFormComponent>;
@@ -48,6 +64,7 @@ describe('MainFormComponent', () => {
   });
 
   beforeEach(() => {
+    reportSignal.set(createDefaultReport());
     TestBed.configureTestingModule({
       imports: [
         SelectButtonModule,
@@ -76,23 +93,22 @@ describe('MainFormComponent', () => {
         },
       ],
     });
-    fixture = TestBed.createComponent(MainFormComponent, { bindings: [inputBinding('reportId', signal('99'))] });
+    fixture = TestBed.createComponent(MainFormComponent, {
+      bindings: [inputBinding('reportId', signal('99')), inputBinding('report', reportSignal)],
+    });
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
-    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
   it('ngOnInit should set up an edited report', () => {
-    fixture.detectChanges();
-
     expect(component.signalForm.statusBy().value()).toBe('affiliation');
   });
 
   it('ngOnInit should set form controls', async () => {
-    fixture.detectChanges();
     component.form.patchValue({
       committee_type: 'X',
       filer_committee_id_number: 'C000000001',
@@ -107,13 +123,6 @@ describe('MainFormComponent', () => {
       affiliated_committee_name: 'affiliated committee',
       statusBy: '',
     });
-
-    const contact_affiliated = Contact.fromJSON({
-      id: '10',
-    });
-
-    component.report = Form1M.fromJSON({ id: '99', affiliated_committee_name: 'abc' });
-    component.report.contact_affiliated = contact_affiliated;
 
     component.ngOnInit();
     component.signalForm.statusBy().value.set('affiliation');
@@ -132,41 +141,18 @@ describe('MainFormComponent', () => {
   });
 
   it('getReportPayload should update and return the report properties', () => {
-    fixture.detectChanges();
     component.form.patchValue({
-      committee_type: 'X',
-      filer_committee_id_number: 'C000000001',
       committee_name: 'test committee',
-      street_1: '123 Main St.',
-      street_2: '',
-      city: 'test city',
-      state: 'DC',
-      zip: '22222',
       affiliated_committee_fec_id: 'C00000002',
-      affiliated_committee_name: 'affiliated committee',
     });
-
-    const contact_affiliated = Contact.fromJSON({
-      id: '10',
-      name: 'committee name',
-      committee_id: 'C000000009',
-    });
-
-    component.report = Form1M.fromJSON({
-      id: '99',
-      committee_name: 'replaced committee',
-      contact_affiliated: contact_affiliated,
-    });
-    component.report.contact_affiliated = contact_affiliated;
 
     const payload = component.getReportPayload();
-    expect((payload as Form1M).contact_affiliated?.name).toBe('affiliated committee');
-    expect((payload as Form1M).contact_affiliated?.committee_id).toBe('C00000002');
-    expect((payload as Form1M).committee_name).toBe('test committee');
+    expect(payload.contact_affiliated?.name).toBe('abc');
+    expect(payload.contact_affiliated?.committee_id).toBe('C00000002');
+    expect(payload.committee_name).toBe('test committee');
   });
 
   it('Update a contact from the contact lookup', () => {
-    fixture.detectChanges();
     const committee = Contact.fromJSON({
       id: '11111-2222222-333333-444444444',
       committee_id: 'C000000001',
@@ -176,7 +162,7 @@ describe('MainFormComponent', () => {
 
     component.affiliatedContact.manager.outerContact.set(committee);
     component.affiliatedContact.update(committee);
-    expect(component.report.contact_affiliated_id).toEqual('11111-2222222-333333-444444444');
+    expect(component.report()!.contact_affiliated_id).toEqual('11111-2222222-333333-444444444');
     expect(component.form.get('affiliated_committee_fec_id')?.value).toEqual('C000000001');
     expect(component.form.get('affiliated_committee_name')?.value).toEqual('Organization Name');
     expect(component.affiliatedContact.manager.excludeIds()).toEqual('11111-2222222-333333-444444444');
@@ -190,7 +176,7 @@ describe('MainFormComponent', () => {
 
     component.candidateContacts[0].manager.outerContact.set(candidate);
     component.candidateContacts[0].update(candidate);
-    expect(component.report.contact_candidate_I?.id).toEqual('22222-33333333-444444-55555555');
+    expect(component.report()!.contact_candidate_I?.id).toEqual('22222-33333333-444444-55555555');
     expect(component.form.get('I_candidate_id_number')?.value).toEqual('C000000002');
     expect(component.form.get('I_candidate_last_name')?.value).toEqual('Smith');
     expect(component.candidateContacts[0].manager.excludeIds()).toEqual(
@@ -201,10 +187,9 @@ describe('MainFormComponent', () => {
     expect(component.candidateContacts[0].candidateId).toEqual('C000000002');
   });
 
-  // Unit test is broken because of Async problems
-  it('Exclude ids should prepopulate when editing a F1M', () => {
-    fixture.detectChanges();
-    component.ngOnInit();
-    expect(component.affiliatedContact.manager.excludeIds()).toEqual('22222-22222-22222-2222222');
+  it('Exclude ids should prepopulate when editing a F1M', async () => {
+    expect(component.report()?.contact_affiliated?.id).toBe('10');
+    expect(component.affiliatedContact.manager.outerContact()).toEqual(component.report()?.contact_affiliated);
+    expect(component.affiliatedContact.manager.excludeIds()).toEqual('10');
   });
 });

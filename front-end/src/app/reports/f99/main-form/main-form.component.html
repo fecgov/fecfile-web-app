@@ -63,6 +63,7 @@
           [options]="filingFrequencies"
           [allowEmpty]="false"
           formControlName="filing_frequency"
+          [disabled]="!isEditable()"
         />
         <app-error-messages [form]="form" fieldName="filing_frequency" [formSubmitted]="formSubmitted" />
       </div>
@@ -71,10 +72,12 @@
 
   <div class="field w-full">
     <label for="message_text">TEXT MESSAGE</label>
-    <textarea id="message_text" appAutoResize formControlName="message_text"></textarea>
+    <textarea id="message_text" appAutoResize formControlName="message_text" [disabled]="!isEditable()"></textarea>
     <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted" />
   </div>
 
-  <hr type="solid" />
-  <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" />
+  @if (isEditable()) {
+    <hr type="solid" />
+    <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" />
+  }
 </form>

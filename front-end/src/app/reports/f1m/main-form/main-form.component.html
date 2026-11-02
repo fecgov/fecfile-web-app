@@ -129,6 +129,7 @@
               key="contact_affiliated"
               [formSubmitted]="formSubmitted"
               [contactType]="affiliatedContact.contactType"
+              [disabled]="!isEditable()"
             />
             <app-error-messages
               [form]="form"
@@ -138,7 +139,7 @@
           </div>
         </div>
       </div>
-      @if (report.contact_affiliated) {
+      @if (report()?.contact_affiliated) {
         <div class="grid">
           <div class="col-9">
             <div class="field">
@@ -180,11 +181,9 @@
             />
           </div>
         </div>
-        <div class="grid">
-          <div class="col-12">
-            <hr />
-          </div>
-        </div>
+        @if (isEditable()) {
+          <hr />
+        }
       }
     }
     @if (statusBy === 'qualification') {
@@ -241,7 +240,7 @@
               </div>
             </div>
           </div>
-          @if (report[candidateContact.key]) {
+          @if (report()?.[candidateContact.key]) {
             <app-name-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -286,15 +285,15 @@
               </div>
             </div>
           }
-          <div class="grid">
-            <div class="col-12">
-              <hr />
-            </div>
-          </div>
+          @if (isEditable()) {
+            <hr />
+          }
         </div>
       }
     }
-    <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" [submitDisabled]="disableSubmission()" />
+    @if (isEditable()) {
+      <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" [submitDisabled]="disableSubmission()" />
+    }
   </form>
 </div>
 
