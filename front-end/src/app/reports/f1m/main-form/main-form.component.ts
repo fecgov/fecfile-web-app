@@ -259,14 +259,12 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
 
   async getConfirmations(): Promise<boolean> {
     if (!this.report) return false;
-    return this.confirmationService.confirmWithUser(
-      this.form,
-      this.contactConfigs,
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
-      undefined,
-      this.signalForm.candidateOffices().value(),
-    );
+    return this.confirmationService.confirmWithUser(this.form, {
+      contactConfig: this.contactConfigs,
+      getContact: this.getContact.bind(this),
+      getTemplateMap: this.getTemplateMap.bind(this),
+      candidateOffices: this.signalForm.candidateOffices().value(),
+    });
   }
 
   getContact(contactKey: string) {
@@ -310,7 +308,16 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
 
   getReportPayload(): Form1M {
     const data = SchemaUtils.getFormValues(this.form, this.schema, this.formProperties);
+    if (this.signalForm.statusBy().value() === 'qualification') {
+      f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
+        const office = this.signalForm.candidateOffices[tag]().value();
+        data[`${tag}_candidate_office`] = office.candidate_office;
+        data[`${tag}_candidate_state`] = office.candidate_state;
+        data[`${tag}_candidate_district`] = office.candidate_district;
+      });
+    }
     this.updateContactsWithForm();
+
     return Object.assign(this.report, data);
   }
 
@@ -325,11 +332,17 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     Object.entries(this.contactConfigs).forEach(([contactKey, config]: [string, { [formField: string]: string }]) => {
       if (this.report[contactKey as keyof Form1M]) {
         const contact = this.report[contactKey as keyof Form1M] as Contact;
+        const candidateOffices = this.signalForm.candidateOffices().value();
+        const splits = contactKey.split('contact_candidate_');
+        const candidateOffice = splits.length === 2 ? candidateOffices[splits[1] as F1MCandidateTag] : undefined;
+
         const contactChanges = TransactionContactUtils.getContactChanges(
           this.form,
           contact,
           this.templateMapConfigs[contactKey],
           config,
+          undefined,
+          candidateOffice,
         );
         contactChanges.forEach(([property, value]) => (contact[property as keyof Contact] = value as never));
       }

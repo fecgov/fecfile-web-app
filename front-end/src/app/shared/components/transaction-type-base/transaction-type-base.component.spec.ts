@@ -267,13 +267,12 @@ describe('TransactionTypeBaseComponent', () => {
       const contactConfig = component.transaction!.transactionType?.contactConfig;
       component.transaction!.transactionType = {} as TransactionType;
       await expect(
-        testwrapperService.confirmWithUser(
-          component.form,
+        testwrapperService.confirmWithUser(component.form, {
           contactConfig,
-          component.getContact.bind(this),
-          component.getTemplateMap.bind(this),
-          component.transaction,
-        ),
+          getContact: component.getContact.bind(this),
+          getTemplateMap: component.getTemplateMap.bind(this),
+          transaction: component.transaction,
+        }),
       ).rejects.toThrow('FECfile+: Cannot find template map when confirming transaction');
     });
 
@@ -289,13 +288,12 @@ describe('TransactionTypeBaseComponent', () => {
       );
       expect(Object.keys(component.transaction.transactionType.contactConfig)[0]).toEqual('contact_1');
       payload.transactionType.useParentContact = true;
-      testwrapperService.confirmWithUser(
-        component.form,
-        component.transaction.transactionType?.contactConfig ?? {},
-        component.getContact.bind(this),
-        component.getTemplateMap.bind(this),
-        component.transaction,
-      );
+      testwrapperService.confirmWithUser(component.form, {
+        contactConfig: component.transaction.transactionType?.contactConfig ?? {},
+        getContact: component.getContact.bind(this),
+        getTemplateMap: component.getTemplateMap.bind(this),
+        transaction: component.transaction,
+      });
       expect(confirmSpy).toHaveBeenCalledTimes(0);
     });
 
@@ -306,13 +304,12 @@ describe('TransactionTypeBaseComponent', () => {
       });
       (component.transaction['contact_1' as keyof Transaction] as Contact).id = undefined;
 
-      testwrapperService.confirmWithUser(
-        component.form,
-        component.transaction.transactionType?.contactConfig ?? {},
-        component.getContact.bind(this),
-        component.getTemplateMap.bind(this),
-        component.transaction,
-      );
+      testwrapperService.confirmWithUser(component.form, {
+        contactConfig: component.transaction.transactionType?.contactConfig ?? {},
+        getContact: component.getContact.bind(this),
+        getTemplateMap: component.getTemplateMap.bind(this),
+        transaction: component.transaction,
+      });
       expect(createMessageSpy).toHaveBeenCalled();
     });
   });
@@ -525,6 +522,7 @@ describe('TransactionTypeBaseComponent', () => {
         component.form,
         component.transaction,
         component.contactIdMap['contact_2'],
+        component.candidateOfficeModel,
       );
     });
   });

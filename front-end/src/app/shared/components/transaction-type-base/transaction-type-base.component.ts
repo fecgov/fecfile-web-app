@@ -205,15 +205,13 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
   async getConfirmations(): Promise<boolean> {
     if (!this.transaction) return false;
-    return this.confirmationService.confirmWithUser(
-      this.form,
-      this.transaction.transactionType?.contactConfig ?? {},
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
-      this.transaction,
-      undefined,
-      this.candidateOfficeModel(),
-    );
+    return this.confirmationService.confirmWithUser(this.form, {
+      contactConfig: this.transaction.transactionType?.contactConfig ?? {},
+      getContact: this.getContact.bind(this),
+      getTemplateMap: this.getTemplateMap.bind(this),
+      transaction: this.transaction,
+      candidateOffice: this.candidateOfficeModel(),
+    });
   }
 
   getContact(contactKey: string, transaction?: Transaction) {
@@ -322,8 +320,8 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.form,
       this.transaction,
       this.contactIdMap['contact_1'],
+      this.candidateOfficeModel,
     );
-    if (selectItem?.value?.type === 'CAN') this.updateCandidateOffice(selectItem.value);
   }
 
   clearFormPrimaryContact() {
@@ -336,8 +334,8 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.form,
       this.transaction,
       this.contactIdMap['contact_2'],
+      this.candidateOfficeModel,
     );
-    this.updateCandidateOffice(selectItem.value);
   }
 
   updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
@@ -347,7 +345,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.transaction,
       this.contactIdMap['contact_2'],
     );
-    if (selectItem?.value?.type === 'CAN') this.updateCandidateOffice(selectItem.value);
   }
 
   updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
@@ -437,14 +434,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         const fieldControl = this.form.get(this.transaction.transactionType.templateMap[inherittedField]);
         fieldControl?.disable();
       }
-    });
-  }
-
-  private updateCandidateOffice(contact: Contact | null): void {
-    this.candidateOfficeModel.set({
-      candidate_office: contact?.candidate_office ?? null,
-      candidate_state: contact?.candidate_state ?? null,
-      candidate_district: contact?.candidate_district ?? null,
     });
   }
 

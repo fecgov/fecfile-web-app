@@ -154,13 +154,13 @@ export abstract class TripleTransactionTypeBaseComponent
     if (!this.childTransaction_2) return false;
     const result = await super.getConfirmations();
     if (!result) return false;
-    return this.confirmationService.confirmWithUser(
-      this.childForm_2,
-      this.childTransaction_2.transactionType?.contactConfig ?? {},
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
-      this.childTransaction_2,
-    );
+    return this.confirmationService.confirmWithUser(this.childForm_2, {
+      contactConfig: this.childTransaction_2.transactionType?.contactConfig ?? {},
+      getContact: this.getContact.bind(this),
+      getTemplateMap: this.getTemplateMap.bind(this),
+      transaction: this.childTransaction_2,
+      candidateOffice: this.candidateOfficeModel(),
+    });
   }
 
   override resetForm() {
@@ -193,6 +193,7 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childForm_2,
       this.childTransaction_2,
       this.childContactIdMap_2['contact_1'],
+      this.candidateOfficeModel,
     );
 
     if (this.childTransaction_2) {
@@ -208,6 +209,7 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childForm_2,
       this.childTransaction_2,
       this.childContactIdMap_2['contact_2'],
+      this.candidateOfficeModel,
     );
   }
 

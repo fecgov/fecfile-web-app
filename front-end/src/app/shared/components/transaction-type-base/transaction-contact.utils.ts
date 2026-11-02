@@ -9,6 +9,7 @@ import {
   candidateOfficeFields,
   CandidateOfficeModel,
 } from '../signal-form/candidate-office-form/candidate-office-form.component';
+import { WritableSignal } from '@angular/core';
 
 export class TransactionContactUtils {
   /**
@@ -124,6 +125,7 @@ export class TransactionContactUtils {
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
+    candidateOfficeModel: WritableSignal<CandidateOfficeModel>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -150,7 +152,7 @@ export class TransactionContactUtils {
         form.get(templateMap.organization_name)?.setValue(contact.name);
         break;
       case ContactTypes.CANDIDATE:
-        TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap);
+        TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap, candidateOfficeModel);
         form.get(templateMap.employer)?.setValue(contact.employer);
         form.get(templateMap.occupation)?.setValue(contact.occupation);
         break;
@@ -211,24 +213,35 @@ export class TransactionContactUtils {
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
+    candidateOfficeModel: WritableSignal<CandidateOfficeModel>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
-    TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap);
+    TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap, candidateOfficeModel);
     if (transaction) {
       transaction.contact_2 = contact;
     }
     contactId$.next(contact.id ?? '');
   }
 
-  static updateFormWithCandidateFields(contact: Contact, form: FormGroup, templateMap: TransactionTemplateMapType) {
+  static updateFormWithCandidateFields(
+    contact: Contact,
+    form: FormGroup,
+    templateMap: TransactionTemplateMapType,
+    candidateOfficeModel: WritableSignal<CandidateOfficeModel>,
+  ) {
     form.get(templateMap.candidate_fec_id)?.setValue(contact.candidate_id);
     form.get(templateMap.candidate_last_name)?.setValue(contact.last_name);
     form.get(templateMap.candidate_first_name)?.setValue(contact.first_name);
     form.get(templateMap.candidate_middle_name)?.setValue(contact.middle_name);
     form.get(templateMap.candidate_prefix)?.setValue(contact.prefix);
     form.get(templateMap.candidate_suffix)?.setValue(contact.suffix);
+    candidateOfficeModel.set({
+      candidate_office: contact?.candidate_office ?? null,
+      candidate_state: contact?.candidate_state ?? null,
+      candidate_district: contact?.candidate_district ?? null,
+    });
   }
 
   /**

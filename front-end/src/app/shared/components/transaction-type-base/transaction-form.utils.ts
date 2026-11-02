@@ -33,7 +33,7 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { CandidateOfficeModel } from '../signal-form/candidate-office-form/candidate-office-form.component';
@@ -103,14 +103,17 @@ export class TransactionFormUtils {
     form.removeControl(templateMap.candidate_state);
     form.removeControl(templateMap.candidate_district);
 
-    const primaryContact = transaction?.contact_1;
-    if (form.get('entity_type')?.value === ContactTypes.CANDIDATE && primaryContact?.type === ContactTypes.CANDIDATE) {
-      TransactionContactUtils.updateFormWithCandidateFields(primaryContact, form, templateMap);
-    }
-
-    component.candidateOfficeModel.set(
-      TransactionFormUtils.getCandidateOfficeFromTransaction(transaction, templateMap),
+    const candidateContact = [transaction?.contact_1, transaction?.contact_2].find(
+      (contact) => contact?.type === ContactTypes.CANDIDATE,
     );
+    if (candidateContact) {
+      TransactionContactUtils.updateFormWithCandidateFields(
+        candidateContact,
+        form,
+        templateMap,
+        component.candidateOfficeModel,
+      );
+    }
 
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
       let id = (transaction[contact as keyof Transaction] as Contact)?.id ?? '';
@@ -199,28 +202,6 @@ export class TransactionFormUtils {
         }
       });
     });
-  }
-
-  private static getCandidateOfficeFromTransaction(
-    transaction: Transaction,
-    templateMap: TransactionTemplateMapType,
-  ): CandidateOfficeModel {
-    const primaryContact = transaction.contact_1;
-
-    if (primaryContact?.type === ContactTypes.CANDIDATE) {
-      return {
-        candidate_office: primaryContact.candidate_office ?? null,
-        candidate_state: primaryContact.candidate_state ?? null,
-        candidate_district: primaryContact.candidate_district ?? null,
-      };
-    }
-
-    return {
-      candidate_office: (transaction[templateMap.candidate_office as keyof Transaction] ??
-        null) as CandidateOfficeTypes | null,
-      candidate_state: (transaction[templateMap.candidate_state as keyof Transaction] ?? null) as string | null,
-      candidate_district: (transaction[templateMap.candidate_district as keyof Transaction] ?? null) as string | null,
-    };
   }
 
   // Only dynamically update non-inherited calendar_ytd values on the form input.

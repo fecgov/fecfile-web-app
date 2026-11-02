@@ -193,6 +193,9 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override async validateForm() {
+    this.candidateOfficeForm.candidate_office().markAsTouched();
+    this.candidateOfficeForm.candidate_state().markAsTouched();
+    this.candidateOfficeForm.candidate_district().markAsTouched();
     this.formSubmitted = true;
 
     let invalid = -1;
@@ -234,13 +237,13 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (!this.childTransaction) return false;
     const result = await super.getConfirmations();
     if (!result) return false;
-    return this.confirmationService.confirmWithUser(
-      this.childForm,
-      this.childTransaction.transactionType?.contactConfig ?? {},
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
-      this.childTransaction,
-    );
+    return this.confirmationService.confirmWithUser(this.childForm, {
+      contactConfig: this.childTransaction.transactionType?.contactConfig ?? {},
+      getContact: this.getContact.bind(this),
+      getTemplateMap: this.getTemplateMap.bind(this),
+      transaction: this.childTransaction,
+      candidateOffice: this.candidateOfficeModel(),
+    });
   }
 
   override resetForm() {
@@ -273,6 +276,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childForm,
       this.childTransaction,
       this.childContactIdMap['contact_1'],
+      this.candidateOfficeModel,
     );
 
     if (this.childTransaction) {
@@ -317,6 +321,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childForm,
       this.childTransaction,
       this.childContactIdMap['contact_2'],
+      this.candidateOfficeModel,
     );
   }
 
