@@ -23,18 +23,15 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { environment } from 'environments/environment';
-import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, merge, Observable, of, startWith, takeUntil } from 'rxjs';
-import { FormComponent } from '../form.component';
-import { GlossaryService } from '../glossary/glossary.service';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { MessageService, ToastMessageOptions, SelectItem } from 'primeng/api';
+import { of, takeUntil, Observable, merge, startWith, map } from 'rxjs';
+import { FormComponent } from '../form.component';
 
 @Directive()
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
   protected readonly committeeStore = inject(CommitteeStore);
-  private readonly glossaryService = inject(GlossaryService);
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
@@ -52,7 +49,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
 
   readonly activeReportId: string = this.activatedRoute.snapshot.params['reportId'] ?? '';
-  readonly showGlossary = environment.showGlossary;
   readonly reportTypes = ReportTypes;
   readonly saveSuccessMessage: ToastMessageOptions = {
     severity: 'success',
@@ -393,9 +389,5 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         fieldControl?.disable();
       }
     });
-  }
-
-  openGlossary() {
-    this.glossaryService.search(this.transactionType?.title ?? '');
   }
 }
