@@ -22,7 +22,6 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { Action, ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import Aura from '@primeuix/themes/aura';
-import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
 import { ROUTES } from 'app/routes';
 import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
 import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
@@ -183,7 +182,6 @@ bootstrapApplication(AppComponent, {
       inject(FrontendErrorReportingService).initializeGlobalListeners();
     }),
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: USE_DYNAMIC_SIDEBAR, useValue: environment.showGlossary },
     { provide: ErrorHandler, useClass: FrontendGlobalErrorHandlerService },
   ],
 }).catch((err) => console.log(err));
