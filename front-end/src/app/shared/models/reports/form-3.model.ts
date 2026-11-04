@@ -155,6 +155,7 @@ export class Form3 extends BaseForm3 {
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
     ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
+    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
