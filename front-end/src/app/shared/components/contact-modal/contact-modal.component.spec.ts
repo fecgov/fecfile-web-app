@@ -109,11 +109,13 @@ describe('ContactModalComponent', () => {
     const messageSpy = vi.spyOn(component.messageService, 'add');
     await component.saveContact();
 
-    expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({
-      type: ContactTypes.COMMITTEE,
-      committee_id: 'C12345678',
-      name: 'Registered Committee',
-    }));
+    expect(createSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: ContactTypes.COMMITTEE,
+        committee_id: 'C12345678',
+        name: 'Registered Committee',
+      }),
+    );
     expect(messageSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: 'Contact created' }));
   });
 
