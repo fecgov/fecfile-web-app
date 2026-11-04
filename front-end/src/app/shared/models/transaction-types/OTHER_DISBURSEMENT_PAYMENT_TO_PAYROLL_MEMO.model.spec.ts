@@ -1,6 +1,7 @@
 import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO } from './OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { ReportTypes } from '../reports/report.model';
 
 describe('OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO', () => {
   let transactionType: OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO;
