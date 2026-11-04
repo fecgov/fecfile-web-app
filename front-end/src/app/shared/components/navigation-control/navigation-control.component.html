@@ -9,7 +9,6 @@
       (click)="clickButton()"
       [disabled]="isDisabled()"
       data-cy="navigation-control-button"
-      appSingleClick
     ></button>
   }
   @case (controlType.DROPDOWN) {
@@ -41,7 +40,6 @@
                     (click)="onDropdownChange(childOption)"
                     (keyup.enter)="onDropdownChange(childOption)"
                     (keyup.space)="onDropdownChange(childOption)"
-                    appSingleClick
                     [disabled]="!childOption.value"
                     class="w-full flex justify-content-start"
                   >
@@ -77,7 +75,6 @@
       data-cy="navigation-control-splitbutton"
       [disabled]="isDisabled()"
       [model]="items"
-      appSingleClick
     >
       <ng-template #dropdownicon>
         <svg pButtonIcon alt="Dropdown icon" width="10" height="10" class="rotate-90">

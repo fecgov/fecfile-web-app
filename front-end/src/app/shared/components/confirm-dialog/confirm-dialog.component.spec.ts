@@ -63,19 +63,24 @@ describe('ConfirmDialogComponent', () => {
 
   it('should call accept on confirm', () => {
     const acceptSpy = vi.fn();
+    const rejectSpy = vi.fn();
 
     confirmation$.next({
       message: 'acceptSpy',
       accept: acceptSpy,
+      reject: rejectSpy,
     });
 
     fixture.detectChanges();
 
     expect(component.visible()).toBe(true);
 
-    component.confirmOption();
+    const continueButton: HTMLButtonElement = fixture.nativeElement.querySelector('.submit-button');
+    continueButton.click();
+    fixture.detectChanges();
 
     expect(acceptSpy).toHaveBeenCalled();
+    expect(rejectSpy).not.toHaveBeenCalled();
     expect(component.visible()).toBe(false);
   });
 
