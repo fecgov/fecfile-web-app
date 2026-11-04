@@ -23,10 +23,7 @@ export abstract class MainFormBaseComponent<T extends Report> extends FormCompon
 
   readonly reportId = input<string>();
   readonly report = model<T>();
-  readonly isEditable = computed(() => {
-    const report = this.report();
-    return !report?.report_status || report.report_status === 'In progress';
-  });
+  readonly isEditable = computed(() => !this.reportId() || (this.report()?.canEdit ?? false));
 
   constructor() {
     super();

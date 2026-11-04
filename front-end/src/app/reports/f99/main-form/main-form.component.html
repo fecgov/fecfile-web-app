@@ -1,6 +1,8 @@
 <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-  <h1>Form 99</h1>
-  <hr />
+  <h1 class="border-bottom-2 pb-2 mb-3">Form 99</h1>
+  @if (!isEditable()) {
+    <h4 class="read-only-tag">READ ONLY</h4>
+  }
   <h2>Committee</h2>
 
   <div class="field w-9">
@@ -76,8 +78,11 @@
     <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted" />
   </div>
 
-  @if (isEditable()) {
-    <hr type="solid" />
-    <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" />
-  }
+  <hr type="solid" />
+  <app-save-cancel
+    [backLabel]="isEditable() ? 'Back' : 'Return to reports'"
+    [includeSave]="isEditable()"
+    (save)="submitForm($event)"
+    (cancelForm)="goBack()"
+  />
 </form>

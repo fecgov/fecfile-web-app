@@ -25,6 +25,7 @@ const createDefaultReport = (): Form1M => {
   const report = Form1M.fromJSON({
     id: '99',
     affiliated_committee_name: 'abc',
+    report_status: 'In progress',
   });
 
   report.contact_affiliated = Contact.fromJSON({
