@@ -174,6 +174,52 @@ describe('ContactDialogComponent', () => {
     expect(messageSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('should clear selected lookup data before saving another contact', async () => {
+    vi.spyOn(contactService, 'checkFecIdForUniqueness').mockResolvedValue(true);
+    const createSpy = vi.spyOn(contactService, 'create').mockImplementation(async (contact) => contact);
+    const selectedContact = Contact.fromJSON({
+      type: ContactTypes.CANDIDATE,
+      candidate_id: 'P00000001',
+      first_name: 'Lookup',
+      last_name: 'Candidate',
+      street_1: '123 Main St',
+      city: 'Anytown',
+      state: 'VA',
+      zip: '22201',
+      country: 'USA',
+      candidate_office: 'P',
+    });
+
+    component.contact.set(new Contact());
+    component.updateContact(selectedContact);
+    fixture.detectChanges();
+
+    await component.saveContact(false);
+    expect(component.contact()?.candidate_id).toBeUndefined();
+    expect(component.contact()?.id).toBeUndefined();
+    expect(component.type()).toBe(ContactTypes.CANDIDATE);
+
+    component.type.set(ContactTypes.ORGANIZATION);
+    fixture.detectChanges();
+    component.form.patchValue({
+      name: 'Another Organization',
+      street_1: '456 Main St',
+      city: 'Anytown',
+      state: 'VA',
+      zip: '22201',
+      country: 'USA',
+    });
+
+    await component.saveContact(false);
+
+    expect(createSpy).toHaveBeenCalledTimes(2);
+    expect(createSpy.mock.calls[1][0]).toMatchObject({
+      type: ContactTypes.ORGANIZATION,
+      name: 'Another Organization',
+    });
+    expect(createSpy.mock.calls[1][0].candidate_id).toBeUndefined();
+  });
+
   it('should raise confirmation dialog', () => {
     component.contact.set(new Contact());
     const spy = vi.spyOn(testConfirmationService, 'confirm').mockImplementation((confirmation: Confirmation) => {

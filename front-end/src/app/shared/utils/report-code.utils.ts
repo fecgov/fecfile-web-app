@@ -39,11 +39,12 @@ export const ReportCodes = {
 export type ReportCodes = (typeof ReportCodes)[keyof typeof ReportCodes];
 
 export function getCoverageDates(
-  reportCode: ReportCodes,
+  reportCode: ReportCodes | null,
   year: number,
   isElectionYear: boolean,
   filingFrequency: FilingFrequency,
 ): [Date | undefined, Date] | undefined {
+  if (!reportCode) return undefined;
   if (reportCode === ReportCodes.YE) {
     const adjustedYear = DateUtils.isCurrentMonthJanuary() ? year - 1 : year;
     if (isElectionYear) {

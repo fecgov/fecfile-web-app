@@ -1,12 +1,12 @@
+import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { Exclude, Transform, Type } from 'class-transformer';
 import { JsonSchema } from 'fecfile-validate';
-import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
 import { LabelList } from '../../utils/label.utils';
 import { BaseModel } from '../base.model';
+import { TransactionTypes } from '../transaction.model';
 import { UploadSubmission } from '../upload-submission.model';
 import { WebPrintSubmission } from '../webprint-submission.model';
-import { TransactionTypes } from '../transaction.model';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -58,6 +58,14 @@ export abstract class Report extends BaseModel {
 
   get canEdit(): boolean {
     return this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE;
+  }
+
+  get isF3(): boolean {
+    return this.report_type === ReportTypes.F3;
+  }
+
+  get isF24(): boolean {
+    return this.report_type === ReportTypes.F24;
   }
 }
 

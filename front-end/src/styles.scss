@@ -176,7 +176,7 @@ label.disabled {
 
 .add-button {
   color: #212121;
-  background-color: var(--orange);
+  background-color: var(--orange) !important;
   border: 0;
   font-weight: 600;
 }

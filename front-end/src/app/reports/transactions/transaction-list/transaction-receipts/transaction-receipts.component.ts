@@ -42,7 +42,7 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
     },
     this.buildAmountColumn(),
     {
-      field: 'aggregate',
+      field: this.report().isF3 ? 'entity_election_cycle_to_date' : 'aggregate',
       header: 'Aggregate',
       sortable: true,
       cssClass: 'aggregate-column',

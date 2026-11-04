@@ -22,17 +22,25 @@ describe('ElectionCyclesListComponent', () => {
   };
 
   const mockDataResponse = {
-    count: 1,
+    count: 2,
     results: [
-      new ElectionCycle({
+      ElectionCycle.fromJson({
         id: '1',
         office: 'House',
-        electionType: 'General',
-        electionYear: 2024,
-        coverage: {
-          startDate: new Date('2023-01-01'),
-          endDate: new Date('2024-11-05'),
-        },
+        election_type: 'General',
+        election_year: 2024,
+        has_form3: true,
+        start_date: '2023-01-01',
+        end_date: '2024-11-05',
+      }),
+      ElectionCycle.fromJson({
+        id: '2',
+        office: 'House',
+        election_type: 'General',
+        election_year: 2022,
+        has_form3: false,
+        start_date: '2021-01-01',
+        end_date: '2022-11-08',
       }),
     ],
   };
@@ -70,6 +78,16 @@ describe('ElectionCyclesListComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should hide actions for cycles associated with a Form 3', async () => {
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(component.items().map((cycle) => cycle.hasForm3)).toEqual([true, false]);
+    const actions = fixture.nativeElement.querySelectorAll('app-table-actions-button');
+
+    expect(actions).toHaveLength(1);
+  });
+
   describe('Initial State & Computing Values', () => {
     it('should compute initial pagination parameters correctly', () => {
       expect(component.params()).toEqual({
@@ -94,7 +112,7 @@ describe('ElectionCyclesListComponent', () => {
       const cols = component.columns();
       expect(cols).toHaveLength(6);
       expect(cols[0].field).toBe('office');
-      expect(cols.find((col) => col.field === 'electionType')?.header).toBe('Cycle Type');
+      expect(cols.find((col) => col.field === 'electionType')?.header).toBe('Cycle type');
       expect(mockBreakpointStore.getColumnWidths).toHaveBeenCalled();
     });
 
@@ -124,7 +142,7 @@ describe('ElectionCyclesListComponent', () => {
       component.addItem();
       const currentItems = component.items();
 
-      expect(currentItems).toHaveLength(2);
+      expect(currentItems).toHaveLength(3);
       expect(currentItems[0].id).toBe('initial');
     });
 

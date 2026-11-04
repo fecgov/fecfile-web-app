@@ -51,6 +51,26 @@ export class DateUtils {
   }
 
   /**
+   * For a given date string YYYY-MM-DD (FEC format), convert it to MM/DD/YYYY format.
+   *
+   * @param {string | null | undefined} fecStr Date string in YYYY-MM-DD format
+   * @returns {string} MM/DD/YYYY formatted date string, or empty string if invalid
+   */
+  public static convertFecFormatToSlashFormat(fecStr: string | null | undefined): string {
+    if (!fecStr) return '';
+
+    const parts = fecStr.split('-');
+    if (parts.length !== 3) return '';
+
+    const [year, month, day] = parts;
+    if (!year || !month || !day || year.length !== 4 || month.length !== 2 || day.length !== 2) {
+      return '';
+    }
+
+    return `${month}/${day}/${year}`;
+  }
+
+  /**
    * @returns True if all dates are defined and date ranges overlap.  (dates that are the same count as overlapping)
    */
   public static areOverlapping(fromA?: Date, throughA?: Date, fromB?: Date, throughB?: Date): boolean {

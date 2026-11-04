@@ -173,6 +173,14 @@ export function testF3(): Form3 {
       created: '10/10/2010',
       updated: '10/12/2010',
     },
+    electionCycle: {
+      id: 'election',
+      office: 'House',
+      election_type: 'General',
+      election_year: '2026',
+      start_date: '01/01/2026',
+      end_date: '03/31/2026',
+    },
   });
 }
 
@@ -508,6 +516,7 @@ export function testTemplateMap(): TransactionTemplateMapType {
     aggregate: 'contribution_aggregate',
     calendar_ytd: '',
     aggregate_general_elec_expended: '',
+    entity_election_cycle_to_date: 'entity_election_cycle_to_date',
     general_election_year: 'general_election_year',
     purpose_description: 'contribution_purpose_descrip',
     text4000: 'text4000',
@@ -550,3 +559,7 @@ export function testTemplateMap(): TransactionTemplateMapType {
     quinary_zip: 'subordinate_zip',
   };
 }
+
+export const detectChangesAndWait = () => {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+};

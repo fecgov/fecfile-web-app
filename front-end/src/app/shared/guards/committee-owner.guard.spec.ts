@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeMemberService } from '../services/committee-member.service';
-import { testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
+import { detectChangesAndWait, testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
 import { committeeOwnerGuard } from './committee-owner.guard';
 import { CommitteeStore } from 'app/committee/committee.store';
 import { CommitteeAccount } from '../models/committee-account.model';
@@ -65,7 +65,7 @@ describe('committeeOwnerGuard', () => {
 
     it('should route to reports page when memberService.needsSecondAdmin()', async () => {
       needsSecondAdminMock.set(true);
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await detectChangesAndWait();
       const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
       expect(safe).toEqual(router.createUrlTree(['/reports']));
     });

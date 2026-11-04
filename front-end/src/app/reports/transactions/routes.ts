@@ -44,6 +44,7 @@ export const TRANSACTION_ROUTES: Route[] = [
     },
     data: {
       sidebarSection: ReportSidebarSection.TRANSACTIONS,
+      noComponentReuse: true,
     },
     canActivate: [ReportIsEditableGuard],
     runGuardsAndResolvers: 'always',

@@ -106,4 +106,19 @@ describe('ValidateUtils', () => {
     const properties: string[] = SchemaUtils.getSchemaProperties(undefined);
     expect(properties.length).toBe(0);
   });
+
+  it('#getFormGroupFieldsNoBlur should set updateOn to change for noBlur fields and blur for others', () => {
+    const fields = SchemaUtils.getFormGroupFieldsNoBlur([
+      'last_name',
+      'contribution_amount',
+      'amount',
+      'custom_amount',
+      'memo_code',
+    ]);
+    expect(fields['last_name'].updateOn).toBe('blur');
+    expect(fields['contribution_amount'].updateOn).toBe('change');
+    expect(fields['amount'].updateOn).toBe('change');
+    expect(fields['custom_amount'].updateOn).toBe('blur');
+    expect(fields['memo_code'].updateOn).toBe('change');
+  });
 });

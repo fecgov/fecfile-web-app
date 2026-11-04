@@ -1,4 +1,12 @@
-import { MaybeFieldTree, PathKind, SchemaPath, validate, validateHttp, validateTree } from '@angular/forms/signals';
+import {
+  MaybeFieldTree,
+  PathKind,
+  SchemaPath,
+  TreeValidationResult,
+  validate,
+  validateHttp,
+  validateTree,
+} from '@angular/forms/signals';
 import { CookieService } from 'ngx-cookie-service';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { getHeaders, QueryParams } from 'app/shared/services/api.service';
@@ -63,13 +71,25 @@ export function validateDateAfter(coverageSchema: SchemaPath<Coverage>) {
   });
 }
 
+export interface DateOverlapResponse {
+  start_date: boolean;
+  end_date: boolean;
+}
+
 export function validateDateOverlap(
   coverageSchema: SchemaPath<Coverage>,
   url: string,
   cookieService: CookieService,
   options?: {
-    excludeId?: string | null;
+    excludeId?: string;
     message?: string;
+    mapResponseToErrors?: (
+      response: DateOverlapResponse,
+      fields: {
+        startField: MaybeFieldTree<Date | null, string>;
+        endField: MaybeFieldTree<Date | null, string>;
+      },
+    ) => TreeValidationResult;
   },
 ) {
   const errorMessage = options?.message ?? 'The selected dates overlap with an existing period.';
@@ -105,7 +125,14 @@ export function validateDateOverlap(
       return undefined;
     },
 
-    onSuccess: (response: { start_date: boolean; end_date: boolean }) => {
+    onSuccess: (response: DateOverlapResponse) => {
+      if (options?.mapResponseToErrors) {
+        return options.mapResponseToErrors(response, {
+          startField,
+          endField,
+        });
+      }
+
       const errors = [];
       if (response?.start_date) {
         errors.push({
