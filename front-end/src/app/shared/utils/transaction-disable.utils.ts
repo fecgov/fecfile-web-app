@@ -27,8 +27,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleATransactionTypes.UNREGISTERED_RECOUNT_DONATION_FROM_ORGANIZATION,
 
     /*** DISBURSEMENT **********************************************/
-    // OPERATING EXPENDITURES
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
     // CONTRIBUTIONS/EXPENDITURES
     ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,

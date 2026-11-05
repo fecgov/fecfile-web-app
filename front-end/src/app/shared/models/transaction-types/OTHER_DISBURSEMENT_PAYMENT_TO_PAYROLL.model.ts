@@ -1,13 +1,18 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { ORGANIZATION, ORGANIZATION_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import {
+  ELECTION_FIELDS,
+  ORGANIZATION,
+  ORGANIZATION_B_FORM_FIELDS,
+} from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_PARENTS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { ReportTypes } from '../reports/report.model';
 
 export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL extends SchBTransactionType {
-  formFields = ORGANIZATION_B_FORM_FIELDS;
+  formFields = [...ORGANIZATION_B_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
@@ -29,5 +34,9 @@ export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL extends SchBTransactionType {
       return 'Payroll Memo: See Below';
     }
     return 'Payroll memo entries do not meet itemization threshold.';
+  }
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
   }
 }
