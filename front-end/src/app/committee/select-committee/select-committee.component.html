@@ -29,19 +29,25 @@
             <span class="karla-bold empty-verbiage">Not currently active in any FECfile+ committee accounts</span>
           </div>
         } @else if (activeCommittees().length) {
-          <div class="committee-list">
+          <ul class="committee-list">
             @for (committee of activeCommittees(); track committee) {
-              <div id="{{ committee.id }}" class="fec-card" (click)="activateCommittee(committee)">
-                <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-                <div class="committee-info">
-                  <h3>
-                    <span>{{ committee.name }}</span>
-                  </h3>
-                  <span class="h5">{{ committee.committee_id }}</span>
-                </div>
-              </div>
+              <li>
+                <button
+                  id="{{ committee.id }}"
+                  class="fec-card committee-button"
+                  (click)="activateCommittee(committee)"
+                >
+                  <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
+                  <div class="committee-info">
+                    <h3>
+                      <span>{{ committee.name }}</span>
+                    </h3>
+                    <span class="h5">{{ committee.committee_id }}</span>
+                  </div>
+                </button>
+              </li>
             }
-          </div>
+          </ul>
         }
       }
 
@@ -90,11 +96,11 @@
       </div>
     }
 
-    <div class="create-committee-card karla-bold" routerLink="/login/create-committee">
+    <button class="create-committee-card karla-bold w-full border-none p-0" routerLink="/login/create-committee">
       <div class="blue-box">
         <img class="plus" src="assets/img/Plus-Circle.svg" alt="Create committee icon" height="60px" width="60px" />
       </div>
       <div class="karla-bold create-text">create a new committee account</div>
-    </div>
+    </button>
   </div>
 </div>

@@ -128,3 +128,8 @@ h5 {
 .committee-icon {
   flex: 0 0 34px;
 }
+
+.committee-button {
+  border: none;
+  width: calc(100% - 6px);
+}
