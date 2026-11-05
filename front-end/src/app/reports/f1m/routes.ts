@@ -1,6 +1,5 @@
 import { Route } from '@angular/router';
 import { MainFormComponent } from './main-form/main-form.component';
-import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guard';
 import { Report } from 'app/shared/models/reports/report.model';
 import { PrintPreviewComponent } from '../shared/print-preview/print-preview.component';
@@ -8,6 +7,7 @@ import { SubmitReportStatusComponent } from '../submission-workflow/submit-repor
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { reportResolver } from 'app/shared/resolvers/report.resolver';
 
 export const F1M_ROUTES: Route[] = [
   {
@@ -22,7 +22,7 @@ export const F1M_ROUTES: Route[] = [
     path: 'edit/:reportId',
     title: 'Report details',
     component: MainFormComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: { sidebarSection: ReportSidebarSection.CREATE },
     runGuardsAndResolvers: 'always',
   },
@@ -30,7 +30,7 @@ export const F1M_ROUTES: Route[] = [
     path: 'web-print/:reportId',
     title: 'Print preview',
     component: PrintPreviewComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f1m/edit/' + report?.id,
@@ -43,7 +43,7 @@ export const F1M_ROUTES: Route[] = [
     title: 'Add a report level memo',
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getNextUrl: (report?: Report) => '/reports/f1m/submit/' + report?.id,
@@ -55,7 +55,7 @@ export const F1M_ROUTES: Route[] = [
     title: 'Submit report',
     component: SubmitReportComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f1m/web-print/' + report?.id,
@@ -67,7 +67,7 @@ export const F1M_ROUTES: Route[] = [
     path: 'submit/status/:reportId',
     title: 'Report status',
     component: SubmitReportStatusComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
     runGuardsAndResolvers: 'always',
   },

@@ -1,148 +1,163 @@
+import { Injector, runInInjectionContext } from '@angular/core';
+import { ActivatedRouteSnapshot, convertToParamMap, RedirectCommand, Router } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot } from '@angular/router';
-import { BaseForm3, CoverageDates } from 'app/shared/models/reports/base-form-3';
-import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { SharedForm3Resolver } from './shared-form3.resolver';
+import { ElectionCycleService } from 'app/tools/election-cycle/election-cycle.service';
+import type { Form3 } from '../models/reports/form-3.model';
+import type { ElectionCycle } from 'app/tools/election-cycle/election-cycle.model';
+import { form3CoverageResolver, form3ElectionCycleResolver, sharedForm3Resolver } from './shared-form3.resolver';
+import { ReportService } from 'app/shared/services/report.service';
 
-describe('SharedForm3Resolver', () => {
-  let resolver: SharedForm3Resolver;
-  let reportResolver: { resolve: ReturnType<typeof vi.fn> };
-  let activeService: { getCoverageDates: ReturnType<typeof vi.fn> };
+describe('Form 3 resolvers', () => {
+  let injector: Injector;
+  let router: Router;
   let route: ActivatedRouteSnapshot;
+  let setActiveReportById: ReturnType<typeof vi.fn>;
 
-  const createCoverage = (startDate: Date, endDate: Date): CoverageDates =>
+  let getCoverageDates: ReturnType<typeof vi.fn>;
+  let getElectionCycle: ReturnType<typeof vi.fn>;
+
+  const coverageDate1 = new Date('2025-01-01');
+  const coverageDate2 = new Date('2025-04-01');
+  const coverageDate3 = new Date('2025-07-01');
+
+  const coverageDates = [
+    { coverage_from_date: coverageDate1 },
+    { coverage_from_date: coverageDate2 },
+    { coverage_from_date: coverageDate3 },
+  ];
+
+  const createReport = (overrides: Partial<Form3> = {}): Form3 =>
     ({
-      coverage_from_date: startDate,
-      coverage_through_date: endDate,
-    }) as CoverageDates;
+      coverage_from_date: coverageDate2,
+      electionCycleId: 'cycle-1',
+      nextElectionCycleId: null,
+      electionCycle: null,
+      nextElectionCycle: null,
+      ...overrides,
+    }) as Form3;
+
+  const createRoute = (reportId: string | null = null): ActivatedRouteSnapshot =>
+    ({
+      paramMap: convertToParamMap(reportId ? { reportId } : {}),
+    }) as ActivatedRouteSnapshot;
+
+  const resolve = <T>(resolver: (route: ActivatedRouteSnapshot) => Promise<T>): Promise<T> =>
+    runInInjectionContext(injector, () => resolver(route));
 
   beforeEach(() => {
-    route = {} as ActivatedRouteSnapshot;
-
-    reportResolver = { resolve: vi.fn().mockResolvedValue(null) };
-
-    activeService = { getCoverageDates: vi.fn().mockResolvedValue([]) };
+    setActiveReportById = vi.fn();
+    getCoverageDates = vi.fn().mockResolvedValue(coverageDates);
+    getElectionCycle = vi.fn();
 
     TestBed.configureTestingModule({
       providers: [
-        SharedForm3Resolver,
-        { provide: ReportResolver, useValue: reportResolver },
-        { provide: FORM_3_SERVICE, useValue: activeService },
+        {
+          provide: FORM_3_SERVICE,
+          useValue: { getCoverageDates },
+        },
+        {
+          provide: ElectionCycleService,
+          useValue: { get: getElectionCycle },
+        },
+        {
+          provide: ReportService,
+          useValue: { setActiveReportById },
+        },
       ],
     });
 
-    resolver = TestBed.inject(SharedForm3Resolver);
+    injector = TestBed.inject(Injector);
+    router = TestBed.inject(Router);
+    route = createRoute('report-1');
   });
 
-  it('should return null report and all coverage when no report is resolved', async () => {
-    const coverage = [
-      createCoverage(new Date(2026, 0, 1), new Date(2026, 2, 31)),
-      createCoverage(new Date(2026, 3, 1), new Date(2026, 5, 30)),
-    ];
-
-    reportResolver.resolve.mockResolvedValue(undefined);
-    activeService.getCoverageDates.mockResolvedValue(coverage);
-
-    const result = await resolver.resolve(route);
-
-    expect(reportResolver.resolve).toHaveBeenCalledWith(route);
-    expect(activeService.getCoverageDates).toHaveBeenCalledOnce();
-    expect(result).toEqual({ report: null, existingCoverage: coverage });
-  });
-
-  it('should return null report when the report resolver returns null', async () => {
-    const coverage = [createCoverage(new Date(2026, 0, 1), new Date(2026, 2, 31))];
-
-    reportResolver.resolve.mockResolvedValue(null);
-    activeService.getCoverageDates.mockResolvedValue(coverage);
-
-    const result = await resolver.resolve(route);
-    expect(result).toEqual({ report: null, existingCoverage: coverage });
-  });
-
-  it('should exclude coverage with the same start date as the current report', async () => {
-    const startDate = new Date(2026, 0, 1);
-    const report = {
-      coverage_from_date: startDate,
-      report_code: 'Q1',
-    } as unknown as BaseForm3;
-
-    const matchingCoverage = createCoverage(new Date(startDate.getTime()), new Date(2026, 2, 31));
-    const otherCoverage = createCoverage(new Date(2026, 3, 1), new Date(2026, 5, 30));
-
-    reportResolver.resolve.mockResolvedValue(report);
-    activeService.getCoverageDates.mockResolvedValue([matchingCoverage, otherCoverage]);
-
-    const result = await resolver.resolve(route);
-    expect(result.report).toBe(report);
-    expect(result.existingCoverage).toEqual([otherCoverage]);
-  });
-
-  it('should retain coverage with a different start date', async () => {
-    const report = {
-      coverage_from_date: new Date(2026, 0, 1),
-      report_code: 'Q1',
-    } as unknown as BaseForm3;
-
-    const otherCoverage = createCoverage(new Date(2026, 3, 1), new Date(2026, 5, 30));
-
-    reportResolver.resolve.mockResolvedValue(report);
-    activeService.getCoverageDates.mockResolvedValue([otherCoverage]);
-
-    const result = await resolver.resolve(route);
-    expect(result.existingCoverage).toEqual([otherCoverage]);
-  });
-
-  it('should exclude all coverage entries with the same start date', async () => {
-    const startDate = new Date(2026, 0, 1);
-    const report = {
-      coverage_from_date: startDate,
-    } as BaseForm3;
-
-    const matchingCoverage1 = createCoverage(new Date(startDate.getTime()), new Date(2026, 2, 31));
-    const matchingCoverage2 = createCoverage(new Date(startDate.getTime()), new Date(2026, 5, 30));
-
-    reportResolver.resolve.mockResolvedValue(report);
-    activeService.getCoverageDates.mockResolvedValue([matchingCoverage1, matchingCoverage2]);
-
-    const result = await resolver.resolve(route);
-    expect(result.existingCoverage).toEqual([]);
-  });
-
-  it('should resolve the report before requesting coverage dates', async () => {
-    const report = {
-      coverage_from_date: new Date(2026, 0, 1),
-    } as BaseForm3;
-
-    const callOrder: string[] = [];
-
-    reportResolver.resolve.mockImplementation(async () => {
-      callOrder.push('report');
-      return report;
+  describe('sharedForm3Resolver', () => {
+    it('should resolve the report', async () => {
+      const report = createReport();
+      setActiveReportById.mockResolvedValue(report);
+      const result = await resolve(sharedForm3Resolver);
+      expect(result).toBe(report);
+      expect(setActiveReportById).toHaveBeenCalledOnce();
+      expect(setActiveReportById).toHaveBeenCalledWith('report-1');
     });
 
-    activeService.getCoverageDates.mockImplementation(async () => {
-      callOrder.push('coverage');
-      return [];
+    it('should return a RedirectCommand when reportResolver redirects', async () => {
+      const redirect = new RedirectCommand(router.parseUrl('/reports'));
+      setActiveReportById.mockRejectedValue(new Error('Report not found'));
+      const result = await resolve(sharedForm3Resolver);
+      expect(result).toStrictEqual(redirect);
+    });
+  });
+
+  describe('form3CoverageResolver', () => {
+    it('should resolve coverage dates without a report when creating a report', async () => {
+      route = createRoute();
+      const result = await resolve(form3CoverageResolver);
+      expect(result).toEqual({
+        report: null,
+        existingCoverage: coverageDates,
+      });
+      expect(getCoverageDates).toHaveBeenCalledOnce();
+      expect(setActiveReportById).not.toHaveBeenCalled();
     });
 
-    await resolver.resolve(route);
-    expect(callOrder).toEqual(['report', 'coverage']);
+    it('should resolve the report and filter its coverage date when editing a report', async () => {
+      const report = createReport();
+      setActiveReportById.mockResolvedValue(report);
+      const result = await resolve(form3CoverageResolver);
+      expect(result).toEqual({
+        report,
+        existingCoverage: [coverageDates[0], coverageDates[2]],
+      });
+      expect(getCoverageDates).toHaveBeenCalledOnce();
+      expect(setActiveReportById).toHaveBeenCalledWith('report-1');
+    });
+
+    it('should return a RedirectCommand when resolving the report redirects', async () => {
+      const redirect = new RedirectCommand(router.parseUrl('/reports'));
+      route = createRoute('report-1');
+      setActiveReportById.mockRejectedValue(new Error('Report not found'));
+      const result = await resolve(form3CoverageResolver);
+      expect(result).toStrictEqual(redirect);
+    });
   });
 
-  it('should propagate an error when resolving the report fails', async () => {
-    const error = new Error('Failed to resolve report');
-    reportResolver.resolve.mockRejectedValue(error);
-    await expect(resolver.resolve(route)).rejects.toThrow('Failed to resolve report');
-    expect(activeService.getCoverageDates).not.toHaveBeenCalled();
-  });
+  describe('form3ElectionCycleResolver', () => {
+    it('should resolve the election cycle', async () => {
+      const report = createReport();
+      const electionCycle = { id: 'cycle-1' } as ElectionCycle;
+      setActiveReportById.mockResolvedValue(report);
+      getElectionCycle.mockResolvedValue(electionCycle);
+      let result = await resolve(form3ElectionCycleResolver);
+      expect(result).toBe(report);
+      result = result as Form3;
+      expect(getElectionCycle).toHaveBeenCalledOnce();
+      expect(getElectionCycle).toHaveBeenCalledWith('cycle-1');
+      expect(result.electionCycle).toBe(electionCycle);
+      expect(result.nextElectionCycle).toBeNull();
+    });
 
-  it('should propagate an error when fetching coverage dates fails', async () => {
-    const error = new Error('Failed to fetch coverage');
-    reportResolver.resolve.mockResolvedValue(null);
-    activeService.getCoverageDates.mockRejectedValue(error);
-    await expect(resolver.resolve(route)).rejects.toThrow('Failed to fetch coverage');
+    it('should resolve both election cycles when a next election cycle exists', async () => {
+      const report = createReport({ nextElectionCycleId: 'cycle-2' });
+      const electionCycle = { id: 'cycle-1' } as ElectionCycle;
+      const nextElectionCycle = { id: 'cycle-2' } as ElectionCycle;
+      getElectionCycle.mockResolvedValueOnce(electionCycle).mockResolvedValueOnce(nextElectionCycle);
+      setActiveReportById.mockResolvedValue(report);
+      const result = (await resolve(form3ElectionCycleResolver)) as Form3;
+      expect(getElectionCycle).toHaveBeenCalledTimes(2);
+      expect(getElectionCycle).toHaveBeenNthCalledWith(1, 'cycle-1');
+      expect(getElectionCycle).toHaveBeenNthCalledWith(2, 'cycle-2');
+      expect(result.electionCycle).toBe(electionCycle);
+      expect(result.nextElectionCycle).toBe(nextElectionCycle);
+    });
+
+    it('should return a RedirectCommand when resolving the report redirects', async () => {
+      const redirect = new RedirectCommand(router.parseUrl('/reports'));
+      setActiveReportById.mockRejectedValue(new Error('Report not found'));
+      const result = await resolve(form3ElectionCycleResolver);
+      expect(result).toStrictEqual(redirect);
+      expect(getElectionCycle).not.toHaveBeenCalled();
+    });
   });
 });

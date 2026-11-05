@@ -13,6 +13,7 @@ import { F3FormTypes, Form3 } from 'app/shared/models';
 import { FilingFrequency, ReportCodes } from 'app/shared/utils/report-code.utils';
 import { ReportTypeCategories } from './shared-form3.model';
 import { SharedForm3Store } from './shared-form3.store';
+import { testElectionCycle } from 'app/shared/utils/unit-test.utils';
 
 describe('CreateSharedF3Component', () => {
   let fixture: ComponentFixture<CreateSharedF3Component>;
@@ -141,6 +142,7 @@ describe('CreateSharedF3Component', () => {
           startDate: new Date(2026, 0, 1),
           endDate: new Date(2026, 2, 31),
         },
+        electionCycle: testElectionCycle(),
       }));
 
       await component.create(

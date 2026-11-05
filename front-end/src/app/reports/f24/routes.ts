@@ -1,6 +1,5 @@
 import { Route } from '@angular/router';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
-import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
 import { Report } from 'app/shared/models/reports/report.model';
@@ -11,20 +10,21 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { Form24EditComponent } from './form-24-edit/form-24-edit.component';
 import { UpdateVersionNumberComponent } from '../shared/update-version-number/update-version-number.component';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
+import { reportResolver } from 'app/shared/resolvers/report.resolver';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
-// ReportResolver, both the guard and the resovler read the :reportId in the URL
+// reportResolver, both the guard and the resovler read the :reportId in the URL
 // and put the report for the ID in the ActiveReport value in the ngrx store. As a result:
 // 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
-// 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
+// 2) The reportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
 export const F24_ROUTES: Route[] = [
   {
     path: 'edit/:reportId',
     title: 'Edit a report',
     component: Form24EditComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: { sidebarSection: ReportSidebarSection.CREATE },
     runGuardsAndResolvers: 'always',
   },
@@ -32,7 +32,7 @@ export const F24_ROUTES: Route[] = [
     path: 'update-version-number/:reportId',
     title: 'Update Version Number',
     component: UpdateVersionNumberComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: { sidebarSection: ReportSidebarSection.EDIT },
     runGuardsAndResolvers: 'always',
     canActivate: [featureFlagGuard('manualReportVersion')],
@@ -41,7 +41,7 @@ export const F24_ROUTES: Route[] = [
     path: 'report/:reportId/transactions/select/independent-expenditures',
     component: TransactionIndependentExpenditurePickerComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.TRANSACTIONS,
     },
@@ -50,7 +50,7 @@ export const F24_ROUTES: Route[] = [
     path: 'web-print/:reportId',
     title: 'Print preview',
     component: PrintPreviewComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => `/reports/f24/transactions/${report?.id}/list`,
@@ -63,7 +63,7 @@ export const F24_ROUTES: Route[] = [
     title: 'Submit report',
     component: SubmitReportComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f24/web-print/' + report?.id,
@@ -75,7 +75,7 @@ export const F24_ROUTES: Route[] = [
     path: 'submit/status/:reportId',
     title: 'Report status',
     component: SubmitReportStatusComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
     runGuardsAndResolvers: 'always',
   },
@@ -84,7 +84,7 @@ export const F24_ROUTES: Route[] = [
     title: 'Add a report level memo',
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getNextUrl: (report?: Report) => `/reports/transactions/report/${report?.id}/list`,

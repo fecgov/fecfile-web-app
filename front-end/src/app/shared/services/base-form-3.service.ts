@@ -33,8 +33,10 @@ export abstract class BaseForm3Service<T extends BaseForm3> extends ReportServic
     return map;
   }
 
-  public getFinalReport(year: number): Promise<T | undefined> {
-    return this.apiService.get<T | undefined>(`${this.apiEndpoint}/final/?year=${year}`);
+  async getFinalReport(year: number): Promise<T | undefined> {
+    const result = await this.apiService.get<T | undefined>(`${this.apiEndpoint}/final/?year=${year}`);
+    if (!result) return undefined;
+    return getReportFromJSON<T>(result);
   }
 
   public async getFutureReports(coverage_through_date: string): Promise<T[]> {
