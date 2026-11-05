@@ -1,17 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
-import type { SharedForm3InitialData } from 'app/shared/resolvers/shared-form3.resolver';
+import { BaseForm3, CoverageDates } from 'app/shared/models/reports/base-form-3';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { BehaviorSubject } from 'rxjs';
 import { SharedForm3Store, currentYear } from './shared-form3.store';
 
-type CoverageDate = SharedForm3InitialData['existingCoverage'][number];
-
 describe('SharedForm3Store', () => {
   let store: SharedForm3Store;
-  let routeData: BehaviorSubject<{ initialData: SharedForm3InitialData }>;
+  let reportData: BehaviorSubject<BaseForm3 | null>;
+  let coverageData: BehaviorSubject<CoverageDates[]>;
 
   let activeService: {
     getReportCodeLabelMap: ReturnType<typeof vi.fn>;
@@ -23,25 +21,19 @@ describe('SharedForm3Store', () => {
   const reportCode = reportCodes[0];
   const anotherReportCode = reportCodes[1];
 
-  const coverage = (code: ReportCodes, fromYear: number, throughYear: number): CoverageDate =>
+  const coverage = (code: ReportCodes, fromYear: number, throughYear: number): CoverageDates =>
     ({
       coverage_from_date: new Date(fromYear, 0, 1),
       coverage_through_date: new Date(throughYear, 11, 31),
       report_code: code,
-    }) as CoverageDate;
+    }) as CoverageDates;
 
-  const initialData = (
-    report: BaseForm3 | null = null,
-    existingCoverage: CoverageDate[] = [],
-  ): SharedForm3InitialData => ({
-    report,
-    existingCoverage,
-  });
+  const initialReport: BaseForm3 | null = null;
+  const initialExisting: CoverageDates[] = [];
 
   beforeEach(() => {
-    routeData = new BehaviorSubject({
-      initialData: initialData(),
-    });
+    reportData = new BehaviorSubject<BaseForm3 | null>(null);
+    coverageData = new BehaviorSubject<CoverageDates[]>([]);
 
     activeService = {
       getReportCodeLabelMap: vi.fn().mockResolvedValue({}),
@@ -54,7 +46,7 @@ describe('SharedForm3Store', () => {
         { provide: FORM_3_SERVICE, useValue: activeService },
         {
           provide: ActivatedRoute,
-          useValue: { data: routeData.asObservable() },
+          useValue: { data: { report: reportData, coverageDates: coverageData } },
         },
       ],
     });
@@ -70,14 +62,13 @@ describe('SharedForm3Store', () => {
     it('should expose the report from route data', () => {
       const report = { report_code: reportCode } as BaseForm3;
 
-      routeData.next({ initialData: initialData(report) });
+      reportData.next(report);
 
       expect(store.report()).toBe(report);
     });
 
     it('should expose null when route data contains a null report', () => {
-      routeData.next({ initialData: initialData(null) });
-
+      reportData.next(null);
       expect(store.report()).toBeNull();
     });
   });
@@ -85,8 +76,8 @@ describe('SharedForm3Store', () => {
   describe('existingCoverage', () => {
     it('should expose coverage from resolved route data', () => {
       const existingCoverage = [coverage(reportCode, currentYear, currentYear)];
-
-      routeData.next({ initialData: initialData(null, existingCoverage) });
+      reportData.next(null);
+      coverageData.next(existingCoverage);
 
       expect(store.existingCoverage()).toEqual(existingCoverage);
     });
@@ -94,11 +85,11 @@ describe('SharedForm3Store', () => {
     it('should update when resolved route data changes', () => {
       const firstCoverage = [coverage(reportCode, currentYear, currentYear)];
       const secondCoverage = [coverage(anotherReportCode, currentYear, currentYear)];
-
-      routeData.next({ initialData: initialData(null, firstCoverage) });
+      reportData.next(null);
+      coverageData.next(firstCoverage);
       expect(store.existingCoverage()).toEqual(firstCoverage);
 
-      routeData.next({ initialData: initialData(null, secondCoverage) });
+      coverageData.next(secondCoverage);
       expect(store.existingCoverage()).toEqual(secondCoverage);
     });
   });
@@ -108,9 +99,7 @@ describe('SharedForm3Store', () => {
       const labels = { [reportCode]: 'Test report code' };
       activeService.getReportCodeLabelMap.mockResolvedValue(labels);
 
-      await vi.waitFor(() => {
-        expect(store.reportCodeLabelMap.value()).toEqual(labels);
-      });
+      await vi.waitFor(() => expect(store.reportCodeLabelMap.value()).toEqual(labels));
 
       expect(activeService.getReportCodeLabelMap).toHaveBeenCalledOnce();
     });
@@ -122,36 +111,32 @@ describe('SharedForm3Store', () => {
     });
 
     it('should include codes when the coverage starts in the current year', () => {
-      routeData.next({
-        initialData: initialData(null, [coverage(reportCode, currentYear, currentYear - 1)]),
-      });
+      reportData.next(null);
+      coverageData.next([coverage(reportCode, currentYear, currentYear - 1)]);
 
       expect(store.usedReportCodes()).toEqual([reportCode]);
     });
 
     it('should include codes when the coverage ends in the current year', () => {
-      routeData.next({
-        initialData: initialData(null, [coverage(reportCode, currentYear - 1, currentYear)]),
-      });
+      reportData.next(null);
+      coverageData.next([coverage(reportCode, currentYear - 1, currentYear)]);
 
       expect(store.usedReportCodes()).toEqual([reportCode]);
     });
 
     it('should exclude codes when neither coverage date is in the current year', () => {
-      routeData.next({
-        initialData: initialData(null, [coverage(reportCode, currentYear - 2, currentYear - 1)]),
-      });
+      reportData.next(null);
+      coverageData.next([coverage(reportCode, currentYear - 2, currentYear - 1)]);
 
       expect(store.usedReportCodes()).toEqual([]);
     });
 
     it('should include multiple codes used in the current year', () => {
-      routeData.next({
-        initialData: initialData(null, [
-          coverage(reportCode, currentYear, currentYear),
-          coverage(anotherReportCode, currentYear - 1, currentYear),
-        ]),
-      });
+      reportData.next(null);
+      coverageData.next([
+        coverage(reportCode, currentYear, currentYear),
+        coverage(anotherReportCode, currentYear - 1, currentYear),
+      ]);
 
       expect(store.usedReportCodes()).toEqual([reportCode, anotherReportCode]);
     });
@@ -163,17 +148,15 @@ describe('SharedForm3Store', () => {
     });
 
     it('should disable codes already used in the current year', () => {
-      routeData.next({
-        initialData: initialData(null, [coverage(reportCode, currentYear, currentYear)]),
-      });
+      reportData.next(null);
+      coverageData.next([coverage(reportCode, currentYear, currentYear)]);
 
       expect(store.disabledReportCodes()[reportCode]).toBe(true);
     });
 
     it('should not disable codes that have not been used in the current year', () => {
-      routeData.next({
-        initialData: initialData(null, [coverage(reportCode, currentYear - 2, currentYear - 1)]),
-      });
+      reportData.next(null);
+      coverageData.next([coverage(reportCode, currentYear - 2, currentYear - 1)]);
 
       expect(store.disabledReportCodes()[reportCode]).toBe(false);
     });
@@ -183,10 +166,8 @@ describe('SharedForm3Store', () => {
         coverage_from_date: new Date(currentYear - 1, 0, 1),
         report_code: reportCode,
       } as BaseForm3;
-
-      routeData.next({
-        initialData: initialData(report, [coverage(reportCode, currentYear, currentYear)]),
-      });
+      reportData.next(report);
+      coverageData.next([coverage(reportCode, currentYear, currentYear)]);
 
       expect(store.disabledReportCodes()[reportCode]).toBe(false);
     });

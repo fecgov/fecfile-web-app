@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { ReportSummaryComponent } from '../summaries/report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from '../summaries/report-detailed-summary/report-detailed-summary.component';
-import { ReportResolver } from 'app/shared/resolvers/report.resolver';
+import { reportResolver } from 'app/shared/resolvers/report.resolver';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { Report } from 'app/shared/models/reports/report.model';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
@@ -14,22 +14,26 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { UpdateVersionNumberComponent } from 'app/reports/shared/update-version-number/update-version-number.component';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
-import { SharedForm3Resolver } from 'app/shared/resolvers/shared-form3.resolver';
+import {
+  f3XDetailedSummaryResolver,
+  sharedForm3Resolver,
+  f3XSummaryResolver,
+} from 'app/shared/resolvers/shared-form3.resolver';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
-// ReportResolver, both the guard and the resovler read the :reportId in the URL
+// reportResolver, both the guard and the resovler read the :reportId in the URL
 // and put the report for the ID in the ActiveReport value in the ngrx store. As a result:
 // 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
-// 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
+// 2) The reportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
 export const F3X_ROUTES: Route[] = [
   {
     path: 'create',
     title: 'Create a report',
     component: CreateSharedF3Component,
-    resolve: { initialData: SharedForm3Resolver },
-    providers: [SharedForm3Resolver, { provide: FORM_3_SERVICE, useClass: Form3XService }],
+    resolve: { reportCoverage: sharedForm3Resolver },
+    providers: [{ provide: FORM_3_SERVICE, useClass: Form3XService }],
     data: {
       sidebar: null,
     },
@@ -38,8 +42,8 @@ export const F3X_ROUTES: Route[] = [
     path: 'edit/:reportId',
     title: 'Edit a report',
     component: CreateSharedF3Component,
-    providers: [SharedForm3Resolver, { provide: FORM_3_SERVICE, useClass: Form3XService }],
-    resolve: { initialData: SharedForm3Resolver },
+    providers: [{ provide: FORM_3_SERVICE, useClass: Form3XService }],
+    resolve: { reportCoverage: sharedForm3Resolver },
     data: { sidebarSection: ReportSidebarSection.EDIT },
     runGuardsAndResolvers: 'always',
   },
@@ -47,7 +51,7 @@ export const F3X_ROUTES: Route[] = [
     path: 'update-version-number/:reportId',
     title: 'Update Version Number',
     component: UpdateVersionNumberComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: { sidebarSection: ReportSidebarSection.EDIT },
     runGuardsAndResolvers: 'always',
     canActivate: [featureFlagGuard('manualReportVersion')],
@@ -56,7 +60,8 @@ export const F3X_ROUTES: Route[] = [
     path: 'summary/:reportId',
     title: 'View summary page',
     component: ReportSummaryComponent,
-    resolve: { report: ReportResolver },
+    resolve: { reportLines: f3XSummaryResolver },
+    providers: [{ provide: FORM_3_SERVICE, useClass: Form3XService }],
     data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',
   },
@@ -64,7 +69,8 @@ export const F3X_ROUTES: Route[] = [
     path: 'detailed-summary/:reportId',
     title: 'View detailed summary page',
     component: ReportDetailedSummaryComponent,
-    resolve: { report: ReportResolver },
+    resolve: { reportLines: f3XDetailedSummaryResolver },
+    providers: [{ provide: FORM_3_SERVICE, useClass: Form3XService }],
     data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',
   },
@@ -72,7 +78,7 @@ export const F3X_ROUTES: Route[] = [
     path: 'web-print/:reportId',
     title: 'Print preview',
     component: PrintPreviewComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f3x/detailed-summary/' + report?.id,
@@ -85,7 +91,7 @@ export const F3X_ROUTES: Route[] = [
     title: 'Add a report level memo',
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getNextUrl: (report?: Report) => '/reports/f3x/submit/' + report?.id,
@@ -97,7 +103,7 @@ export const F3X_ROUTES: Route[] = [
     title: 'Submit report',
     component: SubmitReportComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f3x/memo/' + report?.id,
@@ -109,7 +115,7 @@ export const F3X_ROUTES: Route[] = [
     path: 'submit/status/:reportId',
     title: 'Report status',
     component: SubmitReportStatusComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
     runGuardsAndResolvers: 'always',
   },

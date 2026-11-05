@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, resource } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import type { SharedForm3InitialData } from 'app/shared/resolvers/shared-form3.resolver';
+import { BaseForm3, CoverageDates } from 'app/shared/models/reports/base-form-3';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { map } from 'rxjs';
@@ -13,9 +13,12 @@ export class SharedForm3Store {
   private readonly activeService = inject(FORM_3_SERVICE);
   private readonly route = inject(ActivatedRoute);
 
-  readonly initialData = toSignal(this.route.data.pipe(map((data) => data['initialData'] as SharedForm3InitialData)));
-  readonly report = computed(() => this.initialData()?.report);
-  readonly existingCoverage = computed(() => this.initialData()?.existingCoverage ?? []);
+  readonly reportCoverage = toSignal<{
+    report: BaseForm3 | null;
+    existingCoverage: CoverageDates[];
+  }>(this.route.data.pipe(map((data) => data['reportCoverage'])));
+  readonly report = computed(() => this.reportCoverage()?.report);
+  readonly existingCoverage = computed(() => this.reportCoverage()?.existingCoverage ?? []);
 
   readonly reportCodeLabelMap = resource({ loader: () => this.activeService.getReportCodeLabelMap() });
 

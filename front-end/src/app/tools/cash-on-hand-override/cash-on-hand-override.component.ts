@@ -45,7 +45,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   ngOnInit(): void {
     this.yearFormControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((selectedYear) => {
       if (selectedYear) {
-        const year = parseInt(String(selectedYear));
+        const year = Number.parseInt(String(selectedYear));
         const override = this.cashOnHandService.getCashOnHand(year);
         const previousYear = this.form3XService.getFinalReport(year - 1);
         // reset while waiting for api response
@@ -59,16 +59,14 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   }
 
   updateForm = ([cashOnHandOverride, previousYear]: [CashOnHand | undefined, Form3X | undefined]): void => {
-    this.currentAmountFormControl.setValue(
-      cashOnHandOverride?.cash_on_hand ?? previousYear?.L8_cash_on_hand_close_ytd ?? 0,
-    );
+    this.currentAmountFormControl.setValue(cashOnHandOverride?.cash_on_hand ?? previousYear?.ytd['L8'] ?? 0);
     this.newAmountFormControl.reset();
   };
 
   updateLine6a(): void {
     if (this.form.valid) {
       if (this.yearFormControl.value !== null && this.newAmountFormControl.value !== null) {
-        const year = parseInt(String(this.yearFormControl.value));
+        const year = Number.parseInt(String(this.yearFormControl.value));
         this.cashOnHandService
           .setCashOnHand(year, this.newAmountFormControl.value)
           .then(() => {

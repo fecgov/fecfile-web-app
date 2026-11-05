@@ -1,60 +1,51 @@
-import { computed, Directive, effect, inject, signal, viewChild } from '@angular/core';
+import { computed, Directive, effect, inject, input, linkedSignal, Signal, signal, viewChild } from '@angular/core';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { ApiService } from 'app/shared/services/api.service';
-import { ReportService } from 'app/shared/services/report.service';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { SharedSummaryTemplatesComponent } from './shared-summary-templates.component';
-
-export interface LineSummary {
-  lineNumber: string;
-  description: string;
-  thisPeriod?: number;
-  yearToDate?: number;
-  bold?: boolean;
-  italic?: boolean;
-  overlay?: string;
-  indent?: number;
-}
+import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
+import { Form3, isForm3S } from 'app/shared/models/reports/form-3.model';
+import { ColumnDefinition } from 'app/shared/components/table/table.component';
+import { buildColumns } from './table.config';
+import { BreakpointStore } from 'app/store/breakpoint.store';
+import { LineSummary } from 'app/shared/models/reports/lines.model';
+import { ElectionCycle } from 'app/tools/election-cycle/election-cycle.model';
 
 @Directive()
 export abstract class BaseSummaryComponent {
-  private readonly store = inject(Store);
+  private readonly breakpointStore = inject(BreakpointStore);
   public readonly router = inject(Router);
   private readonly apiService = inject(ApiService);
-  private readonly reportService = inject(ReportService);
+  readonly reportService = inject(FORM_3_SERVICE);
 
   readonly sharedTemplate = viewChild.required(SharedSummaryTemplatesComponent);
 
-  readonly activeReport = this.store.selectSignal(selectActiveReport);
-  readonly report = computed(() => this.activeReport() as BaseForm3);
-  readonly isF3X = computed(() => this.router.url.includes('/f3x/'));
-  readonly formText = computed(() => (this.isF3X() ? 'f3x' : 'f3'));
+  readonly reportLines = input.required<{
+    report: BaseForm3;
+    detailedLines?: {
+      receipts: LineSummary[];
+      disbursements: LineSummary[];
+      third: LineSummary[];
+    };
+    lines?: LineSummary[];
+    electionCycle?: ElectionCycle;
+    nextElectionCycle?: ElectionCycle | null;
+  }>();
+  readonly report = linkedSignal(() => this.reportLines().report);
+  readonly electionCycle = computed(() => this.reportLines().electionCycle);
+  readonly type = computed(() => {
+    if (this.reportService.isF3X) return 'F3X';
+    if (isForm3S(this.report() as Form3)) return 'F3S';
+    return 'F3';
+  });
+  readonly formText = this.reportService.isF3X ? 'f3x' : 'f3';
 
   readonly calculationFinished = computed(() => this.report().calculation_status === 'SUCCEEDED');
 
   readonly first = signal(0);
-  readonly columns = computed(() => {
-    const columns = [
-      { field: 'lineNumber', header: 'Line', cssClass: 'line-column' },
-      {
-        field: 'description',
-        header: 'Description',
-        cssClass: 'description-column',
-        bodyTpl: this.sharedTemplate().descriptionTpl(),
-      },
-      { field: 'thisPeriod', header: 'This Period', cssClass: 'period-column', pipes: ['currency'] },
-      {
-        field: 'yearToDate',
-        header: this.isF3X() ? 'Calendar Year-to-Date' : 'Election Cycle-to-Date',
-        cssClass: 'ytd-column',
-        pipes: ['currency'],
-      },
-    ];
-
-    return columns;
-  });
+  readonly columns: Signal<ColumnDefinition<LineSummary>[]> = computed(() =>
+    buildColumns(this.report(), this.type(), this.sharedTemplate().descriptionTpl(), this.breakpointStore, this.electionCycle()),
+  );
 
   constructor() {
     effect(async () => {
@@ -68,7 +59,7 @@ export abstract class BaseSummaryComponent {
     });
   }
 
-  refreshSummary(): void {
-    this.reportService.setActiveReportById(this.report().id);
+  async refreshSummary() {
+    this.report.set(await this.reportService.get(this.report().id!));
   }
 }

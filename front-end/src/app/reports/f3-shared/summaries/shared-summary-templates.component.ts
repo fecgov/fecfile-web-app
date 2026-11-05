@@ -1,8 +1,8 @@
 import { Component, TemplateRef, viewChild } from '@angular/core';
 import { TableBodyContext } from 'app/shared/components/table/table.component';
-import { LineSummary } from './base-summary.component';
 import { NgClass } from '@angular/common';
 import { CalculationOverlayComponent } from 'app/shared/components/calculation-overlay/calculation-overlay.component';
+import type { LineSummary } from 'app/shared/models/reports/lines.model';
 
 @Component({
   selector: 'app-shared-summary-templates',

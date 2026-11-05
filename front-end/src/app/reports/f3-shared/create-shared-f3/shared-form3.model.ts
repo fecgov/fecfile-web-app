@@ -122,8 +122,8 @@ function getDefaultTypeCategory() {
 export function buildJson(report: BaseForm3, formValue: SharedForm3Model, isF3X: boolean, hasElectionReport: boolean) {
   if (isF3X) (report as Form3X).filing_frequency = formValue.filingFrequency!;
   else {
-    (report as Form3).electionCycle = formValue.electionCycle!;
-    (report as Form3).nextElectionCycle = formValue.nextElectionCycle;
+    (report as Form3).electionCycleId = formValue.electionCycle!.id;
+    (report as Form3).nextElectionCycleId = formValue.nextElectionCycle!.id;
   }
   report.report_type_category = formValue.reportTypeCategory!;
   report.report_code = formValue.reportCode!;

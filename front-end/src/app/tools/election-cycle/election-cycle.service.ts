@@ -24,9 +24,14 @@ export class ElectionCycleService implements TableListService<ElectionCycle> {
   private readonly apiService = inject(ApiService);
   private readonly endpoint = '/election-cycles/';
 
+  public async get(id: string): Promise<ElectionCycle> {
+    const response = await this.apiService.get<ElectionCycle>(`${this.endpoint}${id}/`);
+    return ElectionCycle.fromJson(response);
+  }
+
   public async getTableData(params = {}): Promise<ListRestResponse> {
     params = { page: 1, ordering: '-election_year,-start_date', ...params };
-    const response = await this.apiService.get<ListRestResponse>(`/election-cycles/`, params);
+    const response = await this.apiService.get<ListRestResponse>(this.endpoint, params);
     response.results = response.results.map((item) => ElectionCycle.fromJson(item));
     return response;
   }

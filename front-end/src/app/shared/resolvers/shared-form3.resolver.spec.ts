@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { BaseForm3, CoverageDates } from 'app/shared/models/reports/base-form-3';
-import { ReportResolver } from 'app/shared/resolvers/report.resolver';
+import { reportResolver } from 'app/shared/resolvers/report.resolver';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { SharedForm3Resolver } from './shared-form3.resolver';
+import { sharedForm3Resolver } from './shared-form3.resolver';
 
-describe('SharedForm3Resolver', () => {
-  let resolver: SharedForm3Resolver;
+describe('sharedForm3Resolver', () => {
+  let resolver: sharedForm3Resolver;
   let reportResolver: { resolve: ReturnType<typeof vi.fn> };
   let activeService: { getCoverageDates: ReturnType<typeof vi.fn> };
   let route: ActivatedRouteSnapshot;
@@ -27,13 +27,13 @@ describe('SharedForm3Resolver', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        SharedForm3Resolver,
-        { provide: ReportResolver, useValue: reportResolver },
+        sharedForm3Resolver,
+        { provide: reportResolver, useValue: reportResolver },
         { provide: FORM_3_SERVICE, useValue: activeService },
       ],
     });
 
-    resolver = TestBed.inject(SharedForm3Resolver);
+    resolver = TestBed.inject(sharedForm3Resolver);
   });
 
   it('should return null report and all coverage when no report is resolved', async () => {

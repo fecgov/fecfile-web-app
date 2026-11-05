@@ -1,29 +1,18 @@
-import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, RedirectCommand, Router } from '@angular/router';
 import { Report } from '../models/reports/report.model';
 import { ReportService } from '../services/report.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ReportResolver {
-  private readonly reportService = inject(ReportService);
-  private readonly router = inject(Router);
+export const reportResolver = async (route: ActivatedRouteSnapshot): Promise<Report | RedirectCommand> => {
+  const reportService: ReportService<Report> = inject(ReportService);
+  const router = inject(Router);
 
-  async resolve(route: ActivatedRouteSnapshot): Promise<Report | undefined> {
-    const reportId = route.paramMap.get('reportId');
+  const reportId = route.paramMap.get('reportId');
+  if (!reportId) return new RedirectCommand(router.parseUrl('/reports'));
 
-    if (!reportId) {
-      return undefined;
-    }
-
-    try {
-      return await this.reportService.setActiveReportById(reportId);
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      await this.router.navigateByUrl('/reports');
-      return undefined;
-    }
+  try {
+    return await reportService.setActiveReportById(reportId);
+  } catch {
+    return new RedirectCommand(router.parseUrl('/reports'));
   }
-}
+};

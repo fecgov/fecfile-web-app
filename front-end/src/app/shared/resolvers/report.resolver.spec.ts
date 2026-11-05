@@ -4,14 +4,14 @@ import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { Form3XService } from '../services/form-3x.service';
-import { ReportResolver } from './report.resolver';
+import { reportResolver } from './report.resolver';
 import { Report } from '../models/reports/report.model';
 import { Form3X } from '../models/reports/form-3x.model';
 import { environment } from '../../../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 
-describe('ReportResolver', () => {
-  let resolver: ReportResolver;
+describe('reportResolver', () => {
+  let resolver: reportResolver;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('ReportResolver', () => {
       providers: [provideHttpClient(), provideHttpClientTesting(), Form3XService, provideMockStore(testMockStore())],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
-    resolver = TestBed.inject(ReportResolver);
+    resolver = TestBed.inject(reportResolver);
   });
 
   it('should be created', () => {
