@@ -36,6 +36,7 @@ import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sc
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { provideZoneChangeDetection } from '@angular/core';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 let testTransaction: SchATransaction;
 
@@ -361,6 +362,16 @@ describe('TransactionTypeBaseComponent', () => {
       });
       await component.handleNavigate(navEvent);
       expect(transactionServiceSpy.update).toHaveBeenCalledTimes(0);
+    });
+
+    it('should reenable single-click if confirmation handling fails', async () => {
+      fixture.detectChanges();
+      const dispatchSpy = vi.spyOn(store, 'dispatch');
+      vi.spyOn(component, 'getConfirmations').mockRejectedValue(new Error('Confirmation failed'));
+
+      await expect(component.handleNavigate(navEvent)).rejects.toThrow('Confirmation failed');
+
+      expect(dispatchSpy).toHaveBeenCalledWith(singleClickEnableAction());
     });
 
     it('should save on confirmation', async () => {

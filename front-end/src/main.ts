@@ -89,7 +89,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   try {
     return localStorageSync({
-      keys: ['singleClickDisabled', 'userLoginData', 'activeReport'],
+      keys: ['userLoginData', 'activeReport'],
       storageKeySerializer: (key) => `fecfile_online_${key}`,
       rehydrate: true,
     })(reducer);
