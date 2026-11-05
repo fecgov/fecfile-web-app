@@ -49,6 +49,7 @@ export abstract class SchDTransactionType extends TransactionType {
     aggregate: '',
     calendar_ytd: '',
     aggregate_general_elec_expended: '',
+    entity_election_cycle_to_date: '',
     general_election_year: '',
     purpose_description: 'purpose_of_debt_or_obligation',
     text4000: '',

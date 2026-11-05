@@ -92,7 +92,7 @@ export class ElectionCyclesListComponent {
 
   public rowActions: TableAction<ElectionCycle>[] = [
     new TableAction('Edit', this.editItem.bind(this)),
-    new TableAction('Delete', this.deleteItem.bind(this)),
+    new TableAction('Delete', this.deleteItem.bind(this), (cycle) => !cycle.hasForm3),
   ];
 
   private async handleFormSubmit(): Promise<void> {

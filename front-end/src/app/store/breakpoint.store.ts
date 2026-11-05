@@ -52,4 +52,10 @@ export class BreakpointStore {
 
     return widthConfig.sm!;
   }
+
+  isAtLeast(minSize: ScreenSize): boolean {
+    const currentIdx = BREAKPOINT_FALLBACK_ORDER.indexOf(this.screenSize());
+    const targetIdx = BREAKPOINT_FALLBACK_ORDER.indexOf(minSize);
+    return currentIdx <= targetIdx;
+  }
 }

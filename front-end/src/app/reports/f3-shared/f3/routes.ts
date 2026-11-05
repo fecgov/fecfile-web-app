@@ -14,6 +14,7 @@ import { UpdateVersionNumberComponent } from 'app/reports/shared/update-version-
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 import { ReportDetailedSummaryComponent } from '../summaries/report-detailed-summary/report-detailed-summary.component';
 import { ReportSummaryComponent } from '../summaries/report-summary/report-summary.component';
+import { SharedForm3Resolver } from 'app/shared/resolvers/shared-form3.resolver';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -27,7 +28,8 @@ export const F3_ROUTES: Route[] = [
     path: 'create',
     title: 'Create a report',
     component: CreateSharedF3Component,
-    providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
+    providers: [SharedForm3Resolver, { provide: FORM_3_SERVICE, useClass: Form3Service }],
+    resolve: { initialData: SharedForm3Resolver },
     data: {
       sidebar: null,
     },
@@ -36,8 +38,8 @@ export const F3_ROUTES: Route[] = [
     path: 'edit/:reportId',
     title: 'Edit a report',
     component: CreateSharedF3Component,
-    providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
-    resolve: { report: ReportResolver },
+    providers: [SharedForm3Resolver, { provide: FORM_3_SERVICE, useClass: Form3Service }],
+    resolve: { initialData: SharedForm3Resolver },
     data: { sidebarSection: ReportSidebarSection.EDIT },
     runGuardsAndResolvers: 'always',
   },

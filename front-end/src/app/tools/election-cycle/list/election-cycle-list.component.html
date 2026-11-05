@@ -37,11 +37,10 @@
             />
           </div>
         </p-accordion-header>
-        <div
+        <section
           class="election-cycle-accordion-content"
           [class.election-cycle-accordion-content-open]="active() === 0"
           [id]="acc.id() + '_accordioncontent_0'"
-          role="region"
           [attr.aria-labelledby]="acc.id() + '_accordionheader_0'"
           [attr.aria-hidden]="active() !== 0"
           [attr.inert]="active() !== 0 ? '' : null"
@@ -65,7 +64,7 @@
               </p>
             </div>
           </div>
-        </div>
+        </section>
       </p-accordion-panel>
     </p-accordion>
   </section>
@@ -189,7 +188,7 @@
               </p-cellEditor>
             </td>
             <td>
-              @if (!editing) {
+              @if (!editing && !item.hasForm3) {
                 <app-table-actions-button
                   [tableActions]="rowActions"
                   [actionItem]="item"

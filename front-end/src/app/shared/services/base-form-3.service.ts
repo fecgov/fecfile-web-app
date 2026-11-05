@@ -9,6 +9,7 @@ export const FORM_3_SERVICE = new InjectionToken<BaseForm3Service<BaseForm3>>('F
 
 @Injectable()
 export abstract class BaseForm3Service<T extends BaseForm3> extends ReportService<T> {
+  readonly isF3X: boolean = false;
   reportCodeLabelMap$ = new BehaviorSubject<{ [key in ReportCodes]: string } | undefined>(undefined);
 
   public async getCoverageDates(): Promise<CoverageDates[]> {

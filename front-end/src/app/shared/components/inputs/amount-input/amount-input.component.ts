@@ -1,26 +1,26 @@
 import { Component, computed, inject, input, OnInit, viewChild } from '@angular/core';
-import { AbstractControl, ValidationErrors, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { AbstractControl, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { ReportTypes } from 'app/shared/models';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
+import { Form24Service } from 'app/shared/services/form-24.service';
 import { DateUtils } from 'app/shared/utils/date.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { derivedAsync } from 'ngxtension/derived-async';
 import { InputNumber } from 'primeng/inputnumber';
-import { BaseInputComponent } from '../base-input.component';
-import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
-import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { InputText } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
 import { CalendarComponent } from '../../calendar/calendar.component';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { BaseInputComponent } from '../base-input.component';
+import { InputNumberComponent } from '../input-number/input-number.component';
 import {
   LinkedReportInputComponent,
   LinkedReportTooltipText,
 } from '../linked-report-input/linked-report-input.component';
-import { InputNumberComponent } from '../input-number/input-number.component';
-import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Store } from '@ngrx/store';
-import { InputText } from 'primeng/inputtext';
-import { ReportTypes } from 'app/shared/models';
-import { TooltipModule } from 'primeng/tooltip';
-import { Form24Service } from 'app/shared/services/form-24.service';
-import { derivedAsync } from 'ngxtension/derived-async';
+import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 
 @Component({
   selector: 'app-amount-input',
@@ -53,7 +53,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   readonly amountInput = viewChild.required<InputNumber>('amountInput');
   readonly contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
 
-  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
+  readonly isF24 = computed(() => this.report().isF24);
+  readonly isF3 = computed(() => this.report().isF3);
   readonly isIE = computed(() => {
     const transactionType = this.transaction()?.transaction_type_identifier;
     if (!transactionType) return false;

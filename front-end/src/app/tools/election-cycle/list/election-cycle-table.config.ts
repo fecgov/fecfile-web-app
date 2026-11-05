@@ -50,10 +50,10 @@ export function electionColumns(breakpointStore: BreakpointStore) {
   const isSmall = breakpointStore.screenSize() === 'sm';
   return [
     { field: 'office', header: 'Office', width: widths.office },
-    { field: 'electionType', header: isSmall ? 'Type' : 'Cycle Type', width: widths.electionType },
-    { field: 'electionYear', header: isSmall ? 'Year' : 'Election Year', width: widths.electionYear },
-    { field: 'startDate', header: 'Start Date', width: widths.startDate },
-    { field: 'endDate', header: 'End Date', width: widths.endDate },
+    { field: 'electionType', header: isSmall ? 'Type' : 'Cycle type', width: widths.electionType },
+    { field: 'electionYear', header: isSmall ? 'Year' : 'Election year', width: widths.electionYear },
+    { field: 'startDate', header: 'Start date', width: widths.startDate },
+    { field: 'endDate', header: 'End date', width: widths.endDate },
     { field: '', header: 'Actions', width: widths.actions },
   ];
 }

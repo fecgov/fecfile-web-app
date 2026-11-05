@@ -121,6 +121,7 @@ export function buildClonedTransaction(source: ScheduleTransaction, reportId: st
     'aggregate_amount',
     'calendar_ytd_per_election_office',
     'aggregate_general_elec_expended',
+    'election_cycle_to_date_aggregate',
     'semi_annual_refunded_bundled_amt',
   ]) {
     if (derivedField in clone) {

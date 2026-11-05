@@ -19,6 +19,7 @@ export class TransactionListRecord extends BaseModel {
   amount: number | undefined;
   balance: number | undefined;
   aggregate: number | undefined;
+  entity_election_cycle_to_date: number | undefined;
   report_code_label: string | undefined;
   report_ids: string[] | undefined;
   parent_transaction_id: string | undefined;
