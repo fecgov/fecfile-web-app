@@ -122,13 +122,12 @@ export class Form1M extends Report {
   }
 
   getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
+    const reviewReportItems = [MenuInfo.printPreview(this)];
+    if (this.canEdit) reviewReportItems.push(MenuInfo.addReportLevelMenu(this, isEditable));
     return [
-      MenuInfo.editReport(sidebarSection, this),
-      MenuInfo.reviewReport(sidebarSection, [
-        MenuInfo.printPreview(this),
-        MenuInfo.addReportLevelMenu(this, isEditable),
-      ]),
-      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
+      MenuInfo.editReport(sidebarSection, this, this.canEdit ? 'EDIT A REPORT' : 'REPORT DETAILS'),
+      MenuInfo.reviewReport(sidebarSection, reviewReportItems),
+      MenuInfo.submitReport(sidebarSection, this, isEditable, this.canEdit ? 'SIGN & SUBMIT' : 'SUBMIT YOUR REPORT'),
     ];
   }
 }

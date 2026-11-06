@@ -1,8 +1,12 @@
 <div data-cy="form-1m-component" class="form-container">
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-    <h1>FORM 1M</h1>
-    <span class="subheader">NOTIFICATION OF MULTICANDIDATE STATUS</span>
-    <hr />
+    <hgroup class="border-bottom-2 pb-2 mb-3">
+      <h1>FORM 1M</h1>
+      <span class="subheader">NOTIFICATION OF MULTICANDIDATE STATUS</span>
+    </hgroup>
+    @if (!isEditable()) {
+      <h4 class="read-only-tag">READ ONLY</h4>
+    }
     <h2>Committee</h2>
     <div class="grid">
       <div class="col-9">
@@ -102,52 +106,16 @@
       </div>
     </div>
 
-    <fieldset class="field">
-      <legend>STATUS BY</legend>
-      <div class="col-12 flex">
-        <p-radioButton
-          inputId="affiliation"
-          name="statusBy"
-          value="affiliation"
-          data-cy="affiliation-radio"
-          formControlName="statusBy"
-          [class]="
-            statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
-              ? 'ng-invalid ng-dirty'
-              : ''
-          "
-        />
-        <label for="affiliation" class="ml-2">AFFILIATION</label>
-      </div>
-      <div class="grid">
-        <div class="col-12 flex">
-          <p-radioButton
-            inputId="qualification"
-            name="statusBy"
-            value="qualification"
-            data-cy="qualification-radio"
-            formControlName="statusBy"
-            [class]="
-              statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
-                ? 'ng-invalid ng-dirty'
-                : ''
-            "
-          />
-          <label for="qualification" class="ml-2">QUALIFICATION</label>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-12">
-          <app-error-messages
-            [form]="form"
-            fieldName="statusBy"
-            [formSubmitted]="formSubmitted"
-            requiredErrorMessage="An answer is required."
-          />
-        </div>
-      </div>
-    </fieldset>
-    @if (statusByControl?.value === 'affiliation') {
+    <app-radio-button-input
+      [formField]="signalForm.statusBy"
+      label="STATUS BY"
+      [options]="statusByOptions"
+      [labelFunction]="(option) => option.toUpperCase()"
+      class="mb-3"
+    />
+
+    @let statusBy = signalForm.statusBy().value();
+    @if (statusBy === 'affiliation') {
       <div class="grid">
         <div class="col-12">
           <h2>Affiliation</h2>
@@ -157,24 +125,26 @@
           </p>
         </div>
       </div>
-      <div class="grid">
-        <div class="col-12">
-          <div class="field" [class.report-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
-            <app-report-contact-lookup
-              [form]="form"
-              key="contact_affiliated"
-              [formSubmitted]="formSubmitted"
-              [contactType]="affiliatedContact.contactType"
-            />
-            <app-error-messages
-              [form]="form"
-              [fieldName]="affiliatedContact.contactLookupKey"
-              [formSubmitted]="formSubmitted"
-            />
+      @if (isEditable()) {
+        <div class="grid">
+          <div class="col-12">
+            <div class="field" [class.report-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
+              <app-report-contact-lookup
+                [form]="form"
+                key="contact_affiliated"
+                [formSubmitted]="formSubmitted"
+                [contactType]="affiliatedContact.contactType"
+              />
+              <app-error-messages
+                [form]="form"
+                [fieldName]="affiliatedContact.contactLookupKey"
+                [formSubmitted]="formSubmitted"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      @if (report.contact_affiliated) {
+      }
+      @if (report()?.contact_affiliated) {
         <div class="grid">
           <div class="col-9">
             <div class="field">
@@ -216,14 +186,10 @@
             />
           </div>
         </div>
-        <div class="grid">
-          <div class="col-12">
-            <hr />
-          </div>
-        </div>
+        <hr />
       }
     }
-    @if (statusByControl?.value === 'qualification') {
+    @if (statusBy === 'qualification') {
       <div class="grid">
         <div class="col-12">
           <h2>Qualification</h2>
@@ -258,26 +224,27 @@
               <h3 class="candidate-header">Candidate #{{ i + 1 }}</h3>
             </div>
           </div>
-          <div class="grid">
-            <div class="col-12">
-              <div class="field" [class.report-contact-invalid]="candidateContact.control?.status === 'INVALID'">
-                <app-report-contact-lookup
-                  [form]="form"
-                  [formSubmitted]="formSubmitted"
-                  [key]="'contact_candidate_' + f1mCandidateTags[i]"
-                  [contactType]="candidateContact.contactType"
-                >
-                </app-report-contact-lookup>
-                <app-error-messages
-                  [form]="form"
-                  [fieldName]="candidateContact.contactLookupKey"
-                  [formSubmitted]="formSubmitted"
-                  requiredErrorMessage="Candidate information is required"
-                />
+          @if (isEditable()) {
+            <div class="grid">
+              <div class="col-12">
+                <div class="field" [class.report-contact-invalid]="candidateContact.control?.status === 'INVALID'">
+                  <app-report-contact-lookup
+                    [form]="form"
+                    [formSubmitted]="formSubmitted"
+                    [key]="'contact_candidate_' + f1mCandidateTags[i]"
+                    [contactType]="candidateContact.contactType"
+                  />
+                  <app-error-messages
+                    [form]="form"
+                    [fieldName]="candidateContact.contactLookupKey"
+                    [formSubmitted]="formSubmitted"
+                    requiredErrorMessage="Candidate information is required"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          @if (report[candidateContact.key]) {
+          }
+          @if (report()?.[candidateContact.key]) {
             <app-name-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -306,12 +273,9 @@
                 </div>
               </div>
               <div class="col-9 co-input-container">
-                <app-candidate-office-input
-                  [form]="form"
-                  [formSubmitted]="formSubmitted"
-                  [officeFormControlName]="templateMapConfigs[candidateContact.key]['candidate_office']"
-                  [stateFormControlName]="templateMapConfigs[candidateContact.key]['candidate_state']"
-                  [districtFormControlName]="templateMapConfigs[candidateContact.key]['candidate_district']"
+                <app-candidate-office-form
+                  class="grid-form"
+                  [fields]="signalForm.candidateOffices[f1mCandidateTags[i]]"
                 />
               </div>
             </div>
@@ -325,15 +289,18 @@
               </div>
             </div>
           }
-          <div class="grid">
-            <div class="col-12">
-              <hr />
-            </div>
-          </div>
+          <hr />
         </div>
       }
     }
-    <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" />
+
+    <app-save-cancel
+      [includeSave]="isEditable()"
+      [backLabel]="isEditable() ? 'Back' : 'Return to reports'"
+      (save)="submitForm($event)"
+      (cancelForm)="goBack()"
+      [submitDisabled]="disableSubmission()"
+    />
   </form>
 </div>
 

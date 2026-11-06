@@ -3,16 +3,31 @@
   font-size: 1.2em;
   font-family: var(--karla);
   align-content: center;
-}
 
-.add-contact-container span {
-  padding: 0 0.3em;
-  cursor: pointer;
-}
+  & > span {
+    padding: 0 0.3em;
+    cursor: pointer;
+  }
 
-.add-contact-container img {
-  margin-right: 5px;
-  vertical-align: middle;
+  & button {
+    &:not(:disabled) {
+      cursor: pointer;
+    }
+    background-color: transparent;
+    border: none;
+    & > span {
+      color: var(--fec-black);
+      font-size: 20px;
+      font-family: var(--karla);
+      border-bottom: 1px dotted #112e51;
+      padding: 0 !important;
+      line-height: 1;
+    }
+    & > img {
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+  }
 }
 
 .contact-lookup-container {
