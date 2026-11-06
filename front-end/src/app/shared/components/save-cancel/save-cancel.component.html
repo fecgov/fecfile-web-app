@@ -3,6 +3,7 @@
     <button
       pButton
       pRipple
+      type="button"
       [label]="backLabel()"
       (click)="cancelForm.emit()"
       [class]="includeSave() ? 'p-button-secondary' : 'p-button-primary'"
@@ -14,6 +15,7 @@
         pButton
         pRipple
         appSingleClick
+        type="button"
         label="Save"
         (click)="save.emit()"
         class="p-button-primary"
@@ -25,6 +27,7 @@
         pButton
         pRipple
         appSingleClick
+        type="button"
         label="Save & continue"
         (click)="save.emit('continue')"
         class="p-button-info ml-4"

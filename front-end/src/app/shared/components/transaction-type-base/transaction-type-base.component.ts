@@ -229,12 +229,17 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   async handleNavigate(navigationEvent: NavigationEvent): Promise<void> {
     this.formSubmitted = true;
     if (navigationEvent.action === NavigationAction.SAVE) {
-      if (!(await this.validateForm())) return;
+      try {
+        if (!(await this.validateForm())) return;
 
-      const confirmed = await this.getConfirmations();
-      // if every confirmation was accepted
-      if (confirmed) await this.submit(navigationEvent);
-      else this.store.dispatch(singleClickEnableAction());
+        const confirmed = await this.getConfirmations();
+
+        if (confirmed) {
+          await this.submit(navigationEvent);
+        }
+      } finally {
+        this.store.dispatch(singleClickEnableAction());
+      }
     } else {
       await this.navigateTo(navigationEvent);
     }
