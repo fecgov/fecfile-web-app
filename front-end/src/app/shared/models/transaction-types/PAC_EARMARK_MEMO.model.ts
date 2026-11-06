@@ -3,8 +3,10 @@ import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLab
 import { AggregationGroups } from '../transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { EARMARK_MEMO } from './common-types/EARMARK_MEMO.model';
+import { INDIVIDUAL_COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_EARMARK_MEMO extends EARMARK_MEMO {
+  override formFields = INDIVIDUAL_COMMITTEE_FORM_FIELDS;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_MEMO);
   schema = schema;
 

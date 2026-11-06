@@ -1,5 +1,6 @@
 import { PAC_EARMARK_MEMO } from './PAC_EARMARK_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { ReportTypes } from '../reports/report.model';
 
 describe('PAC_EARMARK_MEMO', () => {
   let transactionType: PAC_EARMARK_MEMO;
@@ -21,5 +22,10 @@ describe('PAC_EARMARK_MEMO', () => {
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Total earmarked through conduit.');
+  });
+
+  it('should not include election information', () => {
+    expect(transactionType.formFields).not.toContain('election_code');
+    expect(transactionType.hasElectionInformation(ReportTypes.F3)).toBe(false);
   });
 });
