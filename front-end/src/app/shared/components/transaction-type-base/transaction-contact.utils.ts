@@ -1,15 +1,21 @@
 import { FormGroup } from '@angular/forms';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes, getNameString } from '../../models/contact.model';
-import { StringDateBooleanNull } from '../signal-inputs/select-input/select.input';
 import {
   candidateOfficeFields,
   CandidateOfficeModel,
 } from '../signal-form/candidate-office-form/candidate-office-form.component';
 import { WritableSignal } from '@angular/core';
+import {
+  ContactFields,
+  getNameString,
+  Contact,
+  ContactTypes,
+  CandidateOfficeTypes,
+} from 'app/shared/models/contact.model';
+import type { TemplateMapKeyType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import type { StringDateBooleanNull } from '../signal-inputs/select-input/select.input';
 
 export class TransactionContactUtils {
   /**
@@ -230,6 +236,7 @@ export class TransactionContactUtils {
     form: FormGroup,
     templateMap: TransactionTemplateMapType,
     candidateOfficeModel: WritableSignal<CandidateOfficeModel>,
+    transaction?: Transaction,
   ) {
     form.get(templateMap.candidate_fec_id)?.setValue(contact.candidate_id);
     form.get(templateMap.candidate_last_name)?.setValue(contact.last_name);
@@ -237,11 +244,7 @@ export class TransactionContactUtils {
     form.get(templateMap.candidate_middle_name)?.setValue(contact.middle_name);
     form.get(templateMap.candidate_prefix)?.setValue(contact.prefix);
     form.get(templateMap.candidate_suffix)?.setValue(contact.suffix);
-    candidateOfficeModel.set({
-      candidate_office: contact?.candidate_office ?? null,
-      candidate_state: contact?.candidate_state ?? null,
-      candidate_district: contact?.candidate_district ?? null,
-    });
+    candidateOfficeModel.set(getCandidateOfficeModel(contact, templateMap, transaction));
   }
 
   /**
@@ -408,3 +411,18 @@ function isPresidentialPrimary(
   const electionCode = form.get(templateMap.election_code)?.value ?? '';
   return electionCode.startsWith('P') && candidateOffice.candidate_office === CandidateOfficeTypes.PRESIDENTIAL;
 }
+
+const getCandidateOfficeModel = (
+  contact: Contact,
+  templateMap: TransactionTemplateMapType,
+  transaction?: Transaction,
+): CandidateOfficeModel => {
+  const getValue = <T>(contactValue: T | null | undefined, templateKey: TemplateMapKeyType): T | null =>
+    contactValue ?? (transaction?.[templateMap[templateKey] as keyof Transaction] as T | null) ?? null;
+
+  return {
+    candidate_office: getValue(contact.candidate_office, 'candidate_office'),
+    candidate_state: getValue(contact.candidate_state, 'candidate_state'),
+    candidate_district: getValue(contact.candidate_district, 'candidate_district'),
+  };
+};

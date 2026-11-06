@@ -219,6 +219,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
 
   async saveContact() {
     try {
+      this.updateContactType(this.manager().contactType());
       const payload: Contact = Contact.fromJSON({
         ...this.manager().contact(),
         ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.manager().contactType())),
