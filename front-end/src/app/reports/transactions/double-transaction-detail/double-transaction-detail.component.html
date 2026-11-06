@@ -46,6 +46,7 @@
           <app-transaction-input
             [isEditable]="isEditable()"
             [form]="form"
+            [candidateOfficeFields]="candidateOfficeForm"
             [formSubmitted]="formSubmitted"
             [transaction]="transaction"
             [contactTypeOptions]="contactTypeOptions"
@@ -95,6 +96,7 @@
           <app-transaction-input
             [isEditable]="isEditable()"
             [form]="childForm"
+            [candidateOfficeFields]="candidateOfficeForm"
             [formSubmitted]="formSubmitted"
             [transaction]="childTransaction"
             [contactTypeOptions]="childContactTypeOptions"

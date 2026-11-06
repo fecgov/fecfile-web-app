@@ -102,52 +102,16 @@
       </div>
     </div>
 
-    <fieldset class="field">
-      <legend>STATUS BY</legend>
-      <div class="col-12 flex">
-        <p-radioButton
-          inputId="affiliation"
-          name="statusBy"
-          value="affiliation"
-          data-cy="affiliation-radio"
-          formControlName="statusBy"
-          [class]="
-            statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
-              ? 'ng-invalid ng-dirty'
-              : ''
-          "
-        />
-        <label for="affiliation" class="ml-2">AFFILIATION</label>
-      </div>
-      <div class="grid">
-        <div class="col-12 flex">
-          <p-radioButton
-            inputId="qualification"
-            name="statusBy"
-            value="qualification"
-            data-cy="qualification-radio"
-            formControlName="statusBy"
-            [class]="
-              statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
-                ? 'ng-invalid ng-dirty'
-                : ''
-            "
-          />
-          <label for="qualification" class="ml-2">QUALIFICATION</label>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-12">
-          <app-error-messages
-            [form]="form"
-            fieldName="statusBy"
-            [formSubmitted]="formSubmitted"
-            requiredErrorMessage="An answer is required."
-          />
-        </div>
-      </div>
-    </fieldset>
-    @if (statusByControl?.value === 'affiliation') {
+    <app-radio-button-input
+      [formField]="signalForm.statusBy"
+      label="STATUS BY"
+      [options]="statusByOptions"
+      [labelFunction]="(option) => option.toUpperCase()"
+      class="mb-3"
+    />
+
+    @let statusBy = signalForm.statusBy().value();
+    @if (statusBy === 'affiliation') {
       <div class="grid">
         <div class="col-12">
           <h2>Affiliation</h2>
@@ -223,7 +187,7 @@
         </div>
       }
     }
-    @if (statusByControl?.value === 'qualification') {
+    @if (statusBy === 'qualification') {
       <div class="grid">
         <div class="col-12">
           <h2>Qualification</h2>
@@ -306,12 +270,9 @@
                 </div>
               </div>
               <div class="col-9 co-input-container">
-                <app-candidate-office-input
-                  [form]="form"
-                  [formSubmitted]="formSubmitted"
-                  [officeFormControlName]="templateMapConfigs[candidateContact.key]['candidate_office']"
-                  [stateFormControlName]="templateMapConfigs[candidateContact.key]['candidate_state']"
-                  [districtFormControlName]="templateMapConfigs[candidateContact.key]['candidate_district']"
+                <app-candidate-office-form
+                  class="grid-form"
+                  [fields]="signalForm.candidateOffices[f1mCandidateTags[i]]"
                 />
               </div>
             </div>
@@ -333,7 +294,7 @@
         </div>
       }
     }
-    <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" />
+    <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" [submitDisabled]="disableSubmission()" />
   </form>
 </div>
 
