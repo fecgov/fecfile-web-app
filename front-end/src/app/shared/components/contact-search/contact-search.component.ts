@@ -29,6 +29,7 @@ export class ContactSearchComponent {
 
   readonly key = input.required<string>();
   readonly isBare = input(true);
+  readonly disabled = input(false);
   readonly openNewContactDialog = input(false);
 
   readonly manager = computed(() => this.cmservice.get(this.key()));

@@ -1,8 +1,12 @@
 <div data-cy="form-1m-component" class="form-container">
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-    <h1>FORM 1M</h1>
-    <span class="subheader">NOTIFICATION OF MULTICANDIDATE STATUS</span>
-    <hr />
+    <hgroup class="border-bottom-2 pb-2 mb-3">
+      <h1>FORM 1M</h1>
+      <span class="subheader">NOTIFICATION OF MULTICANDIDATE STATUS</span>
+    </hgroup>
+    @if (!isEditable()) {
+      <h4 class="read-only-tag">READ ONLY</h4>
+    }
     <h2>Committee</h2>
     <div class="grid">
       <div class="col-9">
@@ -121,24 +125,26 @@
           </p>
         </div>
       </div>
-      <div class="grid">
-        <div class="col-12">
-          <div class="field" [class.report-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
-            <app-report-contact-lookup
-              [form]="form"
-              key="contact_affiliated"
-              [formSubmitted]="formSubmitted"
-              [contactType]="affiliatedContact.contactType"
-            />
-            <app-error-messages
-              [form]="form"
-              [fieldName]="affiliatedContact.contactLookupKey"
-              [formSubmitted]="formSubmitted"
-            />
+      @if (isEditable()) {
+        <div class="grid">
+          <div class="col-12">
+            <div class="field" [class.report-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
+              <app-report-contact-lookup
+                [form]="form"
+                key="contact_affiliated"
+                [formSubmitted]="formSubmitted"
+                [contactType]="affiliatedContact.contactType"
+              />
+              <app-error-messages
+                [form]="form"
+                [fieldName]="affiliatedContact.contactLookupKey"
+                [formSubmitted]="formSubmitted"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      @if (report.contact_affiliated) {
+      }
+      @if (report()?.contact_affiliated) {
         <div class="grid">
           <div class="col-9">
             <div class="field">
@@ -180,11 +186,7 @@
             />
           </div>
         </div>
-        <div class="grid">
-          <div class="col-12">
-            <hr />
-          </div>
-        </div>
+        <hr />
       }
     }
     @if (statusBy === 'qualification') {
@@ -222,26 +224,27 @@
               <h3 class="candidate-header">Candidate #{{ i + 1 }}</h3>
             </div>
           </div>
-          <div class="grid">
-            <div class="col-12">
-              <div class="field" [class.report-contact-invalid]="candidateContact.control?.status === 'INVALID'">
-                <app-report-contact-lookup
-                  [form]="form"
-                  [formSubmitted]="formSubmitted"
-                  [key]="'contact_candidate_' + f1mCandidateTags[i]"
-                  [contactType]="candidateContact.contactType"
-                >
-                </app-report-contact-lookup>
-                <app-error-messages
-                  [form]="form"
-                  [fieldName]="candidateContact.contactLookupKey"
-                  [formSubmitted]="formSubmitted"
-                  requiredErrorMessage="Candidate information is required"
-                />
+          @if (isEditable()) {
+            <div class="grid">
+              <div class="col-12">
+                <div class="field" [class.report-contact-invalid]="candidateContact.control?.status === 'INVALID'">
+                  <app-report-contact-lookup
+                    [form]="form"
+                    [formSubmitted]="formSubmitted"
+                    [key]="'contact_candidate_' + f1mCandidateTags[i]"
+                    [contactType]="candidateContact.contactType"
+                  />
+                  <app-error-messages
+                    [form]="form"
+                    [fieldName]="candidateContact.contactLookupKey"
+                    [formSubmitted]="formSubmitted"
+                    requiredErrorMessage="Candidate information is required"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          @if (report[candidateContact.key]) {
+          }
+          @if (report()?.[candidateContact.key]) {
             <app-name-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -286,15 +289,18 @@
               </div>
             </div>
           }
-          <div class="grid">
-            <div class="col-12">
-              <hr />
-            </div>
-          </div>
+          <hr />
         </div>
       }
     }
-    <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" [submitDisabled]="disableSubmission()" />
+
+    <app-save-cancel
+      [includeSave]="isEditable()"
+      [backLabel]="isEditable() ? 'Back' : 'Return to reports'"
+      (save)="submitForm($event)"
+      (cancelForm)="goBack()"
+      [submitDisabled]="disableSubmission()"
+    />
   </form>
 </div>
 

@@ -2,12 +2,18 @@ import { FormGroup } from '@angular/forms';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
 import {
   candidateOfficeFields,
   CandidateOfficeModel,
 } from '../signal-form/candidate-office-form/candidate-office-form.component';
 import { WritableSignal } from '@angular/core';
+import {
+  ContactFields,
+  getNameString,
+  Contact,
+  ContactTypes,
+  CandidateOfficeTypes,
+} from 'app/shared/models/contact.model';
 import type { TemplateMapKeyType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import type { StringDateBooleanNull } from '../signal-inputs/select-input/select.input';
 
@@ -61,7 +67,7 @@ export class TransactionContactUtils {
     });
     const changesMessage = 'Change(s): <ul class="contact-confirm-dialog">'.concat(...changeMessages.join(''), '</ul>');
     return (
-      `Your suggested changes for <b>${contact.getNameString()}</b> will affect all transactions involving this contact.` +
+      `Your suggested changes for <b>${getNameString(contact)}</b> will affect all transactions involving this contact.` +
       `<br><br>${changesMessage}`
     );
   }

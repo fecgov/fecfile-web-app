@@ -1,31 +1,40 @@
 <div class="flex justify-content-between">
   <div>
-    <button pButton pRipple label="Back" type="button" (click)="cancelForm.emit()" class="p-button-secondary"></button>
-  </div>
-  <div>
     <button
       pButton
       pRipple
-      appSingleClick
-      label="Save"
       type="button"
-      (click)="save.emit()"
-      class="p-button-primary"
-      [class.p-disabled]="submitDisabled()"
-      [disabled]="submitDisabled()"
-      data-cy="save-cancel-actions"
-    ></button>
-    <button
-      pButton
-      pRipple
-      appSingleClick
-      label="Save & continue"
-      type="button"
-      (click)="save.emit('continue')"
-      class="p-button-info ml-4"
-      [class.p-disabled]="submitDisabled()"
-      [disabled]="submitDisabled()"
-      data-cy="save-cancel-actions"
+      [label]="backLabel()"
+      (click)="cancelForm.emit()"
+      [class]="includeSave() ? 'p-button-secondary' : 'p-button-primary'"
     ></button>
   </div>
+  @if (includeSave()) {
+    <div>
+      <button
+        pButton
+        pRipple
+        appSingleClick
+        type="button"
+        label="Save"
+        (click)="save.emit()"
+        class="p-button-primary"
+        [class.p-disabled]="submitDisabled()"
+        [disabled]="submitDisabled()"
+        data-cy="save-cancel-actions"
+      ></button>
+      <button
+        pButton
+        pRipple
+        appSingleClick
+        type="button"
+        label="Save & continue"
+        (click)="save.emit('continue')"
+        class="p-button-info ml-4"
+        [class.p-disabled]="submitDisabled()"
+        [disabled]="submitDisabled()"
+        data-cy="save-cancel-actions"
+      ></button>
+    </div>
+  }
 </div>

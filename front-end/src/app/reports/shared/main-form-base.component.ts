@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, OnInit } from '@angular/core';
+import { computed, Directive, effect, inject, input, model, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommitteeStore } from 'app/committee/committee.store';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -8,9 +8,8 @@ import { ReportService } from 'app/shared/services/report.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { JsonSchema } from 'fecfile-validate';
 import { MessageService } from 'primeng/api';
-@Component({
-  template: '',
-})
+
+@Directive()
 export abstract class MainFormBaseComponent<T extends Report> extends FormComponent implements OnInit {
   protected readonly committeeStore = inject(CommitteeStore);
   protected abstract reportService: ReportService<T>;
@@ -23,15 +22,20 @@ export abstract class MainFormBaseComponent<T extends Report> extends FormCompon
   abstract webprintURL: string;
 
   readonly reportId = input<string>();
+  readonly report = model<T>();
+  readonly isEditable = computed(() => !this.reportId() || (this.report()?.canEdit ?? false));
 
   constructor() {
     super();
 
     effect(() => {
       this.setConstantFormValues(this.committeeStore.committee());
-      if (this.reportId()) {
-        this.form.patchValue(this.activeReport());
-      }
+      const report = this.report();
+      if (report) this.form.patchValue(report);
+    });
+
+    effect(() => {
+      if (!this.isEditable()) this.form.disable();
     });
   }
 

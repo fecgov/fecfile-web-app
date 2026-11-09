@@ -16,6 +16,7 @@ export class ReportContactLookupComponent implements OnInit {
   readonly form = input.required<FormGroup>();
   readonly formSubmitted = input.required<boolean>();
   readonly contactType = input.required<ContactTypes>();
+  readonly disabled = input(false);
 
   readonly manager = computed(() => this.cmservice.get(this.key()));
 

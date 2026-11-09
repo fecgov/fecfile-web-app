@@ -34,7 +34,7 @@ import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage } from 'app/shared/models/candidate.model';
 import { committeePatternMessage } from 'app/shared/models/committee-account.model';
 import { compatForm } from '@angular/forms/signals/compat';
-import { applyWhen, required, submit, FormField } from '@angular/forms/signals';
+import { applyWhen, required, submit, FormField, disabled } from '@angular/forms/signals';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 import { RadioButtonInput } from 'app/shared/components/signal-inputs/radio-button-input/radio-button.input';
 
@@ -141,8 +141,6 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
   affiliatedContact: AffiliatedContact = {} as AffiliatedContact;
   candidateContacts: CandidateContact[] = [];
 
-  report = new Form1M();
-
   readonly formModel = signal<MainFormModel>({
     contactForm: this.form,
     statusBy: null,
@@ -158,6 +156,8 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
   readonly signalForm = compatForm(
     this.formModel,
     (schema) => {
+      disabled(schema, () => !this.isEditable());
+
       required(schema.statusBy, { message: requiredMessage });
       for (const item of f1mCandidateTags) {
         applyWhen(
@@ -216,30 +216,30 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
 
   override ngOnInit(): void {
     super.ngOnInit();
-    const reportId = this.reportId();
-    this.initForm();
-
+    const report = this.report();
     // A deep copy of activeReport has to be made because the actual activeReport
     // object is set to read-only by the NgRx store.
-    if (reportId) {
-      this.report = Form1M.fromJSON(structuredClone(this.activeReport()));
+    if (report) {
       // Set the statusBy radio button based on form values
 
       this.signalForm().value.update((v) => {
         return {
-          statusBy: this.report.affiliated_committee_name ? 'affiliation' : 'qualification',
+          statusBy: report.affiliated_committee_name ? 'affiliation' : 'qualification',
           contactForm: v.contactForm,
           candidateOffices: this.getCandidateOffices(),
         };
       });
+    } else {
+      this.report.set(new Form1M());
     }
+    this.initForm();
   }
 
   private getCandidateOffices(): CandidateOfficeModels {
     const getOffice = (tag: F1MCandidateTag): CandidateOfficeModel => ({
-      candidate_office: this.report[`${tag}_candidate_office`] ?? null,
-      candidate_state: this.report[`${tag}_candidate_state`] ?? null,
-      candidate_district: this.report[`${tag}_candidate_district`] ?? null,
+      candidate_office: this.report()?.[`${tag}_candidate_office`] ?? null,
+      candidate_state: this.report()?.[`${tag}_candidate_state`] ?? null,
+      candidate_district: this.report()?.[`${tag}_candidate_district`] ?? null,
     });
 
     return {
@@ -268,10 +268,7 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
   }
 
   getContact(contactKey: string) {
-    if (this.report[contactKey as keyof Form1M]) {
-      return this.report[contactKey as keyof Form1M] as Contact;
-    }
-    return null;
+    return this.report()?.[contactKey as keyof Form1M] as Contact | null;
   }
 
   getTemplateMap(contactKey: string): TransactionTemplateMapType | undefined {
@@ -317,8 +314,7 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
       });
     }
     this.updateContactsWithForm();
-
-    return Object.assign(this.report, data);
+    return Object.assign(this.report()!, data);
   }
 
   public override async submit(): Promise<void> {
@@ -330,12 +326,11 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
 
   updateContactsWithForm() {
     Object.entries(this.contactConfigs).forEach(([contactKey, config]: [string, { [formField: string]: string }]) => {
-      if (this.report[contactKey as keyof Form1M]) {
-        const contact = this.report[contactKey as keyof Form1M] as Contact;
+      const contact = this.report()?.[contactKey as keyof Form1M] as Contact | null;
+      if (contact) {
         const candidateOffices = this.signalForm.candidateOffices().value();
         const splits = contactKey.split('contact_candidate_');
         const candidateOffice = splits.length === 2 ? candidateOffices[splits[1] as F1MCandidateTag] : undefined;
-
         const contactChanges = TransactionContactUtils.getContactChanges(
           this.form,
           contact,
