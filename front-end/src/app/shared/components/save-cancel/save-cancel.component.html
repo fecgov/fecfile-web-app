@@ -1,6 +1,6 @@
 <div class="flex justify-content-between">
   <div>
-    <button pButton pRipple label="Back" (click)="cancelForm.emit()" class="p-button-secondary"></button>
+    <button pButton pRipple label="Back" type="button" (click)="cancelForm.emit()" class="p-button-secondary"></button>
   </div>
   <div>
     <button
@@ -8,6 +8,7 @@
       pRipple
       appSingleClick
       label="Save"
+      type="button"
       (click)="save.emit()"
       class="p-button-primary"
       [class.p-disabled]="submitDisabled()"
@@ -19,6 +20,7 @@
       pRipple
       appSingleClick
       label="Save & continue"
+      type="button"
       (click)="save.emit('continue')"
       class="p-button-info ml-4"
       [class.p-disabled]="submitDisabled()"

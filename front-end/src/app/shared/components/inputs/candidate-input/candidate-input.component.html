@@ -80,14 +80,7 @@
     </div>
     <div class="col-6"></div>
   </div>
-  @if (hasCandidateOfficeInput) {
-    <app-candidate-office-input
-      [transaction]="transaction()"
-      [form]="form"
-      [formSubmitted]="formSubmitted"
-      [officeFormControlName]="templateMap['candidate_office']"
-      [stateFormControlName]="templateMap['candidate_state']"
-      [districtFormControlName]="templateMap['candidate_district']"
-    />
+  @if (hasCandidateOfficeInput()) {
+    <app-candidate-office-form [fields]="candidateOfficeFields()" class="grid-form" />
   }
 </div>
