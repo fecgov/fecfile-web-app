@@ -83,7 +83,10 @@ h5 {
   background-color: var(--surface-ground);
   padding: 12px 20px;
   margin-top: 20px;
+  border: 0;
+  width: 100%;
   border-top: 1px solid #112e51;
+  cursor: pointer;
 }
 
 .header-expanded {
