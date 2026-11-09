@@ -77,7 +77,7 @@
         type="button"
         label="Save"
         class="p-button-primary"
-        (click)="jump = undefined"
+        (click)="submitForm()"
         [class.p-disabled]="disableSubmission()"
         [disabled]="disableSubmission()"
         data-cy="save-cancel-actions"
@@ -86,7 +86,7 @@
         pButton
         type="button"
         label="Save & continue"
-        (click)="jump = 'continue'"
+        (click)="submitForm('continue')"
         class="p-button-info ml-4"
         [class.p-disabled]="disableSubmission()"
         [disabled]="disableSubmission()"
