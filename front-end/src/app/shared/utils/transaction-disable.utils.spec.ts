@@ -1,20 +1,10 @@
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { isTransactionTypeDisabledForReport, DISABLED_TRANSACTION_TYPES } from './transaction-disable.utils';
+import { isTransactionTypeDisabledForReport } from './transaction-disable.utils';
 
 describe('transaction disable utils', () => {
-  beforeEach(() => {
-    vi.spyOn(DISABLED_TRANSACTION_TYPES[ReportTypes.F3]!, 'has').mockImplementation(
-      (type) => type === ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-    );
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('disables transactions present in the disabled list', () => {
-    expect(isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT)).toBe(true);
+    expect(isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.IN_KIND_RECEIPT)).toBe(true);
   });
 
   it('does not disable transactions missing from the disabled list', () => {
@@ -31,6 +21,10 @@ describe('transaction disable utils', () => {
     expect(
       isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE),
     ).toBe(false);
+  });
+
+  it('does not disable earmark receipts for Form 3', () => {
+    expect(isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.EARMARK_RECEIPT)).toBe(false);
   });
 
   it('does not disable transactions for report types missing from the disabled list', () => {

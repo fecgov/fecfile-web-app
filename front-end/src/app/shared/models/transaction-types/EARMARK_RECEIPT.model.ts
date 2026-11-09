@@ -3,12 +3,19 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIP
 import { ContactTypes } from '../contact.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
+import { ELECTION_FIELDS, INDIVIDUAL_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { ReportTypes } from '../reports/report.model';
 import { EARMARK } from './common-types/EARMARK.model';
 
 export class EARMARK_RECEIPT extends EARMARK {
+  override formFields = [...INDIVIDUAL_FORM_FIELDS, ...ELECTION_FIELDS];
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleATransactionTypes.EARMARK_MEMO];
+
+  override hasElectionInformation(reportType: ReportTypes): boolean {
+    return reportType === ReportTypes.F3;
+  }
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children?.length) return '';

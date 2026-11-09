@@ -1,6 +1,7 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { ReportTypes } from '../reports/report.model';
 
 describe('EARMARK_RECEIPT', () => {
   let transaction: SchATransaction;
@@ -16,6 +17,14 @@ describe('EARMARK_RECEIPT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_RECEIPT);
+  });
+
+  it('should be available for Individual contacts and include election information for Form 3', () => {
+    expect(transaction.transactionType?.contactTypeOptions).toEqual([ContactTypes.INDIVIDUAL]);
+    expect(transaction.transactionType?.formFields).toContain('election_code');
+    expect(transaction.transactionType?.formFields).toContain('election_other_description');
+    expect(transaction.transactionType?.hasElectionInformation(ReportTypes.F3)).toBe(true);
+    expect(transaction.transactionType?.hasElectionInformation(ReportTypes.F3X)).toBe(false);
   });
 
   it('#generatePurposeDescription() should generate empty string', () => {
