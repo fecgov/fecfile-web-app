@@ -277,21 +277,14 @@
           </div>
         </div>
       }
-      @if (type() === 'CAN') {
+      @if (!signalForm.candidateOffice().hidden()) {
         <hr />
         <div class="grid">
           <div class="col-12">
             <h3>Office</h3>
           </div>
         </div>
-        <app-candidate-office-input
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          officeFormControlName="candidate_office"
-          stateFormControlName="candidate_state"
-          districtFormControlName="candidate_district"
-        >
-        </app-candidate-office-input>
+        <app-candidate-office-form class="grid-form" [fields]="signalForm.candidateOffice" />
       }
     </form>
     @if (!isNewItem()) {

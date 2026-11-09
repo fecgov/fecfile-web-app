@@ -1,5 +1,5 @@
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
@@ -25,6 +25,8 @@ import { SignatureInputComponent } from '../../../shared/components/inputs/signa
 import { SupportOpposeInputComponent } from '../../../shared/components/inputs/support-oppose-input/support-oppose-input.component';
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { SectionHeaderComponent } from './section-header/section-header.component';
+import { FieldTree } from '@angular/forms/signals';
+import { CandidateOfficeModel } from 'app/shared/components/signal-form/candidate-office-form/candidate-office-form.component';
 
 @Component({
   selector: 'app-transaction-input',
@@ -61,6 +63,8 @@ export class TransactionInputComponent implements OnInit {
   @Input() contributionAmountReadOnly = false;
   @Input() candidateInfoPosition = 'low';
   @Input() isSingle = false;
+
+  readonly candidateOfficeFields = input.required<FieldTree<CandidateOfficeModel, string | number>>();
 
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() primaryContactClear = new EventEmitter<void>();
