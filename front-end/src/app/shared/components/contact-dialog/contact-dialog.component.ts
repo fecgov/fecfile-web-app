@@ -151,10 +151,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       },
     },
   );
-  readonly disableSubmission = computed(() => {
-    const sf = this.signalForm();
-    return sf.submitting() || sf.invalid() || !sf.dirty();
-  });
+  readonly disableSubmission = computed(() => this.signalForm().submitting() || this.signalForm().invalid());
   private jump?: 'continue';
 
   constructor() {

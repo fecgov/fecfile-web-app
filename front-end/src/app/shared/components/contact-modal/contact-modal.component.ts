@@ -103,10 +103,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     },
   );
 
-  readonly disableSubmission = computed(() => {
-    const sf = this.signalForm();
-    return sf.submitting() || sf.invalid() || !sf.dirty();
-  });
+  readonly disableSubmission = computed(() => this.signalForm().submitting() || this.signalForm().invalid());
 
   readonly stateOptions = computed(() => {
     if (this.manager().contactType() === ContactTypes.CANDIDATE) {
