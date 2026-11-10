@@ -1,7 +1,12 @@
-<h1 class="page-title">Import</h1>
+<h1 class="page-title">Import contacts</h1>
 <hr class="top-hr" />
-<section class="import-report" aria-label="Report file upload" [attr.aria-busy]="uploading()">
-  <p>Select a CSV file containing report data, then choose Upload. Maximum file size: 10 MB.</p>
+<section class="import-report" aria-label="Contacts file upload" [attr.aria-busy]="uploading()">
+  <p>Upload a CSV with up to 1,000 contacts. Maximum file size: 10 MB.</p>
+  <p>
+    Every row creates a new contact in the active committee. Duplicates are allowed. If any row is invalid, no contacts
+    are imported.
+  </p>
+  <p><a href="assets/contacts-import-template.csv" download>Download the CSV template with examples</a></p>
   <p-fileupload
     name="file"
     accept=".csv"
@@ -9,7 +14,7 @@
     [maxFileSize]="maxFileSize"
     [customUpload]="true"
     [disabled]="uploading()"
-    uploadLabel="Upload"
+    uploadLabel="Validate CSV"
     cancelLabel="Clear"
     mode="advanced"
     (uploadHandler)="upload($event)"
@@ -17,9 +22,7 @@
     (onClear)="resetResult()"
     (onRemove)="resetResult()"
   >
-    <ng-template #empty>
-      <p>Drag and drop a CSV file here or choose a file.</p>
-    </ng-template>
+    <ng-template #empty><p>Drag and drop a CSV file here or choose a file.</p></ng-template>
   </p-fileupload>
   <div class="upload-status" role="status" aria-live="polite">
     @if (status()) {
@@ -29,8 +32,27 @@
   @if (error()) {
     <p-message severity="error">{{ error() }}</p-message>
   }
-  @if (response() !== undefined) {
-    <h2>API response</h2>
-    <pre>{{ response() | json }}</pre>
+  @if (checkingFailed()) {
+    <button pButton type="button" label="Retry status check" (click)="watchJob()" [disabled]="uploading()"></button>
+  }
+  @if (canConfirm()) {
+    <button pButton type="button" label="Confirm import" (click)="confirm()"></button>
+  }
+  @if (job(); as result) {
+    @if (result.errors.length) {
+      <h2>Import errors</h2>
+      @for (rowError of result.errors; track $index) {
+        <p>{{ rowError.row === null ? 'File error' : 'CSV row ' + rowError.row }}</p>
+        <pre>{{ rowError.fields | json }}</pre>
+      }
+    }
+    @if (result.import_status === 'PARSED') {
+      <h2>Preview</h2>
+      <p>
+        Showing the first {{ result.preview.length }} of {{ result.total_rows }} contacts. Nothing has been imported
+        yet.
+      </p>
+      <pre>{{ result.preview | json }}</pre>
+    }
   }
 </section>

@@ -11,7 +11,7 @@ export const baseEnvironment = {
   showRestoreDeletedContacts: false,
   enableImport: true,
   showImportPrototype: false,
-  importUploadEndpoint: '/imports/',
+  importUploadEndpoint: '/contacts/imports/start/',
   manualReportVersion: true,
   whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
   errorReporting: {

@@ -1,0 +1,5 @@
+type,name,first_name,last_name,middle_name,prefix,suffix,committee_id,candidate_id,candidate_office,candidate_state,candidate_district,street_1,street_2,city,state,zip,country,telephone,employer,occupation
+IND,,First,Example,,,,,,,,,123 Example St,,Annapolis,MD,21401,USA,,Example Company,Engineer
+ORG,Example Organization,,,,,,,,,,,123 Example St,,Annapolis,MD,21401,USA,,,
+COM,Example Committee,,,,,,C00123456,,,,,123 Example St,,Annapolis,MD,21401,USA,,,
+CAN,,First,Example,,,,,H0MD12345,H,MD,01,123 Example St,,Annapolis,MD,21401,USA,,,

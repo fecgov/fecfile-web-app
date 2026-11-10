@@ -1,67 +1,125 @@
 import { JsonPipe } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
-import { ImportService } from 'app/shared/services/import.service';
-import { environment } from 'environments/environment';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subscription } from 'rxjs';
+import { ACTIVE_IMPORT_STATES, ContactImportJob, ImportService } from 'app/shared/services/import.service';
 import { FileUpload, FileUploadHandlerEvent } from 'primeng/fileupload';
 import { Message } from 'primeng/message';
+import { ButtonDirective } from 'primeng/button';
 
 @Component({
   selector: 'app-import',
-  imports: [FileUpload, JsonPipe, Message],
+  imports: [FileUpload, JsonPipe, Message, ButtonDirective],
   templateUrl: './import.component.html',
   styleUrl: './import.component.scss',
 })
 export class ImportComponent {
   private readonly importService = inject(ImportService);
+  private readonly destroyRef = inject(DestroyRef);
+  private watcher?: Subscription;
   readonly maxFileSize = 10 * 1024 * 1024;
   readonly uploading = signal(false);
   readonly status = signal('');
   readonly error = signal('');
-  readonly response = signal<unknown>(undefined);
+  readonly job = signal<ContactImportJob | null>(null);
+  readonly checkingFailed = signal(false);
+  readonly canConfirm = computed(
+    () => this.job()?.import_status === 'PARSED' && !this.uploading() && !this.checkingFailed(),
+  );
 
   resetResult(): void {
+    this.watcher?.unsubscribe();
     this.status.set('');
     this.error.set('');
-    this.response.set(undefined);
+    this.job.set(null);
+    this.checkingFailed.set(false);
+  }
+
+  private showJob(job: ContactImportJob): void {
+    this.job.set(job);
+    this.uploading.set(ACTIVE_IMPORT_STATES.has(job.import_status));
+    switch (job.import_status) {
+      case 'CREATED':
+      case 'PARSING':
+        this.status.set('Validating contacts…');
+        break;
+      case 'PARSED':
+        this.status.set(`${job.total_rows} contacts passed validation. Confirm to import them.`);
+        break;
+      case 'CONFIRMED':
+      case 'IMPORTING':
+        this.status.set('Importing contacts…');
+        break;
+      case 'IMPORTED':
+        this.status.set(`Imported ${job.totals.new ?? job.total_rows} contacts.`);
+        break;
+      case 'CANCELLED':
+        this.status.set('Import cancelled.');
+        break;
+      default:
+        this.status.set('Import blocked. No contacts were saved. Review the errors below.');
+    }
+  }
+
+  watchJob(): void {
+    const job = this.job();
+    if (!job) return;
+    this.watcher?.unsubscribe();
+    this.error.set('');
+    this.checkingFailed.set(false);
+    this.uploading.set(true);
+    this.watcher = this.importService
+      .watch(job.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updated) => this.showJob(updated),
+        error: () => {
+          this.uploading.set(false);
+          this.checkingFailed.set(true);
+          this.error.set('Could not check import status. Retry the status check before taking another action.');
+        },
+      });
   }
 
   async upload(event: FileUploadHandlerEvent): Promise<void> {
     if (this.uploading()) return;
     this.resetResult();
-    if (event.files.length !== 1) {
-      this.error.set('Choose one CSV file at a time.');
-      return;
-    }
     const file = event.files[0];
-    if (!file || !file.name.toLowerCase().endsWith('.csv') || file.size === 0 || file.size > this.maxFileSize) {
-      this.error.set('Choose a nonempty CSV file up to 10 MB.');
+    if (
+      event.files.length !== 1 ||
+      !file ||
+      !file.name.toLowerCase().endsWith('.csv') ||
+      !file.size ||
+      file.size > this.maxFileSize
+    ) {
+      this.error.set('Choose one nonempty CSV file up to 10 MB.');
       return;
     }
-
     this.uploading.set(true);
     this.status.set('Uploading…');
     try {
-      const result = await this.importService.upload<unknown>(environment.importUploadEndpoint, file);
-      this.response.set(result);
-      this.status.set('Upload complete. See the API response below for the import result.');
-    } catch (error: unknown) {
-      this.status.set('');
-      if (error instanceof HttpErrorResponse) {
-        if (error.status === 404 || error.status === 501) {
-          this.error.set('The import endpoint is not available yet. No import was confirmed.');
-        } else if (error.status === 0) {
-          this.error.set('Could not reach the API. Check that it is running and try again.');
-        } else {
-          this.error.set(`Upload failed (HTTP ${error.status}). See the API response below for details.`);
-        }
-        // Avoid displaying HTML error pages, while retaining structured validation errors.
-        if (error.error !== null && typeof error.error === 'object') this.response.set(error.error);
-      } else {
-        this.error.set('Upload failed. Please try again.');
-      }
-    } finally {
+      this.showJob(await this.importService.upload(file));
+      this.watchJob();
+    } catch {
       this.uploading.set(false);
+      this.status.set('');
+      this.error.set('Could not upload the CSV. Check your connection and committee access, then try again.');
+    }
+  }
+
+  async confirm(): Promise<void> {
+    const job = this.job();
+    if (!job || !this.canConfirm()) return;
+    this.uploading.set(true);
+    this.error.set('');
+    try {
+      this.showJob(await this.importService.confirm(job.id));
+      this.watchJob();
+    } catch {
+      // A lost response does not establish whether confirmation reached the server.
+      this.uploading.set(false);
+      this.checkingFailed.set(true);
+      this.error.set('Could not confirm the import status. Retry the status check before confirming again.');
     }
   }
 }
