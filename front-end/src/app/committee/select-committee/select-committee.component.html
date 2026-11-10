@@ -55,15 +55,10 @@
       Contact the administrator for that committee.
     </div>
     @if (hasDisabledCommittees()) {
-      <div class="disabled-committee-header" [class]="disabledShown() ? 'header-expanded' : ''">
+      <button class="disabled-committee-header" [class]="disabledShown() ? 'header-expanded' : ''" (click)="toggle()">
         <span class="karla-bold text-base">Disabled committees associated with your account</span>
-        <div
-          [class]="disabledShown() ? 'minus-icon-mask' : 'plus-icon-mask'"
-          class="bg-primary"
-          (click)="toggle()"
-          (keypress)="toggle()"
-        ></div>
-      </div>
+        <div [class]="disabledShown() ? 'minus-icon-mask' : 'plus-icon-mask'" class="bg-primary"></div>
+      </button>
 
       <div #content class="collapsible-content">
         <ul>
