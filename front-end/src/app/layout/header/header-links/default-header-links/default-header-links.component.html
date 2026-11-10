@@ -12,6 +12,9 @@
     </button>
     <div class="p-popover custom-popover" [class.hidden]="toolsHidden()">
       <ul>
+        @if (showImportPrototype) {
+          <li><button (click)="clickLink('/tools/import')">Import</button></li>
+        }
         <li><button (click)="clickLink('/tools/update-cash-on-hand')">Update cash on hand</button></li>
         @if (electionCycleStore.showElectionCycles() && showForm3) {
           <li><button (click)="clickLink('/tools/election-cycles')">Election cycles</button></li>

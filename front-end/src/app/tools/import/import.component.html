@@ -1,0 +1,36 @@
+<h1 class="page-title">Import</h1>
+<hr class="top-hr" />
+<section class="import-report" aria-label="Report file upload" [attr.aria-busy]="uploading()">
+  <p>Select a CSV file containing report data, then choose Upload. Maximum file size: 10 MB.</p>
+  <p-fileupload
+    name="file"
+    accept=".csv"
+    [multiple]="false"
+    [maxFileSize]="maxFileSize"
+    [customUpload]="true"
+    [disabled]="uploading()"
+    uploadLabel="Upload"
+    cancelLabel="Clear"
+    mode="advanced"
+    (uploadHandler)="upload($event)"
+    (onSelect)="resetResult()"
+    (onClear)="resetResult()"
+    (onRemove)="resetResult()"
+  >
+    <ng-template #empty>
+      <p>Drag and drop a CSV file here or choose a file.</p>
+    </ng-template>
+  </p-fileupload>
+  <div class="upload-status" role="status" aria-live="polite">
+    @if (status()) {
+      <p>{{ status() }}</p>
+    }
+  </div>
+  @if (error()) {
+    <p-message severity="error">{{ error() }}</p-message>
+  }
+  @if (response() !== undefined) {
+    <h2>API response</h2>
+    <pre>{{ response() | json }}</pre>
+  }
+</section>

@@ -8,6 +8,12 @@ import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 
 export const TOOLS_ROUTES: Route[] = [
   {
+    path: 'import',
+    loadComponent: () => import('./import/import.component').then((mod) => mod.ImportComponent),
+    title: 'Import',
+    canActivate: [featureFlagGuard('showImportPrototype')],
+  },
+  {
     path: 'update-cash-on-hand',
     component: CashOnHandOverrideComponent,
     title: 'Update cash on hand',

@@ -19,6 +19,7 @@ export class DefaultHeaderLinksComponent {
   readonly loginService = inject(LoginService);
   readonly showAllTransactionsPage = environment.showAllTransactionsPage;
   readonly showForm3 = environment.showForm3;
+  readonly showImportPrototype = environment.showImportPrototype;
 
   readonly toolsHidden = signal(true);
   readonly accountHidden = signal(true);

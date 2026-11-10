@@ -10,6 +10,8 @@ export const baseEnvironment = {
   showAllTransactionsPage: false,
   showRestoreDeletedContacts: false,
   enableImport: true,
+  showImportPrototype: false,
+  importUploadEndpoint: '/imports/',
   manualReportVersion: true,
   whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
   errorReporting: {
