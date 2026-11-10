@@ -1,9 +1,21 @@
 import { FormGroup } from '@angular/forms';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
+import {
+  candidateOfficeFields,
+  CandidateOfficeModel,
+} from '../signal-form/candidate-office-form/candidate-office-form.component';
+import { WritableSignal } from '@angular/core';
+import {
+  ContactFields,
+  getNameString,
+  Contact,
+  ContactTypes,
+  CandidateOfficeTypes,
+} from 'app/shared/models/contact.model';
+import type { TemplateMapKeyType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import type { StringDateBooleanNull } from '../signal-inputs/select-input/select.input';
 
 export class TransactionContactUtils {
   /**
@@ -21,34 +33,20 @@ export class TransactionContactUtils {
     templateMap: TransactionTemplateMapType,
     contactConfig: { [formField: string]: string },
     transaction?: Transaction,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): any[] {
-    return Object.entries(contactConfig)
-      .map(([field, property]: string[]) => {
-        const contactValue = contact[property as keyof Contact] ?? undefined;
-        const formField = form.get(templateMap[field as keyof TransactionTemplateMapType]);
-        let formFieldValue = formField?.value ?? undefined;
+    candidateOffice?: CandidateOfficeModel,
+  ): [string, StringDateBooleanNull][] {
+    const result: [string, StringDateBooleanNull][] = [];
 
-        // On IE Transactions, a Presidential Candidate running in a Primary election has a value for its state.
-        // This value needs to be saved on the transaction *but not* on the contact, so we detect "undefined"
-        // as the value for the contact.
-        if (field === 'candidate_state' && transaction?.transactionType.scheduleId === ScheduleIds.E) {
-          const candidateOfficeField = form.get(templateMap.candidate_office);
-          const electionCodeField = form.get(templateMap.election_code);
-          const candidateOffice = candidateOfficeField?.value ?? '';
-          const electionCode = electionCodeField?.value ?? '';
+    for (const [field, property] of Object.entries(contactConfig)) {
+      const templateField = templateMap[field as keyof TransactionTemplateMapType];
+      if (templateField === '' || (!candidateOfficeFields.has(field) && !form.get(templateField))) continue;
 
-          if (electionCode?.startsWith('P') && candidateOffice === CandidateOfficeTypes.PRESIDENTIAL) {
-            formFieldValue = null;
-          }
-        }
+      const contactValue = contact[property as keyof Contact] ?? null;
+      const formFieldValue = getContactFormValue(field, form, templateMap, transaction, candidateOffice) ?? null;
+      if (formFieldValue !== contactValue) result.push([property, formFieldValue]);
+    }
 
-        if (formField && formFieldValue !== contactValue) {
-          return [property, formFieldValue];
-        }
-        return undefined;
-      })
-      .filter((change) => !!change);
+    return result;
   }
 
   /**
@@ -69,7 +67,7 @@ export class TransactionContactUtils {
     });
     const changesMessage = 'Change(s): <ul class="contact-confirm-dialog">'.concat(...changeMessages.join(''), '</ul>');
     return (
-      `Your suggested changes for <b>${contact.getNameString()}</b> will affect all transactions involving this contact.` +
+      `Your suggested changes for <b>${getNameString(contact)}</b> will affect all transactions involving this contact.` +
       `<br><br>${changesMessage}`
     );
   }
@@ -95,7 +93,12 @@ export class TransactionContactUtils {
    * @param templateMap
    * @param form
    */
-  static updateContactsWithForm(transaction: Transaction, templateMap: TransactionTemplateMapType, form: FormGroup) {
+  static updateContactsWithForm(
+    transaction: Transaction,
+    templateMap: TransactionTemplateMapType,
+    form: FormGroup,
+    candidateOffice?: CandidateOfficeModel,
+  ) {
     Object.entries(transaction.transactionType?.contactConfig ?? {}).forEach(
       ([contactKey, config]: [string, { [formField: string]: string }]) => {
         if (transaction[contactKey as keyof Transaction]) {
@@ -106,11 +109,9 @@ export class TransactionContactUtils {
             templateMap,
             config,
             transaction,
+            candidateOffice,
           );
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
-            contact[property] = value as never;
-          });
+          contactChanges.forEach(([property, value]) => (contact[property as keyof Contact] = value as never));
         }
       },
     );
@@ -130,6 +131,7 @@ export class TransactionContactUtils {
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
+    candidateOfficeModel: WritableSignal<CandidateOfficeModel>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
@@ -156,7 +158,7 @@ export class TransactionContactUtils {
         form.get(templateMap.organization_name)?.setValue(contact.name);
         break;
       case ContactTypes.CANDIDATE:
-        TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap);
+        TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap, candidateOfficeModel);
         form.get(templateMap.employer)?.setValue(contact.employer);
         form.get(templateMap.occupation)?.setValue(contact.occupation);
         break;
@@ -217,27 +219,32 @@ export class TransactionContactUtils {
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
+    candidateOfficeModel: WritableSignal<CandidateOfficeModel>,
   ) {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
-    TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap);
+    TransactionContactUtils.updateFormWithCandidateFields(contact, form, templateMap, candidateOfficeModel);
     if (transaction) {
       transaction.contact_2 = contact;
     }
     contactId$.next(contact.id ?? '');
   }
 
-  static updateFormWithCandidateFields(contact: Contact, form: FormGroup, templateMap: TransactionTemplateMapType) {
+  static updateFormWithCandidateFields(
+    contact: Contact,
+    form: FormGroup,
+    templateMap: TransactionTemplateMapType,
+    candidateOfficeModel: WritableSignal<CandidateOfficeModel>,
+    transaction?: Transaction,
+  ) {
     form.get(templateMap.candidate_fec_id)?.setValue(contact.candidate_id);
     form.get(templateMap.candidate_last_name)?.setValue(contact.last_name);
     form.get(templateMap.candidate_first_name)?.setValue(contact.first_name);
     form.get(templateMap.candidate_middle_name)?.setValue(contact.middle_name);
     form.get(templateMap.candidate_prefix)?.setValue(contact.prefix);
     form.get(templateMap.candidate_suffix)?.setValue(contact.suffix);
-    form.get(templateMap.candidate_office)?.setValue(contact.candidate_office);
-    form.get(templateMap.candidate_state)?.setValue(contact.candidate_state);
-    form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
+    candidateOfficeModel.set(getCandidateOfficeModel(contact, templateMap, transaction));
   }
 
   /**
@@ -364,3 +371,58 @@ export class TransactionContactUtils {
 }
 
 export type ContactIdMapType = { [contact: string]: Subject<string> };
+
+function getContactFormValue(
+  field: string,
+  form: FormGroup,
+  templateMap: TransactionTemplateMapType,
+  transaction?: Transaction,
+  candidateOffice?: CandidateOfficeModel,
+): StringDateBooleanNull {
+  if (candidateOffice && field in candidateOffice) {
+    return getCandidateOfficeValue(field, candidateOffice, form, templateMap, transaction);
+  }
+
+  return form.get(templateMap[field as keyof TransactionTemplateMapType])?.value ?? null;
+}
+
+function getCandidateOfficeValue(
+  field: string,
+  candidateOffice: CandidateOfficeModel,
+  form: FormGroup,
+  templateMap: TransactionTemplateMapType,
+  transaction?: Transaction,
+): StringDateBooleanNull {
+  const value = candidateOffice[field as keyof CandidateOfficeModel] ?? null;
+  if (field !== 'candidate_state' || !isPresidentialPrimary(transaction, form, templateMap, candidateOffice)) {
+    return value;
+  }
+
+  return null;
+}
+
+function isPresidentialPrimary(
+  transaction: Transaction | undefined,
+  form: FormGroup,
+  templateMap: TransactionTemplateMapType,
+  candidateOffice: CandidateOfficeModel,
+): boolean {
+  if (transaction?.transactionType.scheduleId !== ScheduleIds.E) return false;
+  const electionCode = form.get(templateMap.election_code)?.value ?? '';
+  return electionCode.startsWith('P') && candidateOffice.candidate_office === CandidateOfficeTypes.PRESIDENTIAL;
+}
+
+const getCandidateOfficeModel = (
+  contact: Contact,
+  templateMap: TransactionTemplateMapType,
+  transaction?: Transaction,
+): CandidateOfficeModel => {
+  const getValue = <T>(contactValue: T | null | undefined, templateKey: TemplateMapKeyType): T | null =>
+    contactValue ?? (transaction?.[templateMap[templateKey] as keyof Transaction] as T | null) ?? null;
+
+  return {
+    candidate_office: getValue(contact.candidate_office, 'candidate_office'),
+    candidate_state: getValue(contact.candidate_state, 'candidate_state'),
+    candidate_district: getValue(contact.candidate_district, 'candidate_district'),
+  };
+};

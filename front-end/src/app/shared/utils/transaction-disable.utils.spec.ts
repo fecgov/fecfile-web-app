@@ -26,7 +26,11 @@ describe('transaction disable utils', () => {
   it('does not disable PAC earmark receipts for Form 3', () => {
     expect(
       isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT),
+  });
+
     ).toBe(false);
+  it('does not disable earmark receipts for Form 3', () => {
+    expect(isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.EARMARK_RECEIPT)).toBe(false);
   });
 
   it('does not disable transactions for report types missing from the disabled list', () => {

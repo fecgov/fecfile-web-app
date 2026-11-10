@@ -49,6 +49,7 @@
         <app-candidate-input
           [transaction]="transaction"
           [form]="form"
+          [candidateOfficeFields]="candidateOfficeFields()"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
           [hasCandidateOfficeInput]="transactionType?.hasCandidateOffice() ?? false"
@@ -262,6 +263,7 @@
           <app-candidate-input
             [transaction]="transaction"
             [form]="form"
+            [candidateOfficeFields]="candidateOfficeFields()"
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
             [hasCandidateOfficeInput]="transactionType?.hasCandidateOffice() ?? false"

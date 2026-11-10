@@ -23,10 +23,10 @@
   <app-independent-expenditure-create-f3x-input />
 }
 @if (!isEditable()) {
-  <h4 class="read-only-tag subtitle">READ ONLY</h4>
+  <h4 class="read-only-tag">READ ONLY</h4>
 }
 @if (isDebtRepayment(transaction)) {
-  <h4 class="read-only-tag subtitle">DEBT REPAYMENT</h4>
+  <h4 class="read-only-tag">DEBT REPAYMENT</h4>
 }
 
 <h2 class="top-margin-32">{{ transactionType?.contactTitle || 'Contact' }}</h2>
@@ -35,6 +35,7 @@
     [isEditable]="isEditable()"
     [isSingle]="true"
     [form]="form"
+    [candidateOfficeFields]="candidateOfficeForm"
     [formSubmitted]="formSubmitted"
     [transaction]="transaction"
     [contactTypeOptions]="contactTypeOptions"

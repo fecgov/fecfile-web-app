@@ -9,7 +9,9 @@ import { SingleClickDirective } from '../../directives/single-click.directive';
   imports: [ButtonDirective, Ripple, SingleClickDirective],
 })
 export class SaveCancelComponent {
+  readonly includeSave = input(true);
   readonly submitDisabled = input(false);
+  readonly backLabel = input('Back');
   readonly save = output<'continue' | void>();
   readonly cancelForm = output<void>();
 }

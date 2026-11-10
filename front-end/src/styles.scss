@@ -921,3 +921,12 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
 .p-invalid {
   border-color: var(--error) !important;
 }
+
+.read-only-tag {
+  color: gray;
+  text-transform: uppercase;
+  margin-bottom: 2.5em;
+  font-family: var(--karla-bold);
+  font-size: 14px;
+  padding-top: 8px;
+}
