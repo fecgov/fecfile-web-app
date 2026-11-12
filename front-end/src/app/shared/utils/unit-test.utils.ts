@@ -25,6 +25,7 @@ import { AggregationGroups, Transaction, TransactionTypes } from '../models/tran
 import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
+import { ElectionCycle } from 'app/tools/election-cycle/election-cycle.model';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({
@@ -152,6 +153,7 @@ export function testActiveReport(): Form3X {
 export function testF3(): Form3 {
   return Form3.fromJSON({
     id: '999',
+    calculation_status: 'SUCCEEDED',
     coverage_from_date: '2022-05-25',
     coverage_through_date: '2022-06-30',
     form_type: 'F3N',
@@ -173,14 +175,20 @@ export function testF3(): Form3 {
       created: '10/10/2010',
       updated: '10/12/2010',
     },
-    electionCycle: {
-      id: 'election',
-      office: 'House',
-      election_type: 'General',
-      election_year: '2026',
-      start_date: '01/01/2026',
-      end_date: '03/31/2026',
-    },
+    election_cycle_id: 'ec-1',
+  });
+}
+
+export function testElectionCycle(): ElectionCycle {
+  return ElectionCycle.fromJson({
+    id: 'ec-1',
+    committee_account: 'ca-1',
+    office: 'House',
+    election_type: 'General',
+    election_year: '2000',
+    start_date: '2025-01-01',
+    end_date: '2025-12-31',
+    has_form3: false,
   });
 }
 

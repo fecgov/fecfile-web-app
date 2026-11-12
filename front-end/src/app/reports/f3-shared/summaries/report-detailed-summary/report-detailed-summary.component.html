@@ -7,12 +7,12 @@
     <app-table
       class="has-federal-total"
       [(first)]="first"
-      [items]="receiptLines()"
+      [items]="lines().receipts"
       title="Receipts"
-      [(totalItems)]="receiptLines().length"
+      [(totalItems)]="lines().receipts.length"
       [loading]="!calculationFinished()"
       sortField="name"
-      [rowsPerPage]="receiptLines().length"
+      [rowsPerPage]="lines().receipts.length"
       [columns]="columns()"
       [showPaginationControls]="false"
     >
@@ -21,12 +21,12 @@
     <app-table
       class="has-federal-total"
       [(first)]="first"
-      [items]="disbursementLines()"
+      [items]="lines().disbursements"
       title="Disbursements"
-      [(totalItems)]="disbursementLines().length"
+      [(totalItems)]="lines().disbursements.length"
       [loading]="!calculationFinished()"
       sortField="name"
-      [rowsPerPage]="disbursementLines().length"
+      [rowsPerPage]="lines().disbursements.length"
       [columns]="columns()"
       [showPaginationControls]="false"
     >
@@ -34,12 +34,12 @@
     <hr class="table-bottom" />
     <app-table
       [(first)]="first"
-      [items]="thirdLines()"
+      [items]="lines().third"
       [title]="thirdTitle()"
-      [(totalItems)]="thirdLines().length"
+      [(totalItems)]="lines().third.length"
       [loading]="!calculationFinished()"
       sortField="name"
-      [rowsPerPage]="thirdLines().length"
+      [rowsPerPage]="lines().third.length"
       [columns]="columns()"
       [showPaginationControls]="false"
     >
@@ -61,7 +61,7 @@
       pButton
       pRipple
       class="p-button-secondary icon-gap"
-      (click)="router.navigate(['/reports', this.formText(), 'summary', report().id])"
+      (click)="router.navigate(['/reports', this.formText, 'summary', report().id])"
     >
       <svg pButtonIcon alt="Previous Arrow" width="10" height="10" class="rotate-180">
         <use href="assets/img/arrow.svg#arrow"></use>
@@ -72,7 +72,7 @@
       pButton
       pRipple
       class="p-button-primary icon-gap"
-      (click)="router.navigate(['/reports', this.formText(), 'web-print', report().id])"
+      (click)="router.navigate(['/reports', this.formText, 'web-print', report().id])"
     >
       <span>See print preview</span>
       <svg pButtonIcon alt="Next Arrow" width="10" height="10">

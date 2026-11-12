@@ -1,55 +1,87 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { CardModule } from 'primeng/card';
+import { Router } from '@angular/router';
 import { ReportSummaryComponent } from './report-summary.component';
-import { ReportService } from 'app/shared/services/report.service';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { getLineSummaries } from './lines';
+import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { ApiService } from 'app/shared/services/api.service';
-import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { HttpResponse, provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { testElectionCycle, testF3 } from 'app/shared/utils/unit-test.utils';
+import { inputBinding, signal } from '@angular/core';
+import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+
+const f3 = testF3();
+f3.electionCycle = testElectionCycle();
+const report = signal<BaseForm3>(f3);
 
 describe('ReportSummaryComponent', () => {
-  let component: ReportSummaryComponent;
   let fixture: ComponentFixture<ReportSummaryComponent>;
-  let apiService: ApiService;
-  const f3x: Form3X = Form3X.fromJSON({
-    id: '999',
-    coverage_from_date: '2022-05-25',
-    form_type: 'F3XN',
-    report_code: 'Q1',
-  });
-  const f3xSubject: Subject<object> = new BehaviorSubject<object>({ report: f3x });
+  let component: ReportSummaryComponent;
+  let router: Router;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [CardModule, ReportSummaryComponent],
+  const navigateByUrl = vi.fn();
+  const navigate = vi.fn();
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [ReportSummaryComponent],
       providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([]),
-        provideMockStore(testMockStore()),
         {
-          provide: ActivatedRoute,
+          provide: FORM_3_SERVICE,
           useValue: {
-            data: f3xSubject,
+            isF3X: false,
+            get: vi.fn(),
           },
         },
-        ApiService,
-        ReportService,
+        { provide: ApiService, useValue: { post: vi.fn() } },
       ],
-    }).compileComponents();
+    });
 
-    apiService = TestBed.inject(ApiService);
-    fixture = TestBed.createComponent(ReportSummaryComponent);
+    fixture = TestBed.createComponent(ReportSummaryComponent, { bindings: [inputBinding('report', report)] });
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+
+    vi.spyOn(router, 'navigateByUrl').mockImplementation(navigateByUrl);
+    vi.spyOn(router, 'navigate').mockImplementation(navigate);
     fixture.detectChanges();
-    vi.spyOn(apiService, 'post').mockReturnValue(Promise.resolve(new HttpResponse<unknown>()));
   });
 
-  it('should create', () => {
+  it('should create', async () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('lines', () => {
+    it('should get line summaries from the report', () => {
+      expect(component.lines()).toEqual(getLineSummaries(testF3()));
+    });
+  });
+
+  describe('template', () => {
+    it('should display the summary table when calculation has finished', async () => {
+      expect(fixture.nativeElement.querySelector('app-table')).not.toBeNull();
+      expect(fixture.nativeElement.querySelector('.fec-loader-div')).toBeNull();
+    });
+
+    it('should display the loading indicator when calculation has not finished', () => {
+      const testReport = testF3();
+      testReport.calculation_status = 'PENDING';
+      report.set(testReport);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('app-table')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.fec-loader-div')).not.toBeNull();
+    });
+  });
+
+  describe('navigation', () => {
+    it('should navigate to the report transactions page', () => {
+      const button = fixture.nativeElement.querySelector('button.p-button-secondary') as HTMLButtonElement;
+      button.click();
+      expect(navigateByUrl).toHaveBeenCalledWith('/reports/transactions/report/999/list');
+    });
+
+    it('should navigate to the detailed summary page', () => {
+      const button = fixture.nativeElement.querySelector('button.p-button-primary') as HTMLButtonElement;
+      button.click();
+      expect(navigate).toHaveBeenCalledWith(['/reports', 'f3', 'detailed-summary', '999']);
+    });
   });
 });

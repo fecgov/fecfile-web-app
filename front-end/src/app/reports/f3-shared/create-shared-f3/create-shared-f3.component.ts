@@ -193,7 +193,7 @@ export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Mode
   });
 
   create(formValue: SharedForm3Model, isF3X: boolean, hasElectionReport: boolean) {
-    const intialReport = this.activeService.isF3X
+    const intialReport = isF3X
       ? Form3X.fromJSON({ form_type: F3xFormTypes.F3XN })
       : Form3.fromJSON({ form_type: F3FormTypes.F3N });
     const report = buildJson(intialReport, formValue, isF3X, hasElectionReport);

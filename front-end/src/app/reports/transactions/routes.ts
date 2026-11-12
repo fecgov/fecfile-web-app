@@ -4,22 +4,22 @@ import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guar
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
-import { ReportResolver } from 'app/shared/resolvers/report.resolver';
+import { reportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
-// ReportResolver, both the guard and the resovler read the :reportId in the URL
+// reportResolver, both the guard and the resovler read the :reportId in the URL
 // and put the report for the ID in the ActiveReport value in the ngrx store. As a result:
 // 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
-// 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
+// 2) The reportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
 export const TRANSACTION_ROUTES: Route[] = [
   {
     path: 'report/:reportId/list',
     title: 'Manage your transactions',
     component: TransactionListComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     data: {
       sidebarSection: ReportSidebarSection.TRANSACTIONS,
     },
@@ -28,7 +28,7 @@ export const TRANSACTION_ROUTES: Route[] = [
   {
     path: 'report/:reportId/select/:category',
     component: TransactionTypePickerComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: reportResolver },
     canActivate: [ReportIsEditableGuard],
     data: {
       sidebarSection: ReportSidebarSection.TRANSACTIONS,
@@ -39,7 +39,7 @@ export const TRANSACTION_ROUTES: Route[] = [
     path: 'report/:reportId/create/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
-      report: ReportResolver,
+      report: reportResolver,
       transaction: TransactionResolver,
     },
     data: {
@@ -53,7 +53,7 @@ export const TRANSACTION_ROUTES: Route[] = [
     path: 'report/:reportId/list/:transactionId',
     component: TransactionContainerComponent,
     resolve: {
-      report: ReportResolver,
+      report: reportResolver,
       transaction: TransactionResolver,
     },
     data: {
@@ -66,7 +66,7 @@ export const TRANSACTION_ROUTES: Route[] = [
     path: 'report/:reportId/list/:parentTransactionId/create-sub-transaction/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
-      report: ReportResolver,
+      report: reportResolver,
       transaction: TransactionResolver,
     },
     canActivate: [ReportIsEditableGuard],
