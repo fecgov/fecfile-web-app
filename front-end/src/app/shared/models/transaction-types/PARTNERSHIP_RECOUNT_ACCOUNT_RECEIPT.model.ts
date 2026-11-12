@@ -4,10 +4,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
+import { ORGANIZATION_FORM_FIELDS, ORGANIZATION, ELECTION_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { ReportTypes } from '../reports/report.model';
 
 export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT extends SchATransactionType {
-  formFields = ORGANIZATION_FORM_FIELDS;
+  formFields = [...ORGANIZATION_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT);
   schema = schema;
@@ -24,6 +25,10 @@ export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT extends SchATransactionType {
 
   override get isReattributable(): boolean {
     return false;
+  }
+
+  override hasElectionInformation(reportType: ReportTypes): boolean {
+    return reportType === ReportTypes.F3;
   }
 
   getNewTransaction() {
