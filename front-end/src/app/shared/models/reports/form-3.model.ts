@@ -141,6 +141,7 @@ export class Form3 extends BaseForm3 {
     ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.UNREGISTERED_RECOUNT_DONATION_FROM_ORGANIZATION,
+    ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
 
     // LOANS AND DEBTS
     ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,

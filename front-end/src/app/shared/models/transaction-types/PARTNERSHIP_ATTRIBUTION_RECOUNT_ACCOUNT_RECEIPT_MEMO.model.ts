@@ -3,11 +3,12 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_AT
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
+import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL, ELECTION_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
+import { ReportTypes } from '../reports/report.model';
 
 export class PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO extends SCHEDULE_A_MEMO {
-  formFields = INDIVIDUAL_FORM_FIELDS;
+  formFields = [...INDIVIDUAL_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
@@ -18,6 +19,10 @@ export class PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO extends SCHEDU
 
   override generatePurposeDescription(): string {
     return 'Recount Account Partnership Attribution';
+  }
+
+  override hasElectionInformation(reportType: ReportTypes): boolean {
+    return reportType === ReportTypes.F3;
   }
 
   getNewTransaction() {
