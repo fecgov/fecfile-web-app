@@ -7,16 +7,24 @@
   <section class="grid-section">
     <p-fileupload
       #fu
-      name="import-candidate"
-      [customUpload]="true"
+      name="file"
+      [url]="uploadUrl"
+      [headers]="uploadHeaders"
+      [withCredentials]="true"
       [disabled]="uploading()"
-      (uploadHandler)="upload($event)"
       [multiple]="false"
       [auto]="true"
+      (onSelect)="resetResult(); fu.uploadedFiles = []"
+      (onError)="errored.set(true)"
+      (onUpload)="uploaded.set(true)"
       maxFileSize="5000000"
       mode="advanced"
       accept=".csv"
-      [pt]="{ root: { class: 'border-0!' }, header: { class: 'hidden!' }, content: { class: 'p-0!' } }"
+      [pt]="{
+        root: { class: 'border-none' },
+        header: { class: 'hidden' },
+        content: { class: 'p-0' },
+      }"
     >
       <ng-template
         #content
@@ -26,7 +34,7 @@
         let-removeUploadedFileCallback="removeUploadedFileCallback"
       >
         <div
-          class="flex flex-col items-center gap-2 p-6 cursor-pointer border-2 border-dashed border-surface rounded-md"
+          class="flex flex-column align-items-center gap-2 p-6 cursor-pointer border-2 border-dashed border-surface border-round-md"
           (click)="fu.choose()"
         >
           <i class="pi pi-upload text-muted-color" style="font-size: 32px"></i>
@@ -34,60 +42,69 @@
           <div class="text-xs text-muted-color">CSV files only</div>
           <div class="text-xs text-muted-color">Up to 5 MB</div>
         </div>
-        {{ uploadedFiles }}
         @if (uploadedFiles?.length > 0 || files?.length > 0) {
-          <div class="flex flex-col gap-2 mt-3">
+          <section class="uploads">
+            <h3 class="uploads-heading">Uploads</h3>
+
             @for (file of uploadedFiles; track $index; let i = $index) {
-              <div class="flex items-center gap-3 px-3 py-2 rounded-md bg-surface-50 dark:bg-surface-800">
+              <div class="upload-row">
                 <i class="pi pi-file text-primary shrink-0"></i>
-                <div class="flex-1 min-w-0">
-                  <div class="text-sm truncate">{{ file.name }}</div>
+
+                <div class="upload-details">
+                  <span class="upload-name" [title]="file.name">{{ file.name }}</span>
+
                   <div class="flex items-center gap-1 text-xs">
                     <span class="text-muted-color tabular-nums">{{ formatSize(file.size) }}</span>
                     <span class="text-muted-color">·</span>
-                    <span class="text-emerald-500">Completed</span>
+                    <span class="ttext-muted-color">Upload successful</span>
                   </div>
                 </div>
+
                 <button
                   type="button"
-                  pButton
-                  iconOnly
-                  variant="text"
-                  severity="secondary"
-                  size="small"
-                  rounded
+                  class="rounded-image-button"
+                  [attr.aria-label]="'Remove ' + file.name"
                   (click)="removeUploadedFileCallback(i)"
                 >
-                  <i class="pi pi-times"></i>
+                  <svg alt="remove upload" height="20" width="20" class="primary-icon">
+                    <use href="assets/img/x-circle.svg#x-icon"></use>
+                  </svg>
                 </button>
               </div>
             }
+
             @for (file of files; track $index; let i = $index) {
-              <div class="flex items-center gap-3 px-3 py-2 rounded-md bg-surface-50 dark:bg-surface-800">
+              <div class="upload-row">
                 <i class="pi pi-file text-primary shrink-0"></i>
-                <div class="flex-1 min-w-0">
-                  <div class="text-sm truncate">{{ file.name }}</div>
-                  <div class="flex items-center gap-1 text-xs">
-                    <span class="text-muted-color tabular-nums">{{ formatSize(file.size) }}</span>
-                    <span class="text-muted-color">·</span>
-                    <span class="text-primary">Pending</span>
-                  </div>
+                <div class="upload-details">
+                  <span class="upload-name" [title]="file.name">{{ file.name }}</span>
+                  @if (errored()) {
+                    <div class="flex items-center gap-1 text-xs">
+                      <span class="text-muted-color tabular-nums">{{ formatSize(file.size) }}</span>
+                      <span class="text-muted-color">·</span>
+                      <span class="text-red-500">Upload failed</span>
+                    </div>
+                  } @else {
+                    <div class="flex items-center gap-1 text-xs">
+                      <span class="text-muted-color tabular-nums">{{ formatSize(file.size) }}</span>
+                      <span class="text-muted-color">·</span>
+                      <span class="text-muted-color">Pending</span>
+                    </div>
+                  }
                 </div>
                 <button
                   type="button"
-                  pButton
-                  iconOnly
-                  variant="text"
-                  severity="secondary"
-                  size="small"
-                  rounded
+                  class="rounded-image-button"
+                  [attr.aria-label]="'Remove ' + file.name"
                   (click)="removeFileCallback($event, i)"
                 >
-                  <i class="pi pi-times"></i>
+                  <svg alt="remove upload" height="20" width="20" class="primary-icon">
+                    <use href="assets/img/x-circle.svg#x-icon"></use>
+                  </svg>
                 </button>
               </div>
             }
-          </div>
+          </section>
         }
       </ng-template>
     </p-fileupload>

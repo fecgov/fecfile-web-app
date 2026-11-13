@@ -1,0 +1,26 @@
+.uploads {
+  margin-top: 1.5rem;
+}
+
+.uploads-heading {
+  margin: 0 0 0.75rem;
+}
+
+.upload-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3rem;
+  padding: 0.5rem 0.75rem;
+  background: #f0f0f0;
+
+  & + & {
+    margin-top: 0.5rem;
+  }
+}
+
+.upload-details {
+  flex: 1;
+  min-width: 0;
+}
