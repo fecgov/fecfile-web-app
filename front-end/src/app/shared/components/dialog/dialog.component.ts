@@ -26,6 +26,7 @@ export class DialogComponent {
   readonly hasCustomFooter = computed(() => !!this.projectedFooter());
 
   handleEscape(event: Event) {
+    event.stopPropagation();
     if (!this.dismissible()) {
       event.preventDefault();
     }

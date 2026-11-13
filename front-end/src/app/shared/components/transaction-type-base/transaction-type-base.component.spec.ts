@@ -1,7 +1,7 @@
 import type { Mock, MockedObject } from 'vitest';
 import { DatePipe } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
   NavigationAction,
@@ -36,6 +36,7 @@ import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sc
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { provideZoneChangeDetection } from '@angular/core';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 let testTransaction: SchATransaction;
 
@@ -161,7 +162,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should set the contact type options', () => {
       fixture.detectChanges();
       expect(component.contactTypeOptions).toContainEqual({ label: 'Individual', value: ContactTypes.INDIVIDUAL });
-      expect(component.contactTypeOptions.length).toEqual(1);
+      expect(component.contactTypeOptions).toHaveLength(1);
     });
 
     it('should pre-populate clone-like transactions without an id', () => {
@@ -211,6 +212,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should update contacts form if there is a transaction', async () => {
+      component.ngOnInit();
       const contactSpy = vi.spyOn(TransactionContactUtils, 'updateContactsWithForm');
       await component.submitForm(navEvent);
       expect(contactSpy).toHaveBeenCalled();
@@ -229,17 +231,6 @@ describe('TransactionTypeBaseComponent', () => {
       navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
     });
 
-    it('should set processing to false if no transaction type identifier on payload', async () => {
-      const payload = TransactionFormUtils.getPayloadTransaction(
-        component.transaction,
-        '999',
-        component.form,
-        component.formProperties,
-      );
-      payload.transaction_type_identifier = undefined;
-      await component.processPayload(payload, navEvent);
-    });
-
     it('should update data and then set processing to false', async () => {
       fixture.detectChanges();
       const payload = TransactionFormUtils.getPayloadTransaction(
@@ -247,6 +238,8 @@ describe('TransactionTypeBaseComponent', () => {
         '999',
         component.form,
         component.formProperties,
+        component.templateMap,
+        component.candidateOfficeModel(),
       );
       await component.processPayload(payload, navEvent);
       expect(transactionServiceSpy.update).toHaveBeenCalled();
@@ -262,6 +255,8 @@ describe('TransactionTypeBaseComponent', () => {
         '999',
         component.form,
         component.formProperties,
+        component.templateMap,
+        component.candidateOfficeModel(),
       );
       expect(payload.report_ids?.length).toEqual(2);
       expect(payload.report_ids?.includes('321')).toBe(true);
@@ -273,13 +268,12 @@ describe('TransactionTypeBaseComponent', () => {
       const contactConfig = component.transaction!.transactionType?.contactConfig;
       component.transaction!.transactionType = {} as TransactionType;
       await expect(
-        testwrapperService.confirmWithUser(
-          component.form,
+        testwrapperService.confirmWithUser(component.form, {
           contactConfig,
-          component.getContact.bind(this),
-          component.getTemplateMap.bind(this),
-          component.transaction,
-        ),
+          getContact: component.getContact.bind(this),
+          getTemplateMap: component.getTemplateMap.bind(this),
+          transaction: component.transaction,
+        }),
       ).rejects.toThrow('FECfile+: Cannot find template map when confirming transaction');
     });
 
@@ -290,16 +284,17 @@ describe('TransactionTypeBaseComponent', () => {
         '999',
         component.form,
         component.formProperties,
+        component.templateMap,
+        component.candidateOfficeModel(),
       );
       expect(Object.keys(component.transaction.transactionType.contactConfig)[0]).toEqual('contact_1');
       payload.transactionType.useParentContact = true;
-      testwrapperService.confirmWithUser(
-        component.form,
-        component.transaction.transactionType?.contactConfig ?? {},
-        component.getContact.bind(this),
-        component.getTemplateMap.bind(this),
-        component.transaction,
-      );
+      testwrapperService.confirmWithUser(component.form, {
+        contactConfig: component.transaction.transactionType?.contactConfig ?? {},
+        getContact: component.getContact.bind(this),
+        getTemplateMap: component.getTemplateMap.bind(this),
+        transaction: component.transaction,
+      });
       expect(confirmSpy).toHaveBeenCalledTimes(0);
     });
 
@@ -310,13 +305,12 @@ describe('TransactionTypeBaseComponent', () => {
       });
       (component.transaction['contact_1' as keyof Transaction] as Contact).id = undefined;
 
-      testwrapperService.confirmWithUser(
-        component.form,
-        component.transaction.transactionType?.contactConfig ?? {},
-        component.getContact.bind(this),
-        component.getTemplateMap.bind(this),
-        component.transaction,
-      );
+      testwrapperService.confirmWithUser(component.form, {
+        contactConfig: component.transaction.transactionType?.contactConfig ?? {},
+        getContact: component.getContact.bind(this),
+        getTemplateMap: component.getTemplateMap.bind(this),
+        transaction: component.transaction,
+      });
       expect(createMessageSpy).toHaveBeenCalled();
     });
   });
@@ -334,6 +328,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should exit if form is invalid', async () => {
+      component.form.addControl('test', new FormControl(null, Validators.required));
       await component.handleNavigate(navEvent);
       expect(navigateToSpy).toHaveBeenCalledTimes(0);
     });
@@ -361,6 +356,16 @@ describe('TransactionTypeBaseComponent', () => {
       });
       await component.handleNavigate(navEvent);
       expect(transactionServiceSpy.update).toHaveBeenCalledTimes(0);
+    });
+
+    it('should reenable single-click if confirmation handling fails', async () => {
+      fixture.detectChanges();
+      const dispatchSpy = vi.spyOn(store, 'dispatch');
+      vi.spyOn(component, 'getConfirmations').mockRejectedValue(new Error('Confirmation failed'));
+
+      await expect(component.handleNavigate(navEvent)).rejects.toThrow('Confirmation failed');
+
+      expect(dispatchSpy).toHaveBeenCalledWith(singleClickEnableAction());
     });
 
     it('should save on confirmation', async () => {
@@ -528,6 +533,7 @@ describe('TransactionTypeBaseComponent', () => {
         component.form,
         component.transaction,
         component.contactIdMap['contact_2'],
+        component.candidateOfficeModel,
       );
     });
   });

@@ -36,6 +36,7 @@ import {
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { CandidateOfficeModel } from '../signal-form/candidate-office-form/candidate-office-form.component';
 
 export type DateType = Date | string | undefined;
 
@@ -67,14 +68,14 @@ export class TransactionFormUtils {
    * @param contactService
    * @param isF3
    */
-  static async onInit(
+  static onInit(
     component: TransactionTypeBaseComponent,
     form: FormGroup,
     transaction: Transaction | undefined,
     contactIdMap: ContactIdMapType,
     contactService: ContactService,
     isF3: boolean,
-  ): Promise<void> {
+  ) {
     const shouldPatchFromTransaction =
       !!transaction && TransactionFormUtils.shouldInitializeFromTransaction(transaction);
 
@@ -98,10 +99,21 @@ export class TransactionFormUtils {
     if (!transactionType || !templateMap) {
       throw new Error('FECfile+: Cannot find template map when initializing transaction form');
     }
+    form.removeControl(templateMap.candidate_office);
+    form.removeControl(templateMap.candidate_state);
+    form.removeControl(templateMap.candidate_district);
 
-    const primaryContact = transaction?.contact_1;
-    if (form.get('entity_type')?.value === ContactTypes.CANDIDATE && primaryContact?.type === ContactTypes.CANDIDATE) {
-      TransactionContactUtils.updateFormWithCandidateFields(primaryContact, form, templateMap);
+    const candidateContact = [transaction?.contact_1, transaction?.contact_2].find(
+      (contact) => contact?.type === ContactTypes.CANDIDATE,
+    );
+    if (candidateContact) {
+      TransactionContactUtils.updateFormWithCandidateFields(
+        candidateContact,
+        form,
+        templateMap,
+        component.candidateOfficeModel,
+        transaction,
+      );
     }
 
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
@@ -214,9 +226,7 @@ export class TransactionFormUtils {
         (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
         (form.get(templateMap.date2) as SubscriptionFormControl).valueChanges,
         (form.get(templateMap.election_code) as SubscriptionFormControl).valueChanges,
-        (form.get(templateMap.candidate_office) as SubscriptionFormControl).valueChanges,
-        (form.get(templateMap.candidate_state) as SubscriptionFormControl).valueChanges,
-        (form.get(templateMap.candidate_district) as SubscriptionFormControl).valueChanges,
+        component.candidateOffice$,
       ).pipe(
         debounceTime(100),
         filter(() => {
@@ -224,14 +234,15 @@ export class TransactionFormUtils {
           return !code || code.toString().length === 5;
         }),
         switchMap(() => {
+          const candidateOffice = component.candidateOfficeModel();
           return component.transactionService.getPreviousElectionAggregate(
             transaction,
             form.get(templateMap.date)?.value,
             form.get(templateMap.date2)?.value,
             form.get(templateMap.election_code)?.value,
-            form.get(templateMap.candidate_office)?.value,
-            form.get(templateMap.candidate_state)?.value,
-            form.get(templateMap.candidate_district)?.value,
+            candidateOffice.candidate_office ?? undefined,
+            candidateOffice.candidate_state ?? undefined,
+            candidateOffice.candidate_district ?? undefined,
           );
         }),
         shareReplay(1),
@@ -344,6 +355,8 @@ export class TransactionFormUtils {
     activeReportId: string,
     form: FormGroup,
     formProperties: string[],
+    templateMap: TransactionTemplateMapType,
+    candidateOffice: CandidateOfficeModel,
   ): Transaction {
     if (!transaction) {
       throw new Error('FECfile+: Payload transaction not found');
@@ -359,6 +372,9 @@ export class TransactionFormUtils {
     }
 
     let formValues = SchemaUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
+    formValues[templateMap.candidate_office] = candidateOffice.candidate_office;
+    formValues[templateMap.candidate_state] = candidateOffice.candidate_state;
+    formValues[templateMap.candidate_district] = candidateOffice.candidate_district;
     formValues = TransactionFormUtils.retrieveMemoText(transaction, form, formValues);
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);

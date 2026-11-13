@@ -1,15 +1,5 @@
 <div class="flex gap-2">
   <h1>{{ transaction?.transactionType?.title }}</h1>
-  @if (showGlossary) {
-    <img
-      class="cursor-pointer"
-      src="assets/img/i-book.svg"
-      draggable="false"
-      alt="book"
-      (click)="openGlossary()"
-      (keypress)="openGlossary()"
-    />
-  }
 </div>
 
 @if (transactionType?.subTitle) {
@@ -19,7 +9,7 @@
   <app-independent-expenditure-create-f3x-input />
 }
 @if (!isEditable()) {
-  <h4 class="read-only-tag subtitle">READ ONLY</h4>
+  <h4 class="read-only-tag">READ ONLY</h4>
 }
 
 <p class="group-description">{{ transactionType?.description }}</p>
@@ -56,6 +46,7 @@
           <app-transaction-input
             [isEditable]="isEditable()"
             [form]="form"
+            [candidateOfficeFields]="candidateOfficeForm"
             [formSubmitted]="formSubmitted"
             [transaction]="transaction"
             [contactTypeOptions]="contactTypeOptions"
@@ -105,6 +96,7 @@
           <app-transaction-input
             [isEditable]="isEditable()"
             [form]="childForm"
+            [candidateOfficeFields]="candidateOfficeForm"
             [formSubmitted]="formSubmitted"
             [transaction]="childTransaction"
             [contactTypeOptions]="childContactTypeOptions"

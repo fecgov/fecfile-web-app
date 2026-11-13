@@ -1,18 +1,16 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MenubarModule } from 'primeng/menubar';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HeaderComponent } from './header.component';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
-import { USE_DYNAMIC_SIDEBAR, LayoutService } from '../layout.service';
-import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  let layoutService: LayoutService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,7 +20,6 @@ describe('HeaderComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideMockStore(testMockStore()),
-        { provide: USE_DYNAMIC_SIDEBAR, useValue: true },
       ],
     }).compileComponents();
   });
@@ -32,7 +29,6 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-    layoutService = TestBed.inject(LayoutService);
     fixture.detectChanges();
   });
 
@@ -58,12 +54,5 @@ describe('HeaderComponent', () => {
     expect(component['document'].documentElement.style.getPropertyValue('--header-total')).toBe(
       'calc(80px + var(--header-top))',
     );
-  });
-
-  it('should toggle the sidebar when the seal image is clicked', () => {
-    const sealImage = fixture.nativeElement.querySelector('img.seal-and-title');
-    expect(layoutService.showSidebar()).toBe(true);
-    sealImage.click();
-    expect(layoutService.showSidebar()).toBe(false);
   });
 });

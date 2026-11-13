@@ -4,6 +4,7 @@
       [(type)]="currentType"
       [contactTypeOptions]="contactTypeOptions()"
       [candidateOffice]="mandatoryCandidateOffice()"
+      [autosave]="shouldAutosave()"
       (contactLookupSelect)="setContact($event)"
       (createNewContactSelect)="createNewContactSelected()"
     >
@@ -14,6 +15,7 @@
     [(type)]="currentType"
     [contactTypeOptions]="contactTypeOptions()"
     [defaultCandidateOffice]="mandatoryCandidateOffice()"
+    [(contact)]="newContact"
     [(visible)]="detailVisible"
     (savedContact)="setContact($event)"
   />

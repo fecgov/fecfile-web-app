@@ -1,10 +1,9 @@
-import { Component, DOCUMENT, effect, HostListener, inject, input, signal } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
-import { HeaderStyles } from './header-styles';
-import { LayoutService, USE_DYNAMIC_SIDEBAR } from '../layout.service';
+import { Component, DOCUMENT, effect, HostListener, inject, input, signal } from '@angular/core';
 import { DefaultHeaderLinksComponent } from './header-links/default-header-links/default-header-links.component';
 import { LoginHeaderLinksComponent } from './header-links/login-header-links/login-header-links.component';
 import { LogoutHeaderLinksComponent } from './header-links/logout-header-links/logout-header-links.component';
+import { HeaderStyles } from './header-styles';
 
 @Component({
   standalone: true,
@@ -15,8 +14,6 @@ import { LogoutHeaderLinksComponent } from './header-links/logout-header-links/l
 })
 export class HeaderComponent {
   private readonly document = inject(DOCUMENT);
-  readonly layoutService = inject(LayoutService);
-  readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
   readonly headerStyle = input<HeaderStyles>('DEFAULT');
   readonly isCompact = signal(false);
 
@@ -30,9 +27,5 @@ export class HeaderComponent {
   @HostListener('window:scroll')
   onScroll() {
     this.isCompact.set(window.scrollY > 0);
-  }
-
-  toggleSidebar() {
-    this.layoutService.showSidebar.update((v) => !v);
   }
 }
