@@ -1,0 +1,116 @@
+<form class="grid-form">
+  <header class="mb-2">
+    <h1>Upload a file for import</h1>
+  </header>
+  <hr type="solid" class="mb-4" />
+  <p class="mb-4">Please upload the file you want to import.</p>
+  <section class="grid-section">
+    <p-fileupload
+      #fu
+      name="import-candidate"
+      url="/api/upload-import-candidate/"
+      [multiple]="false"
+      maxFileSize="5000000"
+      mode="advanced"
+      accept=".csv"
+      [pt]="{ root: { class: 'border-0!' }, header: { class: 'hidden!' }, content: { class: 'p-0!' } }"
+    >
+      <ng-template
+        #content
+        let-files
+        let-uploadedFiles="uploadedFiles"
+        let-removeFileCallback="removeFileCallback"
+        let-removeUploadedFileCallback="removeUploadedFileCallback"
+      >
+        <div
+          class="flex flex-col items-center gap-2 p-6 cursor-pointer border-2 border-dashed border-surface rounded-md"
+          (click)="fu.choose()"
+        >
+          <i class="pi pi-upload text-muted-color" style="font-size: 32px"></i>
+          <div class="text-sm font-medium">Drag and drop a file here or click to browse</div>
+          <div class="text-xs text-muted-color">CSV files only</div>
+          <div class="text-xs text-muted-color">Up to 5 MB</div>
+        </div>
+        @if (uploadedFiles?.length > 0 || files?.length > 0) {
+          <div class="flex flex-col gap-2 mt-3">
+            @for (file of uploadedFiles; track $index; let i = $index) {
+              <div class="flex items-center gap-3 px-3 py-2 rounded-md bg-surface-50 dark:bg-surface-800">
+                <i class="pi pi-file text-primary shrink-0"></i>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm truncate">{{ file.name }}</div>
+                  <div class="flex items-center gap-1 text-xs">
+                    <span class="text-muted-color tabular-nums">{{ formatSize(file.size) }}</span>
+                    <span class="text-muted-color">·</span>
+                    <span class="text-emerald-500">Completed</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  pButton
+                  iconOnly
+                  variant="text"
+                  severity="secondary"
+                  size="small"
+                  rounded
+                  (click)="removeUploadedFileCallback(i)"
+                >
+                  <i class="pi pi-times"></i>
+                </button>
+              </div>
+            }
+            @for (file of files; track $index; let i = $index) {
+              <div class="flex items-center gap-3 px-3 py-2 rounded-md bg-surface-50 dark:bg-surface-800">
+                <i class="pi pi-file text-primary shrink-0"></i>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm truncate">{{ file.name }}</div>
+                  <div class="flex items-center gap-1 text-xs">
+                    <span class="text-muted-color tabular-nums">{{ formatSize(file.size) }}</span>
+                    <span class="text-muted-color">·</span>
+                    <span class="text-primary">Pending</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  pButton
+                  iconOnly
+                  variant="text"
+                  severity="secondary"
+                  size="small"
+                  rounded
+                  (click)="removeFileCallback($event, i)"
+                >
+                  <i class="pi pi-times"></i>
+                </button>
+              </div>
+            }
+          </div>
+        }
+        @if (files?.length === 1) {
+          <button type="button" pButton class="w-full! mt-3" (click)="fu.upload()">Upload file</button>
+        }
+      </ng-template>
+    </p-fileupload>
+  </section>
+
+  <footer class="flex justify-content-between border-top-2 pt-5">
+    <button
+      pButton
+      type="button"
+      label="Cancel"
+      (click)="router.navigateByUrl('/reports')"
+      class="p-button-secondary"
+    ></button>
+    <div>
+      <button
+        pButton
+        type="button"
+        label="Review import plan"
+        class="p-button-primary"
+        (click)="submitForm()"
+        [class.p-disabled]="disableSubmission()"
+        [disabled]="disableSubmission()"
+        data-cy="review-action"
+      ></button>
+    </div>
+  </footer>
+</form>

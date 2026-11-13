@@ -8,5 +8,6 @@ export const environment = createEnvironment({
   baseUri: 'https://stage-api.fecfile.fec.gov',
   overrides: {
     showAllTransactionsPage: true,
+    enableImport: true,
   },
 });

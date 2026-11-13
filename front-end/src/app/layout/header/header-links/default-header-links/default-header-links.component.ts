@@ -18,6 +18,7 @@ export class DefaultHeaderLinksComponent {
   readonly electionCycleStore = inject(ElectionCycleStore);
   readonly loginService = inject(LoginService);
   readonly showAllTransactionsPage = environment.showAllTransactionsPage;
+  readonly enableImport = environment.enableImport;
   readonly showForm3 = environment.showForm3;
 
   readonly toolsHidden = signal(true);

@@ -5,6 +5,7 @@ import { electionCycleGuard } from './election-cycle/election-cycle.guard';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { ElectionCycleStore } from './election-cycle/election-cycle.store';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
+import { ImportComponent } from './import/import.component';
 
 export const TOOLS_ROUTES: Route[] = [
   {
@@ -20,6 +21,13 @@ export const TOOLS_ROUTES: Route[] = [
     pathMatch: 'full',
     providers: [Form3Service, ElectionCycleStore],
     canActivate: [electionCycleGuard, featureFlagGuard('showForm3')],
+  },
+  {
+    path: 'import',
+    component: ImportComponent,
+    title: 'Import',
+    pathMatch: 'full',
+    canActivate: [featureFlagGuard('enableImport')],
   },
   { path: '**', redirectTo: '' },
 ];

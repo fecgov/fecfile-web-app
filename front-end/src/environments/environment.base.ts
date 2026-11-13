@@ -9,7 +9,7 @@ export const baseEnvironment = {
   showSchedF: true,
   showAllTransactionsPage: false,
   showRestoreDeletedContacts: false,
-  enableImport: true,
+  enableImport: false,
   manualReportVersion: true,
   whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
   errorReporting: {

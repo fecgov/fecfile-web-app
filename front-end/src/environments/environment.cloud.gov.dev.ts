@@ -9,5 +9,6 @@ export const environment = createEnvironment({
   overrides: {
     ffapiTimeoutCookieName: 'ffapi_timeout_dev',
     showAllTransactionsPage: true,
+    enableImport: true,
   },
 });
