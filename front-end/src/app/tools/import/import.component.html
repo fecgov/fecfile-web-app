@@ -8,8 +8,11 @@
     <p-fileupload
       #fu
       name="import-candidate"
-      url="/api/upload-import-candidate/"
+      [customUpload]="true"
+      [disabled]="uploading()"
+      (uploadHandler)="upload($event)"
       [multiple]="false"
+      [auto]="true"
       maxFileSize="5000000"
       mode="advanced"
       accept=".csv"
@@ -31,6 +34,7 @@
           <div class="text-xs text-muted-color">CSV files only</div>
           <div class="text-xs text-muted-color">Up to 5 MB</div>
         </div>
+        {{ uploadedFiles }}
         @if (uploadedFiles?.length > 0 || files?.length > 0) {
           <div class="flex flex-col gap-2 mt-3">
             @for (file of uploadedFiles; track $index; let i = $index) {
@@ -84,9 +88,6 @@
               </div>
             }
           </div>
-        }
-        @if (files?.length === 1) {
-          <button type="button" pButton class="w-full! mt-3" (click)="fu.upload()">Upload file</button>
         }
       </ng-template>
     </p-fileupload>
