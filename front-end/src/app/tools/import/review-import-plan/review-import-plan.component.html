@@ -1,0 +1,7 @@
+@if (error(); as message) {
+  <p class="text-red-600" role="alert">{{ message }}</p>
+} @else if (!importDetail() || parsing()) {
+  <p>Preparing your import plan…</p>
+} @else {
+  <p>Import status: {{ importDetail()?.status }}</p>
+}

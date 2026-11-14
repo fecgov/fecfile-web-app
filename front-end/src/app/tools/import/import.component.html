@@ -16,7 +16,7 @@
       [auto]="true"
       (onSelect)="resetResult(); fu.uploadedFiles = []"
       (onError)="errored.set(true)"
-      (onUpload)="uploaded.set(true)"
+      (onUpload)="onUpload($event)"
       maxFileSize="5000000"
       mode="advanced"
       accept=".csv"

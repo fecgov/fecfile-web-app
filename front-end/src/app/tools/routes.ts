@@ -6,6 +6,8 @@ import { Form3Service } from 'app/shared/services/form-3.service';
 import { ElectionCycleStore } from './election-cycle/election-cycle.store';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 import { ImportComponent } from './import/import.component';
+import { ReviewImportPlanComponent } from './import/review-import-plan/review-import-plan.component';
+import { ImportService } from './import/import.service';
 
 export const TOOLS_ROUTES: Route[] = [
   {
@@ -26,6 +28,13 @@ export const TOOLS_ROUTES: Route[] = [
     path: 'import',
     component: ImportComponent,
     title: 'Import',
+    pathMatch: 'full',
+    canActivate: [featureFlagGuard('enableImport')],
+  },
+  {
+    path: 'import/:importId/review-plan',
+    component: ReviewImportPlanComponent,
+    title: 'Review Import Plan',
     pathMatch: 'full',
     canActivate: [featureFlagGuard('enableImport')],
   },
