@@ -1,6 +1,7 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO } from './OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO.model';
+import { ReportTypes } from '../reports/report.model';
 
 describe('OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO', () => {
   let transactionType: OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO;
@@ -23,5 +24,15 @@ describe('OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO', () => {
 
   it('#generatePurposeDescription() should not be defined', () => {
     expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
+  });
+
+  it('#hasElectionInformation() should return true for F3 report type', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(result).toBe(true);
+  });
+
+  it('#hasElectionInformation() should return false for F3X', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(result).toBe(false);
   });
 });

@@ -1,4 +1,4 @@
-import { computed, Directive, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { computed, Directive, effect, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommitteeStore } from 'app/committee/committee.store';
@@ -10,7 +10,7 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import type { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds, type Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -23,18 +23,22 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { environment } from 'environments/environment';
-import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, merge, Observable, of, startWith, takeUntil } from 'rxjs';
-import { FormComponent } from '../form.component';
-import { GlossaryService } from '../glossary/glossary.service';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import {
+  blankCandidateOfficeModel,
+  buildCandidateSchema,
+  CandidateOfficeModel,
+} from '../signal-form/candidate-office-form/candidate-office-form.component';
+import { form } from '@angular/forms/signals';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { MessageService, ToastMessageOptions, SelectItem } from 'primeng/api';
+import { of, takeUntil, Observable, merge, startWith, map } from 'rxjs';
+import { FormComponent } from '../form.component';
 
 @Directive()
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
   protected readonly committeeStore = inject(CommitteeStore);
-  private readonly glossaryService = inject(GlossaryService);
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
@@ -46,13 +50,22 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
   protected readonly navigationEvent = this.store.selectSignal(selectNavigationEvent);
 
+  readonly candidateOfficeModel = signal<CandidateOfficeModel>(blankCandidateOfficeModel());
+  readonly candidateOfficeForm = form(
+    this.candidateOfficeModel,
+    buildCandidateSchema({
+      defaultOffice: () => undefined,
+      presidentialScheduleE: this.isPresidentialScheduleE.bind(this),
+    }),
+  );
+  readonly candidateOffice$ = toObservable(this.candidateOfficeModel);
+
   @Input() transaction: Transaction | undefined;
   formProperties: string[] = [];
   transactionType?: TransactionType;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
 
   readonly activeReportId: string = this.activatedRoute.snapshot.params['reportId'] ?? '';
-  readonly showGlossary = environment.showGlossary;
   readonly reportTypes = ReportTypes;
   readonly saveSuccessMessage: ToastMessageOptions = {
     severity: 'success',
@@ -131,6 +144,14 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.initInheritedFieldsFromParent();
     }
 
+    const electionCodeControl = this.form.get(this.templateMap.election_code);
+    if (electionCodeControl) {
+      this.electionCode.set(electionCodeControl.value ?? '');
+      electionCodeControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value: string | null) => {
+        this.electionCode.set(value ?? '');
+      });
+    }
+
     this.store.dispatch(navigationEventClearAction());
   }
 
@@ -145,7 +166,12 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   async submit(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+      TransactionContactUtils.updateContactsWithForm(
+        this.transaction,
+        this.templateMap,
+        this.form,
+        this.candidateOfficeModel(),
+      );
     } else {
       this.store.dispatch(singleClickEnableAction());
       throw new Error('FECfile+: No transactions submitted for single-entry transaction form.');
@@ -156,6 +182,8 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.activeReportId,
       this.form,
       this.formProperties,
+      this.templateMap,
+      this.candidateOfficeModel(),
     );
     await this.processPayload(payload, navigationEvent);
   }
@@ -173,13 +201,13 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
   async getConfirmations(): Promise<boolean> {
     if (!this.transaction) return false;
-    return this.confirmationService.confirmWithUser(
-      this.form,
-      this.transaction.transactionType?.contactConfig ?? {},
-      this.getContact.bind(this),
-      this.getTemplateMap.bind(this),
-      this.transaction,
-    );
+    return this.confirmationService.confirmWithUser(this.form, {
+      contactConfig: this.transaction.transactionType?.contactConfig ?? {},
+      getContact: this.getContact.bind(this),
+      getTemplateMap: this.getTemplateMap.bind(this),
+      transaction: this.transaction,
+      candidateOffice: this.candidateOfficeModel(),
+    });
   }
 
   getContact(contactKey: string, transaction?: Transaction) {
@@ -200,17 +228,30 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
   async handleNavigate(navigationEvent: NavigationEvent): Promise<void> {
     this.formSubmitted = true;
-
     if (navigationEvent.action === NavigationAction.SAVE) {
-      if (!(await this.validateForm())) return;
+      try {
+        if (!(await this.validateForm())) return;
 
-      const confirmed = await this.getConfirmations();
-      // if every confirmation was accepted
-      if (confirmed) await this.submit(navigationEvent);
-      else this.store.dispatch(singleClickEnableAction());
+        const confirmed = await this.getConfirmations();
+
+        if (confirmed) {
+          await this.submit(navigationEvent);
+        }
+      } finally {
+        this.store.dispatch(singleClickEnableAction());
+      }
     } else {
       await this.navigateTo(navigationEvent);
     }
+  }
+
+  override async validateForm() {
+    this.candidateOfficeForm.candidate_office().markAsTouched();
+    this.candidateOfficeForm.candidate_state().markAsTouched();
+    this.candidateOfficeForm.candidate_district().markAsTouched();
+    if ((await super.validateForm()) === false) return false;
+    const isCandidateOfficeRequired = this.transactionType?.schema.required.includes(this.templateMap.candidate_office);
+    return !isCandidateOfficeRequired || this.candidateOfficeForm().valid();
   }
 
   async navigateTo(event: NavigationEvent): Promise<boolean> {
@@ -280,6 +321,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.form,
       this.transaction,
       this.contactIdMap['contact_1'],
+      this.candidateOfficeModel,
     );
   }
 
@@ -293,6 +335,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.form,
       this.transaction,
       this.contactIdMap['contact_2'],
+      this.candidateOfficeModel,
     );
   }
 
@@ -395,7 +438,10 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     });
   }
 
-  openGlossary() {
-    this.glossaryService.search(this.transactionType?.title ?? '');
+  readonly electionCode = signal<string>('');
+  isPresidentialScheduleE(): boolean {
+    const isScheE = this.transaction?.transactionType?.scheduleId === ScheduleIds.E;
+    if (!isScheE) return false;
+    return this.electionCode().startsWith('P');
   }
 }

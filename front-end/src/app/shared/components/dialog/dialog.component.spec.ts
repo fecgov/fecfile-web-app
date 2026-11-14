@@ -55,6 +55,26 @@ describe('DialogComponent', () => {
     });
   });
 
+  describe('nested dialog Escape propagation', () => {
+    it.each([true, false])('should keep Escape inside the dialog when dismissible is %s', (dismissible) => {
+      host.dismissible.set(dismissible);
+      host.visible.set(true);
+      fixture.detectChanges();
+      const onDocumentEscape = vi.fn();
+      document.addEventListener('keydown', onDocumentEscape);
+
+      try {
+        const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+        fixture.nativeElement.querySelector('dialog').dispatchEvent(event);
+
+        expect(onDocumentEscape).not.toHaveBeenCalled();
+        expect(event.defaultPrevented).toBe(!dismissible);
+      } finally {
+        document.removeEventListener('keydown', onDocumentEscape);
+      }
+    });
+  });
+
   describe('handleCancel', () => {
     it('should emit reject event and close the dialog when dismissible is true', () => {
       host.dismissible.set(true);

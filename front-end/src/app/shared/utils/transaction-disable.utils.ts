@@ -12,11 +12,9 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     /*** RECEIPTS **********************************************/
     // CONTRIBUTIONS FROM INDIVIDUALS/PERSONS
     ScheduleATransactionTypes.IN_KIND_RECEIPT,
-    ScheduleATransactionTypes.EARMARK_RECEIPT,
     // CONTRIBUTIONS FROM REGISTERED FILERS
     ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
     ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
-    ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
     ScheduleATransactionTypes.IN_KIND_CONTRIBUTION_FROM_CANDIDATE,
     // TRANSFERS
     ScheduleATransactionTypes.AUTHORIZED_COMMITTEE_TRANSFER,
@@ -27,18 +25,11 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleATransactionTypes.UNREGISTERED_RECOUNT_DONATION_FROM_ORGANIZATION,
 
     /*** DISBURSEMENT **********************************************/
-    // OPERATING EXPENDITURES
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
     // CONTRIBUTIONS/EXPENDITURES
     ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
     // OTHER EXPENDITURES
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
-    ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
     ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
     ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
     ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION,

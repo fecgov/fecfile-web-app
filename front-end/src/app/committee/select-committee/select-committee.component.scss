@@ -48,6 +48,7 @@
 
 .committee-info {
   padding-left: 10px;
+  justify-items: left;
   h3 {
     margin: 0;
     cursor: pointer;
@@ -82,7 +83,10 @@ h5 {
   background-color: var(--surface-ground);
   padding: 12px 20px;
   margin-top: 20px;
+  border: 0;
+  width: 100%;
   border-top: 1px solid #112e51;
+  cursor: pointer;
 }
 
 .header-expanded {
@@ -127,4 +131,9 @@ h5 {
 
 .committee-icon {
   flex: 0 0 34px;
+}
+
+.committee-button {
+  border: none;
+  width: calc(100% - 6px);
 }

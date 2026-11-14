@@ -1,4 +1,4 @@
-<div id="print-preview-container" [class.sidebar-version]="layoutService.showSidebar()">
+<div id="print-preview-container" class="sidebar-version">
   <h1 data-cy="print-preview">Print preview</h1>
   <hr class="mb-5" />
 
@@ -71,12 +71,6 @@
       </div>
     </div>
   }
-
-  <!-- @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
-  @if (webPrintStage === 'failure') {
-    <h2 class="text-center">Printing error:<br />{{ printError }}</h2>
-  }
-} -->
   <hr class="mt-5 mb-3" />
   <div class="flex justify-content-between">
     <button

@@ -16,6 +16,7 @@ import { Store } from '@ngrx/store';
 import { SelectModule } from 'primeng/select';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
+import { singleClickDisableAction } from 'app/store/single-click.actions';
 import { cloneInstance, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import { Component, viewChild } from '@angular/core';
 
@@ -72,6 +73,7 @@ describe('NavigationControlComponent', () => {
       fixture.detectChanges();
 
       expect(storeSpy).toHaveBeenCalled();
+      expect(storeSpy).toHaveBeenCalledWith(singleClickDisableAction());
     });
 
     it('should allow adding another', () => {

@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ContactManagementService, ContactManager } from 'app/shared/services/contact-management.service';
 import { provideRouter } from '@angular/router';
-import { ContactTypes, CandidateOfficeTypes, Contact } from '../../models/contact.model';
+import { ContactTypes, Contact } from '../../models/contact.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { testContact } from 'app/shared/utils/unit-test.utils';
 import { firstValueFrom } from 'rxjs';
@@ -34,9 +34,6 @@ describe('ContactModalComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ContactModalComponent);
-    component = fixture.componentInstance;
-
     contactManagementService = TestBed.inject(ContactManagementService);
     contactService = TestBed.inject(ContactService);
 
@@ -45,6 +42,8 @@ describe('ContactModalComponent', () => {
     manager.contactType.set(ContactTypes.INDIVIDUAL);
     manager.contact.set(new Contact());
 
+    fixture = TestBed.createComponent(ContactModalComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
@@ -65,6 +64,66 @@ describe('ContactModalComponent', () => {
     expect(component.stateOptions().length).toBeGreaterThan(0);
   });
 
+  it('should refresh contact field validators when the modal opens for a committee', async () => {
+    manager.setAsSingle(ContactTypes.COMMITTEE);
+    manager.contact.set(
+      Contact.fromJSON({
+        type: ContactTypes.COMMITTEE,
+        committee_id: 'C12345678',
+        name: 'Registered Committee',
+      }),
+    );
+    component.onShow();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(manager.contactType()).toBe(ContactTypes.COMMITTEE);
+    expect(component.form.get('type')?.value).toBe(ContactTypes.COMMITTEE);
+    expect(component.form.get('first_name')?.hasError('required')).toBe(false);
+    expect(component.form.get('last_name')?.hasError('required')).toBe(false);
+    expect(component.form.get('name')?.hasError('required')).toBe(false);
+    expect(component.form.get('name')?.value).toBe('Registered Committee');
+  });
+
+  it('should use the selected manager type on the first dialog open', async () => {
+    const committeeManager = contactManagementService.get('contact_affiliated');
+    committeeManager.setAsSingle(ContactTypes.COMMITTEE);
+    const committee = Contact.fromJSON({
+      type: ContactTypes.COMMITTEE,
+      committee_id: 'C12345678',
+      name: 'Registered Committee',
+      street_1: '123 Main St',
+      city: 'Washington',
+      state: 'DC',
+      zip: '20001',
+      country: 'USA',
+    });
+    committeeManager.contact.set(committee);
+    contactManagementService.activeKey.set('contact_affiliated');
+
+    component.onShow();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.form.get('type')?.value).toBe(ContactTypes.COMMITTEE);
+    expect(component.form.get('first_name')?.hasError('required')).toBe(false);
+    expect(component.form.get('last_name')?.hasError('required')).toBe(false);
+    expect(component.form.get('name')?.value).toBe('Registered Committee');
+
+    const createSpy = vi.spyOn(contactService, 'create').mockResolvedValue(committee);
+    const messageSpy = vi.spyOn(component.messageService, 'add');
+    await component.saveContact();
+
+    expect(createSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: ContactTypes.COMMITTEE,
+        committee_id: 'C12345678',
+        name: 'Registered Committee',
+      }),
+    );
+    expect(messageSpy).toHaveBeenCalledWith(expect.objectContaining({ detail: 'Contact created' }));
+  });
+
   it('should disable state control when country is not USA', () => {
     component.form.get('country')?.setValue('CAN');
     fixture.detectChanges();
@@ -77,22 +136,6 @@ describe('ContactModalComponent', () => {
     fixture.detectChanges();
 
     expect(component.form.get('state')?.enabled).toBe(true);
-  });
-
-  it('should update candidate district options when candidate state changes', () => {
-    component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.HOUSE);
-    component.form.get('candidate_state')?.setValue('CA');
-    fixture.detectChanges();
-
-    expect(component.candidateDistrictOptions.length).toBeGreaterThan(0);
-  });
-
-  it('should clear candidate district options when candidate office is not HOUSE', () => {
-    component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.SENATE);
-    component.form.get('candidate_state')?.setValue('CA');
-    fixture.detectChanges();
-
-    expect(component.candidateDistrictOptions.length).toEqual(0);
   });
 
   it('should not save contact if form is invalid', async () => {
@@ -130,6 +173,14 @@ describe('ContactModalComponent', () => {
     component.cmservice.showDialog.set(false);
     fixture.detectChanges();
     expect(component['reset']).toHaveBeenCalled();
+  });
+
+  it('should restore clearing contacts when the dialog is hidden', () => {
+    manager.clearOnLoad.set(false);
+
+    component.onHide();
+
+    expect(manager.clearOnLoad()).toBe(true);
   });
 
   it('should call updateContactType on initialization', () => {

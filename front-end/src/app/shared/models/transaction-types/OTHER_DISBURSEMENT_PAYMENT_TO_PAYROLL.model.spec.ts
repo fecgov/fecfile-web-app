@@ -1,3 +1,4 @@
+import { ReportTypes } from '../reports/report.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL } from './OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL.model';
 
@@ -29,5 +30,15 @@ describe('OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL', () => {
       } as SchBTransaction,
     ];
     expect(transactionType.generatePurposeDescription(txn)).toBe('Payroll Memo: See Below');
+  });
+
+  it('#hasElectionInformation() should return true for F3 report type', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(result).toBe(true);
+  });
+
+  it('#hasElectionInformation() should return false for F3X', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(result).toBe(false);
   });
 });

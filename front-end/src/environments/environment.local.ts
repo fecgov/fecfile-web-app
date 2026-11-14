@@ -7,7 +7,6 @@ export const environment = createEnvironment({
   externalLinks: 'prod',
   baseUri: 'http://localhost:8080',
   overrides: {
-    showGlossary: true,
     showAllTransactionsPage: true,
   },
 });

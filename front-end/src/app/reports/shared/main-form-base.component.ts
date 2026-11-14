@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { computed, Directive, effect, inject, input, model, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommitteeStore } from 'app/committee/committee.store';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -8,9 +8,8 @@ import { ReportService } from 'app/shared/services/report.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { JsonSchema } from 'fecfile-validate';
 import { MessageService } from 'primeng/api';
-@Component({
-  template: '',
-})
+
+@Directive()
 export abstract class MainFormBaseComponent<T extends Report> extends FormComponent implements OnInit {
   protected readonly committeeStore = inject(CommitteeStore);
   protected abstract reportService: ReportService<T>;
@@ -22,21 +21,25 @@ export abstract class MainFormBaseComponent<T extends Report> extends FormCompon
   abstract getReportPayload(): T;
   abstract webprintURL: string;
 
-  reportId?: string;
+  readonly reportId = input<string>();
+  readonly report = model<T>();
+  readonly isEditable = computed(() => !this.reportId() || (this.report()?.canEdit ?? false));
 
   constructor() {
     super();
 
     effect(() => {
       this.setConstantFormValues(this.committeeStore.committee());
-      if (this.reportId) {
-        this.form.patchValue(this.activeReport());
-      }
+      const report = this.report();
+      if (report) this.form.patchValue(report);
+    });
+
+    effect(() => {
+      if (!this.isEditable()) this.form.disable();
     });
   }
 
   ngOnInit(): void {
-    this.reportId = this.activatedRoute.snapshot.params['reportId'];
     SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
   }
 
@@ -60,8 +63,9 @@ export abstract class MainFormBaseComponent<T extends Report> extends FormCompon
   public async submit(jump: 'continue' | void) {
     const payload: T = this.getReportPayload();
     let report: T;
-    if (this.reportId) {
-      payload.id = this.reportId;
+    const reportId = this.reportId();
+    if (reportId) {
+      payload.id = reportId;
       report = await this.reportService.update(payload, this.formProperties);
     } else {
       report = await this.reportService.create(payload, this.formProperties);
