@@ -1,13 +1,58 @@
-@if (error(); as message) {
-  <p class="text-red-600" role="alert">{{ message }}</p>
-} @else if (!importDetail() || parsing()) {
-  <p>Preparing your import plan…</p>
-} @else {
-  <p>Import status: {{ importDetail()?.status }}</p>
-}
+<form class="grid-form">
+  <header class="mb-2">
+    <h1>Review upload</h1>
+  </header>
+  <hr type="solid" class="mb-4" />
+  <p class="mb-4">
+    Review the following information for accuracy. This will create the type of form identified in the .csv upon
+    completion, and will be available in your reports.
+  </p>
+  <section class="grid-section">
+    @if (error(); as message) {
+      <p class="text-red-600" role="alert">{{ message }}</p>
+    } @else if (!importDetail() || parsing()) {
+      <div class="fec-loader-div">
+        <img
+          class="max-w-full fec-loader-image"
+          src="assets/img/fec-loading-flag.gif"
+          draggable="false"
+          alt="Your report is being parsed..."
+        />
+      </div>
+      <p>Your report is being parsed…</p>
+    } @else {
+      <p>Import status: {{ importDetail()?.status }}</p>
+    }
+  </section>
+  <section class="grid-section">
+    @if (parsedData(); as parsed) {
+      <p-card header="Parsed import data">
+        <div class="parsed-json-container">
+          <pre>{{ parsed | json }}</pre>
+        </div>
+      </p-card>
+    }
+  </section>
 
-@if (parsedData(); as parsed) {
-  <p-card header="Parsed import data">
-    <pre class="parsed-json">{{ parsed | json }}</pre>
-  </p-card>
-}
+  <footer class="flex justify-content-between border-top-2 pt-5">
+    <button
+      pButton
+      type="button"
+      label="Cancel"
+      (click)="router.navigateByUrl('/reports')"
+      class="p-button-secondary"
+    ></button>
+    <div>
+      <button
+        pButton
+        type="button"
+        label="Continue reviewing"
+        class="p-button-primary"
+        (click)="submitForm()"
+        [class.p-disabled]="disableSubmission()"
+        [disabled]="disableSubmission()"
+        data-cy="review-action"
+      ></button>
+    </div>
+  </footer>
+</form>

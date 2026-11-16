@@ -4,6 +4,8 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, exhaustMap, map, of, startWith, switchMap, takeWhile, timer } from 'rxjs';
 import { JsonPipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { Router } from '@angular/router';
 
 interface PollState {
   data: ImportDetail | null;
@@ -17,7 +19,7 @@ const isParsing = (status: string | undefined): boolean => {
 
 @Component({
   selector: 'app-review-import-plan',
-  imports: [CardModule, JsonPipe],
+  imports: [CardModule, JsonPipe, ButtonModule],
   providers: [ImportService],
   templateUrl: './review-import-plan.component.html',
   styleUrl: './review-import-plan.component.scss',
@@ -25,6 +27,7 @@ const isParsing = (status: string | undefined): boolean => {
 export class ReviewImportPlanComponent {
   readonly importService = inject(ImportService);
 
+  protected readonly router: Router = inject(Router);
   readonly initialState: PollState = { data: null, parsedData: null, error: null };
   readonly importId = input.required<string>();
 
@@ -58,5 +61,13 @@ export class ReviewImportPlanComponent {
   readonly importDetail = computed(() => this.state().data);
   readonly error = computed(() => this.state().error);
   readonly parsing = computed(() => isParsing(this.importDetail()?.status));
+  readonly parsingIsComplete = computed(() => this.importDetail()?.status === 'parse_completed');
   readonly parsedData = computed(() => this.state().parsedData);
+  readonly disableSubmission = computed(() => !this.parsedData() || !this.parsingIsComplete());
+
+  submitForm() {
+    if (!this.parsedData() || !this.parsingIsComplete()) {
+      return;
+    }
+  }
 }

@@ -17,7 +17,7 @@
       (onSelect)="resetResult(); fu.uploadedFiles = []"
       (onError)="errored.set(true)"
       (onUpload)="onUpload($event)"
-      maxFileSize="5000000"
+      maxFileSize="2500000"
       mode="advanced"
       accept=".csv"
       [pt]="{
@@ -40,7 +40,7 @@
           <i class="pi pi-upload text-muted-color" style="font-size: 32px"></i>
           <div class="text-sm font-medium">Drag and drop a file here or click to browse</div>
           <div class="text-xs text-muted-color">CSV files only</div>
-          <div class="text-xs text-muted-color">Up to 5 MB</div>
+          <div class="text-xs text-muted-color">Up to 2.5 MB</div>
         </div>
         @if (uploadedFiles?.length > 0 || files?.length > 0) {
           <section class="uploads">

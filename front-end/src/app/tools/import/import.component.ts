@@ -29,12 +29,12 @@ export class ImportComponent {
   readonly uploadUrl = `${environment.apiUrl}/imports/upload-file/`;
   readonly uploadHeaders = new HttpHeaders(getHeaders(this.cookieService)).delete('Content-Type');
 
-  submitForm() {
+  async submitForm() {
     if (!this.importId()) {
       throw new Error('Import ID is not set');
     }
 
-    this.importService.startParse(this.importId()!);
+    await this.importService.startParse(this.importId()!);
     this.router.navigateByUrl(`tools/import/${this.importId()}/review-plan`);
   }
 

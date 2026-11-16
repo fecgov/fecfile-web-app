@@ -1,0 +1,10 @@
+.parsed-json-container {
+  max-height: 60vh;
+  overflow: auto;
+
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
