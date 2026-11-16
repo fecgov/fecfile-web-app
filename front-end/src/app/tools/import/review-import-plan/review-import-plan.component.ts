@@ -65,9 +65,11 @@ export class ReviewImportPlanComponent {
   readonly parsedData = computed(() => this.state().parsedData);
   readonly disableSubmission = computed(() => !this.parsedData() || !this.parsingIsComplete());
 
-  submitForm() {
+  async submitForm() {
     if (!this.parsedData() || !this.parsingIsComplete()) {
       return;
     }
+    await this.importService.startImport(this.importId());
+    this.router.navigate([`/tools/import/${this.importId()}/result`]);
   }
 }

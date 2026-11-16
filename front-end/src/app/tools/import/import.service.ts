@@ -8,6 +8,7 @@ import { ApiService, getHeaders } from 'app/shared/services/api.service';
 export interface ImportDetail {
   id: string;
   status: string;
+  report: string;
 }
 export interface ParsedImportData {
   header: Record<string, string>;
@@ -30,5 +31,9 @@ export class ImportService {
 
   async getParsedData(importId: string): Promise<ParsedImportData> {
     return this.apiService.get(`${this.importUrl}/${importId}/parsed-data/`);
+  }
+
+  async startImport(importId: string): Promise<ImportDetail> {
+    return this.apiService.post(`${this.importUrl}/${importId}/start-import/`, {});
   }
 }

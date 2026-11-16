@@ -1,0 +1,45 @@
+<form class="grid-form">
+  <header class="mb-2">
+    <h1>Review import</h1>
+  </header>
+  <hr type="solid" class="mb-4" />
+  <section class="grid-section">
+    @if (error(); as message) {
+      <p class="text-red-600" role="alert">{{ message }}</p>
+    } @else if (!importDetail() || importing()) {
+      <div class="fec-loader-div">
+        <img
+          class="max-w-full fec-loader-image"
+          src="assets/img/fec-loading-flag.gif"
+          draggable="false"
+          alt="Your report is created..."
+        />
+      </div>
+      <p>Your report is being created...</p>
+    } @else {
+      <p>Import status: {{ importDetail()?.status }}</p>
+    }
+  </section>
+
+  <footer class="flex justify-content-between border-top-2 pt-5">
+    <button
+      pButton
+      type="button"
+      label="Cancel"
+      (click)="router.navigateByUrl('/reports')"
+      class="p-button-secondary"
+    ></button>
+    <div>
+      <button
+        pButton
+        type="button"
+        label="Go to report"
+        class="p-button-primary"
+        (click)="submitForm()"
+        [class.p-disabled]="disableSubmission()"
+        [disabled]="disableSubmission()"
+        data-cy="review-action"
+      ></button>
+    </div>
+  </footer>
+</form>
