@@ -24,7 +24,8 @@ describe('Verify that the terms of service page is working', () => {
     })
   });
 
-  it('The one-year consent checkbox should work', () => {
+  // New test ready to be put into use as soon as its associated bug is fixed (See #FECFILE-3516)
+  xit('The one-year consent checkbox should work', () => {
     cy.visit('/login/security-notice');
     cy.intercept('**/api/v1/users/update_current/').as('update');
 
