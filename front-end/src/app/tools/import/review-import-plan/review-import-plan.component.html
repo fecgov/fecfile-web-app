@@ -5,3 +5,9 @@
 } @else {
   <p>Import status: {{ importDetail()?.status }}</p>
 }
+
+@if (parsedData(); as parsed) {
+  <p-card header="Parsed import data">
+    <pre class="parsed-json">{{ parsed | json }}</pre>
+  </p-card>
+}

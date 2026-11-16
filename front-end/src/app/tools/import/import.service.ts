@@ -9,6 +9,9 @@ export interface ImportDetail {
   id: string;
   status: string;
 }
+export interface ParsedImportData {
+  header: Record<string, string>;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -23,5 +26,9 @@ export class ImportService {
 
   async getImport(importId: string): Promise<ImportDetail> {
     return this.apiService.get(`${this.importUrl}/${importId}/`);
+  }
+
+  async getParsedData(importId: string): Promise<ParsedImportData> {
+    return this.apiService.get(`${this.importUrl}/${importId}/parsed-data/`);
   }
 }
