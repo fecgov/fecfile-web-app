@@ -105,6 +105,7 @@ import { CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/CONTRIBUT
 import { CONTRIBUTION_TO_CANDIDATE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE_VOID.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE_VOID.model';
+import { CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE.model';
 import { FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT.model';
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT.model';
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO.model';
@@ -379,6 +380,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_OUT_UNDEPOSITED: CONDUIT_EARMARK_OUT,
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
+  CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE,
   LOAN_MADE,
   LOAN_REPAYMENT_MADE,
   // Schedule C /////////////////////////////////////////////////////

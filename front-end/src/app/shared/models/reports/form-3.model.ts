@@ -164,7 +164,7 @@ export class Form3 extends BaseForm3 {
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
     ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
     ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
-    ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
+    ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE,
     ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION,
     ScheduleBTransactionTypes.DISGORGEMENT,
     ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,

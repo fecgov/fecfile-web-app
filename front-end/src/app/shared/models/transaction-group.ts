@@ -77,7 +77,7 @@ export const Disbursement: TransactionGroup[] = [
       ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
       ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
       ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
-      ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
+      ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE,
       ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION,
       ScheduleBTransactionTypes.DISGORGEMENT,
     ]),
