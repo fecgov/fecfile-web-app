@@ -32,7 +32,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     // OTHER EXPENDITURES
     ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
     ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
-    ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION,
     ScheduleBTransactionTypes.DISGORGEMENT,
     // REFUNDS
     ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
