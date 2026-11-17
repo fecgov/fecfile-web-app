@@ -1,0 +1,21 @@
+<p-card header="Report information">
+  <dl class="report-details">
+    @for (detail of details(); track detail.label) {
+      <div class="detail">
+        <dt>{{ detail.label }}</dt>
+        <dd>{{ detail.value || '—' }}</dd>
+      </div>
+    }
+
+    <div class="detail">
+      <dt>Committee address</dt>
+      <dd>
+        @for (line of addressLines(); track $index) {
+          <span class="address-line">{{ line }}</span>
+        } @empty {
+          —
+        }
+      </dd>
+    </div>
+  </dl>
+</p-card>

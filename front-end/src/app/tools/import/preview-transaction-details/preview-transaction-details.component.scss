@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.amount-column {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.amount-label {
+  display: block;
+  color: var(--p-text-muted-color);
+}

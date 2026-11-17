@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.report-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 2rem;
+  margin: 0;
+}
+
+dt {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.address-line {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .report-details {
+    grid-template-columns: 1fr;
+  }
+}

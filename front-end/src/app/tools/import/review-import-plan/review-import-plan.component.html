@@ -7,10 +7,12 @@
     Review the following information for accuracy. This will create the type of form identified in the .csv upon
     completion, and will be available in your reports.
   </p>
-  <section class="grid-section">
-    @if (error(); as message) {
+  @if (error(); as message) {
+    <section class="grid-section">
       <p class="text-red-600" role="alert">{{ message }}</p>
-    } @else if (!importDetail() || parsing()) {
+    </section>
+  } @else if (!importDetail() || parsing()) {
+    <section class="grid-section">
       <div class="fec-loader-div">
         <img
           class="max-w-full fec-loader-image"
@@ -20,12 +22,13 @@
         />
       </div>
       <p>Your report is being parsed…</p>
-    } @else {
-      <p>Import status: {{ importDetail()?.status }}</p>
-    }
-  </section>
+    </section>
+  }
   <section class="grid-section">
     @if (parsedData(); as parsed) {
+      <app-preview-header-details [header]="parsed.header" />
+      <app-preview-report-details [report]="parsed.report" />
+      <app-preview-transaction-details [transactions]="parsed.transactions" />
       <p-card header="Parsed import data">
         <div class="parsed-json-container">
           <pre>{{ parsed | json }}</pre>

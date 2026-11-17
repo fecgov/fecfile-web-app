@@ -10,8 +10,18 @@ export interface ImportDetail {
   status: string;
   report: string;
 }
+export type ParsedValue = string | number | boolean | null;
+
+export interface ParsedTransaction {
+  schema_name: string;
+  source_row: number;
+  data: Record<string, ParsedValue>;
+}
+
 export interface ParsedImportData {
   header: Record<string, string>;
+  report: Record<string, string>;
+  transactions: ParsedTransaction[];
 }
 
 @Injectable({

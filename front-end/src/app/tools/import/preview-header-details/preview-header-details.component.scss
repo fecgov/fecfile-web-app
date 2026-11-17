@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+.header-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 2rem;
+  margin: 0;
+}
+
+dt {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .header-details {
+    grid-template-columns: 1fr;
+  }
+}

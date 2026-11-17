@@ -1,0 +1,54 @@
+<p-card header="Transactions">
+  <p-table
+    [value]="rows()"
+    dataKey="sourceRow"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+    [scrollable]="true"
+    scrollHeight="28rem"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    sortField="sourceRow"
+    [sortOrder]="1"
+    stripedRows
+    showGridlines
+    styleClass="import-transactions-table"
+  >
+    <ng-template #header>
+      <tr>
+        <th scope="col" pSortableColumn="sourceRow">Source row <p-sortIcon field="sourceRow" /></th>
+        <th scope="col" pSortableColumn="formType">Line <p-sortIcon field="formType" /></th>
+        <th scope="col" pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+        <th scope="col" pSortableColumn="date">Date <p-sortIcon field="date" /></th>
+        <th scope="col">Memo</th>
+        <th scope="col" pSortableColumn="amount" class="amount-column">
+          Amount / balance <p-sortIcon field="amount" />
+        </th>
+        <th scope="col" pSortableColumn="transactionId">Transaction ID <p-sortIcon field="transactionId" /></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-row>
+      <tr>
+        <td>{{ row.sourceRow }}</td>
+        <td>{{ row.formType || row.schema }}</td>
+        <td>{{ row.name }}</td>
+        <td>{{ row.date ? (row.date | date: 'MM/dd/yyyy' : 'UTC') : '—' }}</td>
+        <td>{{ row.memo ? 'Yes' : '—' }}</td>
+        <td class="amount-column">
+          {{ row.amount !== null ? (row.amount | currency: 'USD') : '—' }}
+          @if (row.amountLabel) {
+            <small class="amount-label">{{ row.amountLabel }}</small>
+          }
+        </td>
+        <td>{{ row.transactionId || '—' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="7">No transactions found in the uploaded file.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

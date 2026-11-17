@@ -1,0 +1,10 @@
+<p-card header="File header information">
+  <dl class="header-details">
+    @for (detail of details(); track detail.label) {
+      <div class="detail">
+        <dt>{{ detail.label }}</dt>
+        <dd>{{ detail.value || '—' }}</dd>
+      </div>
+    }
+  </dl>
+</p-card>

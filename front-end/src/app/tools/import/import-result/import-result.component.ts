@@ -2,7 +2,7 @@ import { Component, inject, input, computed } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, exhaustMap, startWith, switchMap, takeWhile, timer, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { ImportDetail, ImportService, ParsedImportData } from '../import.service';
+import { ImportDetail, ImportService } from '../import.service';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 

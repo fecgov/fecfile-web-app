@@ -1,5 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { ImportService, ImportDetail, ParsedImportData } from '../import.service';
+import { PreviewReportDetailsComponent } from '../preview-report-details/preview-report-details.component';
+import { PreviewHeaderDetailsComponent } from '../preview-header-details/preview-header-details.component';
+import { PreviewTransactionDetailsComponent } from '../preview-transaction-details/preview-transaction-details.component';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, exhaustMap, map, of, startWith, switchMap, takeWhile, timer } from 'rxjs';
 import { JsonPipe } from '@angular/common';
@@ -19,7 +22,14 @@ const isParsing = (status: string | undefined): boolean => {
 
 @Component({
   selector: 'app-review-import-plan',
-  imports: [CardModule, JsonPipe, ButtonModule],
+  imports: [
+    CardModule,
+    JsonPipe,
+    ButtonModule,
+    PreviewReportDetailsComponent,
+    PreviewHeaderDetailsComponent,
+    PreviewTransactionDetailsComponent,
+  ],
   providers: [ImportService],
   templateUrl: './review-import-plan.component.html',
   styleUrl: './review-import-plan.component.scss',
