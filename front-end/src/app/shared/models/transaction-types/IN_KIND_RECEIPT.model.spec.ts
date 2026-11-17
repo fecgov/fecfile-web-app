@@ -1,5 +1,6 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { ReportTypes } from '../reports/report.model';
 
 describe('IN_KIND_RECEIPT', () => {
   let transaction: SchATransaction;
@@ -15,5 +16,11 @@ describe('IN_KIND_RECEIPT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.IN_KIND_RECEIPT);
+  });
+
+  it('should be non-reattributable and show election information only on Form 3', () => {
+    expect(transaction.transactionType?.isReattributable).toBe(false);
+    expect(transaction.transactionType?.hasElectionInformation(ReportTypes.F3)).toBe(true);
+    expect(transaction.transactionType?.hasElectionInformation(ReportTypes.F3X)).toBe(false);
   });
 });
