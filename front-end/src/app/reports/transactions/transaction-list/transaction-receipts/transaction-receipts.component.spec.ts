@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getTestIndividualReceipt, testF3, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestIndividualReceipt, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
