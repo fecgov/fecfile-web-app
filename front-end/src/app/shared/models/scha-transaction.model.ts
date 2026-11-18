@@ -199,6 +199,13 @@ export enum ScheduleATransactionTypes {
   LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT = 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT',
   LOAN_RECEIVED_FROM_BANK_RECEIPT = 'LOAN_RECEIVED_FROM_BANK_RECEIPT',
   LOAN_REPAYMENT_RECEIVED = 'LOAN_REPAYMENT_RECEIVED',
+  INDIVIDUAL_AC_TRANSFER_MEMO = 'INDIVIDUAL_AC_TRANSFER_MEMO',
+  PARTY_AC_TRANSFER_MEMO = 'PARTY_AC_TRANSFER_MEMO',
+  PAC_AC_TRANSFER_MEMO = 'PAC_AC_TRANSFER_MEMO',
+  UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO = 'UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO',
+  TRIBAL_AC_TRANSFER_MEMO = 'TRIBAL_AC_TRANSFER_MEMO',
+  PARTNERSHIP_AC_TRANSFER_MEMO = 'PARTNERSHIP_AC_TRANSFER_MEMO',
+  PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO = 'PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -235,6 +242,19 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   // Transfers
   [ScheduleATransactionTypes.TRANSFER, 'Transfer'],
   [ScheduleATransactionTypes.AUTHORIZED_COMMITTEE_TRANSFER, 'Authorized Committee Transfer'],
+  [ScheduleATransactionTypes.INDIVIDUAL_AC_TRANSFER_MEMO, 'Individual Authorized Committee Transfer Memo'],
+  [ScheduleATransactionTypes.PARTY_AC_TRANSFER_MEMO, 'Party Authorized Committee Transfer Memo'],
+  [ScheduleATransactionTypes.PAC_AC_TRANSFER_MEMO, 'PAC Authorized Committee Transfer Memo'],
+  [
+    ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO,
+    'Unregistered Organization Authorized Committee Transfer Memo',
+  ],
+  [ScheduleATransactionTypes.TRIBAL_AC_TRANSFER_MEMO, 'Tribal Authorized Committee Transfer Memo'],
+  [ScheduleATransactionTypes.PARTNERSHIP_AC_TRANSFER_MEMO, 'Partnership Authorized Committee Transfer Memo'],
+  [
+    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO,
+    'Partnership Attribution Authorized Committee Transfer Memo',
+  ],
   [ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER, 'Joint Fundraising Transfer'],
   [ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO, 'Individual Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO, 'PAC Joint Fundraising Transfer Memo'],
