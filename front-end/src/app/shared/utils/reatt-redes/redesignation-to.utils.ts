@@ -1,10 +1,11 @@
 import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
-import type { TransactionTypes } from '../../models/transaction.model';
+import { ScheduleIds, type TransactionTypes } from '../../models/transaction.model';
 import type { SchBTransaction } from '../../models/schb-transaction.model';
 import type { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
+import { SchATransaction } from 'app/shared/models';
 
 export class RedesignationToUtils {
   public static overlayTransactionProperties(
@@ -39,9 +40,16 @@ export class RedesignationToUtils {
       dependentChildTransactionTypes: [transaction.transaction_type_identifier as TransactionTypes],
       generatePurposeDescription: (transaction: SchBTransaction): string => {
         if (!transaction.reatt_redes) return '';
-        const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
-        if (!expenditureDate) throw new Error('No Expenditure Date!');
-        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(expenditureDate)}`;
+
+        let date: Date | undefined;
+        if (transaction.transactionType.scheduleId === ScheduleIds.B) {
+          date = (transaction.reatt_redes as SchBTransaction).expenditure_date;
+        } else if (transaction.transactionType.scheduleId === ScheduleIds.A) {
+          date = (transaction.reatt_redes as SchATransaction).contribution_date;
+        }
+
+        if (!date) throw new Error('No Expenditure Date!');
+        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(date)}`;
       },
       hideContactLookup: true,
     });

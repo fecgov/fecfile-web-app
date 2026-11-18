@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getTestIndividualReceipt, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestIndividualReceipt, testF3, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -18,7 +18,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-import { ScheduleATransactionTypes } from 'app/shared/models';
+import { ReportTypes, ScheduleATransactionTypes } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -136,11 +136,13 @@ describe('TransactionReceiptsComponent', () => {
     const itemizeAction = component.rowActions.find((ra) => ra.label === 'Itemize');
     const unitemizeAction = component.rowActions.find((ra) => ra.label === 'Unitemize');
     const reattributeAction = component.rowActions.find((ra) => ra.label === 'Reattribute');
+    const redesignateAction = component.rowActions.find((ra) => ra.label === 'Redesignate');
     const deleteAction = component.rowActions.find((ra) => ra.label === 'Delete');
     expect(viewAction?.isAvailable(transaction)).toBe(true);
     expect(deleteAction?.isAvailable(transaction)).toBe(false);
     expect(editAction?.isAvailable(transaction)).toBe(false);
     expect(aggregateAction?.isAvailable(transaction)).toBe(false);
+    expect(redesignateAction?.isAvailable(transaction)).toBe(false);
 
     expect(unaggregateAction?.isAvailable({ ...transaction, force_unaggregated: false } as TransactionListRecord)).toBe(
       false,
@@ -215,6 +217,10 @@ describe('TransactionReceiptsComponent', () => {
         transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.PAC_RETURN),
       } as TransactionListRecord),
     ).toEqual(false);
+
+    expect(redesignateAction?.isAvailable(transaction)).toBe(false);
+    component.report().report_type = ReportTypes.F3;
+    expect(redesignateAction?.isAvailable(transaction)).toBe(true);
   });
 
   it('test canClone', () => {

@@ -4,6 +4,7 @@ import type { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { ReattRedesTypes } from './reatt-redes.utils';
 import type { SubscriptionFormControl } from '../subscription-form-control';
+import { SchATransaction, ScheduleIds } from 'app/shared/models';
 
 export class RedesignationFromUtils {
   private static readOnlyFields = [
@@ -67,9 +68,16 @@ export class RedesignationFromUtils {
       amountLabel: 'REDESIGNATED AMOUNT',
       generatePurposeDescription: (transaction: SchBTransaction): string => {
         if (!transaction.reatt_redes) return '';
-        const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
-        if (!expenditureDate) throw new Error('No Expenditure Date!');
-        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(expenditureDate)}`;
+
+        let date: Date | undefined;
+        if (transaction.transactionType.scheduleId === ScheduleIds.B) {
+          date = (transaction.reatt_redes as SchBTransaction).expenditure_date;
+        } else if (transaction.transactionType.scheduleId === ScheduleIds.A) {
+          date = (transaction.reatt_redes as SchATransaction).contribution_date;
+        }
+
+        if (!date) throw new Error('No Expenditure Date!');
+        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(date)}`;
       },
       hideContactLookup: true,
     });
