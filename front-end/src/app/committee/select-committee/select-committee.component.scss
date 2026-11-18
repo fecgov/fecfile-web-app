@@ -48,15 +48,13 @@
 
 .committee-info {
   padding-left: 10px;
-  justify-items: left;
+  text-align: left;
   h3 {
+    display: inline;
     margin: 0;
     cursor: pointer;
-
-    span {
-      border-bottom: dotted 2px;
-      border-color: #d1d1d1;
-    }
+    border-bottom: dotted 2px;
+    border-color: #d1d1d1;
   }
 }
 
