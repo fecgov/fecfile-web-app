@@ -103,6 +103,7 @@ import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transa
 import { CONDUIT_EARMARK_OUT } from '../models/transaction-types/CONDUIT_EARMARK_OUT.model';
 import { CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE.model';
 import { CONTRIBUTION_TO_CANDIDATE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE_VOID.model';
+import { CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE_VOID.model';
 import { FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT.model';
@@ -379,6 +380,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_OUT_UNDEPOSITED: CONDUIT_EARMARK_OUT,
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
+  CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE,
   LOAN_MADE,
   LOAN_REPAYMENT_MADE,
   // Schedule C /////////////////////////////////////////////////////
