@@ -77,7 +77,7 @@ describe('NavigationControlComponent', () => {
       expect(storeSpy).toHaveBeenCalledWith(singleClickDisableAction());
     });
 
-    it('should not disable single-click when cancelling navigation', () => {
+    it('should disable single-click when cancelling navigation', () => {
       host.navigationControl = CANCEL_CONTROL;
       fixture.detectChanges();
 
@@ -85,7 +85,7 @@ describe('NavigationControlComponent', () => {
       const button = fixture.nativeElement.querySelector('button');
       button.click();
 
-      expect(storeSpy).not.toHaveBeenCalledWith(singleClickDisableAction());
+      expect(storeSpy).toHaveBeenCalledWith(singleClickDisableAction());
       expect(storeSpy).toHaveBeenCalledWith(
         expect.objectContaining({ type: navigationEventSetAction.type, action: NavigationAction.CANCEL }),
       );
