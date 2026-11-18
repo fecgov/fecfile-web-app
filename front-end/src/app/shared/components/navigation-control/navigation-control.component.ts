@@ -142,7 +142,9 @@ export class NavigationControlComponent {
       cloneInstance(transaction),
       destinationTransactionType,
     );
-    this.store.dispatch(singleClickDisableAction());
+    if (navControl.navigationAction === NavigationAction.SAVE) {
+      this.store.dispatch(singleClickDisableAction());
+    }
     this.store.dispatch(navigationEventSetAction(navigationEvent));
   }
 
@@ -150,7 +152,9 @@ export class NavigationControlComponent {
     // Handle click event for dropdown version of control
     if (event.value.action) {
       const navigationEvent = cloneNavigationEvent(event.value);
-      this.store.dispatch(singleClickDisableAction());
+      if (navigationEvent.action === NavigationAction.SAVE) {
+        this.store.dispatch(singleClickDisableAction());
+      }
       this.store.dispatch(navigationEventSetAction(navigationEvent));
     }
   }

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
+  CANCEL_CONTROL,
   ControlType,
   NavigationAction,
   NavigationControl,
@@ -74,6 +75,20 @@ describe('NavigationControlComponent', () => {
 
       expect(storeSpy).toHaveBeenCalled();
       expect(storeSpy).toHaveBeenCalledWith(singleClickDisableAction());
+    });
+
+    it('should not disable single-click when cancelling navigation', () => {
+      host.navigationControl = CANCEL_CONTROL;
+      fixture.detectChanges();
+
+      const storeSpy = vi.spyOn(store, 'dispatch');
+      const button = fixture.nativeElement.querySelector('button');
+      button.click();
+
+      expect(storeSpy).not.toHaveBeenCalledWith(singleClickDisableAction());
+      expect(storeSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ type: navigationEventSetAction.type, action: NavigationAction.CANCEL }),
+      );
     });
 
     it('should allow adding another', () => {
