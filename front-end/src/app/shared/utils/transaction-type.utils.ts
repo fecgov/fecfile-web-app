@@ -97,6 +97,14 @@ import { TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transa
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
 import { UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT } from '../models/transaction-types/UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT.model';
+import { AUTHORIZED_COMMITTEE_TRANSFER } from '../models/transaction-types/AUTHORIZED_COMMITTEE_TRANSFER.model';
+import { INDIVIDUAL_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/INDIVIDUAL_AC_TRANSFER_MEMO.model';
+import { PAC_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/PAC_AC_TRANSFER_MEMO.model';
+import { PARTNERSHIP_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/PARTNERSHIP_AC_TRANSFER_MEMO.model';
+import { PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO.model';
+import { PARTY_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/PARTY_AC_TRANSFER_MEMO.model';
+import { TRIBAL_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/TRIBAL_AC_TRANSFER_MEMO.model';
+import { UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO.model';
 
 // Schedule B /////////////////////////////////////////////////////
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
@@ -251,6 +259,14 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_RECEIPT,
   TRIBAL_RECOUNT_RECEIPT,
   UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
+  AUTHORIZED_COMMITTEE_TRANSFER,
+  INDIVIDUAL_AC_TRANSFER_MEMO,
+    PARTY_AC_TRANSFER_MEMO,
+    PAC_AC_TRANSFER_MEMO,
+    UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO,
+    TRIBAL_AC_TRANSFER_MEMO,
+    PARTNERSHIP_AC_TRANSFER_MEMO,
+    PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO,
   BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
