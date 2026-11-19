@@ -17,7 +17,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
     ScheduleATransactionTypes.IN_KIND_CONTRIBUTION_FROM_CANDIDATE,
     // TRANSFERS
-    ScheduleATransactionTypes.AUTHORIZED_COMMITTEE_TRANSFER,
     ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
     ScheduleATransactionTypes.IN_KIND_TRANSFER,
     // OTHER
@@ -30,9 +29,7 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
     // OTHER EXPENDITURES
-    ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
     ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
-    ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION,
     ScheduleBTransactionTypes.DISGORGEMENT,
     // REFUNDS
     ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
