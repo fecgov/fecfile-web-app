@@ -183,6 +183,7 @@ import { TRANSFER_TO_AFFILIATES } from '../models/transaction-types/TRANSFER_TO_
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
+import { CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION } from '../models/transaction-types/CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION.model';
 
 // Schedule C /////////////////////////////////////////////////////
 import { LOAN_BY_COMMITTEE } from '../models/transaction-types/LOAN_BY_COMMITTEE.model';
@@ -399,6 +400,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE,
   LOAN_MADE,
   LOAN_REPAYMENT_MADE,
+  CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION,
   // Schedule C /////////////////////////////////////////////////////
   LOAN_RECEIVED_FROM_INDIVIDUAL,
   LOAN_RECEIVED_FROM_BANK,
