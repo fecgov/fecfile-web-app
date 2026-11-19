@@ -12,7 +12,7 @@
   }
 
   <!--  Begin Sidebar section -->
-  @if (sidebar === Sidebar.Report && layoutService.showSidebar()) {
+  @if (sidebar === Sidebar.Report) {
     <div class="flex flex-grow-1 fec-background-color">
       <div class="flex-shrink-1" id="sidebar-container">
         <app-report-sidebar />

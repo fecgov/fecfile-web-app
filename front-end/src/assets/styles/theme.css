@@ -1277,7 +1277,7 @@ p-password.p-password-clearable.p-password-mask .p-password-clear-icon {
   right: 2.5rem;
 }
 
-.p-radiobutton + label {
+.p-radiobutton:not(.p-disabled) + label {
   cursor: pointer;
 }
 
@@ -3431,9 +3431,7 @@ td {
   border: none;
 }
 
-.p-field-checkbox > label:not(.p-disabled) {
-  cursor: pointer;
-}
+
 
 .p-tieredmenu-item {
   background: white !important;

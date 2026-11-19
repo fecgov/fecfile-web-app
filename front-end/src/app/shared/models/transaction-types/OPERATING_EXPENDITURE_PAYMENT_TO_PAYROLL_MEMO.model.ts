@@ -4,13 +4,15 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import {
+  ELECTION_FIELDS,
   INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
 import { SCHEDULE_B_MEMO } from './common-types/SCHEDULE_B_MEMO.model';
+import { ReportTypes } from '../reports/report.model';
 
 export class OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SCHEDULE_B_MEMO {
-  formFields = INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS;
+  formFields = [...INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS, ...ELECTION_FIELDS];
   override contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
@@ -24,5 +26,9 @@ export class OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SCHEDULE_B_ME
       transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
+  }
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
   }
 }

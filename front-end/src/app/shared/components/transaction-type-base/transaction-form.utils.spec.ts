@@ -11,6 +11,11 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
 import { Subject, of } from 'rxjs';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import {
+  blankCandidateOfficeModel,
+  CandidateOfficeModel,
+} from '../signal-form/candidate-office-form/candidate-office-form.component';
+import { signal } from '@angular/core';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -140,6 +145,7 @@ describe('FormUtils', () => {
     );
     const component = {
       destroy$: new Subject<void>(),
+      candidateOfficeModel: signal<CandidateOfficeModel>(blankCandidateOfficeModel()),
     } as TransactionTypeBaseComponent;
     const contactService = {
       getFecIdValidator: () => () => of(null),
@@ -153,9 +159,9 @@ describe('FormUtils', () => {
     expect(form.get('donor_candidate_middle_name')?.value).toBe('Q');
     expect(form.get('donor_candidate_prefix')?.value).toBe('Dr');
     expect(form.get('donor_candidate_suffix')?.value).toBe('Jr');
-    expect(form.get('donor_candidate_office')?.value).toBe('S');
-    expect(form.get('donor_candidate_state')?.value).toBe('NY');
-    expect(form.get('donor_candidate_district')?.value).toBe('12');
+    expect(component.candidateOfficeModel().candidate_office).toBe('S');
+    expect(component.candidateOfficeModel().candidate_state).toBe('NY');
+    expect(component.candidateOfficeModel().candidate_district).toBe('12');
   });
 });
 

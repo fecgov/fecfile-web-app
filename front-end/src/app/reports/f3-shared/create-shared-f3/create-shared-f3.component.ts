@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { form, FormField, FormRoot, hidden, required } from '@angular/forms/signals';
+import { form, FormField, FormRoot, hidden, required, submit } from '@angular/forms/signals';
 import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
 import { mapResponseToErrors } from './create-shared-f3.utils';
 import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
@@ -225,5 +225,10 @@ export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Mode
     this.form.electionCycle().value.set($event.electionCycle);
     this.form.nextElectionCycle().value.set($event.nextElectionCycle);
     this.nextElectionCycleRequired.set($event.needsNextCycle);
+  }
+
+  submitForm(jump?: 'continue') {
+    this.jump = jump;
+    return submit(this.form);
   }
 }

@@ -91,10 +91,10 @@ export class Contact extends BaseModel {
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToInstance(Contact, json);
   }
+}
 
-  getNameString(): string {
-    return this.name ?? `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
-  }
+export function getNameString(contact: Contact): string {
+  return contact.name ?? `${contact.last_name}, ${contact.first_name} ${contact.middle_name ?? ''}`.trim();
 }
 
 export function isEntity(type: ContactTypes) {

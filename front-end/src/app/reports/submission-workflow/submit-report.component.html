@@ -57,8 +57,14 @@
           <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" />
         </div>
         <div class="w-15">
-          <label for="state">STATE/TERRITORY</label>
-          <app-searchable-select inputId="state" controlName="state" [form]="form" [options]="stateOptions" />
+          <span id="state-label" class="span-label">STATE/TERRITORY</span>
+          <app-searchable-select
+            inputId="state"
+            controlName="state"
+            [form]="form"
+            [options]="stateOptions"
+            aria-labelledby="state-label"
+          />
           <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
         </div>
         <div class="w-9">

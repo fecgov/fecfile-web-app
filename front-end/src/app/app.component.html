@@ -1,4 +1,4 @@
-<div>
+<div id="main" tabindex="-1">
   @if (memberService.needsSecondAdmin()) {
     <app-second-committee-admin-dialog />
   }
@@ -9,10 +9,6 @@
   <p-toast />
   <app-download-tray />
 </div>
-
-@if (showGlossary) {
-  <app-glossary />
-}
 
 @if (showCommitteeChangedDialog()) {
   <app-dialog header="Committee changed" [visible]="true" [noInput]="true" [dismissible]="false">

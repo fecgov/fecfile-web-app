@@ -18,6 +18,8 @@ import { ContactDialogComponent } from '../contact-dialog/contact-dialog.compone
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ContactProperty, TransactionContactLookupComponent } from './transaction-contact-lookup.component';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { By } from '@angular/platform-browser';
 
 @Component({
   imports: [TransactionContactLookupComponent],
@@ -97,6 +99,42 @@ describe('TransactionContactLookupComponent', () => {
     component.detailVisible.set(false);
     component.createNewContactSelected();
     expect(component.detailVisible()).toBe(true);
+  });
+
+  it.each([ContactTypes.CANDIDATE, ContactTypes.COMMITTEE])(
+    'opens a pre-populated contact dialog for a new %s lookup result without selecting it',
+    (type) => {
+      const newContact = Contact.fromJSON({
+        type,
+        name: 'Lookup contact',
+        candidate_id: type === ContactTypes.CANDIDATE ? 'P00000001' : undefined,
+        committee_id: type === ContactTypes.COMMITTEE ? 'C00000001' : undefined,
+      });
+      const contactSelectSpy = vi.spyOn(component.contactSelect, 'emit');
+
+      component.setContact(newContact);
+      fixture.detectChanges();
+
+      const contactDialog = fixture.debugElement.query(By.directive(ContactDialogComponent)).componentInstance;
+      expect(component.detailVisible()).toBe(true);
+      expect(contactDialog.contact()).toEqual(newContact);
+      expect(contactSelectSpy).not.toHaveBeenCalled();
+    },
+  );
+
+  it('only disables lookup autosave for candidate and committee contacts', () => {
+    const contactLookup = fixture.debugElement.query(By.directive(ContactLookupComponent)).componentInstance;
+
+    expect(contactLookup.autosave()).toBe(true);
+    component.currentType.set(ContactTypes.CANDIDATE);
+    fixture.detectChanges();
+    expect(contactLookup.autosave()).toBe(false);
+    component.currentType.set(ContactTypes.COMMITTEE);
+    fixture.detectChanges();
+    expect(contactLookup.autosave()).toBe(false);
+    component.currentType.set(ContactTypes.INDIVIDUAL);
+    fixture.detectChanges();
+    expect(contactLookup.autosave()).toBe(true);
   });
 
   function testContactLookupByProperty(contactProperty: ContactProperty, lookup: string) {

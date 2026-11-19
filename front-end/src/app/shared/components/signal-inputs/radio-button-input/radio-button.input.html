@@ -11,7 +11,7 @@
         [name]="name()"
         [value]="option"
         [(ngModel)]="value"
-        [disabled]="disabledOpt"
+        [disabled]="disabledOpt || disabled()"
         [class]="disabledOpt? 'p-disabled border-none bg-transparent' : ''"
       />
       <label [for]="option" class="ml-2" [class.p-disabled]="disabledOpt"> {{ labelFn(option) }} </label>

@@ -1,3 +1,4 @@
+import { ReportTypes } from '../reports/report.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT } from './OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT.model';
 
@@ -29,5 +30,15 @@ describe('OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT', () => {
       } as SchBTransaction,
     ];
     expect(transactionType.generatePurposeDescription(txn)).toBe('Credit Card Memo: See Below');
+  });
+
+  it('hasElectionInformation() should be true on a form 3', () => {
+    const hasElectionInformation = transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(hasElectionInformation).toBe(true);
+  });
+
+  it('hasElectionInformation() should be true on a form 3', () => {
+    const hasElectionInformation = transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(hasElectionInformation).toBe(false);
   });
 });

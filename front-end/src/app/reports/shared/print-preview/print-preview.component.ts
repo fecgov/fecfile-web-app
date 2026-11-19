@@ -12,7 +12,6 @@ import { takeUntil } from 'rxjs';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
-import { LayoutService } from 'app/layout/layout.service';
 import { CommitteeStore } from 'app/committee/committee.store';
 
 @Component({
@@ -28,7 +27,6 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   public readonly route = inject(ActivatedRoute);
   private readonly webPrintService = inject(WebPrintService);
   private readonly reportService = inject(ReportService);
-  readonly layoutService = inject(LayoutService);
   report: Report = new Form3X() as unknown as Report;
   readonly submitDate = signal<Date | undefined>(undefined);
   readonly formattedDate = computed(() => {

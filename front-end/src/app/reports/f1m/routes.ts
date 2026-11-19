@@ -20,7 +20,7 @@ export const F1M_ROUTES: Route[] = [
   },
   {
     path: 'edit/:reportId',
-    title: 'Edit a report',
+    title: 'Report details',
     component: MainFormComponent,
     resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.CREATE },

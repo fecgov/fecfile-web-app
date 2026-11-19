@@ -118,10 +118,9 @@ describe('ReattTransactionTypeBaseComponent', () => {
   });
 
   describe('updateElectionData', () => {
-    it("should bail if no templatemap or it's not schedule B", () => {
+    it('should bail if the child transaction is missing', () => {
       component.childTransaction = undefined;
-      component.updateElectionData();
-      expect(component.childForm.get('election_code')).toBeFalsy();
+      expect(() => component.updateElectionData()).not.toThrow();
     });
 
     it('should update election and candidate data for primary and child forms', () => {

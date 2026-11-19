@@ -34,7 +34,7 @@ describe('ConfirmationWrapperService', () => {
 
     confirmationService.confirm.mockImplementation((config: Confirmation) => config.accept?.());
 
-    const result = await service.confirmWithUser(form, contactConfig, getContact, getTemplateMap);
+    const result = await service.confirmWithUser(form, { contactConfig, getContact, getTemplateMap });
     expect(result).toBe(true);
   });
 

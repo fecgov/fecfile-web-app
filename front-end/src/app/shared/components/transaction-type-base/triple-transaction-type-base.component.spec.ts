@@ -107,32 +107,26 @@ describe('TripleTransactionTypeBaseComponent', () => {
   });
 
   describe('getConfirmations()', () => {
-    it('should return false if there is not child transaction 2', async () => {
-      component.childTransaction_2 = undefined;
-      const res = await component.getConfirmations();
-      expect(res).toBe(false);
-    });
-
-    it('should return false if not child transaction', async () => {
-      component.childTransaction = undefined;
-      const v = await component.getConfirmations();
-      expect(v).toBe(false);
-    });
-
-    it('should return false if reject parent confirmation', async () => {
-      component.transaction = undefined;
-      const v = await component.getConfirmations();
-      expect(v).toBe(false);
+    it.each([
+      { description: 'child transaction 2 is missing', setup: () => (component.childTransaction_2 = undefined) },
+      { description: 'child transaction 1 is missing', setup: () => (component.childTransaction = undefined) },
+      { description: 'parent transaction is missing', setup: () => (component.transaction = undefined) },
+    ])('should return false when $description', async ({ setup }) => {
+      setup();
+      await expect(component.getConfirmations()).resolves.toBe(false);
     });
 
     it('should confirm with user', async () => {
       component.transaction!.contact_1 = testContact();
+
       await component.getConfirmations();
+
       expect(confirmSpy).toHaveBeenCalled();
     });
 
     it('should confirm with user 1 time if only primary transaction contact updated', async () => {
       component.transaction!.contact_1 = testContact();
+
       await component.getConfirmations();
 
       expect(confirmSpy).toHaveBeenCalledTimes(1);
@@ -199,6 +193,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
         component.childForm_2,
         component.childTransaction_2,
         component.childContactIdMap_2['contact_1'],
+        component.candidateOfficeModel,
       );
     });
   });
@@ -214,6 +209,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
         component.childForm_2,
         component.childTransaction_2,
         component.childContactIdMap_2['contact_2'],
+        component.candidateOfficeModel,
       );
     });
   });

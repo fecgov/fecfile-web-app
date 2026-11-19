@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { inputBinding, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +24,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { Select, SelectModule } from 'primeng/select';
 import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
 import { MainFormComponent } from './main-form.component';
+
+const reportId = signal<string | undefined>(undefined);
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
@@ -80,7 +82,8 @@ describe('MainFormComponent', () => {
       ],
     });
     router = TestBed.inject(Router);
-    fixture = TestBed.createComponent(MainFormComponent);
+    fixture = TestBed.createComponent(MainFormComponent, { bindings: [inputBinding('reportId', reportId)] });
+    reportId.set(undefined);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -106,8 +109,9 @@ describe('MainFormComponent', () => {
     expect(createSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
+    reportId.set('99');
+    fixture.detectChanges();
     component.form.patchValue({ ...f99 });
-    component.reportId = '999';
     await component.submitForm();
     expect(updateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
