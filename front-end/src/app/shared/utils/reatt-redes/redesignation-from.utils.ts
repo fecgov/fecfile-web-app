@@ -42,10 +42,10 @@ export class RedesignationFromUtils {
   ];
 
   public static overlayTransactionProperties(
-    transaction: SchBTransaction,
-    redesignatedTransaction?: SchBTransaction,
+    transaction: SchBTransaction | SchATransaction,
+    redesignatedTransaction?: SchBTransaction | SchATransaction,
     activeReportId?: string,
-  ): SchBTransaction {
+  ): SchBTransaction | SchATransaction {
     if (redesignatedTransaction) {
       transaction.reatt_redes_id = redesignatedTransaction.id;
       transaction.reatt_redes = redesignatedTransaction;
@@ -76,7 +76,7 @@ export class RedesignationFromUtils {
           date = (transaction.reatt_redes as SchATransaction).contribution_date;
         }
 
-        if (!date) throw new Error('No Expenditure Date!');
+        if (!date) throw new Error('No date!');
         return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(date)}`;
       },
       hideContactLookup: true,
@@ -89,7 +89,11 @@ export class RedesignationFromUtils {
     return transaction;
   }
 
-  public static overlayForm(fromForm: FormGroup, transaction: SchBTransaction, toForm: FormGroup): FormGroup {
+  public static overlayForm(
+    fromForm: FormGroup,
+    transaction: SchBTransaction | SchATransaction,
+    toForm: FormGroup,
+  ): FormGroup {
     const templateMap = transaction.transactionType.templateMap;
     const purposeDescriptionControl = fromForm.get(templateMap.purpose_description);
     // Update purpose description for rules that are independent of the transaction date being in the report.

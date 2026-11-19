@@ -9,10 +9,10 @@ import { SchATransaction } from 'app/shared/models';
 
 export class RedesignationToUtils {
   public static overlayTransactionProperties(
-    transaction: SchBTransaction,
-    redesignatedTransaction?: SchBTransaction,
+    transaction: SchBTransaction | SchATransaction,
+    redesignatedTransaction?: SchBTransaction | SchATransaction,
     activeReportId?: string,
-  ): SchBTransaction {
+  ): SchBTransaction | SchATransaction {
     if (redesignatedTransaction) {
       transaction.reatt_redes_id = redesignatedTransaction.id;
       transaction.reatt_redes = redesignatedTransaction;
@@ -48,8 +48,8 @@ export class RedesignationToUtils {
           date = (transaction.reatt_redes as SchATransaction).contribution_date;
         }
 
-        if (!date) throw new Error('No Expenditure Date!');
-        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(date)}`;
+        if (!date) throw new Error('No date!');
+        return `Redesignation - Contribution to ${DateUtils.convertDateToSlashFormat(date)}`;
       },
       hideContactLookup: true,
     });
@@ -92,7 +92,7 @@ export class RedesignationToUtils {
     'memo_code',
   ];
 
-  public static overlayForm(form: FormGroup, toTransaction: SchBTransaction): FormGroup {
+  public static overlayForm(form: FormGroup, toTransaction: SchBTransaction | SchATransaction): FormGroup {
     // Add additional amount validation
     form
       .get(toTransaction.transactionType.templateMap.amount)

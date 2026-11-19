@@ -1,8 +1,9 @@
 import { FormGroup, Validators } from '@angular/forms';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
-import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test.utils';
+import { getTestTransactionByType, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { SubscriptionFormControl } from '../subscription-form-control';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models';
 
 describe('Redesignation From', () => {
   describe('overlayTransactionProperties', () => {
@@ -15,6 +16,16 @@ describe('Redesignation From', () => {
       );
       expect(fromTransaction.transactionType.accordionTitle).toBe('AUTO-POPULATED');
       expect(fromTransaction.fields_to_validate?.includes('memo_code')).toBe(false);
+      expect(fromTransaction.reatt_redes_id).toBe(transaction.id);
+    });
+
+    it('should work with Schedule A', () => {
+      const transaction = testScheduleATransaction();
+      const fromTransaction = RedesignationFromUtils.overlayTransactionProperties(
+        getTestTransactionByType(ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE) as SchATransaction,
+        transaction,
+        '123741da-aa57-4cc3-8530-667e8b712378',
+      );
       expect(fromTransaction.reatt_redes_id).toBe(transaction.id);
     });
   });
