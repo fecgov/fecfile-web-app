@@ -433,6 +433,7 @@ export function testScheduleBTransaction() {
     contributor_state: 'VA',
     contributor_zip: '20001',
     contribution_date: '2022-08-11',
+    expenditure_date: '2022-08-11',
     contribution_amount: 1,
     contribution_aggregate: 2,
     aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,

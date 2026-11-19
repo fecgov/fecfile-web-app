@@ -66,17 +66,18 @@ export class RedesignationFromUtils {
       contactTitle: 'Contact',
       dateLabel: 'REDESIGNATION DATE',
       amountLabel: 'REDESIGNATED AMOUNT',
-      generatePurposeDescription: (transaction: SchBTransaction): string => {
+      generatePurposeDescription: (transaction: SchBTransaction | SchATransaction): string => {
         if (!transaction.reatt_redes) return '';
 
         let date: Date | undefined;
         if (transaction.transactionType.scheduleId === ScheduleIds.B) {
           date = (transaction.reatt_redes as SchBTransaction).expenditure_date;
+          if (!date) throw new Error('No expenditure date!');
         } else if (transaction.transactionType.scheduleId === ScheduleIds.A) {
           date = (transaction.reatt_redes as SchATransaction).contribution_date;
+          if (!date) throw new Error('No contribution date!');
         }
 
-        if (!date) throw new Error('No date!');
         return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(date)}`;
       },
       hideContactLookup: true,

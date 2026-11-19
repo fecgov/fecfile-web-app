@@ -9,24 +9,38 @@ describe('Redesignation From', () => {
   describe('overlayTransactionProperties', () => {
     it('should override default properties', () => {
       const transaction = testScheduleBTransaction();
+
       const fromTransaction = RedesignationFromUtils.overlayTransactionProperties(
         getTestTransactionByType(ScheduleBTransactionTypes.OPERATING_EXPENDITURE) as SchBTransaction,
         transaction,
         '3cd741da-aa57-4cc3-8530-667e8b7bad78',
-      );
+      ) as SchBTransaction;
       expect(fromTransaction.transactionType.accordionTitle).toBe('AUTO-POPULATED');
       expect(fromTransaction.fields_to_validate?.includes('memo_code')).toBe(false);
       expect(fromTransaction.reatt_redes_id).toBe(transaction.id);
+      expect(fromTransaction.transactionType.generatePurposeDescription).toBeDefined();
+      if (fromTransaction.transactionType.generatePurposeDescription) {
+        expect(fromTransaction.transactionType.generatePurposeDescription(fromTransaction)).toBe(
+          'Redesignation - Contribution from 08/11/2022',
+        );
+      }
     });
 
     it('should work with Schedule A', () => {
       const transaction = testScheduleATransaction();
+
       const fromTransaction = RedesignationFromUtils.overlayTransactionProperties(
         getTestTransactionByType(ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE) as SchATransaction,
         transaction,
         '123741da-aa57-4cc3-8530-667e8b712378',
-      );
+      ) as SchATransaction;
       expect(fromTransaction.reatt_redes_id).toBe(transaction.id);
+      expect(fromTransaction.transactionType.generatePurposeDescription).toBeDefined();
+      if (fromTransaction.transactionType.generatePurposeDescription) {
+        expect(fromTransaction.transactionType.generatePurposeDescription(fromTransaction)).toBe(
+          'Redesignation - Contribution from 08/11/2022',
+        );
+      }
     });
   });
 

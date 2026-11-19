@@ -38,17 +38,18 @@ export class RedesignationToUtils {
       footer:
         'The information in this redesignation will automatically create a related disbursement. Review the disbursement, or continue without reviewing and "Save transactions."',
       dependentChildTransactionTypes: [transaction.transaction_type_identifier as TransactionTypes],
-      generatePurposeDescription: (transaction: SchBTransaction): string => {
+      generatePurposeDescription: (transaction: SchBTransaction | SchATransaction): string => {
         if (!transaction.reatt_redes) return '';
 
         let date: Date | undefined;
         if (transaction.transactionType.scheduleId === ScheduleIds.B) {
           date = (transaction.reatt_redes as SchBTransaction).expenditure_date;
+          if (!date) throw new Error('No expenditure date!');
         } else if (transaction.transactionType.scheduleId === ScheduleIds.A) {
           date = (transaction.reatt_redes as SchATransaction).contribution_date;
+          if (!date) throw new Error('No contribution date!');
         }
 
-        if (!date) throw new Error('No date!');
         return `Redesignation - Contribution to ${DateUtils.convertDateToSlashFormat(date)}`;
       },
       hideContactLookup: true,
