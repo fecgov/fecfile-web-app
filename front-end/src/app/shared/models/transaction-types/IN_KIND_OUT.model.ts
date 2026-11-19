@@ -3,10 +3,11 @@ import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { INDIVIDUAL_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { ELECTION_FIELDS, INDIVIDUAL_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { IN_KIND_OUT as CommonInKindOut } from './common-types/IN_KIND_OUT.model';
+import { ReportTypes } from '../reports/report.model';
 export class IN_KIND_OUT extends CommonInKindOut {
-  override formFields = INDIVIDUAL_B_FORM_FIELDS;
+  override formFields = [...INDIVIDUAL_B_FORM_FIELDS, ...ELECTION_FIELDS];
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);
   schema = schema;
   override inheritedFields = [
@@ -24,7 +25,13 @@ export class IN_KIND_OUT extends CommonInKindOut {
     'amount',
     'purpose_description',
     'memo_code',
+    'election_code',
+    'election_other_description',
   ] as TemplateMapKeyType[];
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
+  }
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
