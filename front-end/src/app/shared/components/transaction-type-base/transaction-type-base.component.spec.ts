@@ -315,11 +315,15 @@ describe('TransactionTypeBaseComponent', () => {
     });
   });
 
-  it('should automatically route if the navigation event is not a save event', () => {
+  it('should route and reenable single-click if the navigation event is not a save event', async () => {
+    navigateToSpy.mockResolvedValue(true);
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
     const navEvent = new NavigationEvent(NavigationAction.CANCEL);
-    component.handleNavigate(navEvent);
+    await component.handleNavigate(navEvent);
+
     expect(navigateToSpy).toHaveBeenCalled();
     expect(confirmSpy).toHaveBeenCalledTimes(0);
+    expect(dispatchSpy).toHaveBeenCalledWith(singleClickEnableAction());
   });
 
   describe('save navigation', () => {

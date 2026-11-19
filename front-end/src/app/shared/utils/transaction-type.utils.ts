@@ -97,12 +97,21 @@ import { TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transa
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
 import { UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT } from '../models/transaction-types/UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT.model';
+import { AUTHORIZED_COMMITTEE_TRANSFER } from '../models/transaction-types/AUTHORIZED_COMMITTEE_TRANSFER.model';
+import { INDIVIDUAL_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/INDIVIDUAL_AC_TRANSFER_MEMO.model';
+import { PAC_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/PAC_AC_TRANSFER_MEMO.model';
+import { PARTNERSHIP_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/PARTNERSHIP_AC_TRANSFER_MEMO.model';
+import { PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO.model';
+import { PARTY_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/PARTY_AC_TRANSFER_MEMO.model';
+import { TRIBAL_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/TRIBAL_AC_TRANSFER_MEMO.model';
+import { UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO } from '../models/transaction-types/ac-memo/UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO.model';
 
 // Schedule B /////////////////////////////////////////////////////
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 import { CONDUIT_EARMARK_OUT } from '../models/transaction-types/CONDUIT_EARMARK_OUT.model';
 import { CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE.model';
 import { CONTRIBUTION_TO_CANDIDATE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE_VOID.model';
+import { CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE_VOID.model';
 import { CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE.model';
@@ -175,6 +184,7 @@ import { TRANSFER_TO_AFFILIATES } from '../models/transaction-types/TRANSFER_TO_
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
+import { CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION } from '../models/transaction-types/CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION.model';
 
 // Schedule C /////////////////////////////////////////////////////
 import { LOAN_BY_COMMITTEE } from '../models/transaction-types/LOAN_BY_COMMITTEE.model';
@@ -251,6 +261,14 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_RECEIPT,
   TRIBAL_RECOUNT_RECEIPT,
   UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
+  AUTHORIZED_COMMITTEE_TRANSFER,
+  INDIVIDUAL_AC_TRANSFER_MEMO,
+    PARTY_AC_TRANSFER_MEMO,
+    PAC_AC_TRANSFER_MEMO,
+    UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO,
+    TRIBAL_AC_TRANSFER_MEMO,
+    PARTNERSHIP_AC_TRANSFER_MEMO,
+    PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO,
   BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
@@ -381,8 +399,10 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
   CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE,
+  CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE,
   LOAN_MADE,
   LOAN_REPAYMENT_MADE,
+  CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION,
   // Schedule C /////////////////////////////////////////////////////
   LOAN_RECEIVED_FROM_INDIVIDUAL,
   LOAN_RECEIVED_FROM_BANK,
