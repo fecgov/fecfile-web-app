@@ -1,5 +1,6 @@
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { ReportTypes } from '../reports/report.model';
 
 describe('PAC_JF_TRANSFER_MEMO', () => {
   let transaction: SchATransaction;
@@ -24,5 +25,15 @@ describe('PAC_JF_TRANSFER_MEMO', () => {
   it('#generatePurpotransaction.seDescription() should generate a string', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('JF Memo: Test Org');
+  });
+
+  it('#hasElectionInformation() should return true for F3 report type', () => {
+    const result = transaction.transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(result).toBe(true);
+  });
+
+  it('#hasElectionInformation() should return false for F3X', () => {
+    const result = transaction.transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(result).toBe(false);
   });
 });
