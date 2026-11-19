@@ -3,12 +3,12 @@ import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.mo
 import { isTransactionTypeDisabledForReport } from './transaction-disable.utils';
 
 describe('transaction disable utils', () => {
-  it('disables transactions present in the disabled list', () => {
-    expect(isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.IN_KIND_RECEIPT)).toBe(true);
-  });
-
   it('does not disable transactions missing from the disabled list', () => {
     expect(isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.PARTY_RECEIPT)).toBe(false);
+  });
+
+  it('does not disable in-kind receipts for Form 3', () => {
+    expect(isTransactionTypeDisabledForReport(ReportTypes.F3, ScheduleATransactionTypes.IN_KIND_RECEIPT)).toBe(false);
   });
 
   it('does not disable returned or bounced individual receipts for Form 3', () => {

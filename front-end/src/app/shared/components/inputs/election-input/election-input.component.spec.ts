@@ -71,6 +71,13 @@ describe('ElectionInputComponent', () => {
     expect(component.form.get('election_code')?.value).toBe('G2024');
   });
 
+  it('should update election type and year when election code is inherited', () => {
+    component.form.get('election_code')?.setValue('O2026');
+
+    expect(component.form.get('electionType')?.value).toBe('O');
+    expect(component.form.get('electionYear')?.value).toBe('2026');
+  });
+
   it('should flag missing required fields', () => {
     component.form.patchValue({
       electionType: 'G',
