@@ -58,21 +58,22 @@ export class PageUtils {
   }
 
 
-  static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
+  static pSelectDropdownSetValue(querySelector: string, value: string|null, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
-    if (value) {
     cy.get(alias)
       .find(querySelector)
       .eq(index)
       .find('[role="combobox"]')
       .focus()
       .type('{enter}');
-
-    cy.get('.p-select-overlay:visible')
-      .find(`[role="option"][aria-label="${value}"]`)
-      .should('be.visible')
-      .click();
-  }
+    if (value) {
+      cy.get('.p-select-overlay:visible')
+        .find(`[role="option"][aria-label="${value}"]`)
+        .should('be.visible')
+        .click();
+    } else {
+      cy.get(alias).click('topLeft');
+    }
   }
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {

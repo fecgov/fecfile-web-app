@@ -20,6 +20,7 @@
         [inputId]="`searchBox-${key}`"
         [(ngModel)]="searchTerm"
         [group]="true"
+        [disabled]="disabled()"
         field="label"
         [dropdown]="true"
         [suggestions]="contactLookupList"

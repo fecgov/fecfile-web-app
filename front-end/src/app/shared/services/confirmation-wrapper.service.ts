@@ -3,6 +3,21 @@ import { FormGroup } from '@angular/forms';
 import { TransactionContactUtils } from '../components/transaction-type-base/transaction-contact.utils';
 import { Transaction, Contact, TransactionTemplateMapType, ContactTypes } from '../models';
 import { ConfirmationService } from 'primeng/api';
+import { CandidateOfficeModel } from '../components/signal-form/candidate-office-form/candidate-office-form.component';
+import { CandidateOfficeModels } from 'app/reports/f1m/main-form/main-form.component';
+
+interface ConfirmOptions {
+  contactConfig: {
+    [contactKey: string]: {
+      [formField: string]: string;
+    };
+  };
+  getContact: (contactKey: string, transaction?: Transaction) => Contact | null;
+  getTemplateMap: (contactKey: string, transaction?: Transaction) => TransactionTemplateMapType | undefined;
+  transaction?: Transaction;
+  candidateOffices?: CandidateOfficeModels; // For Form 1M
+  candidateOffice?: CandidateOfficeModel; // For all others
+}
 
 @Injectable({
   providedIn: 'root',
@@ -10,28 +25,32 @@ import { ConfirmationService } from 'primeng/api';
 export class ConfirmationWrapperService {
   private readonly confirmationService = inject(ConfirmationService);
 
-  async confirmWithUser(
-    form: FormGroup,
-    contactConfig: {
-      [contactKey: string]: {
-        [formField: string]: string;
-      };
-    },
-    getContact: (contactKey: string, transaction?: Transaction) => Contact | null,
-    getTemplateMap: (contactKey: string, transaction?: Transaction) => TransactionTemplateMapType | undefined,
-    transaction?: Transaction,
-  ): Promise<boolean> {
-    for (const [contactKey, config] of Object.entries(contactConfig)) {
-      const templateMap = getTemplateMap(contactKey, transaction);
+  async confirmWithUser(form: FormGroup, confirmOptions: ConfirmOptions): Promise<boolean> {
+    for (const [contactKey, config] of Object.entries(confirmOptions.contactConfig)) {
+      const templateMap = confirmOptions.getTemplateMap(contactKey, confirmOptions.transaction);
       if (!templateMap) {
         throw new Error('FECfile+: Cannot find template map when confirming transaction');
       }
 
-      const contact = getContact(contactKey, transaction);
-      if (contact === null) continue;
+      const contact = confirmOptions.getContact(contactKey, confirmOptions.transaction);
+      if (contact === null || contact === undefined) continue;
       let result = await this.createContactConfirmation(contact, form, templateMap, contactKey);
       if (!result) return false;
-      result = await this.contactChangesConfirmation(contact, form, templateMap, config, transaction);
+
+      if (confirmOptions.candidateOffices) {
+        const candidateKey = contactKey.split('contact_candidate_');
+        confirmOptions.candidateOffice =
+          confirmOptions.candidateOffices[candidateKey[1] as keyof CandidateOfficeModels];
+      }
+
+      result = await this.contactChangesConfirmation(
+        contact,
+        form,
+        templateMap,
+        config,
+        confirmOptions.transaction,
+        confirmOptions.candidateOffice,
+      );
       if (!result) return false;
     }
     return true;
@@ -43,8 +62,16 @@ export class ConfirmationWrapperService {
     templateMap: TransactionTemplateMapType,
     config: { [formField: string]: string },
     transaction?: Transaction,
+    candidateOffice?: CandidateOfficeModel,
   ): Promise<boolean> {
-    const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config, transaction);
+    const changes = TransactionContactUtils.getContactChanges(
+      form,
+      contact,
+      templateMap,
+      config,
+      transaction,
+      candidateOffice,
+    );
     if (changes.length > 0) {
       const message = TransactionContactUtils.getContactChangesMessage(contact, changes);
       return this.displayConfirmationPopup(message);

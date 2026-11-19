@@ -177,6 +177,7 @@ describe('ContactDialogComponent', () => {
   it('should clear selected lookup data before saving another contact', async () => {
     vi.spyOn(contactService, 'checkFecIdForUniqueness').mockResolvedValue(true);
     const createSpy = vi.spyOn(contactService, 'create').mockImplementation(async (contact) => contact);
+    const messageSpy = vi.spyOn(messageService, 'add');
     const selectedContact = Contact.fromJSON({
       type: ContactTypes.CANDIDATE,
       candidate_id: 'P00000001',
@@ -218,6 +219,12 @@ describe('ContactDialogComponent', () => {
       name: 'Another Organization',
     });
     expect(createSpy.mock.calls[1][0].candidate_id).toBeUndefined();
+    expect(messageSpy).toHaveBeenLastCalledWith({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Contact created',
+      life: 3000,
+    });
   });
 
   it('should raise confirmation dialog', () => {
@@ -229,14 +236,13 @@ describe('ContactDialogComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should use a duplicate contact without confirmation or update when it has no changes', () => {
+  it('should use a duplicate contact without confirmation or update when it has no changes', async () => {
     const selectedContact = testContact();
     component.contact.set(selectedContact);
     component.type.set(selectedContact.type);
     component.visible.set(true);
-    for (const [field, control] of Object.entries(component.form.controls)) {
-      control.setValue(selectedContact[field as keyof Contact]);
-    }
+    fixture.detectChanges();
+    await fixture.whenStable();
     const confirmSpy = vi.spyOn(testConfirmationService, 'confirm');
     const savedContactSpy = vi.spyOn(component.savedContact, 'emit');
     const updateSpy = vi.spyOn(contactService, 'update');

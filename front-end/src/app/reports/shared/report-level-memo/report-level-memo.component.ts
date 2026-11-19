@@ -13,12 +13,20 @@ import { injectRouteData } from 'ngxtension/inject-route-data';
 import { MessageService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
   styleUrls: ['./report-level-memo.component.scss'],
-  imports: [ReactiveFormsModule, ButtonDirective, Ripple, SingleClickDirective, AutoResizeDirective],
+  imports: [
+    ReactiveFormsModule,
+    ButtonDirective,
+    Ripple,
+    SingleClickDirective,
+    AutoResizeDirective,
+    ErrorMessagesComponent,
+  ],
 })
 export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   readonly router = inject(Router);

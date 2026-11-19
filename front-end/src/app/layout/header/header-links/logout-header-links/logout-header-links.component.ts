@@ -3,7 +3,7 @@ import { LoginService } from 'app/shared/services/login.service';
 
 @Component({
   selector: 'app-logout-header-links',
-  template: `<a (click)="logOut()">Log Out</a>`,
+  template: `<button class="nav-button" (click)="logOut()">Log Out</button>`,
   styleUrl: '../header-links.component.scss',
 })
 export class LogoutHeaderLinksComponent {

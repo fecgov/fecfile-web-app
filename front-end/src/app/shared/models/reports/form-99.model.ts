@@ -46,9 +46,9 @@ export class Form99 extends Report {
 
   getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
     return [
-      MenuInfo.editReport(sidebarSection, this),
+      MenuInfo.editReport(sidebarSection, this, this.canEdit ? 'EDIT A REPORT' : 'REPORT DETAILS'),
       MenuInfo.reviewReport(sidebarSection, [MenuInfo.printPreview(this)]),
-      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
+      MenuInfo.submitReport(sidebarSection, this, isEditable, this.canEdit ? 'SIGN & SUBMIT' : 'SUBMIT YOUR REPORT'),
     ];
   }
 }

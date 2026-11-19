@@ -482,7 +482,7 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_office-"])', 'Senate', ContactsHelpers.CONTACT_DIALOG);
+    PageUtils.pSelectDropdownSetValue("app-select-input[overrideid='candidate-office']", 'Senate', ContactsHelpers.CONTACT_DIALOG);
     cy.get(PageUtils.getAlias(ContactsHelpers.CONTACT_DIALOG)).click('topLeft');
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -490,15 +490,9 @@ describe('Contacts Edit', () => {
       .find('small.p-error, .p-error')
       .should('not.exist');
 
-    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_office-"])', 'House', ContactsHelpers.CONTACT_DIALOG);
-    cy.get(ContactsHelpers.CONTACT_DIALOG)
-      .find('p-select:has([id^="candidate_district-"])')
-      .eq(0)
-      .find('[role="combobox"]')
-      .focus()
-      .blur();
+    PageUtils.pSelectDropdownSetValue("app-select-input[overrideid='candidate-office']", 'House', ContactsHelpers.CONTACT_DIALOG);
+    PageUtils.pSelectDropdownSetValue("app-select-input[overrideid='candidate-district']", null, ContactsHelpers.CONTACT_DIALOG);
     cy.contains(/Edit Contact/i).should('exist');
-   
     
     expectRequiredNearLabel(/^Candidate district/i);
 
@@ -522,9 +516,9 @@ describe('Contacts Edit', () => {
     cy.get('#employer').clear().type(newEmployer);
     cy.get('#occupation').clear().type(newOccupation);
 
-    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_office-"])', newOffice, ContactsHelpers.CONTACT_DIALOG);
-    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_state-"])', newCandState, ContactsHelpers.CONTACT_DIALOG);
-    PageUtils.pSelectDropdownSetValue('p-select:has([id^="candidate_district-"])', newCandDistrict, ContactsHelpers.CONTACT_DIALOG);
+    PageUtils.pSelectDropdownSetValue("app-select-input[overrideid='candidate-office']", newOffice, ContactsHelpers.CONTACT_DIALOG);
+    PageUtils.pSelectDropdownSetValue("app-select-input[overrideid='candidate-state']", newCandState, ContactsHelpers.CONTACT_DIALOG);
+    PageUtils.pSelectDropdownSetValue("app-select-input[overrideid='candidate-district']", newCandDistrict, ContactsHelpers.CONTACT_DIALOG);
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
@@ -558,9 +552,9 @@ describe('Contacts Edit', () => {
       occupation: newOccupation,
     });
 
-    PageUtils.valueCheck('p-select:has([id^="candidate_office-"])', newOffice);
-    PageUtils.valueCheck('p-select:has([id^="candidate_state-"])', newCandState);
-    PageUtils.valueCheck('p-select:has([id^="candidate_district-"])', newCandDistrict);
+    PageUtils.valueCheck("app-select-input[overrideid='candidate-office']", newOffice);
+    PageUtils.valueCheck("app-select-input[overrideid='candidate-state']", newCandState);
+    PageUtils.valueCheck("app-select-input[overrideid='candidate-district']", newCandDistrict);
 
     candidateLookup(lookupCandidateId, lookupLast, lookupFirst, lookupName);
   });

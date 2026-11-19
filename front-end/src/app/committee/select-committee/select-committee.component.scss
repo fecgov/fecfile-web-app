@@ -48,14 +48,13 @@
 
 .committee-info {
   padding-left: 10px;
+  text-align: left;
   h3 {
+    display: inline;
     margin: 0;
     cursor: pointer;
-
-    span {
-      border-bottom: dotted 2px;
-      border-color: #d1d1d1;
-    }
+    border-bottom: dotted 2px;
+    border-color: #d1d1d1;
   }
 }
 
@@ -82,7 +81,10 @@ h5 {
   background-color: var(--surface-ground);
   padding: 12px 20px;
   margin-top: 20px;
+  border: 0;
+  width: 100%;
   border-top: 1px solid #112e51;
+  cursor: pointer;
 }
 
 .header-expanded {
@@ -127,4 +129,9 @@ h5 {
 
 .committee-icon {
   flex: 0 0 34px;
+}
+
+.committee-button {
+  border: none;
+  width: calc(100% - 6px);
 }

@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SingleClickDirective } from './single-click.directive';
 import { By } from '@angular/platform-browser';
 import { Store, StoreModule } from '@ngrx/store';
-import { singleClickEnableAction } from '../../store/single-click.actions';
+import { singleClickDisableAction, singleClickEnableAction } from '../../store/single-click.actions';
 import { singleClickReducer } from '../../store/single-click.reducer';
 
 @Component({
@@ -16,27 +16,70 @@ describe('SingleClickDirective', () => {
   let des: DebugElement[];
   let fixture: ComponentFixture<TestComponent>;
   let store: Store;
+
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [TestComponent, SingleClickDirective, StoreModule.forRoot({ singleClickDisabled: singleClickReducer })],
+      imports: [
+        TestComponent,
+        SingleClickDirective,
+        StoreModule.forRoot({
+          singleClickDisabled: singleClickReducer,
+        }),
+      ],
     }).createComponent(TestComponent);
+
     store = TestBed.inject(Store);
-    fixture.detectChanges(); // initial binding
-    // all elements with an attached SingleClickDirective
+    fixture.detectChanges();
+
     des = fixture.debugElement.queryAll(By.directive(SingleClickDirective));
   });
 
-  it('should create instance and add+remove disabled attribute', () => {
+  it('should create the directive', () => {
     expect(des.length).toBe(1);
+  });
+
+  it('should dispatch singleClickDisableAction when the button is clicked', () => {
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
     const button = des[0].nativeElement as HTMLButtonElement;
-    vi.spyOn(button, 'setAttribute');
-    vi.spyOn(button, 'removeAttribute');
+
     button.click();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(singleClickDisableAction());
+  });
+
+  it('should ignore clicks on the split button dropdown', () => {
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+
+    const button = des[0].nativeElement as HTMLButtonElement;
+    const dropdown = document.createElement('span');
+    dropdown.classList.add('p-splitbutton-dropdown');
+    button.appendChild(dropdown);
+
+    dropdown.click();
+
+    expect(dispatchSpy).not.toHaveBeenCalledWith(singleClickDisableAction());
+  });
+
+  it('should dispatch singleClickEnableAction when the directive is destroyed', () => {
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+
+    fixture.destroy();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(singleClickEnableAction());
+  });
+
+  it('should not directly manipulate the disabled attribute', () => {
+    const button = des[0].nativeElement as HTMLButtonElement;
+    const setAttributeSpy = vi.spyOn(button, 'setAttribute');
+    const removeAttributeSpy = vi.spyOn(button, 'removeAttribute');
+
+    store.dispatch(singleClickDisableAction());
     fixture.detectChanges();
-    expect(button.setAttribute).toHaveBeenCalledWith('disabled', 'true');
-    expect(button.setAttribute).toHaveBeenCalledTimes(1);
+
     store.dispatch(singleClickEnableAction());
     fixture.detectChanges();
-    expect(button.removeAttribute).toHaveBeenCalledTimes(1);
+
+    expect(setAttributeSpy).not.toHaveBeenCalledWith('disabled', 'true');
+    expect(removeAttributeSpy).not.toHaveBeenCalledWith('disabled');
   });
 });

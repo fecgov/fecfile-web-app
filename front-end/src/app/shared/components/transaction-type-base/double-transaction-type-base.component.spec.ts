@@ -111,37 +111,31 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   describe('init', () => {
-    it('should fail to initialize if no transaction', () => {
-      component.transaction = undefined;
-      try {
-        component.ngOnInit();
-      } catch (err: any) {
-        expect(err.message).toBe('FECfile+: Template map not found for transaction component');
-      }
-    });
-
-    it('should throw error if no child transaction', () => {
-      vi.spyOn(component, 'getChildTransaction').mockImplementation(() => undefined);
-      try {
-        component.ngOnInit();
-      } catch (err: any) {
-        expect(err.message).toBe('FECfile+: Child transaction not found for double-entry transaction form');
-      }
-    });
-
-    it('should throw error if child transaction is missing template map', () => {
-      vi.spyOn(component, 'getChildTransaction').mockImplementation(() => {
-        const t = testTransaction.children?.[0] as SchATransaction;
-        t.transactionType = undefined as unknown as TransactionType;
-        return t;
-      });
-      try {
-        component.ngOnInit();
-      } catch (err: any) {
-        expect(err.message).toBe(
-          'FECfile+: Template map not found for double transaction double-entry transaction form',
-        );
-      }
+    it.each([
+      {
+        scenario: 'no transaction',
+        expectedError: 'FECfile+: Template map not found for transaction component',
+        setup: () => (component.transaction = undefined),
+      },
+      {
+        scenario: 'no child transaction',
+        expectedError: 'FECfile+: Child transaction not found for double-entry transaction form',
+        setup: () => vi.spyOn(component, 'getChildTransaction').mockReturnValue(undefined),
+      },
+      {
+        scenario: 'child transaction has no template map',
+        expectedError: 'FECfile+: Template map not found for double transaction double-entry transaction form',
+        setup: () => {
+          vi.spyOn(component, 'getChildTransaction').mockImplementation(() => {
+            const transaction = testTransaction.children?.[0] as SchATransaction;
+            transaction.transactionType = undefined as unknown as TransactionType;
+            return transaction;
+          });
+        },
+      },
+    ])('should throw an error when $scenario', ({ setup, expectedError }) => {
+      setup();
+      expect(() => component.ngOnInit()).toThrow(expectedError);
     });
   });
 
@@ -278,44 +272,36 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   describe('getConfirmations()', () => {
-    it('should return false if not child transaction', async () => {
-      component.childTransaction = undefined;
-      const v = await component.getConfirmations();
-      expect(v).toBe(false);
-    });
-
-    it('should return false if reject parent confirmation', async () => {
-      component.transaction = undefined;
-      const v = await component.getConfirmations();
-      expect(v).toBe(false);
+    it.each([
+      { scenario: 'child transaction is missing', setup: () => (component.childTransaction = undefined) },
+      { scenario: 'parent transaction is missing', setup: () => (component.transaction = undefined) },
+    ])('should return false when $scenario', async ({ setup }) => {
+      setup();
+      await expect(component.getConfirmations()).resolves.toBe(false);
     });
 
     it('should confirm with user', async () => {
       const confirmSpy = vi.spyOn(component.confirmationService, 'confirmWithUser').mockResolvedValue(true);
+
       await component.getConfirmations();
+
       expect(confirmSpy).toHaveBeenCalled();
     });
   });
 
   describe('childUpdateFormWithPrimaryContact', () => {
     it('should throw an error if no child transaction', () => {
-      vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').mockImplementation(() => {
-        return;
-      });
-      const contact = new Contact();
+      vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').mockImplementation(() => {});
       component.childTransaction = undefined;
-      expect(function () {
-        component.childUpdateFormWithPrimaryContact({ value: contact });
-      }).toThrow(new Error('FECfile+: Missing child transaction.'));
+      expect(() => component.childUpdateFormWithPrimaryContact({ value: new Contact() })).toThrow(
+        'FECfile+: Missing child transaction.',
+      );
     });
 
     it('should call updateInheritedFields', () => {
       const updateInheritedFieldsSpy = vi.spyOn(component, 'updateInheritedFields');
-      vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').mockImplementation(() => {
-        return;
-      });
-      const contact = new Contact();
-      component.childUpdateFormWithPrimaryContact({ value: contact });
+      vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').mockImplementation(() => {});
+      component.childUpdateFormWithPrimaryContact({ value: new Contact() });
       expect(updateInheritedFieldsSpy).toHaveBeenCalledTimes(1);
     });
   });

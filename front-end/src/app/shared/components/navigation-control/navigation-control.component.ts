@@ -23,19 +23,19 @@ import { Store } from '@ngrx/store';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { SingleClickDirective } from '../../directives/single-click.directive';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
 import { singleClickDisableAction } from 'app/store/single-click.actions';
+import { selectSingleClickDisabled } from 'app/store/single-click.selectors';
 
 @Component({
   selector: 'app-navigation-control',
   templateUrl: './navigation-control.component.html',
   styleUrls: ['./navigation-control.component.scss'],
-  imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule, SplitButtonModule],
+  imports: [ButtonModule, Ripple, PopoverModule, FormsModule, SplitButtonModule],
 })
 export class NavigationControlComponent {
   private readonly el = inject(ElementRef);
@@ -77,7 +77,9 @@ export class NavigationControlComponent {
   ];
 
   // This could be a signal but the transaction data is getting updated out of sync
-  readonly isDisabled = () => !!this.navigationControl()?.disabledCondition(this.transaction());
+  readonly singleClickDisabled = this.store.selectSignal(selectSingleClickDisabled);
+  readonly isDisabled = () =>
+    !!this.navigationControl()?.disabledCondition(this.transaction()) || this.singleClickDisabled();
   readonly controlType = ControlType;
   readonly type = computed(() => this.navigationControl().controlType);
 
@@ -140,6 +142,7 @@ export class NavigationControlComponent {
       cloneInstance(transaction),
       destinationTransactionType,
     );
+    this.store.dispatch(singleClickDisableAction());
     this.store.dispatch(navigationEventSetAction(navigationEvent));
   }
 
@@ -147,6 +150,7 @@ export class NavigationControlComponent {
     // Handle click event for dropdown version of control
     if (event.value.action) {
       const navigationEvent = cloneNavigationEvent(event.value);
+      this.store.dispatch(singleClickDisableAction());
       this.store.dispatch(navigationEventSetAction(navigationEvent));
     }
   }
