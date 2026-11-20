@@ -140,12 +140,21 @@ export function lineSummary<T extends string>(
 export function lineHeading(lineNumber: string, description: string, options: LineSummaryOptions = {}): LineSummary {
   return { lineNumber, description, ...options };
 }
+
+/**
+ * Takes in the properties of the Form 3/3X and groups the _ytd and _period properties into the associated lines object
+ * @param source - the properties of the report being transformed
+ * @param suffix - whether this is a period or ytd line
+ * @returns
+ */
 export function transformLines<T extends string>(source: Record<string, unknown>, suffix: 'period' | 'ytd'): Lines {
   const lines = new Lines();
 
   Object.entries(source).forEach(([key, value]) => {
     const regex = /^(L\d+[a-z]*)_.+_(period|ytd)$/;
     const match = regex.exec(key);
+    // 'L6a_year_for_above_ytd' is a tricky one because (despite the name)
+    // it isn't a line like the others, just the year used for the year to date
     if (
       match?.[2] !== suffix ||
       key === 'L6a_year_for_above_ytd' ||
