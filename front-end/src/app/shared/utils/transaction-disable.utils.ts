@@ -16,7 +16,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
     ScheduleATransactionTypes.IN_KIND_CONTRIBUTION_FROM_CANDIDATE,
     // TRANSFERS
-    ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
     ScheduleATransactionTypes.IN_KIND_TRANSFER,
     // OTHER
     ScheduleATransactionTypes.FEDERAL_COMMITTEE_RECOUNT_DONATION,

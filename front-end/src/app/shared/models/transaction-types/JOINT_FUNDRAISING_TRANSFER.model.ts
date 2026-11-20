@@ -5,10 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
-import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, COMMITTEE_FORM_FIELDS, ELECTION_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { ReportTypes } from '../reports/report.model';
 
 export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
-  formFields = COMMITTEE_FORM_FIELDS;
+  formFields = [...COMMITTEE_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   schema = schema;
@@ -27,6 +28,10 @@ export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
 
   override generatePurposeDescription(): string {
     return 'Transfer of Joint Fundraising Proceeds';
+  }
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
   }
 
   getNewTransaction() {
