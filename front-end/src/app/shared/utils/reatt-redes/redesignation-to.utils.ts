@@ -50,7 +50,7 @@ export class RedesignationToUtils {
           if (!date) throw new Error('No contribution date!');
         }
 
-        return `Redesignation - Contribution to ${DateUtils.convertDateToSlashFormat(date)}`;
+        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(date)}`;
       },
       hideContactLookup: true,
     });
