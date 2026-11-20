@@ -42,28 +42,16 @@
   }
 
   .period-column {
-    --period-width: 130px;
-    width: var(--period-width);
-    min-width: var(--period-width);
-    max-width: var(--period-width);
     text-align: right !important;
   }
 
   .ytd-column {
-    --ytd-width: 162px;
-    width: var(--ytd-width);
-    min-width: var(--ytd-width);
-    max-width: var(--ytd-width);
     text-align: right !important;
   }
 
   @media (min-width: 768px) {
     .line-column {
       display: table-cell;
-      --line-width: 72px;
-      width: var(--line-width);
-      min-width: var(--line-width);
-      max-width: var(--line-width);
     }
   }
 }

@@ -1,54 +1,70 @@
+import { Injector, runInInjectionContext } from '@angular/core';
+import { ActivatedRouteSnapshot, convertToParamMap, RedirectCommand, Router } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from '../utils/unit-test.utils';
-import { Form3XService } from '../services/form-3x.service';
-import { ReportResolver } from './report.resolver';
+import { reportResolver } from './report.resolver';
 import { Report } from '../models/reports/report.model';
-import { Form3X } from '../models/reports/form-3x.model';
-import { environment } from '../../../environments/environment';
-import { provideHttpClient } from '@angular/common/http';
+import { ReportService } from '../services/report.service';
 
-describe('ReportResolver', () => {
-  let resolver: ReportResolver;
-  let httpTestingController: HttpTestingController;
+describe('reportResolver', () => {
+  let injector: Injector;
+  let router: Router;
+  let route: ActivatedRouteSnapshot;
+  let setActiveReportById: ReturnType<typeof vi.fn>;
+
+  const createRoute = (reportId: string | null = null): ActivatedRouteSnapshot =>
+    ({
+      paramMap: convertToParamMap(reportId ? { reportId } : {}),
+    }) as ActivatedRouteSnapshot;
+
+  const resolve = () => runInInjectionContext(injector, () => reportResolver(route));
 
   beforeEach(() => {
+    setActiveReportById = vi.fn();
+
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), Form3XService, provideMockStore(testMockStore())],
-    });
-    httpTestingController = TestBed.inject(HttpTestingController);
-    resolver = TestBed.inject(ReportResolver);
-  });
-
-  it('should be created', () => {
-    expect(resolver).toBeTruthy();
-  });
-
-  it('should return an F3X report', () => {
-    const form3X: Form3X = Form3X.fromJSON({ id: '999' });
-    const route = {
-      paramMap: convertToParamMap({ reportId: '999' }),
-    };
-
-    resolver.resolve(route as ActivatedRouteSnapshot).then((response: Report | undefined) => {
-      expect(response).toEqual(form3X);
+      providers: [
+        {
+          provide: ReportService,
+          useValue: { setActiveReportById },
+        },
+      ],
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/${form3X.id}/`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(form3X);
-    httpTestingController.verify();
+    injector = TestBed.inject(Injector);
+    router = TestBed.inject(Router);
+    route = createRoute('report-1');
   });
 
-  it.skip('should return undefined', () => {
-    const route = {
-      paramMap: convertToParamMap({ reportId: undefined }),
-    };
+  it('should resolve the report when a report ID is provided', async () => {
+    const report = { id: 'report-1' } as Report;
 
-    resolver.resolve(route as ActivatedRouteSnapshot).then((response: Report | undefined) => {
-      expect(response).toEqual(undefined);
-    });
+    setActiveReportById.mockResolvedValue(report);
+
+    const result = await resolve();
+
+    expect(result).toBe(report);
+    expect(setActiveReportById).toHaveBeenCalledOnce();
+    expect(setActiveReportById).toHaveBeenCalledWith('report-1');
+  });
+
+  it('should redirect to reports when no report ID is provided', async () => {
+    route = createRoute();
+
+    const result = await resolve();
+
+    expect(result).toBeInstanceOf(RedirectCommand);
+    expect((result as RedirectCommand).redirectTo).toEqual(router.parseUrl('/reports'));
+    expect(setActiveReportById).not.toHaveBeenCalled();
+  });
+
+  it('should redirect to reports when resolving the report fails', async () => {
+    setActiveReportById.mockRejectedValue(new Error('Report not found'));
+
+    const result = await resolve();
+
+    expect(result).toBeInstanceOf(RedirectCommand);
+    expect((result as RedirectCommand).redirectTo).toEqual(router.parseUrl('/reports'));
+    expect(setActiveReportById).toHaveBeenCalledOnce();
+    expect(setActiveReportById).toHaveBeenCalledWith('report-1');
   });
 });

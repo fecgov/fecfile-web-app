@@ -19,6 +19,7 @@ import {
   ReportTypeCategories,
   type SharedForm3Model,
 } from './shared-form3.model';
+import { testElectionCycle } from 'app/shared/utils/unit-test.utils';
 
 const currentYear = new Date().getFullYear();
 const jan1 = new Date(2026, 0, 1);
@@ -65,7 +66,7 @@ function createFormValue(overrides: Partial<SharedForm3Model> = {}): SharedForm3
       date: jan1,
       state: 'VA',
     },
-    electionCycle: null,
+    electionCycle: testElectionCycle(),
     nextElectionCycle: null,
     ...overrides,
   };
@@ -352,22 +353,17 @@ describe('shared-form3.model', () => {
           coverage_through_date: formValue.coverage.endDate,
           date_of_election: formValue.electionReport.date,
           state_of_election: formValue.electionReport.state,
-          electionCycle: null,
+          electionCycleId: formValue.electionCycle!.id,
         }),
       );
     });
 
     it('should assign the election cycle for F3 reports', () => {
       const report = createReport();
-      const electionCycle = {
-        electionYear: currentYear,
-      } as ElectionCycle;
-
+      const electionCycle = { id: 'ec-1' } as ElectionCycle;
       const formValue = createFormValue({ electionCycle });
-
       buildJson(report, formValue, false, true);
-
-      expect((report as Form3).electionCycle).toBe(electionCycle);
+      expect((report as Form3).electionCycleId).toBe(electionCycle.id);
     });
 
     it('should assign the filing frequency for F3X reports', () => {
