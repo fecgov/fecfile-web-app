@@ -364,8 +364,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out (Undeposited)'],
   [ScheduleBTransactionTypes.LOAN_MADE, 'Loan Made'],
   [ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE, 'Loan Repayment Made'],
-  [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE, 'Other Federal Committee Contribution'],
-  [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE, 'Other Federal Candidate Contribution'],
+  [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE, 'Contribution to Other Federal Committee'],
+  [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE, 'Contribution to Other Federal Candidate'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION, 'Unregistered Organization Contribution'],
   [ScheduleBTransactionTypes.DISGORGEMENT, 'Disgorgement'],
   [
