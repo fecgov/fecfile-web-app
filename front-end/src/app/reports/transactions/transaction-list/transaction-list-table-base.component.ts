@@ -184,7 +184,8 @@ export abstract class TransactionListTableBaseComponent
       'Redesignate',
       this.createRedesignation.bind(this),
       (transaction: TransactionListRecord) =>
-        transaction.transactionType.scheduleId === ScheduleIds.B &&
+        (transaction.transactionType.scheduleId === ScheduleIds.B ||
+          (this.report().report_type === ReportTypes.F3 && transaction.transactionType.scheduleId === ScheduleIds.A)) &&
         transaction.transactionType.hasElectionInformation(this.report().report_type) &&
         !transaction.transactionType.negativeAmountValueOnly &&
         !transaction.parent_transaction_id &&

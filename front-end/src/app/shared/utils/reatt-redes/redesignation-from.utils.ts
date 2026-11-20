@@ -4,6 +4,7 @@ import type { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { ReattRedesTypes } from './reatt-redes.utils';
 import type { SubscriptionFormControl } from '../subscription-form-control';
+import { SchATransaction, ScheduleIds } from 'app/shared/models';
 
 export class RedesignationFromUtils {
   private static readOnlyFields = [
@@ -41,10 +42,10 @@ export class RedesignationFromUtils {
   ];
 
   public static overlayTransactionProperties(
-    transaction: SchBTransaction,
-    redesignatedTransaction?: SchBTransaction,
+    transaction: SchBTransaction | SchATransaction,
+    redesignatedTransaction?: SchBTransaction | SchATransaction,
     activeReportId?: string,
-  ): SchBTransaction {
+  ): SchBTransaction | SchATransaction {
     if (redesignatedTransaction) {
       transaction.reatt_redes_id = redesignatedTransaction.id;
       transaction.reatt_redes = redesignatedTransaction;
@@ -65,11 +66,19 @@ export class RedesignationFromUtils {
       contactTitle: 'Contact',
       dateLabel: 'REDESIGNATION DATE',
       amountLabel: 'REDESIGNATED AMOUNT',
-      generatePurposeDescription: (transaction: SchBTransaction): string => {
+      generatePurposeDescription: (transaction: SchBTransaction | SchATransaction): string => {
         if (!transaction.reatt_redes) return '';
-        const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
-        if (!expenditureDate) throw new Error('No Expenditure Date!');
-        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(expenditureDate)}`;
+
+        let date: Date | undefined;
+        if (transaction.transactionType.scheduleId === ScheduleIds.B) {
+          date = (transaction.reatt_redes as SchBTransaction).expenditure_date;
+          if (!date) throw new Error('No expenditure date!');
+        } else if (transaction.transactionType.scheduleId === ScheduleIds.A) {
+          date = (transaction.reatt_redes as SchATransaction).contribution_date;
+          if (!date) throw new Error('No contribution date!');
+        }
+
+        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(date)}`;
       },
       hideContactLookup: true,
     });
@@ -81,7 +90,11 @@ export class RedesignationFromUtils {
     return transaction;
   }
 
-  public static overlayForm(fromForm: FormGroup, transaction: SchBTransaction, toForm: FormGroup): FormGroup {
+  public static overlayForm(
+    fromForm: FormGroup,
+    transaction: SchBTransaction | SchATransaction,
+    toForm: FormGroup,
+  ): FormGroup {
     const templateMap = transaction.transactionType.templateMap;
     const purposeDescriptionControl = fromForm.get(templateMap.purpose_description);
     // Update purpose description for rules that are independent of the transaction date being in the report.
