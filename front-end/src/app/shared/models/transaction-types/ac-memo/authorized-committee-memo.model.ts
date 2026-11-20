@@ -1,15 +1,11 @@
-import { INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
-import { JsonSchema } from 'fecfile-validate';
 import { SchATransactionType } from '../../scha-transaction-type.model';
+import { TemplateMapKeyType } from '../../transaction-type.model';
 import { Transaction } from '../../transaction.model';
 
-// TODO - Base abstract class for Authorized Transfer Memos,
-// will be implemented later, for now just using dummy data
 export abstract class AuthorizedCommitteeMemo extends SchATransactionType {
-  override contactTypeOptions = INDIVIDUAL;
-  formFields = [];
-  override schema = {} as JsonSchema;
-  override getNewTransaction(): Transaction {
-    throw new Error('Method not implemented.');
+  override inheritedFields = ['election_code', 'election_other_description'] as TemplateMapKeyType[];
+
+  override generatePurposeDescription(transaction: Transaction): string {
+    return `Authorized Committee Memo: ${transaction.parent_transaction?.contact_1?.name}`;
   }
 }

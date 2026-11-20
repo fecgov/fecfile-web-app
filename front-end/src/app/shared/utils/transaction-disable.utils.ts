@@ -51,8 +51,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleATransactionTypes.INDIVIDUAL_AC_TRANSFER_MEMO,
     ScheduleATransactionTypes.PARTY_AC_TRANSFER_MEMO,
     ScheduleATransactionTypes.PAC_AC_TRANSFER_MEMO,
-    ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO,
-    ScheduleATransactionTypes.TRIBAL_AC_TRANSFER_MEMO,
     ScheduleATransactionTypes.PARTNERSHIP_AC_TRANSFER_MEMO,
   ]),
 };
