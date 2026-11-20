@@ -57,7 +57,7 @@
               (click)="onDropdownChange(option)"
               (keyup.enter)="onDropdownChange(option)"
               (keyup.space)="onDropdownChange(option)"
-              [disabled]="!option.value"
+              [disabled]="!option.value || disabledTypes().has(option.value.destinationTransactionType)"
               class="w-full flex justify-content-start"
             >
               {{ option.label }}

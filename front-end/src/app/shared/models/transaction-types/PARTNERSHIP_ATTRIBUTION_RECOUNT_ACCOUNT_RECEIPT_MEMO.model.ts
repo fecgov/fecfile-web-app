@@ -6,6 +6,7 @@ import { AggregationGroups } from '../transaction.model';
 import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL, ELECTION_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
 import { ReportTypes } from '../reports/report.model';
+import { TemplateMapKeyType } from '../transaction-type.model';
 
 export class PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO extends SCHEDULE_A_MEMO {
   formFields = [...INDIVIDUAL_FORM_FIELDS, ...ELECTION_FIELDS];
@@ -24,6 +25,8 @@ export class PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO extends SCHEDU
   override hasElectionInformation(reportType: ReportTypes): boolean {
     return reportType === ReportTypes.F3;
   }
+
+  override inheritedFields = ELECTION_FIELDS as TemplateMapKeyType[];
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
