@@ -21,7 +21,7 @@ describe('RedesignationToUtils', () => {
       expect(toTransaction.transactionType.generatePurposeDescription).toBeDefined();
       if (toTransaction.transactionType.generatePurposeDescription) {
         expect(toTransaction.transactionType.generatePurposeDescription(toTransaction)).toBe(
-          'Redesignation - Contribution to 08/11/2022',
+          'Redesignation - Contribution from 08/11/2022',
         );
       }
     });
@@ -38,7 +38,7 @@ describe('RedesignationToUtils', () => {
       expect(toTransaction.transactionType.generatePurposeDescription).toBeDefined();
       if (toTransaction.transactionType.generatePurposeDescription) {
         expect(toTransaction.transactionType.generatePurposeDescription(toTransaction)).toBe(
-          'Redesignation - Contribution to 08/11/2022',
+          'Redesignation - Contribution from 08/11/2022',
         );
       }
     });
