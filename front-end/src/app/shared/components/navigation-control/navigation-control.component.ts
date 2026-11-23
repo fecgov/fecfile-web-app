@@ -30,6 +30,8 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
 import { singleClickDisableAction } from 'app/store/single-click.actions';
 import { selectSingleClickDisabled } from 'app/store/single-click.selectors';
+import { DISABLED_TRANSACTION_TYPES } from 'app/shared/utils/transaction-disable.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 
 @Component({
   selector: 'app-navigation-control',
@@ -40,8 +42,13 @@ import { selectSingleClickDisabled } from 'app/store/single-click.selectors';
 export class NavigationControlComponent {
   private readonly el = inject(ElementRef);
   private readonly store = inject(Store);
+  private readonly report = this.store.selectSignal(selectActiveReport);
   readonly navigationControl = input.required<NavigationControl>();
   readonly transaction = input<Transaction | undefined>(undefined);
+  readonly disabledTypes = computed(() => {
+    if (!this.transaction()) return new Set();
+    return new Set(DISABLED_TRANSACTION_TYPES[this.report().report_type]);
+  });
 
   readonly dropdownOptions = derivedAsync(
     () => {

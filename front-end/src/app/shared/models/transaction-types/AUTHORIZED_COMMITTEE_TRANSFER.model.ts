@@ -3,16 +3,12 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/AUTHORIZED_COM
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
-import {
-  AGGREGATE,
-  COMMITTEE,
-  COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
-} from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, COMMITTEE_WITH_CANDIDATE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
 
 export class AUTHORIZED_COMMITTEE_TRANSFER extends SchATransactionType {
-  formFields = [...COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS, ...AGGREGATE];
+  formFields = [...COMMITTEE_WITH_CANDIDATE_FORM_FIELDS];
   contactTypeOptions = COMMITTEE;
   override contactConfig = STANDARD_AND_CANDIDATE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.AUTHORIZED_COMMITTEE_TRANSFER);
@@ -28,7 +24,6 @@ export class AUTHORIZED_COMMITTEE_TRANSFER extends SchATransactionType {
     ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO,
     ScheduleATransactionTypes.TRIBAL_AC_TRANSFER_MEMO,
     ScheduleATransactionTypes.PARTNERSHIP_AC_TRANSFER_MEMO,
-    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_AC_TRANSFER_MEMO,
   ];
   override _navigationControls = STANDARD_PARENT_CONTROLS;
 

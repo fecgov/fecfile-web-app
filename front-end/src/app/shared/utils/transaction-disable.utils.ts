@@ -11,13 +11,11 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
   [ReportTypes.F3]: new Set<TransactionTypes>([
     /*** RECEIPTS **********************************************/
     // CONTRIBUTIONS FROM INDIVIDUALS/PERSONS
-    ScheduleATransactionTypes.IN_KIND_RECEIPT,
     // CONTRIBUTIONS FROM REGISTERED FILERS
     ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
     ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
     ScheduleATransactionTypes.IN_KIND_CONTRIBUTION_FROM_CANDIDATE,
     // TRANSFERS
-    ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
     ScheduleATransactionTypes.IN_KIND_TRANSFER,
     // OTHER
     ScheduleATransactionTypes.FEDERAL_COMMITTEE_RECOUNT_DONATION,
@@ -29,8 +27,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
     // OTHER EXPENDITURES
-    ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
-    ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION,
     ScheduleBTransactionTypes.DISGORGEMENT,
     // REFUNDS
     ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
@@ -50,6 +46,14 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     // DEBTS
     ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
     ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
+
+    // Memos
+    ScheduleATransactionTypes.INDIVIDUAL_AC_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PARTY_AC_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PAC_AC_TRANSFER_MEMO,
+    ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_AC_TRANSFER_MEMO,
+    ScheduleATransactionTypes.TRIBAL_AC_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PARTNERSHIP_AC_TRANSFER_MEMO,
   ]),
 };
 

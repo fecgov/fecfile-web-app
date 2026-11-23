@@ -71,7 +71,7 @@ describe('ElectionInputComponent', () => {
     expect(component.form.get('election_code')?.value).toBe('G2024');
   });
 
-  it('should update the election type and year when the election code changes externally', () => {
+  it('should update election type and year when election code is inherited', () => {
     component.form.get('election_code')?.setValue('P2028');
 
     expect(component.form.get('electionType')?.value).toBe('P');

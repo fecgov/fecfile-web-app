@@ -115,6 +115,7 @@ import { CONTRIBUTION_TO_CANDIDATE_VOID } from '../models/transaction-types/CONT
 import { CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE_VOID.model';
+import { CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE.model';
 import { FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT.model';
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT.model';
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO.model';
@@ -185,6 +186,7 @@ import { TRANSFER_TO_AFFILIATES } from '../models/transaction-types/TRANSFER_TO_
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
+import { CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION } from '../models/transaction-types/CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION.model';
 
 // Schedule C /////////////////////////////////////////////////////
 import { LOAN_BY_COMMITTEE } from '../models/transaction-types/LOAN_BY_COMMITTEE.model';
@@ -400,9 +402,11 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_OUT_UNDEPOSITED: CONDUIT_EARMARK_OUT,
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
+  CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE,
   CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE,
   LOAN_MADE,
   LOAN_REPAYMENT_MADE,
+  CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION,
   // Schedule C /////////////////////////////////////////////////////
   LOAN_RECEIVED_FROM_INDIVIDUAL,
   LOAN_RECEIVED_FROM_BANK,
