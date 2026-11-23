@@ -10,6 +10,7 @@ import { UnassociatedTransactionListComponent } from './unassociated-transaction
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 import { ReattRedesStore } from './shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from './shared/services/form-3x.service';
+import { Form3Service } from './shared/services/form-3.service';
 
 export const ROUTES: Route[] = [
   {
@@ -59,7 +60,7 @@ export const ROUTES: Route[] = [
           committeeGuard,
           featureFlagGuard('showAllTransactionsPage'),
         ],
-        providers: [ReattRedesStore, Form3XService],
+        providers: [ReattRedesStore, Form3XService, Form3Service],
       },
       {
         path: 'contacts',
