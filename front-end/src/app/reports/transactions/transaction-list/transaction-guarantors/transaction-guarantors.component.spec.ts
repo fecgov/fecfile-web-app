@@ -19,6 +19,7 @@ import { Component, provideZoneChangeDetection, signal, viewChild } from '@angul
 import { ScheduleCTransactionTypes, Transaction } from 'app/shared/models';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form3Service } from 'app/shared/services/form-3.service';
 
 @Component({
   imports: [TransactionGuarantorsComponent],
@@ -57,6 +58,7 @@ describe('TransactionGuarantorsComponent', () => {
         ConfirmationService,
         ReattRedesStore,
         Form3XService,
+        Form3Service,
         provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,

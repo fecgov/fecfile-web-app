@@ -22,6 +22,7 @@ import { ReportTypes, ScheduleATransactionTypes } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form3Service } from 'app/shared/services/form-3.service';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
@@ -42,6 +43,7 @@ describe('TransactionReceiptsComponent', () => {
         ConfirmationService,
         ReattRedesStore,
         Form3XService,
+        Form3Service,
         provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,

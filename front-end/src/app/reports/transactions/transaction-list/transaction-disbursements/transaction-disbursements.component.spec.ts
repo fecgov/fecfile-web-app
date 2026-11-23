@@ -14,6 +14,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form3Service } from 'app/shared/services/form-3.service';
 
 describe('TransactionDisbursementsComponent', () => {
   let fixture: ComponentFixture<TransactionDisbursementsComponent>;
@@ -30,6 +31,7 @@ describe('TransactionDisbursementsComponent', () => {
         ConfirmationService,
         ReattRedesStore,
         Form3XService,
+        Form3Service,
         provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,

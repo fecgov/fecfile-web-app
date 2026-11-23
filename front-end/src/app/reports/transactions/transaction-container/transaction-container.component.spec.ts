@@ -35,6 +35,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { inputBinding, signal } from '@angular/core';
+import { Form3Service } from 'app/shared/services/form-3.service';
 
 const baseTestTransaction = getTestTransactionByType(
   ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
@@ -108,6 +109,7 @@ describe('TransactionContainerComponent', () => {
         TransactionService,
         ReattRedesStore,
         Form3XService,
+        Form3Service,
         Title,
         provideMockStore(testMockStore()),
         FecDatePipe,

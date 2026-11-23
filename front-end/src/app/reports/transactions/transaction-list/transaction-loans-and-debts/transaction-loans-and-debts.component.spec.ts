@@ -18,6 +18,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
 import { ReportService } from 'app/shared/services/report.service';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form3Service } from 'app/shared/services/form-3.service';
 
 describe('TransactionLoansAndDebtsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -35,6 +36,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
         ConfirmationService,
         ReattRedesStore,
         Form3XService,
+        Form3Service,
         provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,
