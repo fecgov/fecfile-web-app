@@ -366,7 +366,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE, 'Loan Repayment Made'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE, 'Contribution to Other Federal Committee'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE, 'Contribution to Other Federal Candidate'],
-  [ScheduleBTransactionTypes.CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION, 'Unregistered Organization Contribution'],
+  [ScheduleBTransactionTypes.CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION, 'Contribution to Unregistered Organization'],
   [ScheduleBTransactionTypes.DISGORGEMENT, 'Disgorgement'],
   [
     ScheduleBTransactionTypes.REFUND_UNREGISTERED_RECEIPT_ORGANIZATION,

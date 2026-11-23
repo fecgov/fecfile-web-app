@@ -24,7 +24,7 @@ export class CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION extends SchBTransactionTy
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION,
-      aggregation_group: AggregationGroups.GENERAL,
+      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
   }
 }
