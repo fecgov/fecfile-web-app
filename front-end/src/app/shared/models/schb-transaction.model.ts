@@ -102,6 +102,7 @@ export class SchBTransaction extends Transaction {
 
 export enum ScheduleBTransactionTypes {
   IN_KIND_OUT = 'IN_KIND_OUT',
+  IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION = 'IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION',
   IN_KIND_CONTRIBUTION_TO_CANDIDATE = 'IN_KIND_CONTRIBUTION_TO_CANDIDATE',
   IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE = 'IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE',
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT = 'BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT',
@@ -188,6 +189,10 @@ export enum ScheduleBTransactionTypes {
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_OUT, 'In-kind Out'],
+  [
+    ScheduleBTransactionTypes.IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION,
+    'In-kind Out from Unregistered Organization',
+  ],
   [ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE, 'In-kind Contribution to Candidate'],
   [ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE, 'In-kind Contribution to Other Committee'],
   [

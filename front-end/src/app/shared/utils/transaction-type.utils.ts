@@ -32,6 +32,7 @@ import { INDIVIDUAL_RECEIPT } from '../models/transaction-types/INDIVIDUAL_RECEI
 import { INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT.model';
 import { INDIVIDUAL_RECOUNT_RECEIPT } from '../models/transaction-types/INDIVIDUAL_RECOUNT_RECEIPT.model';
 import { IN_KIND_RECEIPT } from '../models/transaction-types/IN_KIND_RECEIPT.model';
+import { IN_KIND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION } from '../models/transaction-types/IN_KIND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION.model';
 import { IN_KIND_TRANSFER } from '../models/transaction-types/IN_KIND_TRANSFER.model';
 import { IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY } from '../models/transaction-types/IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY.model';
 import { JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
@@ -129,6 +130,7 @@ import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-type
 import { IN_KIND_CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_CANDIDATE.model';
 import { IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE.model';
 import { IN_KIND_OUT } from '../models/transaction-types/IN_KIND_OUT.model';
+import { IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION } from '../models/transaction-types/IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION.model';
 import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
 import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
 import { LOAN_MADE } from '../models/transaction-types/LOAN_MADE.model';
@@ -220,7 +222,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   EARMARK_RECEIPT,
   EARMARK_MEMO,
   IN_KIND_RECEIPT,
+  IN_KIND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
   IN_KIND_OUT,
+  IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION,
   INDIVIDUAL_JF_TRANSFER_MEMO,
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
   INDIVIDUAL_RECEIPT,
@@ -532,6 +536,7 @@ export function MultipleEntryTransactionTypes(): string[] {
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
     ScheduleATransactionTypes.EARMARK_RECEIPT,
     ScheduleATransactionTypes.IN_KIND_RECEIPT,
+    ScheduleATransactionTypes.IN_KIND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
     ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
     ScheduleATransactionTypes.IN_KIND_TRANSFER,
     ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
