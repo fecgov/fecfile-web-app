@@ -3,7 +3,10 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/IN_KIND_RECEIP
 import { ELECTION_FIELDS, ORGANIZATION, ORGANIZATION_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { ReportTypes } from '../reports/report.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { STANDARD_DOUBLE_ENTRY_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import {
+  STANDARD_DOUBLE_ENTRY_CONTROLS,
+  TransactionNavigationControls,
+} from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { IN_KIND } from './common-types/IN_KIND.model';

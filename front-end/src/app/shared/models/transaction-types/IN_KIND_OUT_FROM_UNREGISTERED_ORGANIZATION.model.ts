@@ -1,6 +1,10 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { ELECTION_FIELDS, ORGANIZATION, ORGANIZATION_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import {
+  ELECTION_FIELDS,
+  ORGANIZATION,
+  ORGANIZATION_B_FORM_FIELDS,
+} from 'app/shared/utils/transaction-type-properties';
 import { ReportTypes } from '../reports/report.model';
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';

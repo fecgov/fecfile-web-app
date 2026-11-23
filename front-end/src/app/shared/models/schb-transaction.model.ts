@@ -189,10 +189,7 @@ export enum ScheduleBTransactionTypes {
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_OUT, 'In-kind Out'],
-  [
-    ScheduleBTransactionTypes.IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION,
-    'In-kind Out from Unregistered Organization',
-  ],
+  [ScheduleBTransactionTypes.IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION, 'In-kind Out from Unregistered Organization'],
   [ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE, 'In-kind Contribution to Candidate'],
   [ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE, 'In-kind Contribution to Other Committee'],
   [
