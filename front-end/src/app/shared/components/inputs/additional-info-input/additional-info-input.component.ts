@@ -40,14 +40,20 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
 
 Add additional information as needed in the following Note or Memo Text box.`;
 
+  private disabledBySystemGenerated = false;
+
   constructor() {
     super();
     effect(() => {
       const purposeDescriptionControl = this.form.get(this.templateMap.purpose_description);
       if (this.isDescriptionSystemGenerated()) {
-        purposeDescriptionControl?.disable({ emitEvent: false });
-      } else {
+        if (purposeDescriptionControl?.enabled) {
+          purposeDescriptionControl.disable({ emitEvent: false });
+          this.disabledBySystemGenerated = true;
+        }
+      } else if (this.disabledBySystemGenerated) {
         purposeDescriptionControl?.enable({ emitEvent: false });
+        this.disabledBySystemGenerated = false;
       }
     });
   }
