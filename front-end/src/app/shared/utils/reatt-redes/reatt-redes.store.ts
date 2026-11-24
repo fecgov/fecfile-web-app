@@ -4,8 +4,11 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { DateUtils } from '../date.utils';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form3Service } from 'app/shared/services/form-3.service';
 import type { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import type { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { Form3 } from 'app/shared/models/reports/form-3.model';
+import { ReportTypes } from 'app/shared/models';
 
 interface ReatRedesTransaction {
   transaction: TransactionListRecord;
@@ -15,9 +18,10 @@ interface ReatRedesTransaction {
 @Injectable()
 export class ReattRedesStore {
   private readonly store = inject(Store);
-  private readonly reportService = inject(Form3XService);
+  private readonly form3xService = inject(Form3XService);
+  private readonly form3Service = inject(Form3Service);
   private readonly activeReport = this.store.selectSignal(selectActiveReport);
-  private readonly _futureReports = signal<Form3X[] | null>(null);
+  private readonly _futureReports = signal<Form3X[] | Form3[] | null>(null);
   readonly futureReports = this._futureReports.asReadonly();
 
   private readonly _reatRedesTransaction = signal<ReatRedesTransaction | null>(null);
@@ -41,12 +45,20 @@ export class ReattRedesStore {
   });
 
   async setTransaction(transaction: TransactionListRecord, type: ReattRedesTypes) {
-    const coverageThroughDate = DateUtils.convertDateToFecFormat(
-      (this.activeReport() as Form3X).coverage_through_date!,
-    );
-    const futureReports = await this.reportService.getFutureReports(coverageThroughDate);
-    this._reatRedesTransaction.set({ transaction, type });
-    this._futureReports.set(futureReports);
+    let reportService: Form3Service | Form3XService | undefined;
+    const activeReport = this.activeReport() as Form3 | Form3X;
+    if (activeReport.report_type === ReportTypes.F3) {
+      reportService = this.form3Service;
+    } else if (activeReport.report_type === ReportTypes.F3X) {
+      reportService = this.form3xService;
+    }
+
+    if (reportService) {
+      const coverageThroughDate = DateUtils.convertDateToFecFormat(activeReport.coverage_through_date!);
+      const futureReports = await reportService.getFutureReports(coverageThroughDate);
+      this._reatRedesTransaction.set({ transaction, type });
+      this._futureReports.set(futureReports);
+    }
   }
 
   clearTransaction() {

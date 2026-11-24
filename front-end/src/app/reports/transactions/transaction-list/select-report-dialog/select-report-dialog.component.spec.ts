@@ -12,6 +12,7 @@ import { provideRouter } from '@angular/router';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
+import { Form3Service } from 'app/shared/services/form-3.service';
 
 describe('SelectReportDialogComponent', () => {
   let component: SelectReportDialogComponent;
@@ -28,6 +29,7 @@ describe('SelectReportDialogComponent', () => {
         provideRouter([]),
         provideMockStore(testMockStore()),
         Form3XService,
+        Form3Service,
         { provide: FORM_3_SERVICE, useClass: Form3XService },
         ReattRedesStore,
       ],

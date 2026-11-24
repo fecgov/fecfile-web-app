@@ -19,6 +19,7 @@ import { PrimeTemplate } from 'primeng/api';
 import { TransactionListComponent } from 'app/reports/transactions/transaction-list/transaction-list.component';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form3Service } from 'app/shared/services/form-3.service';
 
 describe('UnassociatedTransactionListComponent', () => {
   let component: UnassociatedTransactionListComponent;
@@ -49,6 +50,7 @@ describe('UnassociatedTransactionListComponent', () => {
         ConfirmationService,
         ReattRedesStore,
         Form3XService,
+        Form3Service,
         provideMockStore(testMockStore()),
         {
           provide: TransactionService,

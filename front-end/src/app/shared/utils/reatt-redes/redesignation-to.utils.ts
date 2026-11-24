@@ -1,17 +1,18 @@
 import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
-import type { TransactionTypes } from '../../models/transaction.model';
+import { ScheduleIds, type TransactionTypes } from '../../models/transaction.model';
 import type { SchBTransaction } from '../../models/schb-transaction.model';
 import type { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
+import { SchATransaction } from 'app/shared/models';
 
 export class RedesignationToUtils {
   public static overlayTransactionProperties(
-    transaction: SchBTransaction,
-    redesignatedTransaction?: SchBTransaction,
+    transaction: SchBTransaction | SchATransaction,
+    redesignatedTransaction?: SchBTransaction | SchATransaction,
     activeReportId?: string,
-  ): SchBTransaction {
+  ): SchBTransaction | SchATransaction {
     if (redesignatedTransaction) {
       transaction.reatt_redes_id = redesignatedTransaction.id;
       transaction.reatt_redes = redesignatedTransaction;
@@ -37,11 +38,19 @@ export class RedesignationToUtils {
       footer:
         'The information in this redesignation will automatically create a related disbursement. Review the disbursement, or continue without reviewing and "Save transactions."',
       dependentChildTransactionTypes: [transaction.transaction_type_identifier as TransactionTypes],
-      generatePurposeDescription: (transaction: SchBTransaction): string => {
+      generatePurposeDescription: (transaction: SchBTransaction | SchATransaction): string => {
         if (!transaction.reatt_redes) return '';
-        const expenditureDate = (transaction.reatt_redes as SchBTransaction).expenditure_date;
-        if (!expenditureDate) throw new Error('No Expenditure Date!');
-        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(expenditureDate)}`;
+
+        let date: Date | undefined;
+        if (transaction.transactionType.scheduleId === ScheduleIds.B) {
+          date = (transaction.reatt_redes as SchBTransaction).expenditure_date;
+          if (!date) throw new Error('No expenditure date!');
+        } else if (transaction.transactionType.scheduleId === ScheduleIds.A) {
+          date = (transaction.reatt_redes as SchATransaction).contribution_date;
+          if (!date) throw new Error('No contribution date!');
+        }
+
+        return `Redesignation - Contribution from ${DateUtils.convertDateToSlashFormat(date)}`;
       },
       hideContactLookup: true,
     });
@@ -84,7 +93,7 @@ export class RedesignationToUtils {
     'memo_code',
   ];
 
-  public static overlayForm(form: FormGroup, toTransaction: SchBTransaction): FormGroup {
+  public static overlayForm(form: FormGroup, toTransaction: SchBTransaction | SchATransaction): FormGroup {
     // Add additional amount validation
     form
       .get(toTransaction.transactionType.templateMap.amount)

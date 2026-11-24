@@ -190,11 +190,11 @@ export class TransactionResolver {
     let to = TransactionTypeUtils.factory(
       redesignated.transaction_type_identifier,
     ).getNewTransaction() as SchBTransaction;
-    to = RedesignationToUtils.overlayTransactionProperties(to, redesignated, reportId);
+    to = RedesignationToUtils.overlayTransactionProperties(to, redesignated, reportId) as SchBTransaction;
     let from = TransactionTypeUtils.factory(
       redesignated.transaction_type_identifier,
     ).getNewTransaction() as SchBTransaction;
-    from = RedesignationFromUtils.overlayTransactionProperties(from, redesignated, reportId);
+    from = RedesignationFromUtils.overlayTransactionProperties(from, redesignated, reportId) as SchBTransaction;
     to.children = [from];
     return to;
   }
