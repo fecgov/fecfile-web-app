@@ -89,6 +89,7 @@ describe('AdditionalInfoInputComponent', () => {
     fixture.detectChanges();
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     expect(cpd.classes['readonly']).toBeTruthy();
+    expect(component.form.get(host.templateMap.purpose_description)?.disabled).toBe(true);
   });
 
   it('should have a mutable cpd if not system generated', () => {
@@ -96,6 +97,14 @@ describe('AdditionalInfoInputComponent', () => {
     fixture.detectChanges();
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     expect(cpd.classes['readonly']).toBeFalsy();
+    expect(component.form.get(host.templateMap.purpose_description)?.enabled).toBe(true);
+  });
+
+  it('should keep cpd disabled if already disabled (e.g. inherited auto-populated field)', () => {
+    if (host.transaction?.transactionType) host.transaction.transactionType.generatePurposeDescription = undefined;
+    host.form.get(host.templateMap.purpose_description)?.disable();
+    fixture.detectChanges();
+    expect(component.form.get(host.templateMap.purpose_description)?.disabled).toBe(true);
   });
 
   it('should trigger the purposeDescriptionPrefix callbacks', () => {
