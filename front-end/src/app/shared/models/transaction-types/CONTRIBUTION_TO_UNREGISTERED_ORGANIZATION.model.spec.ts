@@ -1,6 +1,7 @@
 import { ReportTypes } from '../reports/report.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION } from './CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION.model';
+import { AggregationGroups } from '../transaction.model';
 
 describe('CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION', () => {
   let transactionType: CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION;
@@ -17,6 +18,7 @@ describe('CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION', () => {
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION);
+    expect(txn.aggregation_group).toBe(AggregationGroups.GENERAL_DISBURSEMENT);
   });
 
   it('should include election information', () => {
