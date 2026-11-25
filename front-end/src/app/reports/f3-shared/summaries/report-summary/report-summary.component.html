@@ -16,8 +16,7 @@
       itemName="users"
       [columns]="columns()"
       [showPaginationControls]="false"
-    >
-    </app-table>
+    />
   } @else {
     <div class="fec-loader-div">
       <img
@@ -46,7 +45,7 @@
       pButton
       pRipple
       class="p-button-primary icon-gap"
-      (click)="router.navigate(['/reports', this.formText(), 'detailed-summary', report().id])"
+      (click)="router.navigate(['/reports', this.formText, 'detailed-summary', report().id])"
     >
       <span>Review detailed summary page</span>
       <svg pButtonIcon alt="Next Arrow" width="10" height="10">
