@@ -140,6 +140,7 @@ export const Receipt: TransactionGroup[] = [
       ScheduleATransactionTypes.TRIBAL_RECEIPT,
       ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
       ScheduleATransactionTypes.IN_KIND_RECEIPT,
+      ScheduleATransactionTypes.IN_KIND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
       ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
       ScheduleATransactionTypes.EARMARK_RECEIPT,
       ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT,

@@ -113,6 +113,7 @@ export class Form3 extends BaseForm3 {
     ScheduleATransactionTypes.TRIBAL_RECEIPT,
     ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
     ScheduleATransactionTypes.IN_KIND_RECEIPT,
+    ScheduleATransactionTypes.IN_KIND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
     ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
     ScheduleATransactionTypes.EARMARK_RECEIPT,
     ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
@@ -151,6 +152,7 @@ export class Form3 extends BaseForm3 {
     ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
     // DISBURSEMENTS
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
+    ScheduleBTransactionTypes.IN_KIND_OUT_FROM_UNREGISTERED_ORGANIZATION,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,

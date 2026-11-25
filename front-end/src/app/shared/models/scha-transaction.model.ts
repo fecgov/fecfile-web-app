@@ -99,6 +99,7 @@ export enum ScheduleATransactionTypes {
   TRIBAL_RECEIPT = 'TRIBAL_RECEIPT',
   PARTNERSHIP_RECEIPT = 'PARTNERSHIP_RECEIPT',
   IN_KIND_RECEIPT = 'IN_KIND_RECEIPT',
+  IN_KIND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION = 'IN_KIND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION',
   RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RETURN_RECEIPT',
   EARMARK_RECEIPT = 'EARMARK_RECEIPT',
   CONDUIT_EARMARK_RECEIPT = 'CONDUIT_EARMARK_RECEIPT',
@@ -214,6 +215,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.TRIBAL_RECEIPT, 'Tribal Receipt'],
   [ScheduleATransactionTypes.PARTNERSHIP_RECEIPT, 'Partnership Receipt'],
   [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-kind Receipt'],
+  [
+    ScheduleATransactionTypes.IN_KIND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
+    'In-kind Receipt from Unregistered Organization',
+  ],
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
   [ScheduleATransactionTypes.EARMARK_MEMO, 'Earmark Memo'],

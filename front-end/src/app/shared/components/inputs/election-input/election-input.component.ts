@@ -39,14 +39,10 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
       'electionYear',
       new SubscriptionFormControl(electionYear, [Validators.required, Validators.pattern('\\d{4}')]),
     );
+
     election_code?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value: string | null) => {
-      const code = value ?? '';
-      if (this.form.get('electionType')?.value !== code.slice(0, 1)) {
-        this.form.get('electionType')?.setValue(code.slice(0, 1), { emitEvent: false });
-      }
-      if (this.form.get('electionYear')?.value !== code.slice(1, 5)) {
-        this.form.get('electionYear')?.setValue(code.slice(1, 5), { emitEvent: false });
-      }
+      this.form.get('electionType')?.setValue(value?.slice(0, 1) ?? '', { emitEvent: false });
+      this.form.get('electionYear')?.setValue(value?.slice(1, 5) ?? '', { emitEvent: false });
     });
 
     if (election_code?.disabled) {
