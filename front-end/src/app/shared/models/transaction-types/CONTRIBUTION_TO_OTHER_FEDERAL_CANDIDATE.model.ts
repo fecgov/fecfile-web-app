@@ -1,0 +1,32 @@
+import { LabelUtils } from 'app/shared/utils/label.utils';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE';
+import { SchBTransactionType } from '../schb-transaction-type.model';
+import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
+
+import {
+  COMMITTEE,
+  COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
+} from 'app/shared/utils/transaction-type-properties';
+import { STANDARD_AND_CANDIDATE } from '../contact.model';
+
+export class CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE extends SchBTransactionType {
+  formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
+  contactTypeOptions = COMMITTEE;
+  override contactConfig = STANDARD_AND_CANDIDATE;
+  title = LabelUtils.get(
+    ScheduleBTransactionTypeLabels,
+    ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE,
+  );
+  schema = schema;
+  override hasCandidateCommittee = true;
+
+  override contact2IsRequired = () => true;
+
+  override isCloneableTransactionType = true;
+
+  getNewTransaction() {
+    return SchBTransaction.fromJSON({
+      transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE,
+    });
+  }
+}
