@@ -8,10 +8,11 @@ import {
 } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
+import { ELECTION_FIELDS, INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
+import { ReportTypes } from '../reports/report.model';
 
 export class IN_KIND_RECEIPT extends IN_KIND {
-  override formFields = INDIVIDUAL_FORM_FIELDS;
+  override formFields = [...INDIVIDUAL_FORM_FIELDS, ...ELECTION_FIELDS];
   override contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.IN_KIND_RECEIPT);
   schema = schema;
@@ -20,6 +21,10 @@ export class IN_KIND_RECEIPT extends IN_KIND {
 
   override get isReattributable(): boolean {
     return false;
+  }
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
   }
 
   getNewTransaction() {

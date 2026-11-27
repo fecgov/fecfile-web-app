@@ -141,6 +141,7 @@ export class Form3 extends BaseForm3 {
     ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.UNREGISTERED_ORGANIZATION_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.UNREGISTERED_RECOUNT_DONATION_FROM_ORGANIZATION,
+    ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
 
     // LOANS AND DEBTS
     ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
@@ -163,9 +164,9 @@ export class Form3 extends BaseForm3 {
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
     ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
-    ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
-    ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
-    ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION,
+    ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_COMMITTEE,
+    ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_FEDERAL_CANDIDATE,
+    ScheduleBTransactionTypes.CONTRIBUTION_TO_UNREGISTERED_ORGANIZATION,
     ScheduleBTransactionTypes.DISGORGEMENT,
     ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
     ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
